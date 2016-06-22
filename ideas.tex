@@ -1,0 +1,430 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+
+\subsubsection*{Definitions}
+
+We presume $g^{*}$ is true model and 
+\[
+y=g^{*}(X)+\epsilon
+\]
+
+
+Suppose we have sub-Gaussian errors $\epsilon$ for constants $K$
+and $\sigma_{0}^{2}$:
+\[
+\max_{i=1:n}K^{2}\left(E\left[\exp(|\epsilon_{i}|^{2}K^{2})-1\right]\right)\le\sigma_{0}^{2}
+\]
+
+
+We will be minimizing $\arg\min_{g\in\mathcal{G}}\|y-g\|_{T}^{2}+\lambda^{2}I^{v}(g)$
+to obtain fitted models $\hat{g}_{\lambda}$.
+
+We will also restrict $\lambda>\lambda_{min}=O_{p}(n^{-t})$ for a
+$t$ we will specify later.
+
+
+\subsubsection*{Goal:}
+
+Bound 
+\[
+Pr\left(\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{V}\ge\delta\right)\le???
+\]
+
+
+
+\subsubsection*{Proof}
+
+Consider the class 
+\[
+\mathcal{G}'=\left\{ \frac{g-g^{*}}{I(g)+I(g^{*})}:g\in\mathcal{G},I(g)+I(g^{*})>0\right\} 
+\]
+
+
+Suppose this class is bounded and its entropy is for $\alpha\in(0,2)$
+
+\[
+H\left(\delta,\mathcal{G}',Q_{n}\right)\le A\delta^{-\alpha}\forall\delta>0,n\ge1
+\]
+
+
+Alo note that the class 
+
+\[
+\mathcal{G}"=\left\{ \left(\frac{g-g^{*}}{I(g)+I(g^{*})}\right)^{2}:g\in\mathcal{G},I(g)+I(g^{*})>0\right\} 
+\]
+
+
+must also be bounded. For some other constant $\tilde{A}$ , we have
+that its entropy is bounded above by (proof in the mini appendix below)
+
+\[
+H\left(\delta,\mathcal{G}",Q_{n}\right)\le\tilde{A}\delta^{-\alpha}\forall\delta>0,n\ge1
+\]
+
+
+
+\subsubsection*{Concentration inequality 1:}
+
+By Lemma 8.4, since $\epsilon$ is sub-gaussian and we've assumed
+that $\mathcal{G}'$ is bounded $\left(\sup_{g'\in\mathcal{G}'}\|g'\|_{n}\le R\right)$
+then for some constant $c$ depending on $A$,$\alpha$, $R$,$K$,$\sigma_{0}$,
+we have for all $\delta\sqrt{n}\ge c$ 
+\[
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|(\epsilon,g-g^{*})_{n}\right|}{\left\Vert g-g^{*}\right\Vert ^{1-\alpha/2}\left(I(g)+I(g^{*})\right)^{\alpha/2}}>\delta\right)\le c\exp\left(-\frac{\delta^{2}n}{c^{2}}\right)
+\]
+
+
+
+\subsubsection*{Concentration inequality 2:}
+
+Now consider two sets of samples $\{X_{i}\}_{i=1}^{n},\{X_{i}'\}_{i=1}^{n}$.
+We are interested in the concentration inequality for 
+\[
+\frac{\left|\|g-g^{*}\|_{n}^{2}-\|g-g^{*}\|_{n'}^{2}\right|}{\left(I(g)+I(g^{*})\right)^{2}}
+\]
+
+
+where $\|g-g^{*}\|_{n'}^{2}=\sum_{i=1}^{n}(g-g^{*})^{2}(X_{i}')$.
+
+Using the Rademacher sequence $\{W_{i}\}_{i=1}^{n}$, we know that
+\begin{eqnarray*}
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g-g^{*}\|_{n}^{2}-\|g-g^{*}\|_{n'}^{2}\right|}{\left(I(g)+I(g^{*})\right)^{2}}>\delta\right) & = & Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\frac{1}{n}\sum_{i=1}^{n}W_{i}\left((g-g^{*})^{2}(X_{i})-(g-g^{*})^{2}(X_{i}')\right)\right|}{\left(I(g)+I(g^{*})\right)^{2}}>\delta\right)\\
+ & \le & 2Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\frac{1}{n}\sum W_{i}(g-g^{*})^{2}(X_{i})\right|}{\left(I(g)+I(g^{*})\right)^{2}}>\delta/2\right)
+\end{eqnarray*}
+
+
+By Lemma 3.2, since the Rademacher sequence is sub-Gaussian and we've
+assumed that $\mathcal{G}"$ is bounded $\left(\sup_{g"\in\mathcal{G}"}\|g"\|_{n}\le R^{2}\right)$,
+then there exists constants $C$, $A_{0}$ s.t. 
+
+\[
+\delta\sqrt{n}\ge A_{0}\delta^{1-\alpha/2}\ge C\left(\int_{0}^{\delta}H^{1/2}(u,\mathcal{G}",Q_{n})du\lor R^{2}\right)
+\]
+That is, for all 
+\[
+\delta\ge A_{0}^{2/\alpha}n^{-1/\alpha}
+\]
+
+
+there is some constant $c$ depending only on $A_{0}$ and $\alpha$ 
+
+\[
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\frac{1}{n}\sum W_{i}(g-g^{*})^{2}(X_{i})\right|}{\left(I(g)+I(g^{*})\right)^{2}}>\delta\right)\le c\exp\left(-\frac{n\delta^{2}}{c^{2}R^{2}}\right)
+\]
+
+
+That is, 
+\[
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g-g^{*}\|_{n}^{2}-\|g-g^{*}\|_{n'}^{2}\right|}{\left(I(g)+I(g^{*})\right)^{2}}>\delta\right)\le\frac{c}{2}\exp\left(-\frac{n\delta^{2}}{4c^{2}R^{2}}\right)
+\]
+
+
+
+\subsubsection*{Construct our high probability set $\mathcal{T}$}
+
+Let $\delta=o_{p}(n^{-1/2})$. Consider the set 
+\begin{eqnarray*}
+\mathcal{T} & = & \left\{ \{X_{i}\}_{i=1}^{n},\{X_{i}'\}_{i=1}^{n'}\mbox{where the conditions (1),(2),(3) hold}\right\} \\
+ & (1) & \sup_{g}\frac{\left|\|g-g^{*}\|_{n}^{2}-\|g-g^{*}\|_{n'}^{2}\right|}{\left(I(g)+I(g^{*})\right)^{2}}\le\delta\\
+ & (2) & \sup_{g}\frac{\left|(\epsilon,g-g^{*})_{n'}\right|}{\left\Vert g-g^{*}\right\Vert _{n'}^{1-\alpha/2}\left(I(g)+I(g^{*})\right)^{\alpha/2}}\le\delta\\
+ & (3) & \sup_{g}\frac{\left|(\epsilon,g-g^{*})_{n}\right|}{\left\Vert g-g^{*}\right\Vert _{n}^{1-\alpha/2}\left(I(g)+I(g^{*})\right)^{\alpha/2}}\le\delta
+\end{eqnarray*}
+
+
+This set occurs with high probability on the order of $Pr(\mathcal{T})=c\exp\left(-O_{p}(1)\frac{\delta^{2}n}{c^{2}}\right)$
+as shown by the concentration inequalities given above. Hence we can
+now suppose our training and validation set come from $\mathcal{T}$. 
+
+Define the following:
+\begin{itemize}
+\item $\hat{g}_{\lambda}\equiv\arg\min_{g\in\mathcal{G}}\|y-g\|_{T}^{2}+\lambda^{2}I^{v}(g)$
+as the minimizer of the penalized loss on the training set. 
+\item $\hat{\lambda}\equiv\arg\min_{\lambda\in\Lambda}\|y-\hat{g}_{\lambda}\|_{V}^{2}$
+as the minimizer of the loss on the validation set (but constrained
+to minimizers of the training set). 
+\item $\tilde{\lambda}$ as the penalty parameter that attains the asymptotically
+optimal convergence rate. By Theorem 10.2, assuming $I(g^{*})>0$
+and $v>\frac{2\alpha}{2+\alpha}$, we have chosen $\tilde{\lambda}$
+to satisfy 
+\begin{eqnarray*}
+\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{T} & = & O_{p}(\tilde{\lambda})I^{v/2}(g^{*})\\
+\tilde{\lambda}^{-1} & = & O_{p}(n^{1/(2+\alpha)})I^{(2v-2\alpha+v\alpha)/2(2+\alpha)}(g^{*})\\
+I(\hat{g}_{\tilde{\lambda}}) & = & O_{p}(1)I(g^{*})
+\end{eqnarray*}
+
+\end{itemize}
+
+\subsubsection*{Show $\hat{g}_{\hat{\lambda}}$ behaves well on $\mathcal{T}$}
+
+By definition, we have
+
+\[
+\|y-\hat{g}_{\hat{\lambda}}\|_{V}^{2}\le\|y-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}
+\]
+
+
+By adding and subtracting $g^{*}$ in the squared norms, we have
+
+\begin{eqnarray*}
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}^{2} & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2(\epsilon,\hat{g}_{\hat{\lambda}}-\hat{g}_{\tilde{\lambda}})_{V}\\
+ & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2(\epsilon,\hat{g}_{\hat{\lambda}}-g^{*})_{V}+2(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\\
+ & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2\left|(\epsilon,\hat{g}_{\hat{\lambda}}-g^{*})_{V}\right|+2\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|
+\end{eqnarray*}
+
+
+\textbf{Case 1:} $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}$ is
+the largest term on the RHS
+
+On the set $\mathcal{T}$, we have 
+\[
+\left|\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}-\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{T}^{2}\right|\le\delta\left(I(\hat{g}_{\tilde{\lambda}})+I(g^{*})\right)^{2}
+\]
+
+
+Since $\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{T}=O_{p}(\tilde{\lambda})I^{v/2}(g^{*})$,
+then
+
+\begin{eqnarray*}
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}^{2} & \le & \delta\left(I(\hat{g}_{\tilde{\lambda}})+I(g^{*})\right)^{2}+\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{T}^{2}\\
+ & \le & \delta\left(I(\hat{g}_{\tilde{\lambda}})+I(g^{*})\right)^{2}+O_{p}\left(\tilde{\lambda}^{2}\right)I^{v}(g^{*})\\
+ & \le & O_{p}(1)\delta I^{2}(g^{*})+O_{p}\left(\tilde{\lambda}^{2}\right)I^{v}(g^{*})
+\end{eqnarray*}
+
+
+Since we also know the order of $\lambda^{*}$, we have 
+\begin{eqnarray*}
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V} & = & \sqrt{O_{p}(1)\delta I^{2}(g^{*})+O_{p}(n^{-2/(2+\alpha)})I^{v-(2v-2\alpha+v\alpha)/(2+\alpha)}(g^{*})}
+\end{eqnarray*}
+
+
+Here, we are looking at a convergence rate of 
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}=O_{p}(n^{-1/4})I(g^{*})
+\]
+
+
+or 
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}=O_{p}(n^{-1/(2+\alpha)})I^{v/2-(2v-2\alpha+v\alpha)/2(2+\alpha)}(g^{*})
+\]
+
+
+\textbf{Case 2:} $\left|2(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|$
+is the largest term on the RHS
+
+On set $\mathcal{T}$, we have 
+\begin{eqnarray*}
+|(\epsilon,\hat{g}_{\tilde{\lambda}}-g^{*})|_{V} & \le & \delta\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}^{1-\alpha/2}\left(I(\hat{g}_{\tilde{\lambda}})+I(g^{*})\right)^{\alpha/2}\\
+ & \le & \delta\left(O_{p}(1)\delta I^{2}(g^{*})+O_{p}(n^{-2/(2+\alpha)})I^{-(2v-2\alpha+v\alpha)/(2+\alpha)}(g^{*})I^{v}(g^{*})\right)^{1-\alpha/2}I^{\alpha/2}(g^{*})O_{p}(1)
+\end{eqnarray*}
+
+
+Hence
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}=\sqrt{\delta\left(O_{p}(1)\delta I^{2}(g^{*})+O_{p}(n^{-2/(2+\alpha)})I^{-(2v-2\alpha+v\alpha)/(2+\alpha)}(g^{*})I^{v}(g^{*})\right)^{1-\alpha/2}I^{\alpha/2}(g^{*})O_{p}(1)}
+\]
+
+
+Here we are looking at a convergence rate of
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}=O_{p}(n^{(\alpha-3)/4})I^{2-\alpha/2}(g^{*})
+\]
+
+
+\textbf{Case 3:} $\left|2(\epsilon,\hat{g}_{\hat{\lambda}}-g^{*})_{V}\right|$
+is the largest term on the RHS
+
+On set $\mathcal{T}$, we have 
+\begin{eqnarray*}
+|(\epsilon,\hat{g}_{\hat{\lambda}}-g^{*})|_{V} & \le & \delta\left\Vert \hat{g}_{\hat{\lambda}}-g^{*}\right\Vert _{V}^{1-\alpha/2}\left(I(\hat{g}_{\hat{\lambda}})+I(g^{*})\right)^{\alpha/2}
+\end{eqnarray*}
+
+
+So 
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}^{2}\le6\delta\left\Vert \hat{g}_{\hat{\lambda}}-g^{*}\right\Vert _{V}^{1-\alpha/2}\left(I(\hat{g}_{\hat{\lambda}})+I(g^{*})\right)^{\alpha/2}
+\]
+
+
+Dividing both sides, we get
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(1)\delta^{2/(2+\alpha)}\left(I(\hat{g}_{\hat{\lambda}})+I(g^{*})\right)^{\alpha/(2+\alpha)}
+\]
+
+
+This is tricky since $I(\hat{g}_{\hat{\lambda}})$ is unknown.
+
+Let's add the assumption that $\lambda_{min}=O_{p}(n^{-t})$ for some
+$t>0$. We must make sure that $\lambda_{min}\le\tilde{\lambda}$.
+Let's consider these two cases:
+
+\textbf{Case 3a: }$I(\hat{g}_{\hat{\lambda}})\ge I(\hat{g}_{\tilde{\lambda}})$
+
+By definition of $\hat{g}_{\hat{\lambda}}$, we have that 
+\[
+\|y-\hat{g}_{\hat{\lambda}}\|_{T}^{2}+\hat{\lambda}^{2}I^{v}(\hat{g}_{\hat{\lambda}})\le\|y-\hat{g}_{\tilde{\lambda}}\|_{T}^{2}+\hat{\lambda}^{2}I^{v}(\hat{g}_{\tilde{\lambda}})
+\]
+
+
+which implies that
+\[
+\hat{\lambda}^{2}I^{v}(\hat{g}_{\hat{\lambda}})\le\|y-\hat{g}_{\tilde{\lambda}}\|_{T}^{2}+\hat{\lambda}^{2}I^{v}(\hat{g}_{\tilde{\lambda}})
+\]
+
+
+\textbf{Case 3aa:} If $\|y-\hat{g}_{\tilde{\lambda}}\|_{T}^{2}\le\hat{\lambda}^{2}I^{v}(\hat{g}_{\tilde{\lambda}})$,
+then $I^{v}(\hat{g}_{\hat{\lambda}})\le2I^{v}(\hat{g}_{\tilde{\lambda}})$.
+Refer to Case 3b below to see that 
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(1)\delta^{2/(2+\alpha)}I(g^{*})^{\alpha/(2+\alpha)}
+\]
+
+
+\textbf{Case 3ab:} If $\|y-\hat{g}_{\tilde{\lambda}}\|_{T}^{2}\ge\hat{\lambda}^{2}I^{v}(\hat{g}_{\tilde{\lambda}})$,
+then $\hat{\lambda}^{2}I^{v}(\hat{g}_{\hat{\lambda}})\le2\|y-\hat{g}_{\tilde{\lambda}}\|_{T}^{2}$.
+Since we know that $\|y-\hat{g}_{\tilde{\lambda}}\|_{T}=O_{p}(\tilde{\lambda})I^{v/2}(g^{*})$.
+Hence we find that
+
+\[
+I(\hat{g}_{\hat{\lambda}})\le O_{p}(n^{(2t-2/(2+\alpha))/v})I^{1-(2v-2\alpha+v\alpha)/(v(2+\alpha))}(g^{*})
+\]
+
+
+Plugging the above into the inequality
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(1)\delta^{2/(2+\alpha)}I(\hat{g}_{\hat{\lambda}})^{\alpha/(2+\alpha)}
+\]
+
+
+we get
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le\delta^{2/(2+\alpha)}O_{p}(n^{(2t-\frac{2}{2+\alpha})\frac{\alpha}{(2+\alpha)v}})I^{\frac{\alpha}{2+\alpha}\frac{2\alpha}{v(2+\alpha)}}(g^{*})
+\]
+
+
+Since $\delta=O(n^{-1/2})$, then we just need $t$ s.t. 
+\[
+(2t-\frac{2}{2+\alpha})\frac{\alpha}{(2+\alpha)v}-\frac{1}{2+\alpha}<0
+\]
+
+
+in order to have $\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\rightarrow0$
+as $n\rightarrow\infty$. Rearranging, we get that we must choose
+$t$ s.t. 
+\[
+t<\frac{v}{2\alpha}+\frac{1}{2+\alpha}
+\]
+
+
+We check that indeed, we can choose $\lambda_{min}\le\tilde{\lambda}$
+since $\tilde{\lambda}=O_{p}(n^{-1/(2+\alpha)})I^{(2v-2\alpha+v\alpha)/(2(2+\alpha))}(g^{*})$.
+
+Let $\theta\in(0,1)$. Then reparameterizing $t=\theta\frac{v}{2\alpha}+\frac{1}{2+\alpha}$,
+we get the following convergence rate:
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(n^{\frac{\theta-1}{2+\alpha}})I^{\frac{\alpha}{2+\alpha}\frac{2\alpha}{v(2+\alpha)}}(g^{*})
+\]
+
+
+So if we choose $\theta$ close to 1, then we get super slow convergence
+rate. If we choose $\theta$ close to 0, then we are essentially requiring
+$\lambda_{min}=\tilde{\lambda},$ which gives us a great convergence
+rate but the value $\lambda_{min}$ will be hard to determine. If
+we choose $\theta=1/2$, then we get a convergence rate about $O_{p}(n^{-1/(4+2\alpha)})$.
+There's a tradeoff between choosing $\lambda_{min}$ as small as possible
+and the convergence rate.
+
+\textbf{Case 3b: }$I(\hat{g}_{\hat{\lambda}})\le I(\hat{g}_{\tilde{\lambda}})$
+
+We're all happy in this case since we know that $I(g_{\tilde{\lambda}})=O_{p}(1)I(g^{*})$:
+
+\begin{eqnarray*}
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V} & \le & O_{p}(1)\delta^{2/(2+\alpha)}\left(I(g_{\tilde{\lambda}})+I(g^{*})\right)^{\alpha/(2+\alpha)}\\
+ & = & O_{p}(1)\delta^{2/(2+\alpha)}\left(O_{p}(1)I(g^{*})\right)^{\alpha/(2+\alpha)}\\
+ & = & O_{p}(1)\delta^{2/(2+\alpha)}I(g^{*})^{\alpha/(2+\alpha)}\\
+ & = & O_{p}(n^{-1/(2+\alpha)})I(g^{*})^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+
+So we have convergence rates of either
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}=O_{p}(n^{-\frac{\theta}{2+\alpha}})I^{\frac{\alpha}{2+\alpha}\frac{2\alpha}{v(2+\alpha)}}(g^{*})
+\]
+
+
+or
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}=O_{p}(n^{-1/(2+\alpha)})I(g^{*})^{\alpha/(2+\alpha)}
+\]
+
+
+
+\subsubsection*{Summary}
+
+From the three cases, we've found that $\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}$
+converges the slowest in case 3ab, for $\theta\in(0,1)$:
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}=O_{p}(n^{\frac{\theta-1}{2+\alpha}})I^{\frac{\alpha}{2+\alpha}\frac{2\alpha}{v(2+\alpha)}}(g^{*})
+\]
+
+
+
+\subsubsection*{Mini Appendix}
+
+
+\subsubsection*{Lemma}
+
+Define function classes $\mathcal{G}'=\{f\}$ and $\mathcal{G}"=\{f^{2}\}$
+and let $Q_{n}$ be an empirical measure. Suppose $\|f\|_{Q_{n}}^{2}<R<\infty\forall f\in\mathcal{G}'$.
+Then for some constant $K$, we have 
+\[
+H\left(\delta K,\mathcal{G}",Q_{n}\right)\le H\left(\delta,\mathcal{G}',Q_{n}\right)
+\]
+
+
+
+\subsubsection*{Proof}
+
+Let the $\delta$-cover set for $\mathcal{G}'$ be $\{f_{1},...,f_{N}\}$.
+Consider any function $f\in\mathcal{G}'$. WLOG, suppose
+
+\[
+\frac{1}{n}\sum(f-f_{1})^{2}(x_{i})\le\delta
+\]
+
+
+Note that 
+\begin{eqnarray*}
+\sum\left|f^{2}-f_{1}^{2}\right|(x_{i}) & = & \sum\left|(f-f_{1})(f+f_{1})\right|(x_{i})\\
+ & \le & \sqrt{\left(\sum(f-f_{1})^{2}(x_{i})\right)\left(\sum(f+f_{1})^{2}(x_{i})\right)}\\
+ & \le & n\sqrt{\delta K}
+\end{eqnarray*}
+
+
+Hence
+
+\[
+\sum\left|f^{2}-f_{1}^{2}\right|^{2}(x_{i})\le\left(\sum\left|f^{2}-f_{1}^{2}\right|(x_{i})\right)^{2}\le n^{2}\delta K
+\]
+
+
+That is, 
+\[
+\|f^{2}-f_{1}^{2}\|_{Q_{n}}\le\delta K
+\]
+
+\end{document}

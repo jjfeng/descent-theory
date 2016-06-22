@@ -1,0 +1,583 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amssymb}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+
+\subsection*{Definitions}
+
+We find the best model for $y$ over function class $\mathcal{G}$.
+Presume $g^{*}\in\mathcal{G}$ is the true model and 
+\[
+y=g^{*}(X)+\epsilon
+\]
+
+
+Given a training set $T$ , We define the fitted models 
+\[
+\hat{g}_{\lambda}=\|y-g\|_{T}^{2}+\lambda^{2}I^{v}(g)
+\]
+
+
+Given a validation set $T$ , let the CV-fitted model be 
+\[
+\hat{g}_{\hat{\lambda}}=\arg\min_{\lambda}\|y-\hat{g}_{\lambda}\|_{V}^{2}
+\]
+
+
+
+\subsection*{Assumptions}
+
+Suppose we have sub-Gaussian errors $\epsilon$ for constants $K$
+and $\sigma_{0}^{2}$:
+\[
+\max_{i=1:n}K^{2}\left(E\left[\exp(|\epsilon_{i}|^{2}K^{2})-1\right]\right)\le\sigma_{0}^{2}
+\]
+
+
+Suppose $v>2\alpha/(2+\alpha)$. 
+
+Suppose that the entropy of the class $\mathcal{G}'$ is 
+\begin{eqnarray*}
+H\left(\delta,\mathcal{G}'=\left\{ \frac{g-g^{*}}{I(g)+I(g^{*})}:g\in\mathcal{G},I(g)+I(g^{*})>0\right\} ,P_{n}\right) & \le & \tilde{A}\delta^{-\alpha}
+\end{eqnarray*}
+ 
+
+Suppose for all $\lambda\in\Lambda$, $I^{v}(\hat{g}_{\lambda})$
+is upper bounded by $\|\hat{g}_{\lambda}\|_{n}^{2}=\frac{1}{n}\sum_{i=1}^{n}\hat{g}_{\lambda}(x_{i})$.
+See Lemma 1 below for the specific assumption. This assumption includes
+Ridge, Lasso, Generalized Lasso, Group Lasso, and the Sobelov norm.
+In the example below, I show that the Sobelov norm also satisfies
+these conditions.
+
+
+\subsection*{Result 1:}
+
+For now, we will suppose $P_{n}=\{X_{i}\}_{i=1}^{n}$ are the same
+between the validation and training set. 
+
+Also, suppose the penalty normalizes the empirical norm such that:
+
+\[
+\sup_{g\in\mathcal{G}}\frac{\|g-g^{*}\|_{n}}{I(g)+I(g^{*})}\le R<\infty
+\]
+
+
+Suppose for all $\lambda\in\Lambda$, $I^{v}(\hat{g}_{\lambda})$
+is upper bounded by its $L_{2}$-norm with some constant $M$ and
+$M_{0}$ such that
+
+\[
+I^{v}(\hat{g}_{\lambda})\le M\|\hat{g}_{\lambda}\|_{n}^{2}+M_{0}
+\]
+
+
+Then
+
+\[
+\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{n}=O_{p}(n^{-1/(2+\alpha)})\left(M^{\alpha/v(2+\alpha)}\|g^{*}\|_{n}^{\alpha/2v(2+\alpha)}\vee I^{2\alpha/(2+\alpha)}(g^{*})\right)
+\]
+
+
+
+\subsubsection*{Proof}
+
+Let $\tilde{\lambda}$ be the optimal $\lambda$ under the given assumptions,
+as specified by Van de geer. From the definition of $\hat{\lambda}$,
+we get the following basic inequality 
+\begin{eqnarray*}
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}^{2} & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2(\epsilon,\hat{g}_{\hat{\lambda}}-\hat{g}_{\tilde{\lambda}})_{V}\\
+ & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2(\epsilon,\hat{g}_{\hat{\lambda}}-g^{*})_{V}+2(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\\
+ & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2\left|(\epsilon,\hat{g}_{\hat{\lambda}}-g^{*})_{V}\right|+2\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|
+\end{eqnarray*}
+
+
+By considering the largest term on the RHS, we have following three
+cases.
+
+\textbf{Case 1:} $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}$ is
+the largest
+
+Since we have assumed that the validation and training set are equal,
+then $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}$ converges at the optimal
+rate $O_{p}(n^{-1/(2+\alpha)})$.
+
+\textbf{Case 2:} $\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|$
+is the largest
+
+In this case, since $\epsilon_{V}$ is independent of $\hat{g}_{\tilde{\lambda}}$,
+then by Cauchy Schwarz, 
+\begin{eqnarray*}
+\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right| & \le & \|\epsilon_{V}\|\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}\\
+ & \le & O_{p}\left(n^{-1/2}\right)\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}
+\end{eqnarray*}
+
+
+Hence $\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|$
+will shrink a bit faster than the optimal rate at a rate of $O_{p}(n^{-(\frac{1}{2+\alpha}+\frac{1}{2})})$.
+
+\textbf{Case 3:} $\left|(\epsilon,g^{*}-\hat{g}_{\hat{\lambda}})_{V}\right|$
+is the largest.
+
+By the assumptions given, Vandegeer (10.6) gives us that 
+\[
+\sup_{g\in\mathcal{G}}\frac{|(\epsilon,g-g*)_{n}|}{\|g-g*\|_{n}^{1-\alpha/2}(I(g^{*})+I(g))^{\alpha/2}}=O_{p}(n^{-1/2})
+\]
+
+
+Hence 
+\[
+\left|(\epsilon,g^{*}-\hat{g}_{\hat{\lambda}})_{V}\right|\le O_{p}(n^{-1/2})\|\hat{g}_{\hat{\lambda}}-g*\|_{n}^{1-\alpha/2}(I(g^{*})+I(\hat{g}_{\hat{\lambda}}))^{\alpha/2}
+\]
+
+
+If $I(g^{*})\ge I(g_{\hat{\lambda}})$ , then
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(n^{-1/(2+\alpha)})I(g^{*})^{\alpha/(2+\alpha)}
+\]
+
+
+Otherwise, we have
+
+\[
+\|\hat{g}_{\hat{\lambda}}-g*\|_{n}^{1+\alpha/2}\le O_{p}(n^{-1/2})I(\hat{g}_{\hat{\lambda}}){}^{\alpha/2}
+\]
+
+
+By Lemma 1 below, using the assumption that the penalty of $\hat{g}_{\lambda}$
+is bounded above by its $L_{2}(P_{n})$ norm, we have that
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha/v(2+\alpha)}\|g^{*}\|_{n}^{\alpha/2v(2+\alpha)}
+\]
+
+
+
+\subsection*{Result 2:}
+
+Now suppose that the training and validation set are independently
+sampled, so the values $X_{i}$ are not necessarily the same. We suppose
+the training and validation sets are both of size $n$.
+
+Suppose the penalty normalizes the empirical norm as follows:
+
+\[
+\sup_{g\in\mathcal{G}}\frac{\|g-g^{*}\|_{T}}{I(g)+I(g^{*})}\le R<\infty,\mbox{ }\sup_{g\in\mathcal{G}}\frac{\|g-g^{*}\|_{V}}{I(g)+I(g^{*})}\le R<\infty
+\]
+
+
+Suppose for all $\lambda\in\Lambda$, $I^{v}(\hat{g}_{\lambda})$
+is upper bounded by its $L_{2}$-norm with constants $M$ and $M_{0}$:
+
+\[
+I^{v}(\hat{g}_{\lambda})\le M\left(\|\hat{g}_{\lambda}\|_{T}^{2}+\|\hat{g}_{\lambda}\|_{V}^{2}\right)+M_{0}=M\|\hat{g}_{\lambda}\|_{2n}^{2}+M_{0}
+\]
+
+
+Then for any $\xi>0$,
+
+\[
+\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{V}=O_{p}(n^{-1/(2+\alpha+\xi)})\left(M^{\alpha/v(2+\alpha)}\|g^{*}\|_{2n}^{\alpha/2v(2+\alpha)}\vee I(g^{*})\right)
+\]
+
+
+Hence the convergence rate is infinitely close to the optimal convergence
+rate $O_{p}(n^{-1/(2+\alpha)})$ attained by $\tilde{\lambda}$, but
+it doesn't actually attain it.
+
+
+\paragraph{Proof:}
+
+We follow the same proof structure of going thru the three cases,
+modifying the proofs as appropriate:
+
+\textbf{Case 1:} $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}$ is
+the largest
+
+By Lemma 2, we have 
+\[
+\left|\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{T}-\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}\right|\le O_{p}(n^{-1/(2+\alpha+\xi)})\left(I(\hat{g}_{\tilde{\lambda}})+I(g^{*})\right)
+\]
+
+
+Therefore, for any $\xi>0$, we have
+\begin{eqnarray*}
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V} & \le & O_{p}(1)\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}\\
+ & \le & O_{p}(1)\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{T}+O_{p}(n^{-1/(2+\alpha+\xi)})I(g^{*})
+\end{eqnarray*}
+
+
+\textbf{Case 2:} $\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|$
+is the largest
+
+The same proof still holds.
+
+\textbf{Case 3:} $\left|(\epsilon,g^{*}-\hat{g}_{\hat{\lambda}})_{V}\right|$
+is the largest.
+
+Again, we have by Van de geer (10.6),
+\[
+\left|(\epsilon,g^{*}-\hat{g}_{\hat{\lambda}})_{V}\right|\le O_{p}(n^{-1/2})\|\hat{g}_{\hat{\lambda}}-g*\|_{V}^{1-\alpha/2}(I(g^{*})+I(\hat{g}_{\hat{\lambda}}))^{\alpha/2}
+\]
+
+
+If $I(g^{*})\ge I(g_{\hat{\lambda}})$ is true, then result is clearly
+attained.
+
+Otherwise, we have
+
+\[
+\|\hat{g}_{\hat{\lambda}}-g*\|_{V}^{1+\alpha/2}\le O_{p}(n^{-1/2})I(\hat{g}_{\hat{\lambda}}){}^{\alpha/2}
+\]
+
+
+By Lemma 1 below, since the penalty is bounded above by the $L_{2}(P_{n})$
+norm, it follows that
+
+\[
+\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha/v(2+\alpha)}\|g^{*}\|_{2n}^{\alpha/2v(2+\alpha)}
+\]
+
+
+
+\subsection*{Lemmas}
+
+
+\subsubsection*{Lemma 1: }
+
+Suppose for all $\lambda\in\Lambda$, the penalty function $I^{v}(g_{\lambda})$
+is upper-bounded by $\|g_{\lambda}\|_{n}^{2}=\frac{1}{n}\sum_{i=1}^{n}g_{\lambda}^{2}(x_{i})$
+with constants $M_{0}$ and $M$:
+
+\[
+I^{v}(g_{\lambda})\le M\|g_{\lambda}\|_{n}^{2}+M_{0}
+\]
+
+
+Suppose there is some function $g^{*}\in\mathcal{G}$ such that 
+\[
+\|g^{*}-g_{\lambda}\|_{n}^{1+\alpha/2}\le O_{p}(n^{-1/2})I^{\alpha/2}(g_{\lambda})
+\]
+then for sufficiently large $n$, 
+\[
+\|g^{*}-g_{\lambda}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha/v(2+\alpha)}\|g^{*}\|_{n}^{\alpha/2v(2+\alpha)}
+\]
+
+
+\textbf{Proof:}
+
+From the assumption that $I^{v}(g_{\lambda})$ is upper-bounded by
+$\|g_{\lambda}\|_{n}^{2}$,
+
+\begin{eqnarray*}
+\|g^{*}-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(M\|g_{\lambda}\|_{n}^{2}+M_{0}\right)^{\alpha/2v}
+\end{eqnarray*}
+
+
+If $M_{0}>\|g_{\lambda}\|_{n}^{2}$, then the result immediately follows.
+
+Otherwise, if $M_{0}\le\|g_{\lambda}\|_{n}^{2}$, then
+
+\begin{eqnarray*}
+\|g^{*}-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})M^{\alpha/2v}\|g_{\lambda}\|_{n}^{\alpha/v}\\
+ & \le & O_{p}(n^{-1/2})M^{\alpha/2v}\left(\|g_{\lambda}-g^{*}\|_{n}+\|g^{*}\|_{n}\right)^{\alpha/v}
+\end{eqnarray*}
+
+
+\textbf{Case 1:} $\|g_{\lambda}-g^{*}\|_{n}\le\|g^{*}\|_{n}$
+
+The result immediately follows.
+
+\textbf{Case 2:} $\|g_{\lambda}-g^{*}\|_{n}>\|g^{*}\|_{n}$
+
+We show for sufficiently large $n$, this case will not occur. Suppose
+this case occurs. Then 
+\begin{eqnarray*}
+\|g^{*}-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})M^{\alpha/v(2+\alpha)}\|g_{\lambda}-g^{*}\|_{n}^{\alpha/v}
+\end{eqnarray*}
+
+
+Rearranging, we have that
+
+\[
+\|g^{*}-g_{\lambda}\|_{n}^{1+\alpha/2-\alpha/v}\le O_{p}(n^{-1/2})M^{\alpha/v(2+\alpha)}
+\]
+
+
+Since the LHS exponent is $1+\alpha/2-\alpha/v>0$, $\|g^{*}-g_{\lambda}\|_{n}$
+decreases with $n$. With sufficiently large $n$, we can ensure that
+only Case 1 occurs. (Check this statement!!!) 
+
+Note: I believe we can often provide a good estimate of $M$ for the
+entire class $\mathcal{G}$, which means that we can always estimate
+the sample size needed to ensure this case never occurs. That is,
+I believe we can often estimate $M$ s.t. 
+\[
+I^{v}(g)\le M\|g\|_{n}^{2}+M_{0}\forall g\in\mathcal{G}
+\]
+
+
+
+\subsubsection*{Lemma 2:}
+
+Let $P_{n'}$ and $P_{n''}$ be empirical distributions over $\{X_{i}'\}_{i=1}^{n},\{X_{i}''\}_{i=1}^{n}$.
+Let $P_{2n}=\frac{1}{2}\left(P_{n'}+P_{n''}\right)$. Suppose $|X_{i}|\le R_{X}<\infty$.
+
+Let $\mathcal{G}'=\left\{ \frac{g-g^{*}}{I(g)+I(g^{*})}:g\in\mathcal{G},I(g)+I(g^{*})>0\right\} $.
+Suppose 
+\[
+\sup_{f\in\mathcal{G}'}\|f\|_{P_{2n}}\le R<\infty
+\]
+
+
+and 
+\[
+H\left(\delta,\mathcal{G}',P_{n'}\right)\le\tilde{A}\delta^{-\alpha},\mbox{ }H\left(\delta,\mathcal{G}',P_{n''}\right)\le\tilde{A}\delta^{-\alpha}
+\]
+
+
+Then 
+
+BAD :(
+
+\[
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}\ge6\delta\right)\le2\exp\left(2\tilde{A}\delta^{-\alpha}-\frac{4\delta^{2}}{\left(R+\sqrt{2}\delta\right)^{2}}\right)
+\]
+
+
+
+\paragraph{Proof:}
+
+The proof is very similar to that in Pollard 1984 (page 32), so some
+details below are omitted.
+
+First note that for any function $f$ and $h$, we have 
+\[
+\|f\|_{P_{n'}}-\|h\|_{P_{n'}}\le\|f-h\|_{P_{n'}}\le\sqrt{2}\|f-h\|_{P_{2n}}
+\]
+
+
+Similarly for $P_{n''}$. 
+
+Let $\{h_{j}\}_{j=1}^{N}$ be the $\sqrt{2}\delta$-cover for $\mathcal{G}'$
+(where $N=N(\sqrt{2}\delta,\mathcal{G}',P_{2n})$). Let $h_{j}$ be
+the closest function (in terms of $\|\cdot\|_{P_{2n}}$) to any $f\in\mathcal{G}'$.
+\begin{eqnarray*}
+\|f\|_{P_{n'}}-\|f\|_{P_{n''}} & \le & \|f-h_{j}\|_{P_{n'}}+\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|+\|f-h_{j}\|_{P_{n''}}\\
+ & \le & 4\delta+\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|
+\end{eqnarray*}
+
+
+Then
+\begin{eqnarray*}
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}\ge6\delta\right) & \le & Pr\left(\sup_{j\in1:N}\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|\ge2\delta\right)\\
+ & \le & N\max_{j\in1:N}Pr\left(\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|\ge2\delta\right)
+\end{eqnarray*}
+
+
+Now note that 
+\begin{eqnarray*}
+\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right| & = & \frac{\left|\|h_{j}\|_{P_{n'}}^{2}-\|h_{j}\|_{P_{n''}}^{2}\right|}{\|h_{j}\|_{P_{n'}}+\|h_{j}\|_{P_{n''}}}\\
+ & \le & \frac{\left|\|h_{j}\|_{P_{n'}}^{2}-\|h_{j}\|_{P_{n''}}^{2}\right|}{\sqrt{2}\|h_{j}\|_{P_{2n}}}
+\end{eqnarray*}
+
+
+By Hoeffding's inequality, 
+\begin{eqnarray*}
+Pr\left(\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|\ge2\delta\right) & \le & Pr\left(\left|\|h_{j}\|_{P_{n'}}^{2}-\|h_{j}\|_{P_{n''}}^{2}\right|\ge2\sqrt{2}\delta\|h_{j}\|_{P_{2n}}\right)\\
+ & = & Pr\left(\left|\sum_{i=1}^{n}W_{i}\left(h_{j}^{2}(x_{i}')-h_{j}^{2}(x_{i}'')\right)\right|\ge2\sqrt{2}n\delta\|h_{j}\|_{P_{2n}}\right)\\
+ & \le & 2\exp\left(-\frac{16\delta^{2}n^{2}\|h_{j}\|_{P_{2n}}^{2}}{4\sum_{i=1}^{n}\left(h_{j}^{2}(x_{i}')-h_{j}^{2}(x_{i}'')\right)^{2}}\right)
+\end{eqnarray*}
+
+
+Since
+
+\begin{eqnarray*}
+\sum_{i=1}^{n}\left(h_{j}^{2}(x_{i}')-h_{j}^{2}(x_{i}'')\right)^{2} & \le & \sum_{i=1}^{n}h_{j}^{4}(x_{i}')+h_{j}^{4}(x_{i}'')\\
+ & \le & n^{2}\|h_{j}\|_{P_{2n}}^{4}\\
+ & \le & n^{2}\|h_{j}\|_{P_{2n}}^{2}\left(\|f\|_{P_{2n}}+\|f-h_{j}\|_{P_{2n}}\right)^{4}\\
+ & \le & n^{2}\|h_{j}\|_{P_{2n}}^{2}\left(R+\sqrt{2}\delta\right)^{2}
+\end{eqnarray*}
+
+
+Hence 
+\[
+Pr\left(\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|\ge2\delta\right)\le2\exp\left(-\frac{4\delta^{2}}{\left(R+\sqrt{2}\delta\right)^{2}}\right)
+\]
+
+
+Since 
+\[
+N(\sqrt{2}\delta,\mathcal{G}',P_{2n})\le N(\delta,\mathcal{G}',P_{n''})+N(\delta,\mathcal{G}',P_{n''})
+\]
+
+
+then
+
+\[
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}\ge6\delta\right)\le2\exp\left(2\tilde{A}\delta^{-\alpha}-\frac{4\delta^{2}}{\left(R+\sqrt{2}\delta\right)^{2}}\right)
+\]
+
+
+Using shorthand, we can write that for any $\xi>0$, 
+\[
+\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}=O_{p}(n^{-1/(2+\alpha+\xi)})
+\]
+
+
+
+\subsubsection*{Example 1: Sobelov norm}
+
+Consider the functions 
+\[
+\mathcal{G}=\left\{ g:[0,1]\mapsto\mathbb{R}:\int_{0}^{1}g^{(m)}(z)^{2}dz<\infty\right\} 
+\]
+
+
+Suppose $x_{i}$ are all unique. Then the Sobelov norm for the class
+$\{\hat{g}_{\lambda}\in\mathcal{G}:\lambda\in\Lambda\}$ is bounded
+above by its $L_{2}(P_{n})$ norm.
+\[
+I^{2}(\hat{g}_{\lambda})=\int_{0}^{1}\left(\hat{g}_{\lambda}^{(m)}(z)\right)^{2}dz\le M\|\hat{g}_{\lambda}\|_{n}^{2}+M_{0}\forall\lambda\in\Lambda
+\]
+
+
+\textbf{Proof:}
+
+Let $\tilde{g}$ satisfy $\tilde{g}(x_{i})=y_{i}$ and have the smallest
+value for $\int_{0}^{1}\left(\tilde{g}^{(m)}(z)\right)^{2}dz$. This
+function $\tilde{g}$ should always exist. 
+
+\textbf{Case 1:} $\lambda\le1/2$
+
+By definition of $\hat{g}_{\lambda}$
+
+\[
+\|y-\hat{g}_{\lambda}\|_{n}^{2}+\lambda^{2}I^{2}(\hat{g}_{\lambda})\le\|y-(\tilde{g}-\lambda\hat{g}_{\lambda})\|_{n}^{2}+\lambda^{2}I^{2}(\tilde{g}-\lambda\hat{g}_{\lambda})
+\]
+
+
+Note that 
+\begin{eqnarray*}
+I^{2}(\tilde{g}-\lambda\hat{g}_{\lambda}) & = & \int_{0}^{1}\left(\tilde{g}^{(m)}-\lambda\hat{g}_{\lambda}^{(m)}\right)^{2}dz\\
+ & = & 2\int_{0}^{1}\max\left(\left|\tilde{g}^{(m)}\right|^{2},\left|\lambda\hat{g}_{\lambda}^{(m)}\right|^{2}\right)dz\\
+ & = & 2\left(\int_{0}^{1}\left|\tilde{g}^{(m)}\right|^{2}dz+\int_{0}^{1}\left|\lambda\hat{g}_{\lambda}^{(m)}\right|^{2}dz\right)
+\end{eqnarray*}
+
+
+Hence
+
+\[
+\lambda^{2}I^{2}(\hat{g}_{\lambda})\le\lambda^{2}\|\hat{g}_{\lambda}\|_{n}^{2}+2\lambda^{2}I^{2}(\tilde{g})+2\lambda^{4}I^{2}(\hat{g}_{\lambda})
+\]
+
+
+The following ineq follows, where the RHS is maximized when $\lambda=1/2$
+
+\[
+I^{2}(\hat{g}_{\lambda})\le\frac{\lambda^{2}}{\lambda^{2}-2\lambda^{4}}\left(\|\hat{g}_{\lambda}\|_{n}^{2}+2I^{2}(\tilde{g})\right)\le2\|\hat{g}_{\lambda}\|_{n}^{2}+4I^{2}(\tilde{g})
+\]
+
+
+\textbf{Case 2:} $\lambda>1/2$
+
+By definition of $\hat{g}_{\lambda}$
+
+\[
+\|y-\hat{g}_{\lambda}\|_{n}^{2}+\lambda^{2}I^{2}(\hat{g}_{\lambda})\le\|y\|_{n}^{2}
+\]
+
+
+The RHS is maximized when $\lambda=1/2$, so
+
+\[
+I^{2}(\hat{g}_{\lambda})\le4\|y\|_{n}^{2}
+\]
+
+
+Hence we have an upper bound for the Sobelov norm
+
+\[
+I^{2}(\hat{g}_{\lambda})\le2\|\hat{g}_{\lambda}\|_{n}^{2}+4I^{2}(\tilde{g})+4\|y\|_{n}^{2}
+\]
+
+
+
+\subsubsection*{Appendix}
+
+
+\paragraph{A cute lemma I found but never used: }
+
+Supposing that $I^{v}(\hat{g}_{\lambda})$ is continuous in $\lambda$,
+then given training data $T$, 
+\begin{eqnarray*}
+\frac{\partial}{\partial\lambda}L_{T}(\hat{g}_{\lambda},\lambda) & = & 2\lambda I^{v}(\hat{g}_{\lambda})
+\end{eqnarray*}
+
+
+Also, $L_{T}$ is convex in $\lambda$.
+
+\textbf{Proof:}
+
+By definition, 
+\[
+L_{T}(\hat{g}_{\lambda},\lambda)=\|y-\hat{g}_{\lambda}\|_{T}^{2}+\lambda^{2}I^{v}(\hat{g}_{\lambda})\le\|y-\hat{g}_{\lambda'}\|_{T}^{2}+\lambda^{2}I^{v}(\hat{g}_{\lambda'})=L_{T}(\hat{g}_{\lambda'},\lambda)
+\]
+
+
+Then we can provide upper and lower bounds for $L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1})$:
+\begin{eqnarray*}
+L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1}) & \le & L_{T}(\hat{g}_{\lambda_{1}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1})\\
+ & = & \|y-\hat{g}_{\lambda_{1}}\|_{T}^{2}+\lambda_{2}^{2}I^{v}(\hat{g}_{\lambda_{1}})-\|y-\hat{g}_{\lambda_{1}}\|_{T}^{2}-\lambda_{1}^{2}I^{v}(\hat{g}_{\lambda_{1}})\\
+ & = & (\lambda_{2}^{2}-\lambda_{1}^{2})I^{v}(\hat{g}_{\lambda_{1}})
+\end{eqnarray*}
+
+
+\begin{eqnarray*}
+L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1}) & \ge & L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{2}},\lambda_{1})\\
+ & = & \|y-\hat{g}_{\lambda_{2}}\|_{T}^{2}+\lambda_{2}^{2}I^{v}(\hat{g}_{\lambda_{2}})-\|y-\hat{g}_{\lambda_{2}}\|_{T}^{2}-\lambda_{1}^{2}I^{v}(\hat{g}_{\lambda_{2}})\\
+ & = & (\lambda_{2}^{2}-\lambda_{1}^{2})I^{v}(\hat{g}_{\lambda_{2}})
+\end{eqnarray*}
+
+
+So suppose WLOG $\lambda_{2}>\lambda_{1}$:
+\[
+(\lambda_{2}+\lambda_{1})I^{v}(\hat{g}_{\lambda_{2}})\le\frac{L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1})}{\lambda_{2}-\lambda_{1}}\le(\lambda_{2}+\lambda_{1})I^{v}(\hat{g}_{\lambda_{1}})
+\]
+
+
+So as $\lambda_{1}\rightarrow\lambda_{2}=\lambda$, we have by the
+sandwich theorem,
+
+\[
+\frac{\partial}{\partial\lambda}L_{T}(\hat{g}_{\lambda},\lambda)=2\lambda I^{v}(\hat{g}_{\lambda})
+\]
+
+
+Furthermore, given training data $T$ 
+\[
+\frac{\partial}{\partial\lambda}L_{T}(\hat{g}_{\lambda},\lambda)=\frac{\partial}{\partial\lambda}\|y-\hat{g}_{\lambda}\|_{T}^{2}+2\lambda I^{v}(\hat{g}_{\lambda})+\lambda^{2}\frac{\partial}{\partial\lambda}I^{v}(\hat{g}_{\lambda})
+\]
+
+
+then, combining this with the lemma, we have that 
+\[
+\frac{\partial}{\partial\lambda}\|y-\hat{g}_{\lambda}\|_{T}^{2}=-\lambda^{2}\frac{\partial}{\partial\lambda}I^{v}(\hat{g}_{\lambda})
+\]
+
+
+Finally, to see that $L_{T}$ is convex in $\lambda$, note that 
+\[
+\frac{\partial^{2}}{\partial\lambda^{2}}L_{T}(\hat{g}_{\lambda},\lambda)=2I^{v}(\hat{g}_{\lambda})+2\lambda vI^{v-1}(\hat{g}_{\lambda})\frac{\partial}{\partial\lambda}I(\hat{g}_{\lambda})>0
+\]
+
+
+since $\frac{\partial}{\partial\lambda}I(\hat{g}_{\lambda})>0$.
+\end{document}
