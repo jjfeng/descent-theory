@@ -52,9 +52,7 @@ H\left(\delta,\mathcal{G}'=\left\{ \frac{g-g^{*}}{I(g)+I(g^{*})}:g\in\mathcal{G}
 Suppose for all $\lambda\in\Lambda$, $I^{v}(\hat{g}_{\lambda})$
 is upper bounded by $\|\hat{g}_{\lambda}\|_{n}^{2}=\frac{1}{n}\sum_{i=1}^{n}\hat{g}_{\lambda}(x_{i})$.
 See Lemma 1 below for the specific assumption. This assumption includes
-Ridge, Lasso, Generalized Lasso, Group Lasso, and the Sobelov norm.
-In the example below, I show that the Sobelov norm also satisfies
-these conditions.
+Ridge, Lasso, Generalized Lasso, and the Group Lasso.
 
 
 \subsection*{Result 1:}
@@ -422,7 +420,7 @@ Using shorthand, we can write that for any $\xi>0$,
 
 
 
-\subsubsection*{Example 1: Sobelov norm}
+\subsubsection*{Example 1: Sobelov norm (Not done...)}
 
 Consider the functions 
 \[
@@ -432,11 +430,15 @@ Consider the functions
 
 Suppose $x_{i}$ are all unique. Then the Sobelov norm for the class
 $\{\hat{g}_{\lambda}\in\mathcal{G}:\lambda\in\Lambda\}$ is bounded
-above by its $L_{2}(P_{n})$ norm.
+above by its $L_{2}(P_{n})$ norm. 
+
 \[
-I^{2}(\hat{g}_{\lambda})=\int_{0}^{1}\left(\hat{g}_{\lambda}^{(m)}(z)\right)^{2}dz\le M\|\hat{g}_{\lambda}\|_{n}^{2}+M_{0}\forall\lambda\in\Lambda
+I^{2}(\hat{g}_{\lambda})=\int_{0}^{1}\left(\hat{g}_{\lambda}^{(m)}(z)\right)^{2}dz\le2\|\hat{g}_{\lambda}\|_{n}^{2}+4I^{2}(\tilde{g})+4\|y\|_{n}^{2}\mbox{ }\forall\lambda\in\Lambda
 \]
 
+
+PROBLEM: as defined, it is possible that $I^{2}(\tilde{g})$ grows
+with $n$, which is not okay!
 
 \textbf{Proof:}
 
