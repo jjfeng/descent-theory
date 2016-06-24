@@ -57,7 +57,8 @@ See Lemma 1 below for the specific assumption. This assumption includes
 Ridge, Lasso, Generalized Lasso, and the Group Lasso.
 
 
-\subsection*{Result 1:}
+\subsection*{Result 1: Single $\lambda$, Single Penalty, cross-validation over
+$X_{T}=X_{V}$}
 
 For now, we will suppose $P_{n}=\{X_{i}\}_{i=1}^{n}$ are the same
 between the validation and training set. 
@@ -160,7 +161,8 @@ is bounded above by its $L_{2}(P_{n})$ norm, we have that
 
 
 
-\subsection*{Result 2:}
+\subsection*{Result 2: Single $\lambda$, Single Penalty, cross-validation over
+general $X_{T},X_{V}$}
 
 Now suppose that the training and validation set are independently
 sampled, so the values $X_{i}$ are not necessarily the same. Suppose
@@ -258,6 +260,156 @@ norm, it follows that
 \[
 \|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha/v(2+\alpha)}\|g^{*}\|_{2n}^{\alpha/2v(2+\alpha)}
 \]
+
+
+
+\subsection*{Result 3: Single $\lambda$, Multiple Penalties, cross-validation
+over general $X_{T},X_{V}$}
+
+Consider an additive model:
+
+\[
+y=\sum_{j=1}^{J}g_{j}^{*}+\epsilon
+\]
+
+
+We fit the model by least squares with separate penalties for each
+function $g_{j}$:
+\[
+\{\hat{g}_{j}\}_{j=1}^{J}=\arg\min_{g_{j}\in\mathcal{G}_{j}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j})
+\]
+
+
+Suppose for all $j$, there is some $0<\alpha_{j}<2$ s.t. for all
+$\delta>0$, 
+\[
+H\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le A\delta^{-\alpha_{j}}
+\]
+
+
+If 
+\[
+\tilde{\lambda}_{T}^{-1}=O_{p}\left(n^{1/(2+\alpha_{max})}\right)I_{(j)}^{(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})/2(2+\alpha_{max})}(g_{(j)}^{*})
+\]
+
+
+then
+\[
+\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}^{2}=O_{p}\left(\tilde{\lambda}_{T}\right)\left(1\vee J^{\frac{1-\alpha_{max}}{2+\alpha_{max}}}\vee\max_{j\in1:J}\left\{ J^{\frac{v_{j}-v_{j}\alpha_{max}+\alpha_{max}}{2v_{j}+v_{j}\alpha_{max}-2\alpha_{max}}}\right\} \right)\max_{j\in1:J}\left(\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}\right)
+\]
+
+
+
+\subsubsection*{Proof:}
+
+We have the basic inequality
+
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le2\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
+\]
+
+
+\textbf{Case 1:}
+
+Suppose the RHS is dominated by the penalty term:
+\[
+\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\le\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
+\]
+
+
+It follows that
+
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}(1)\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
+\]
+
+
+Obviously,
+
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}\le O_{p}(1)\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)\le O_{p}(1)\lambda^{2}\max_{j\in1:J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
+\]
+
+
+Therefore
+
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}(\lambda)\left(\sup_{j\in1:J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)\right)^{1/2}
+\]
+
+
+\textbf{Case 2:}
+
+Suppose the RHS is dominated by the empirical process
+\[
+\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\ge\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
+\]
+
+
+We bound the empirical process as follows. By Lemma 5, we know for
+sufficiently small $\delta>0$, 
+
+\[
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\max_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le2AJ\left(\frac{\delta}{2J\left(1+R\right)}\right)^{-\alpha_{max}}
+\]
+
+
+Hence by Lemma 6,
+
+\[
+\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\left|\left(\epsilon_{T},\sum_{j=1}^{J}g_{j}-g_{j}^{*}\right)\right|}{\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|^{1-\alpha_{max}/2}\max_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)^{\alpha_{max}/2}}=O_{p}\left(n^{-1/2}J^{(1-\alpha_{max})/2}\right)
+\]
+
+
+Consequently, in this case, the basic inequality becomes 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}J^{(1-\alpha_{max})/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}\max_{j\in1:J}\left(I(\hat{g}_{j})+I(g_{j}^{*})\right)^{\alpha_{max}/2}
+\]
+
+
+Let $(j)=\arg\max_{j\in1:J}I(\hat{g}_{j})+I(g_{j}^{*})$. 
+
+\textbf{Case 2a:} Suppose $I(\hat{g}_{(j)})\le I(g_{(j)}^{*})$. 
+
+Then 
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(n^{-1/(2+\alpha_{max})}J^{(1-\alpha_{max})/(2+\alpha_{max})}\right)I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(g_{(j)}^{*})\\
+ & \le & O_{p}(\lambda)J^{(1-\alpha_{max})/(2+\alpha_{max})}\sup_{j\in1:J}\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}
+\end{eqnarray*}
+
+
+\textbf{Case 2b:} Suppose $I(\hat{g}_{(j)})\ge I(g_{(j)}^{*})$. 
+
+Then 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-1/(2+\alpha_{max})}J^{(1-\alpha_{max})/(2+\alpha_{max})}\right)I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(\hat{g}_{(j)})
+\]
+
+
+and 
+\[
+\lambda^{2}I_{(j)}^{v_{(j)}}(\hat{g}_{(j)})\le\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}J^{(3-\alpha_{max})/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}I_{(j)}^{\alpha_{max}/2}(\hat{g}_{(j)})
+\]
+
+
+Hence
+
+\[
+I_{(j)}^{v_{(j)}-\alpha_{max}/2}(\hat{g}_{(j)})\le O_{p}\left(n^{-1/2}J^{(3-\alpha_{max})/2}\right)\lambda^{-2}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}
+\]
+
+
+Simplifying, we get 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-v_{(j)}/(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})}J^{\frac{v_{(j)}-v_{(j)}\alpha_{max}+\alpha_{max}}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}\right)\lambda^{-2\alpha_{max}/(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})}
+\]
+
+
+By our choice of $\tilde{\lambda}$, we have
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(\lambda\right)J^{\frac{v_{(j)}-v_{(j)}\alpha_{max}+\alpha_{max}}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(g_{(j)}^{*})\\
+ & \le & O_{p}\left(\lambda\right)\max_{j\in1:J}\left(J^{\frac{v_{j}-v_{j}\alpha_{max}+\alpha_{max}}{2v_{j}+v_{j}\alpha_{max}-2\alpha_{max}}}\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}\right)
+\end{eqnarray*}
 
 
 
@@ -442,6 +594,166 @@ Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n'
 Using shorthand, we can write that for any $\xi>0$, 
 \[
 \sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}=O_{p}(n^{-1/(2+\alpha+\xi)})
+\]
+
+
+
+\subsubsection*{Lemma 3:}
+
+Suppose the function class $\mathcal{F}$ is bounded s.t. $\sup_{f\in\mathcal{F}}\|f\|_{n}\le R<\infty$.
+Let 
+\[
+\tilde{\mathcal{F}}=\left\{ \gamma f\mbox{ }:\mbox{ }f\in\mathcal{F},\gamma\in(0,1]\right\} 
+\]
+
+
+\[
+H\left(\delta(1+R+\delta),\tilde{\mathcal{F}},\|\cdot\|_{n}\right)\le\log(1+\lfloor\frac{1}{\delta}\rfloor)+H\left(\delta,\mathcal{F},\|\cdot\|_{n}\right)
+\]
+
+
+
+\paragraph*{Proof:}
+
+Let $\{h_{i}\}_{i=1}^{N}$ be the $\delta$-cover for $\mathcal{F}$.
+Consider any $f\in\mathcal{F}$ and let $h_{(f)}$ be the closest
+function in $\delta$-cover for $\mathcal{F}$. Choose $j\in\mathbb{Z}^{+}$
+such that $|\gamma-\delta j|<\delta$.
+
+\begin{eqnarray*}
+\|\gamma f-\delta jh_{(f)}\|_{n} & \le & \|\gamma f-\gamma h_{(f)}\|_{n}+\|\gamma h_{(f)}-\delta jh_{(f)}\|_{n}\\
+ & \le & \gamma\|f-h_{(f)}\|_{n}+|\gamma-\delta j|\|h_{(f)}\|_{n}\\
+ & \le & \gamma\delta+\delta\left(\|f-h_{(f)}\|_{n}+\|f\|_{n}\right)\\
+ & \le & \gamma\delta+\delta\left(\delta+R\right)\\
+ & \le & \delta\left(1+R+\delta\right)
+\end{eqnarray*}
+
+
+Hence we have found that the following $N(1+\lfloor\frac{1}{\delta}\rfloor)$
+functions form a $\delta(1+R+\delta)$-cover for $\tilde{\mathcal{F}}$:
+\[
+\{h_{i}\}_{i=1}^{N}\cup\left\{ j\delta h_{i}\mbox{ }:\mbox{ }j\in1:\lfloor\frac{1}{\delta}\rfloor,i\in1:N\right\} 
+\]
+
+
+
+\subsubsection*{Lemma 4:}
+
+Define function classes $\{\mathcal{F}_{j}\}_{j=1}^{J}$ and 
+\[
+\tilde{\mathcal{F}}=\left\{ \sum_{j=1}^{J}f_{j}\mbox{ }:\mbox{ }f_{j}\in\mathcal{F}_{j}\right\} 
+\]
+
+
+Then
+
+\[
+H\left(J\delta,\tilde{\mathcal{F}},\|\cdot\|_{n}\right)\le\sum_{j=1}^{J}H\left(\delta,\mathcal{F}_{j},\|\cdot\|_{n}\right)
+\]
+
+
+
+\paragraph*{Proof:}
+
+For every $j=1:J$, consider any $f_{j}\in\mathcal{F}_{j}$ and let
+$h_{(j)}$ be the closest function in the $\delta$-cover for $\mathcal{F}_{j}$.
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}f_{j}-\sum_{j=1}^{J}h_{(j)}\| & \le & \sum_{j=1}^{J}\|f_{j}-h_{(j)}\|\le J\delta
+\end{eqnarray*}
+
+
+Hence$\exp\left(\sum_{j=1}^{J}H\left(\delta,\mathcal{F}_{j},\|\cdot\|_{n}\right)\right)$
+functions form a $J\delta$-cover for $\tilde{\mathcal{F}}$.
+
+
+\subsubsection*{Lemma 5:}
+
+Suppose for all $j=1,...,J$, there is some $\alpha_{j}>0$ and $A_{j}>0$
+s.t. the following entropy bound holds for all $\delta>0$
+
+\[
+H\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le A\delta^{-\alpha_{j}}
+\]
+
+
+Then for sufficiently small$\delta>0$, we have
+
+\[
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le2JA\left(\frac{\delta}{2J\left(1+R\right)}\right)^{-\alpha_{max}}
+\]
+
+
+where $\alpha_{max}=\max_{j\in1:J}\alpha_{j}$.
+
+
+\paragraph*{Proof:}
+
+By Lemma 3,
+\[
+H\left(\delta(1+R+\delta),\left\{ \gamma\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}\mbox{ }:\mbox{ }g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0,\gamma\in(0,1]\right\} ,\|\cdot\|_{T}\right)\le\log(1+\lfloor\frac{1}{\delta}\rfloor)+A\delta^{-\alpha_{j}}
+\]
+
+
+Note that 
+\[
+\frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}=\sum_{j=1}^{J}\left(\frac{I(g_{j})+I(g_{j}^{*})}{\sup_{\ell\in1:J}I(g_{\ell})+I(g_{\ell}^{*})}\right)\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}
+\]
+
+
+By Lemma 4,
+
+\[
+H\left(J\delta(1+R+\delta),\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}\mbox{ }:\mbox{}g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le J\log(1+\lfloor\frac{1}{\delta}\rfloor)+JA\delta^{-\alpha_{j}}
+\]
+
+
+Hence for sufficiently small $\delta$, 
+\[
+H\left(J\delta(1+R+\delta),\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}\mbox{ }:\mbox{}g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le2JA\delta^{-\alpha_{max}}
+\]
+
+
+Rearranging, we get 
+\begin{eqnarray*}
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right) & \le & 2AJ\left(\sqrt{\left(\frac{1+R}{2}\right)^{2}+\frac{\delta}{J}}-\frac{1+R}{2}\right)^{-\alpha_{max}}\\
+ & \le & 2AJ\left(\frac{\delta}{2J\left(1+R\right)}\right)^{-\alpha_{max}}
+\end{eqnarray*}
+
+
+(Used the fact that for $b>0$ small enough, $\sqrt{a^{2}+b}-a\ge\sqrt{(a+\frac{b}{4a})^{2}}-a=\frac{b}{4a}$)
+
+
+\subsubsection*{Lemma 6:}
+
+Suppose $\epsilon_{i}$ are sub-gaussian errors and for the function
+class $\mathcal{F}$, we have that for some $0<\alpha<2$, $A'>0$,
+and $J>0$
+
+\[
+H\left(\delta,\mathcal{F},\|\cdot\|_{T}\right)\le A'J^{\tau}\delta^{-\alpha}\mbox{ }\forall\delta>0
+\]
+
+
+Then for $T=2C_{1}CA'^{1/2}J^{\tau/2}2^{1-\alpha/2}$
+
+\[
+Pr\left(\sup_{f\in\mathcal{F}}\frac{\left|\frac{1}{\sqrt{n}}\sum_{i=1}^{n}\epsilon_{i}f(z_{i})\right|}{\|f\|_{n}^{1-\alpha/2}}\ge T\right)\le c\exp(-T^{2}/c^{2})
+\]
+
+
+
+\paragraph*{Proof:}
+
+Follow proof for Lemma 8.4 in Vandegeer, but with $A=A'J^{-\alpha}$.
+Note that we then have $A_{0}=A'^{1/2}J^{\tau/2}$. We then get 
+\[
+Pr\left(\sup_{f\in\mathcal{F}}\frac{\left|\frac{1}{\sqrt{n}}\sum_{i=1}^{n}\epsilon_{i}f(z_{i})\right|}{\|f\|_{n}^{1-\alpha/2}}\ge2C_{1}CA'^{1/2}J^{\tau/2}2^{1-\alpha/2}\right)\le c\exp(-T^{2}/c^{2})
+\]
+
+
+Note that we can write via shorthand that
+\[
+\sup_{f\in\mathcal{F}}\frac{\left|\frac{1}{n}\sum_{i=1}^{n}\epsilon_{i}f(z_{i})\right|}{\|f\|_{n}^{1-\alpha/2}}=O_{p}(J^{\tau/2}n^{-1/2})
 \]
 
 
