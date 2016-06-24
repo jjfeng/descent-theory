@@ -263,8 +263,8 @@ norm, it follows that
 
 
 
-\subsection*{Result 3: Single $\lambda$, Multiple Penalties, cross-validation
-over general $X_{T},X_{V}$}
+\subsection*{Result 3: Single $\lambda$, Multiple Penalties, Optimal $\tilde{\lambda}_{T}$
+over $X_{T}$}
 
 Consider an additive model:
 
@@ -280,22 +280,35 @@ function $g_{j}$:
 \]
 
 
+Suppose $v_{j}>\frac{2\alpha_{j}}{2+\alpha_{j}}$ for all $j$.
+
 Suppose for all $j$, there is some $0<\alpha_{j}<2$ s.t. for all
 $\delta>0$, 
 \[
-H\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le A\delta^{-\alpha_{j}}
+H\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le\frac{A}{J}\delta^{-\alpha_{j}}
 \]
 
 
-If 
+If we choose $\lambda$ s.t. 
 \[
 \tilde{\lambda}_{T}^{-1}=O_{p}\left(n^{1/(2+\alpha_{max})}\right)I_{(j)}^{(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})/2(2+\alpha_{max})}(g_{(j)}^{*})
 \]
 
 
+where 
+\[
+(j)=\arg\max_{j\in1:J}\left(I_{j}(\hat{g}_{j})+I_{j}(g_{j}^{*})\right)
+\]
+
+
+(\textbf{NOTE: A circular definition for optimal lambda!} You choose
+$\lambda$ based on the fitted model $\hat{g}_{j}$ for $\lambda$.
+I think this is okay, but it just means you'll never be able to figure
+out which $\lambda$ is optimal is real life).
+
 then
 \[
-\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}^{2}=O_{p}\left(\tilde{\lambda}_{T}\right)\left(1\vee J^{\frac{1-\alpha_{max}}{2+\alpha_{max}}}\vee\max_{j\in1:J}\left\{ J^{\frac{v_{j}-v_{j}\alpha_{max}+\alpha_{max}}{2v_{j}+v_{j}\alpha_{max}-2\alpha_{max}}}\right\} \right)\max_{j\in1:J}\left(\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}\right)
+\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}=O_{p}\left(\tilde{\lambda}_{T}\right)\left(J^{\frac{\alpha_{max}}{2+\alpha_{max}}}\vee\max_{j\in1:J}\left\{ J^{\frac{\alpha_{max}-v_{j}+1}{2v_{j}+v_{j}\alpha_{max}-2\alpha_{max}}}\right\} \right)\max_{j\in1:J}\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}
 \]
 
 
@@ -350,20 +363,20 @@ We bound the empirical process as follows. By Lemma 5, we know for
 sufficiently small $\delta>0$, 
 
 \[
-H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\max_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le2AJ\left(\frac{\delta}{2J\left(1+R\right)}\right)^{-\alpha_{max}}
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\max_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le2A\left(\frac{\delta}{2J\left(1+R\right)}\right)^{-\alpha_{max}}
 \]
 
 
 Hence by Lemma 6,
 
 \[
-\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\left|\left(\epsilon_{T},\sum_{j=1}^{J}g_{j}-g_{j}^{*}\right)\right|}{\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|^{1-\alpha_{max}/2}\max_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)^{\alpha_{max}/2}}=O_{p}\left(n^{-1/2}J^{(1-\alpha_{max})/2}\right)
+\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\left|\left(\epsilon_{T},\sum_{j=1}^{J}g_{j}-g_{j}^{*}\right)\right|}{\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|^{1-\alpha_{max}/2}\max_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)^{\alpha_{max}/2}}=O_{p}\left(n^{-1/2}J^{\alpha_{max}/2}\right)
 \]
 
 
 Consequently, in this case, the basic inequality becomes 
 \[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}J^{(1-\alpha_{max})/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}\max_{j\in1:J}\left(I(\hat{g}_{j})+I(g_{j}^{*})\right)^{\alpha_{max}/2}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}J^{\alpha_{max}/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}\max_{j\in1:J}\left(I(\hat{g}_{j})+I(g_{j}^{*})\right)^{\alpha_{max}/2}
 \]
 
 
@@ -373,8 +386,8 @@ Let $(j)=\arg\max_{j\in1:J}I(\hat{g}_{j})+I(g_{j}^{*})$.
 
 Then 
 \begin{eqnarray*}
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(n^{-1/(2+\alpha_{max})}J^{(1-\alpha_{max})/(2+\alpha_{max})}\right)I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(g_{(j)}^{*})\\
- & \le & O_{p}(\lambda)J^{(1-\alpha_{max})/(2+\alpha_{max})}\sup_{j\in1:J}\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(n^{-1/(2+\alpha_{max})}J^{\alpha_{max}/(2+\alpha_{max})}\right)I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(g_{(j)}^{*})\\
+ & \le & O_{p}(\lambda)J^{\alpha_{max}/(2+\alpha_{max})}\sup_{j\in1:J}\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}
 \end{eqnarray*}
 
 
@@ -382,33 +395,26 @@ Then
 
 Then 
 \[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-1/(2+\alpha_{max})}J^{(1-\alpha_{max})/(2+\alpha_{max})}\right)I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(\hat{g}_{(j)})
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-1/(2+\alpha_{max})}J^{\alpha_{max}/(2+\alpha_{max})}\right)I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(\hat{g}_{(j)})
 \]
 
 
 and 
 \[
-\lambda^{2}I_{(j)}^{v_{(j)}}(\hat{g}_{(j)})\le\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}J^{(3-\alpha_{max})/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}I_{(j)}^{\alpha_{max}/2}(\hat{g}_{(j)})
-\]
-
-
-Hence
-
-\[
-I_{(j)}^{v_{(j)}-\alpha_{max}/2}(\hat{g}_{(j)})\le O_{p}\left(n^{-1/2}J^{(3-\alpha_{max})/2}\right)\lambda^{-2}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}
+I_{(j)}^{v_{(j)}}(\hat{g}_{(j)})\le\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}J^{(2+\alpha_{max})/2}\right)\lambda^{-2}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}I_{(j)}^{\alpha_{max}/2}(\hat{g}_{(j)})
 \]
 
 
 Simplifying, we get 
 \[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-v_{(j)}/(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})}J^{\frac{v_{(j)}-v_{(j)}\alpha_{max}+\alpha_{max}}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}\right)\lambda^{-2\alpha_{max}/(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-\frac{2v_{(j)}-\alpha_{max}}{2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max}}}J^{\frac{\alpha_{max}-v_{(j)}+1}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}\right)\lambda^{-2\alpha_{max}/(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})}
 \]
 
 
 By our choice of $\tilde{\lambda}$, we have
 \begin{eqnarray*}
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(\lambda\right)J^{\frac{v_{(j)}-v_{(j)}\alpha_{max}+\alpha_{max}}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(g_{(j)}^{*})\\
- & \le & O_{p}\left(\lambda\right)\max_{j\in1:J}\left(J^{\frac{v_{j}-v_{j}\alpha_{max}+\alpha_{max}}{2v_{j}+v_{j}\alpha_{max}-2\alpha_{max}}}\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}\right)
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(\lambda\right)J^{\frac{\alpha_{max}-v_{(j)}+1}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(g_{(j)}^{*})\\
+ & \le & O_{p}\left(\lambda\right)\max_{j\in1:J}\left(J^{\frac{\alpha_{max}-v_{(j)}+1}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}\right)
 \end{eqnarray*}
 
 
@@ -662,7 +668,7 @@ $h_{(j)}$ be the closest function in the $\delta$-cover for $\mathcal{F}_{j}$.
 \end{eqnarray*}
 
 
-Hence$\exp\left(\sum_{j=1}^{J}H\left(\delta,\mathcal{F}_{j},\|\cdot\|_{n}\right)\right)$
+Hence $\exp\left(\sum_{j=1}^{J}H\left(\delta,\mathcal{F}_{j},\|\cdot\|_{n}\right)\right)$
 functions form a $J\delta$-cover for $\tilde{\mathcal{F}}$.
 
 
