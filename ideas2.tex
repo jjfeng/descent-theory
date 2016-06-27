@@ -267,203 +267,6 @@ norm, it follows that
 \subsection*{Result 3: Single $\lambda$, Multiple Penalties, Optimal $\tilde{\lambda}_{T}$
 over $X_{T}$}
 
-Consider an additive model:
-
-\[
-y=\sum_{j=1}^{J}g_{j}^{*}+\epsilon
-\]
-
-
-We fit the model by least squares with separate penalties for each
-function $g_{j}$:
-\[
-\{\hat{g}_{j}\}_{j=1}^{J}=\arg\min_{g_{j}\in\mathcal{G}_{j}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j})
-\]
-
-
-Suppose $v_{j}>\frac{2\alpha_{j}}{2+\alpha_{j}}$ for all $j$.
-
-Suppose for all $j$, there is some $0<\alpha_{j}<2$ s.t. for all
-$\delta>0$, 
-\[
-H\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le\frac{A}{J}\delta^{-\alpha_{j}}
-\]
-
-
-and for all $j$, 
-\[
-\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\|g_{j}-g_{j}^{*}\|_{T}}{I(g_{j})+I(g_{j}^{*})}\le R<\infty
-\]
-
-
-If we choose $\lambda$ s.t. 
-\[
-\tilde{\lambda}_{T}^{-1}=O_{p}\left(n^{1/(2+\alpha_{max})}\right)I_{(j)}^{(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})/2(2+\alpha_{max})}(g_{(j)}^{*})
-\]
-
-
-where 
-\[
-(j)=\arg\max_{j\in1:J}\left(I_{j}(\hat{g}_{j})+I_{j}(g_{j}^{*})\right)
-\]
-
-
-(\textbf{CHECK: A circular definition for optimal lambda!} You choose
-$\lambda$ based on the fitted model $\hat{g}_{j}$ for $\lambda$.
-I think this is okay, but it just means you'll never be able to figure
-out which $\lambda$ is optimal is real life).
-
-then
-\[
-\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}=O_{p}\left(\tilde{\lambda}_{T}\right)\left(J^{\frac{\alpha_{max}}{2+\alpha_{max}}}\vee\max_{j\in1:J}\left\{ J^{\frac{\alpha_{max}-v_{j}+1}{2v_{j}+v_{j}\alpha_{max}-2\alpha_{max}}}\right\} \right)\max_{j\in1:J}\left(I_{j}(g_{j}^{*})\right)^{v_{max}/2}
-\]
-
-
-and 
-\[
-\sum_{j=1}^{J}I^{v_{j}}(\hat{g}_{\lambda,j})\le O_{p}\left(J^{(3\alpha+2)/(2+\alpha)}\right)\left(\max_{j\in1:J}q\left(I_{j}\left(g_{j}^{*}\right)\right)\right)
-\]
-
-
-where 
-\[
-q(z)=\max\left\{ z^{v_{max}},z^{(v_{max}-\alpha_{max}+v_{max}\alpha_{max})/2},z^{v_{max}(2-\alpha_{max})/(2+\alpha_{max})}\right\} 
-\]
-
-
-(Need to triple check the bound for $\sum_{j=1}^{J}I^{v_{j}}(\hat{g}_{\lambda,j})$.
-In particular need to check the arithmetic for the exponent function,
-though I'm very sure the upper bound doesn't grow with $n$.)
-
-
-\subsubsection*{Proof:}
-
-We have the basic inequality
-
-\[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le2\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
-\]
-
-
-\textbf{Case 1:}
-
-Suppose the RHS is dominated by the penalty term:
-\[
-\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\le\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
-\]
-
-
-It follows that
-
-\[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}(1)\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
-\]
-
-
-Obviously,
-
-\[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}\le O_{p}(1)\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)\le O_{p}(1)\lambda^{2}\max_{j\in1:J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
-\]
-
-
-Therefore
-
-\[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}(\lambda)\left(\max_{j\in1:J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)\right)^{1/2}
-\]
-
-
-Also note that 
-\[
-\sum_{j=1}^{J}I^{v_{j}}(\hat{g}_{\lambda,j})\le O_{p}(J)\max_{j\in1:J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
-\]
-
-
-\textbf{Case 2:}
-
-Suppose the RHS is dominated by the empirical process
-\[
-\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\ge\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
-\]
-
-
-We bound the empirical process as follows. By Lemma 5, we know for
-sufficiently small $\delta>0$, 
-
-\[
-H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\max_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le2A\left(\frac{\delta}{2J\left(1+R\right)}\right)^{-\alpha_{max}}
-\]
-
-
-Hence by Lemma 6,
-
-\[
-\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\left|\left(\epsilon_{T},\sum_{j=1}^{J}g_{j}-g_{j}^{*}\right)\right|}{\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|^{1-\alpha_{max}/2}\max_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)^{\alpha_{max}/2}}=O_{p}\left(n^{-1/2}J^{\alpha_{max}/2}\right)
-\]
-
-
-Consequently, in this case, the basic inequality becomes 
-\[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}J^{\alpha_{max}/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}\max_{j\in1:J}\left(I(\hat{g}_{j})+I(g_{j}^{*})\right)^{\alpha_{max}/2}
-\]
-
-
-Let $(j)=\arg\max_{j\in1:J}I(\hat{g}_{j})+I(g_{j}^{*})$. 
-
-\textbf{Case 2a:} Suppose $I(\hat{g}_{(j)})\le I(g_{(j)}^{*})$. 
-
-Then 
-\begin{eqnarray*}
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(n^{-1/(2+\alpha_{max})}J^{\alpha_{max}/(2+\alpha_{max})}\right)I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(g_{(j)}^{*})\\
- & \le & O_{p}(\lambda)J^{\alpha_{max}/(2+\alpha_{max})}\sup_{j\in1:J}\left(I_{j}(g_{j}^{*})\right)^{v_{max}/2}
-\end{eqnarray*}
-
-
-Also,
-
-\begin{eqnarray*}
-\sum_{j=1}^{J}I^{v_{j}}(\hat{g}_{\lambda,j}) & \le & O_{p}\left(J^{(3\alpha+2)/(2+\alpha)}\right)\left(\max_{j\in1:J}I_{j}\left(g_{j}^{*}\right)\right)^{(v_{max}-\alpha_{max}+v_{max}\alpha_{max})/2}
-\end{eqnarray*}
-
-
-\textbf{Case 2b:} Suppose $I(\hat{g}_{(j)})\ge I(g_{(j)}^{*})$. 
-
-Then 
-\[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-1/(2+\alpha_{max})}J^{\alpha_{max}/(2+\alpha_{max})}\right)I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(\hat{g}_{(j)})
-\]
-
-
-and 
-\[
-I_{(j)}^{v_{(j)}}(\hat{g}_{(j)})\le\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}J^{(2+\alpha_{max})/2}\right)\lambda^{-2}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha_{max}/2}I_{(j)}^{\alpha_{max}/2}(\hat{g}_{(j)})
-\]
-
-
-Simplifying, we get 
-\[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-\frac{2v_{(j)}-\alpha_{max}}{2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max}}}J^{\frac{\alpha_{max}-v_{(j)}+1}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}\right)\lambda^{-2\alpha_{max}/(2v_{(j)}-2\alpha_{max}+v_{(j)}\alpha_{max})}
-\]
-
-
-By our choice of $\tilde{\lambda}$, we have
-\begin{eqnarray*}
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(\lambda\right)J^{\frac{\alpha_{max}-v_{(j)}+1}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}I_{(j)}^{\alpha_{max}/(2+\alpha_{max})}(g_{(j)}^{*})\\
- & \le & O_{p}\left(\lambda\right)\max_{j\in1:J}\left(J^{\frac{\alpha_{max}-v_{(j)}+1}{2v_{(j)}+v_{(j)}\alpha_{max}-2\alpha_{max}}}\left(I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}\right)
-\end{eqnarray*}
-
-
-and 
-\[
-\sum_{j=1}^{J}I^{v_{j}}(\hat{g}_{\lambda,j})\le O_{p}\left(J^{(3\alpha+2)/(2+\alpha)}\right)\left(\max_{j\in1:J}I_{j}\left(g_{j}^{*}\right)\right)^{v_{max}(2-\alpha_{max})/(2+\alpha_{max})}
-\]
-
-
-
-\subsection*{Result 3 again: Single $\lambda$, Multiple Penalties, Optimal $\tilde{\lambda}_{T}$
-over $X_{T}$}
-
 Consider function classes $\mathcal{G}_{j}$ that are cones. Also,
 suppose we have an additive model:
 
@@ -481,6 +284,9 @@ function $g_{j}$:
 \]
 
 
+Suppose $v_{j}\ge1$ for all $j$. (This requirement on $v_{j}$ stricter
+than Vandegeer Them 10.2)
+
 Suppose for all $j$, there is some $0<\alpha<2$ s.t. for all $\delta>0$,
 \[
 H\left(\delta,\{g_{j}\in\mathcal{G}_{j}:I(g_{j})\le1\},\|\cdot\|_{T}\right)\le A\delta^{-\alpha}
@@ -493,8 +299,6 @@ and that for all $j$
 \sup_{g_{j}\in\mathcal{G}_{j}}\frac{\|g_{j}-g_{j}^{*}\|_{T}}{I(g_{j})+I(g_{j}^{*})}\le R<\infty
 \]
 
-
-Suppose $v_{j}>\frac{2\alpha}{2+\alpha}$ for all $j$. 
 
 If we choose $\lambda$ s.t. 
 \[
@@ -547,7 +351,7 @@ Hence by (10.6) in Vandegeer,
 \]
 
 
-Consequently, in this case, the basic inequality becomes 
+and the basic inequality becomes 
 \[
 \|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\frac{\lambda^{2}}{J}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}\right)J^{1-\alpha}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha/2}\left(\sum_{j=1}^{J}I(\hat{g}_{j})+I(g_{j}^{*})\right)^{\alpha/2}
 \]
@@ -569,8 +373,8 @@ Then
 \end{eqnarray*}
 
 
-Since either $I_{j}(\hat{g}_{j})\le I_{j}^{v_{j}}(\hat{g}_{j})$ or
-$1\ge I_{j}(\hat{g}_{j})$, then
+By assuming $v_{j}\ge1$, we must have $I_{j}(\hat{g}_{j})\le I_{j}^{v_{j}}(\hat{g}_{j})\vee1$.
+Hence
 
 \begin{eqnarray*}
 \sum_{j=1}^{J}I_{j}(\hat{g}_{j}) & \le & J+\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\\
