@@ -5,8 +5,6 @@
 \usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
-\usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{babel}
 \begin{document}
 
@@ -56,14 +54,20 @@ Suppose $v>2\alpha/(2+\alpha)$.
 Suppose for all $\lambda\in\Lambda$, $I^{v}(\hat{g}_{\lambda})$
 is upper bounded by $\|\hat{g}_{\lambda}\|_{n}^{2}=\frac{1}{n}\sum_{i=1}^{n}\hat{g}_{\lambda}(x_{i})$.
 See Lemma 1 below for the specific assumption. This assumption includes
-Ridge, Lasso, Generalized Lasso, and the Group Lasso.
+Ridge, Lasso, Generalized Lasso, and the Group Lasso. 
 
 
 \subsection*{Result 1: Single $\lambda$, Single Penalty, cross-validation over
-$X_{T}=X_{V}$}
+general $X_{T},X_{V}$}
 
-Suppose $P_{T}=P_{V}=P_{n}=\{X_{i}\}_{i=1}^{n}$ are the same between
-the validation and training set. 
+Suppose that the training and validation set are independently sampled,
+so the values $X_{i}$ are not necessarily the same. Suppose the training
+and validation sets are both of size $n$. Suppose $X$ is bounded
+s.t. $|X|\le R_{X}$ and the domain of $g\in\mathcal{G}$ is over
+$(-R_{X},R_{X})$.
+
+Suppose the same entropy bound (2) for both the training set $P_{T}$
+and validation set $P_{V}$.
 
 Suppose for all $\lambda\in\Lambda$, $I^{v}(\hat{g}_{\lambda})$
 is upper bounded by its $L_{2}$-norm with some constant $M$ and
@@ -74,102 +78,7 @@ I^{v}(\hat{g}_{\lambda})\le M\|\hat{g}_{\lambda}\|_{n}^{2}+M_{0}
 \]
 
 
-Then
-
-\[
-\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{n}=O_{p}(n^{-1/(2+\alpha)})\left(M^{\alpha/v(2+\alpha)}\|g^{*}\|_{n}^{\alpha/2v(2+\alpha)}\vee I^{2\alpha/(2+\alpha)}(g^{*})\right)
-\]
-
-
-
-\subsubsection*{Proof}
-
-Let $\tilde{\lambda}$ be the optimal $\lambda$ under the given assumptions,
-as specified by Van de geer. From the definition of $\hat{\lambda}$,
-we get the following basic inequality 
-\begin{eqnarray*}
-\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}^{2} & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2(\epsilon,\hat{g}_{\hat{\lambda}}-\hat{g}_{\tilde{\lambda}})_{V}\\
- & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2(\epsilon,\hat{g}_{\hat{\lambda}}-g^{*})_{V}+2(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\\
- & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}+2\left|(\epsilon,\hat{g}_{\hat{\lambda}}-g^{*})_{V}\right|+2\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|
-\end{eqnarray*}
-
-
-By considering the largest term on the RHS, we have following three
-cases.
-
-\textbf{Case 1:} $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}$ is
-the largest
-
-Since we have assumed that the validation and training set are equal,
-then $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}$ converges at the optimal
-rate $O_{p}(n^{-1/(2+\alpha)})$.
-
-\textbf{Case 2:} $\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|$
-is the largest
-
-In this case, since $\epsilon_{V}$ is independent of $\hat{g}_{\tilde{\lambda}}$,
-then by Cauchy Schwarz, 
-\begin{eqnarray*}
-\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right| & \le & \|\epsilon_{V}\|\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}\\
- & \le & O_{p}\left(n^{-1/2}\right)\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}
-\end{eqnarray*}
-
-
-Hence $\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|$
-will shrink a bit faster than the optimal rate at a rate of $O_{p}(n^{-(\frac{1}{2+\alpha}+\frac{1}{2})})$.
-
-\textbf{Case 3:} $\left|(\epsilon,g^{*}-\hat{g}_{\hat{\lambda}})_{V}\right|$
-is the largest.
-
-By the assumptions given, Vandegeer (10.6) gives us that 
-\[
-\sup_{g\in\mathcal{G}}\frac{|(\epsilon,g-g*)_{n}|}{\|g-g*\|_{n}^{1-\alpha/2}(I(g^{*})+I(g))^{\alpha/2}}=O_{p}(n^{-1/2})
-\]
-
-
-Hence 
-\[
-\left|(\epsilon,g^{*}-\hat{g}_{\hat{\lambda}})_{V}\right|\le O_{p}(n^{-1/2})\|\hat{g}_{\hat{\lambda}}-g*\|_{n}^{1-\alpha/2}\left(I(g^{*})+I(\hat{g}_{\hat{\lambda}})\right)^{\alpha/2}
-\]
-
-
-If $I(g^{*})\ge I(g_{\hat{\lambda}})$ , then
-
-\[
-\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(n^{-1/(2+\alpha)})I(g^{*})^{\alpha/(2+\alpha)}
-\]
-
-
-Otherwise, we have
-
-\[
-\|\hat{g}_{\hat{\lambda}}-g*\|_{n}^{1+\alpha/2}\le O_{p}(n^{-1/2})I(\hat{g}_{\hat{\lambda}}){}^{\alpha/2}
-\]
-
-
-By Lemma 1 below, using the assumption that the penalty of $\hat{g}_{\lambda}$
-is bounded above by its $L_{2}(P_{n})$ norm, we have that
-
-\[
-\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha v/(2+\alpha)}\|g^{*}\|_{n}^{2\alpha/v(2+\alpha)}
-\]
-
-
-(Note: Here we've assumed function $I$ is from the optimization criterion,
-but that is not necessary!)
-
-
-\subsection*{Result 2: Single $\lambda$, Single Penalty, cross-validation over
-general $X_{T},X_{V}$}
-
-Suppose that the training and validation set are independently sampled,
-so $X_{i}$ are not necessarily the same. Suppose $X$ is bounded
-s.t. $|X|\le R_{X}$ and the domain of $g\in\mathcal{G}$ is over
-$(-R_{X},R_{X})$.
-
-We suppose the training and validation sets are both of size $n$.
-
-Suppose the entropy bound (1) for both training set $P_{T}$ and validation
+Suppose the entropy bound for both training set $P_{T}$ and validation
 set $P_{V}$.
 
 Suppose that 
@@ -178,80 +87,91 @@ Suppose that
 \end{eqnarray*}
 
 
-Suppose for all $\lambda\in\Lambda$, $I^{v}(\hat{g}_{\lambda})$
-is upper bounded by its $L_{2}$-norm with constants $M$ and $M_{0}$:
+Let $\tilde{\lambda}$ be the optimal $\lambda$ by Vandegeer. Then
 
 \[
-I^{v}(\hat{g}_{\lambda})\le M\|\hat{g}_{\lambda}\|_{V}^{2}+M_{0}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}=O_{p}\left(n^{-1/(2+\alpha)}\right)\left(I^{\alpha/(2+\alpha)}(g^{*})+I(g^{*})\right)
 \]
 
 
-Then
+and $\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{V}$ is of the same order
+(differs by some constant).
 
+\textbf{Proof:}
+
+By the triangle inequality, 
 \[
-\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{V}=O_{p}(n^{-1/(2+\alpha)})\left(I(g^{*})\vee I^{(4a-4v+a^{2}v)/2a(2+a)}(g^{*})\vee M^{\alpha v/(2+\alpha)}\|g^{*}\|_{V}^{2\alpha/v(2+\alpha)}\right)
+\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{V}\le\|\hat{g}_{\hat{\lambda}}-\hat{g}_{\tilde{\lambda}}\|_{V}+\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}
 \]
 
 
+We bound each component on the RHS separately.
 
-\paragraph{Proof:}
+First bound $\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}$. By Vandegeer
+Thrm 10.2 and Lemma 2,
 
-We follow the same proof structure of going thru the three cases,
-modifying the proofs as appropriate:
-
-\textbf{Case 1:} $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}^{2}$ is
-the largest
-
-By Lemma 2, we have
-\[
-Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}\ge6\delta\right)\le2\exp\left(2\tilde{A}\delta^{-\alpha}-\frac{4\delta^{2}n}{K^{2}}\right)
-\]
-
-
-Hence for any $\xi>0$,
-\[
-\frac{\left|\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{T}-\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}\right|}{I(g^{*})+I(\hat{g}_{\tilde{\lambda}})}\le O_{p}(n^{-1/(2+\alpha)})
-\]
-
-
-Therefore
 \begin{eqnarray*}
-\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V} & \le & \|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{T}+O_{p}(n^{-1/(2+\alpha)})\left(I(g^{*})+I(\hat{g}_{\tilde{\lambda}})\right)\\
- & \le & O_{p}(\tilde{\lambda})I^{v/2}(g^{*})+O_{p}(n^{-1/(2+\alpha)})I(g^{*})
+\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V} & \le & \|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{T}+\left|\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}-\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{T}\right|\\
+ & \le & O_{p}\left(n^{-1/(2+\alpha)}\right)I^{\alpha/(2+\alpha)}(g^{*})+O_{p}\left(n^{-1/(2+\alpha)}\right)\left(I(g^{*})+I(\hat{g}_{\tilde{\lambda}})\right)\\
+ & \le & O_{p}\left(n^{-1/(2+\alpha)}\right)\left(I^{\alpha/(2+\alpha)}(g^{*})+I(g^{*})\right)
 \end{eqnarray*}
 
 
-where 
+Next bound $\|\hat{g}_{\hat{\lambda}}-\hat{g}_{\tilde{\lambda}}\|_{V}$.
+The basic inequality gives us
+
 \[
-\tilde{\lambda}^{-1}=O_{p}(n^{-1/(2+\alpha)})I^{(2v-2\alpha+\alpha v)/2(2+\alpha)}(g^{*})
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|+2\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|
 \]
 
 
-\textbf{Case 2:} $\left|(\epsilon,g^{*}-\hat{g}_{\tilde{\lambda}})_{V}\right|$
-is the largest
+\textbf{Case a:} $\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{T}\right|$
+is the bigger term on the RHS
 
-Same proof still holds.
+By Vandegeer (10.6),
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2} & \le & O_{P}(n^{-1/2})\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|^{1-\alpha/2}\left(I(\hat{g}_{\tilde{\lambda}})+I(\hat{g}_{\hat{\lambda}})\right)^{\alpha/2}
+\end{eqnarray*}
 
-\textbf{Case 3:} $\left|(\epsilon,g^{*}-\hat{g}_{\hat{\lambda}})_{V}\right|$
-is the largest.
 
-Again, by Vandegeer (10.6),
+If $I(\hat{g}_{\tilde{\lambda}})>I(\hat{g}_{\hat{\lambda}})$, then
+
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V} & \le & O_{P}(n^{-1/(2+\alpha)})I(g^{*})^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+
+Otherwise, suppose $I(\hat{g}_{\tilde{\lambda}})<I(\hat{g}_{\hat{\lambda}})$.
+Since $I$ is a pseudo-norm,
+
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V} & \le & O_{P}(n^{-1/(2+\alpha)})I(\hat{g}_{\hat{\lambda}})^{\alpha/(2+\alpha)}\\
+ & \le & O_{P}(n^{-1/(2+\alpha)})\left(I(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}})+I(\hat{g}_{\tilde{\lambda}})\right)^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+
+If $I(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}})\le I(\hat{g}_{\tilde{\lambda}})$,
+then we're done. Otherwise if $I(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}})\ge I(\hat{g}_{\tilde{\lambda}})$,
+by the assumption that $I^{V}(\cdot)$ is bounded by the L2 norm,
+
 \[
-\left|(\epsilon,g^{*}-\hat{g}_{\hat{\lambda}})_{V}\right|\le O_{p}(n^{-1/2})\|\hat{g}_{\hat{\lambda}}-g*\|_{V}^{1-\alpha/2}(I(g^{*})+I(\hat{g}_{\hat{\lambda}}))^{\alpha/2}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(n^{-1/(2+\alpha)})\left(M\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|_{V}^{2}+M_{0}\right)^{\alpha/v(2+\alpha)}
 \]
 
 
-\textbf{Case 3a:} $I(g^{*})\ge I(g_{\hat{\lambda}})$ 
-
-The result is clearly attained.
-
-\textbf{Case 3b: }$I(g^{*})\le I(g_{\hat{\lambda}})$
-
-By Lemma 1 below, since the penalty is bounded above by the $L_{2}(P_{V})$
-norm, it follows that
+If $M_{0}$ is bigger, we're done. Otherwise,
 
 \[
-\|g^{*}-\hat{g}_{\hat{\lambda}}\|_{V}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha v/(2+\alpha)}\|g^{*}\|_{V}^{2\alpha/v(2+\alpha)}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(n^{-v/(2v-2\alpha+\alpha v)})<O_{P}(n^{-1/(2+\alpha)})
+\]
+
+
+\textbf{Case b:} $\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|$
+is the bigger term on the RHS
+
+By Cauchy Schwarz,
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(1)\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{V}
 \]
 
 
@@ -263,16 +183,14 @@ norm, it follows that
 
 \subsection*{Definitions}
 
-We find the best model for $y$ over function classes $\mathcal{G}_{j}$.
+We find the best model for $y$ over function classes $\mathcal{G}=\left\{ \sum_{j=1}^{J}g_{j}:\mbox{ }g_{j}\in\mathcal{G}_{j}\right\} $.
 Suppose we observe:
 
 \[
 y=\sum_{j=1}^{J}g_{j}^{*}+\epsilon
 \]
-
-
-where $g_{j}^{*}\in\mathcal{G}_{j}$ are the true functions. $\epsilon$
-are sub-Gaussian errors for constants $K$ and $\sigma_{0}^{2}$
+ where $\sum_{j=1}^{J}g_{j}^{*}\in\mathcal{G}$. Suppose $\epsilon$
+are sub-Gaussian errors for constants $K$ and $\sigma_{0}^{2}$:
 \[
 \max_{i=1:n}K^{2}\left(E\left[\exp(|\epsilon_{i}|^{2}K^{2})-1\right]\right)\le\sigma_{0}^{2}
 \]
@@ -281,7 +199,7 @@ are sub-Gaussian errors for constants $K$ and $\sigma_{0}^{2}$
 Given a training set $T$ , we fit models by least squares with multiple
 penalties 
 \[
-\{\hat{g}_{\lambda,j}\}_{j=1}^{J}=\arg\min_{g_{j}\in\mathcal{G}_{j}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}(g_{j})
+\{\hat{g}_{\lambda,j}\}_{j=1}^{J}=\arg\min_{\sum g_{j}\in\mathcal{G}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j})
 \]
 
 
@@ -293,29 +211,28 @@ Given a validation set $V$ , let the CV-fitted model be
 
 \textbf{Reasonable assumption:}
 \begin{itemize}
-\item The entropy bound (2) in result 3 comes from the assumptions in Lemma
+\item The entropy bound (2) in result 2 comes from the assumptions in Lemma
 3. The $\alpha$ below is $\alpha=\max_{j=1:J}\{\alpha_{j}\}$, so
 convergence is only as fast as fitting the highest-entropy function
 class. The constant $A$ must be appropriately inflated such that
 the entropy bound holds for all $\delta\in(0,R]$.
 \end{itemize}
-\textbf{Special assumptions:}
+\textbf{``Special'' assumptions:}
 \begin{itemize}
-\item I assume exponents $v_{k}$ in the optimization criteria are greater
-than one, whereas Vandegeer Thrm 10.2 only assumes $v>2\alpha/(2+\alpha)$.
-Without this assumption, I wasn't able to form inequalities between
-$\sum_{j=1}^{J}I_{j}(g_{j})\le O_{p}(1)+\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j})$.
-To remove this assumption, we need something else in the denominator
-of the entropy bound. (Currently, I use $\sum_{j=1}^{J}I_{j}(g_{j})+I_{j}(g_{j}^{*})$).
-\item In Result 1 and 2, I bounded $\left|(\epsilon_{V},g^{*}-\hat{g}_{\hat{\lambda}})\right|$
-by assuming the penalty function $I^{v}(g)$ was upper bounded by
-$\|g\|_{n}^{2}$. However, that isn't enough for the case of additive
-penalties. I've assumed that there is some function $\tilde{I}:\left\{ \sum_{j=1}^{J}g_{j}:g_{j}\in\mathcal{G}_{j}\right\} \mapsto\mathbb{R}$
-such $I^{v}(\sum_{j=1}^{J}g_{j})$ is upper bounded by $\|\sum_{j=1}^{J}g_{j}\|_{n}^{2}$
-AND it gives the same entropy bound.
+\item We assume exponents $v_{j}=1$, whereas Vandegeer Thrm 10.2 only assumes
+$v>2\alpha/(2+\alpha)$. Without this assumption, I wasn't able to
+form inequalities between $\sum_{j=1}^{J}I_{j}(g_{j})\le something+\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j})$.
+Indeed, Remark 1 in ``HIGH-DIMENSIONAL ADDITIVE MODELING'' (Vandegeer
+2009) notes the importance of using the semi-norm instead of the square
+of the semi-norm.
+\item We assume function class $\mathcal{G}$ satisfies for some constant
+$\tilde{M}$, $\sum_{j=1}^{J}\|g_{j}\|^{2}\le\tilde{M}\|\sum_{j=1}^{J}g_{j}\|^{2}$
+for all $j$. That is, no single function can dominate the behavior
+of the sum. Actually, ``HIGH-DIMENSIONAL ADDITIVE MODELING'' (Vandegeer
+2009) has a similar compatibility condition.
 \end{itemize}
 
-\subsection*{Result 3: Additive Model with multiple penalties, Single oracle $\lambda$
+\subsection*{Result 2: Additive Model with multiple penalties, Single oracle $\lambda$
 over $X_{T}$}
 
 Suppose there is some $0<\alpha<2$ s.t. for all $\delta\in(0,R]$,
@@ -324,23 +241,21 @@ H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I_{j}(g
 \end{equation}
 
 
-\textbf{Special assumption: }Suppose $v_{k}\ge1$ for all $k$. 
-
 If $\lambda$ is chosen s.t. 
 \[
-\tilde{\lambda}_{T}^{-1}=O_{p}\left(n^{1/(2+\alpha)}\right)\left(J+\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{(2-\alpha)/2(2+\alpha)}
+\tilde{\lambda}_{T}^{-1}=O_{p}\left(n^{1/(2+\alpha)}\right)\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{(2-\alpha)/2(2+\alpha)}
 \]
 
 
 then
 \[
-\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}=O_{p}\left(\tilde{\lambda}_{T}\right)\left(\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}=O_{p}\left(\tilde{\lambda}_{T}\right)\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{1/2}
 \]
 
 
 and 
 \[
-\sum_{k=1}^{K}I_{k}(\{\hat{g}_{j}\})\le K+\sum_{j=1}^{J}I_{j}(g_{j}^{*})
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j})=O_{p}(1)\sum_{j=1}^{J}I_{j}(g_{j}^{*})
 \]
 
 
@@ -350,26 +265,26 @@ and
 The basic inequality gives us:
 
 \[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le2\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le2\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|+\lambda^{2}\sum_{j=1}^{J}I_{j}(g_{j}^{*})
 \]
 
 
-\textbf{Case 1: $\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\le\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})$}
+\textbf{Case 1: $\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\le\lambda^{2}\sum_{j=1}^{J}I_{j}(g_{j}^{*})$}
 
 \[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}(\lambda)\left(\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}(\lambda)\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{1/2}
 \]
 
 
-\textbf{Case 2: $\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\ge\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})$}
+\textbf{Case 2: $\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\ge\lambda^{2}\sum_{j=1}^{J}I_{j}(g_{j}^{*})$}
 
 By Vandegeer (10.6), the basic inequality becomes 
 \[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha/2}\left(\sum_{j=1}^{J}I_{j}(\hat{g}_{j})+I_{j}(g_{j}^{*})\right)^{\alpha/2}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha/2}\left(\sum_{j=1}^{J}I_{j}(\hat{g}_{j})+I_{j}(g_{j}^{*})\right)^{\alpha/2}
 \]
 
 
-\textbf{Case 2a:} $\sum_{j=1}^{J}I_{j}(g_{j})\le\sum_{j=1}^{J}I_{j}(g_{j}^{*})$ 
+\textbf{Case 2a:} $\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le\sum_{j=1}^{J}I_{j}(g_{j}^{*})$ 
 
 Then 
 \begin{eqnarray*}
@@ -377,51 +292,24 @@ Then
 \end{eqnarray*}
 
 
-\textbf{Case 2b:} $\sum_{j=1}^{J}I_{j}(g_{j})\ge\sum_{j=1}^{J}I_{j}(g_{j}^{*})$ 
+\textbf{Case 2b:} $\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\ge\sum_{j=1}^{J}I_{j}(g_{j}^{*})$ 
 
-First note that for exponent $v\ge1$, we must have $x\le x^{v}+1$.
-So by assuming $v_{j}\ge1$,
+Then
 
 \begin{eqnarray*}
-\sum_{j=1}^{J}I_{j}(\hat{g}_{j}) & \le & J+\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\\
- & \le & J+O_{p}\left(n^{-1/2}\right)\lambda^{-2}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha/2}\left(\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\right)^{\alpha/2}
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j}) & \le & O_{p}\left(n^{-1/(2-\alpha)}\right)\lambda^{-4/(2-\alpha)}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}
 \end{eqnarray*}
 
 
-\textbf{Case 2b part a:} 2nd term on the RHS in the inequality above
-is bigger
+Hence
 
-Then
-
-\[
-\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le O_{p}\left(n^{-1/(2-\alpha)}\right)\lambda^{-4/(2-\alpha)}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}
-\]
-
-
-which implies
-
-\[
-\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-1/(2-\alpha)}\right)\lambda^{-2\alpha/(2-\alpha)}
-\]
-
-
-and 
-\[
-\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le J+\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})
-\]
-
-
-\textbf{Case 2b part b:} 1st term on the RHS in the inequality above
-is bigger
-
-Then
-\[
-\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le2J\implies\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-1/(2+\alpha)}\right)
-\]
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(n^{-1/(2-\alpha)}\right)\lambda^{-2\alpha/(2-\alpha)}
+\end{eqnarray*}
 
 
 
-\subsection*{Result 4: Additive Model with multiple penalties, Single cross-validation
+\subsection*{Result 3: Additive Model with multiple penalties, Single cross-validation
 $\lambda$ over general $X_{T},X_{V}$}
 
 Suppose that the training and validation set are independently sampled,
@@ -430,94 +318,120 @@ and validation sets are both of size $n$. Suppose $X$ is bounded
 s.t. $|X|\le R_{X}$ and the domain of $g\in\mathcal{G}$ is over
 $(-R_{X},R_{X})$.
 
-In addition to the assumptions in Result 3, assume the following:
-
 Suppose the same entropy bound (2) for both the training set $P_{T}$
 and validation set $P_{V}$.
 
-Suppose the infinity norm is also bounded 
+In addition to the assumptions in Result 4, suppose the infinity norm
+is also bounded 
 \begin{eqnarray*}
 \sup_{g_{j}\in\mathcal{G}_{j}}\frac{\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{\infty}}{\sum_{j=1}^{J}I_{j}(g_{j})+I_{j}(g_{j}^{*})} & \le & K<\infty
 \end{eqnarray*}
 
 
-\textbf{Special Assumption}: Suppose there is some function $\tilde{I}:\left\{ \sum_{j=1}^{J}g_{j}:g_{j}\in\mathcal{G}_{j}\right\} \mapsto\mathbb{R}$
-such 
-
+\textbf{Special Assumption: }Assume the function class is 
 \[
-H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\tilde{I}\left(\sum_{j=1}^{J}g_{j}\right)+\tilde{I}\left(\sum_{j=1}^{J}g_{j}^{*}\right)}:g_{j}\in\mathcal{G}_{j},\tilde{I}\left(\sum_{j=1}^{J}g_{j}\right)+\tilde{I}\left(\sum_{j=1}^{J}g_{j}^{*}\right)>0\right\} ,\|\cdot\|_{V}\right)\le\tilde{A}\delta^{-\alpha}
+\mathcal{G}=\left\{ \sum_{j=1}^{J}g_{j}:\mbox{ }g_{j}\in\mathcal{G}_{j},\sum_{j=1}^{J}\|g_{j}\|^{2}\le\tilde{M}\|\sum_{j=1}^{J}g_{j}\|^{2}\right\} 
 \]
 
 
-Furthermore, suppose there exist constants $M$,$M_{0}$, and $w>2\alpha/(2+\alpha)$
-s.t. for all $\lambda\in\Lambda$ 
+for some constant $\tilde{M}$. (Assume $\sum_{j=1}^{J}g_{j}^{*}\in\mathcal{G}$)
+
+Suppose there exist constants $M$,$M_{0}$ s.t. for all $j$ and
+all $\lambda\in\Lambda$ 
 
 \[
-\tilde{I}^{w}\left(\sum_{j=1}^{J}\hat{g}_{\lambda,j}\right)\le M\|\sum_{j=1}^{J}\hat{g}_{\lambda,j}\|_{V}^{2}+M_{0}
+I_{j}\left(\hat{g}_{\lambda,j}\right)\le M\|\hat{g}_{\lambda,j}\|_{V}^{2}+M_{0}
 \]
 
 
-Then
+Let $\tilde{\lambda}$ be the optimal $\lambda$ as specified in Result
+2. Then
 
 \[
-\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-g_{j}^{*}\|_{V}=O_{p}(n^{-1/(2+\alpha)})\left[\left(K+\sum_{k=1}^{K}I_{k}^{v_{k}}(\{g_{j}^{*}\})\right)\vee\left(M^{\alpha w/(2+\alpha)}\|\sum_{j=1}^{J}g_{j}^{*}\|_{V}^{2\alpha/w(2+\alpha)}\right)\right]
+\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\|_{V}=O_{p}\left(n^{-1/(2+\alpha)}\right)\left(\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha/(2+\alpha)}+\sum_{j=1}^{J}I_{j}(g_{j}^{*})+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}^{\alpha/2(2+\alpha)}\right)
 \]
 
+
+and $\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}$
+is on the same order (differs by a constant).
 
 
 \subsubsection*{Proof:}
 
-The proof is very similar to Result 2.
-
-\textbf{Case 1:} $\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\|_{V}^{2}$
-is the largest
-
-By Lemma 2, we have
+By the triangle inequality, 
 \[
-Pr\left(\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\left|\|\sum_{j=1}^{J}g_{j}^{*}-g_{j}\|_{P_{n}}-\|\sum_{j=1}^{J}g_{j}^{*}-g_{j}\|_{P_{n''}}\right|}{\sum_{j=1}^{J}I_{j}(g_{j})+I_{j}(g_{j}^{*})}\ge6\delta\right)\le2\exp\left(2A\delta^{-\alpha}-\frac{4\delta^{2}n}{K^{2}}\right)
+\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}\le\left\Vert \sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}
 \]
 
 
-Hence
-\[
-\frac{\left|\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\|_{T}-\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\|_{V}\right|}{\sum_{j=1}^{J}I_{j}(g_{j})+I_{j}(g_{j}^{*})}\le O_{p}(n^{-1/(2+\alpha)})
-\]
+By Lemma 2 and Result 2, we can easily bound$\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}$.
 
-
-Therefore
 \begin{eqnarray*}
-\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\|_{V} & \le & \|\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\|_{T}+O_{p}(n^{-1/(2+\alpha)})\left(\sum_{j=1}^{J}I_{j}(g_{j})+I_{j}(g_{j}^{*})\right)\\
- & \le & O_{p}\left(\tilde{\lambda}_{T}\right)\left(\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}+O_{p}(n^{-1/(2+\alpha)})\left(J+\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})\right)
+\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V} & \le & \left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{T}+\left|\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{T}-\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}\right|\\
+ & \le & O_{p}\left(n^{-1/(2+\alpha)}\right)\left(\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha/(2+\alpha)}+\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)
 \end{eqnarray*}
 
 
-\textbf{Case 2:} $\left|\left(\epsilon_{V},\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right)\right|$
-is the largest
+Next bound $\left\Vert \sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}$.
+By definition of $\hat{\lambda}$, we have the basic inequality
 
-Since $\epsilon_{V}$ is independent of $\left\{ \hat{g}_{\tilde{\lambda},j}\right\} $,
-then this term shrinks at the rate of $O_{p}(n^{-1/2-1/(2+\alpha)})$.
-(So the rate is faster than the optimal rate.)
-
-\textbf{Case 3:} $\left|\left(\epsilon_{V},\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right)\right|$
-is the largest.
-
-By our \textbf{special assumption}, we can again apply Vandegeer (10.6),
 \[
-\left|\left(\epsilon_{V},\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right)\right|\le O_{p}(n^{-1/2})\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\|_{V}^{1-\alpha/2}\left(\tilde{I}\left(\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\right)+\tilde{I}\left(\sum_{j=1}^{J}g_{j}^{*}\right)\right)^{\alpha/2}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|+2\left|\left(\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j},\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|
 \]
 
 
-\textbf{Case 3a:}$\tilde{I}(\{\hat{g}_{\hat{\lambda},j}\})\le\tilde{I}(\{g_{j}^{*}\})$ 
+\textbf{Case 1:} $\left|\left(\epsilon,\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|$
+is bigger
 
-The result is clearly attained.
-
-\textbf{Case 3b:}$\tilde{I}(\{\hat{g}_{\hat{\lambda},j}\})>\tilde{I}(\{g_{j}^{*}\})$ 
-
-By the assumption that $\tilde{I}^{w}(\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j})$
-is bounded above by $\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}$,
-Lemma 1 gives us
+By Vandegeer (10.6),
 \begin{eqnarray*}
-\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\|_{V} & \le & O_{p}(n^{-1/(2+\alpha)})M^{\alpha w/(2+\alpha)}\|\sum_{j=1}^{J}g_{j}^{*}\|_{V}^{2\alpha/w(2+\alpha)}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})+I_{j}(\hat{g}_{\hat{\lambda},j})\right)^{\alpha/2}
+\end{eqnarray*}
+
+
+If $\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})\ge\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j})$,
+we're done.
+
+Otherwise, suppose $\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})<\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j})$.
+By the assumptions,
+\begin{eqnarray*}
+\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j}) & \le & M\sum_{j=1}^{J}\|\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}\\
+ & \le & M\tilde{M}\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}
+\end{eqnarray*}
+
+
+Then
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(M\tilde{M}\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}\right)^{\alpha/2}
+\end{eqnarray*}
+
+
+If $M_{0}$ is the biggest, we're done. Otherwise,
+
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{\alpha}\\
+ & \le & O_{p}(n^{-1/2})\left(\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-g_{j}^{*}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}\right)^{\alpha}
+\end{eqnarray*}
+
+
+If $\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}$or
+$\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-g_{j}^{*}\right\Vert _{V}$
+is the biggest on the RHS, then the rate is faster than $O_{p}(n^{-1/(2+\alpha)})$.\textbf{
+}If\textbf{$\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}$ }is
+the biggest, then
+
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V} & \le & O_{p}(n^{-1/(2+\alpha)})\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}^{\alpha/2(2+\alpha)}
+\end{eqnarray*}
+
+
+\textbf{Case 2:} $\left|\left(\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j},\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|$
+is bigger
+
+By Cauchy Schwarz, 
+
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V} & \le & O_{p}(1)\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}
 \end{eqnarray*}
 
 
@@ -538,16 +452,16 @@ I^{v}(g_{\lambda})\le M\|g_{\lambda}\|_{n}^{2}+M_{0}
 \]
 
 
-Suppose there is some function $g^{*}\in\mathcal{G}$ such that
+Suppose there is some function $g\in\mathcal{G}$ such that
 \[
-\|g^{*}-g_{\lambda}\|_{n}^{1+\alpha/2}\le O_{p}(n^{-1/2})I^{\alpha/2}(g_{\lambda})
+\|g-g_{\lambda}\|_{n}^{1+\alpha/2}\le O_{p}(n^{-1/2})I^{\alpha/2}(g_{\lambda})
 \]
 
 
 Then
 
 \[
-\|g^{*}-g_{\lambda}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha v/(2+\alpha)}\|g^{*}\|_{n}^{2\alpha/v(2+\alpha)}
+\|g-g_{\lambda}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha v/(2+\alpha)}\|g\|_{n}^{2\alpha/v(2+\alpha)}
 \]
 
 
@@ -556,36 +470,36 @@ Then
 From the assumptions, we have
 
 \begin{eqnarray*}
-\|g^{*}-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(M\|g_{\lambda}\|_{n}^{2}+M_{0}\right)^{\alpha/2v}
+\|g-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(M\|g_{\lambda}\|_{n}^{2}+M_{0}\right)^{\alpha/2v}
 \end{eqnarray*}
 
 
 If $M_{0}>\|g_{\lambda}\|_{n}^{2}$, we're done. Otherwise,
 
 \begin{eqnarray*}
-\|g^{*}-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})M^{\alpha/2v}\|g_{\lambda}\|_{n}^{\alpha/v}\\
- & \le & O_{p}(n^{-1/2})M^{\alpha/2v}\left(\|g_{\lambda}-g^{*}\|_{n}+\|g^{*}\|_{n}\right)^{\alpha/v}
+\|g-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})M^{\alpha/2v}\|g_{\lambda}\|_{n}^{\alpha/v}\\
+ & \le & O_{p}(n^{-1/2})M^{\alpha/2v}\left(\|g_{\lambda}-g\|_{n}+\|g\|_{n}\right)^{\alpha/v}
 \end{eqnarray*}
 
 
-\textbf{Case 1:} $\|g_{\lambda}-g^{*}\|_{n}\ge\|g^{*}\|_{n}$
+\textbf{Case 1:} $\|g_{\lambda}-g\|_{n}\ge\|g\|_{n}$
 
 Then
 
 \[
-\|g^{*}-g_{\lambda}\|_{n}\le O_{p}(n^{-v/(2v+\alpha v-2\alpha)})M^{\alpha v^{2}/(2v+\alpha v-2\alpha)}
+\|g-g_{\lambda}\|_{n}\le O_{p}(n^{-v/(2v+\alpha v-2\alpha)})M^{\alpha v^{2}/(2v+\alpha v-2\alpha)}
 \]
 
 
 Note that $\sup_{v}-\frac{v}{2v+\alpha v-2\alpha}=-\frac{1}{2+\alpha}$,
 so this rate is faster than $O_{p}(n^{-\frac{1}{2+\alpha}})$.
 
-\textbf{Case 2:} $\|g_{\lambda}-g^{*}\|_{n}\le\|g^{*}\|_{n}$
+\textbf{Case 2:} $\|g_{\lambda}-g\|_{n}\le\|g\|_{n}$
 
 Then
 
 \[
-\|g^{*}-g_{\lambda}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha v/(2+\alpha)}\|g^{*}\|_{n}^{2\alpha/v(2+\alpha)}
+\|g-g_{\lambda}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha v/(2+\alpha)}\|g\|_{n}^{2\alpha/v(2+\alpha)}
 \]
 
 
