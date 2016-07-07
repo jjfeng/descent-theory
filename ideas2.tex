@@ -5,6 +5,7 @@
 \usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{esint}
 \usepackage{babel}
 \begin{document}
 
@@ -225,11 +226,16 @@ form inequalities between $\sum_{j=1}^{J}I_{j}(g_{j})\le something+\sum_{j=1}^{J
 Indeed, Remark 1 in ``HIGH-DIMENSIONAL ADDITIVE MODELING'' (Vandegeer
 2009) notes the importance of using the semi-norm instead of the square
 of the semi-norm.
-\item We assume function class $\mathcal{G}$ satisfies for some constant
-$\tilde{M}$, $\sum_{j=1}^{J}\|g_{j}\|^{2}\le\tilde{M}\|\sum_{j=1}^{J}g_{j}\|^{2}$
-for all $j$. That is, no single function can dominate the behavior
-of the sum. Actually, ``HIGH-DIMENSIONAL ADDITIVE MODELING'' (Vandegeer
-2009) has a similar compatibility condition.
+\item We suppose the following incoherence condition, in the spirit of Vandegeer
+2014 ``The additive model with different smoothness for the components'':
+Let $p_{V}(\vec{x})$ be the empirical density over the validation
+set. Let $p_{Vj}$ be the marginal density of $x_{j}$ for the empirical
+distribution of the validation set. Let 
+\[
+r_{V}(\vec{x})=\frac{p_{V}(\vec{x})}{\Pi_{j=1}^{J}p_{Vj}(x_{j})},\mbox{ }\gamma_{V}^{2}=\int r_{V}(\vec{x})\Pi_{j=1}^{J}p_{Vj}(x_{j})d\mu
+\]
+Suppose that $\gamma_{V}<1/(J-1)$. Furthermore, we will suppose that
+$\int g_{j}p_{Vj}d\mu=0$ for $j=2,...,J$.
 \end{itemize}
 
 \subsection*{Result 2: Additive Model with multiple penalties, Single oracle $\lambda$
@@ -328,14 +334,6 @@ is also bounded
 \end{eqnarray*}
 
 
-\textbf{Special Assumption: }Assume the function class is 
-\[
-\mathcal{G}=\left\{ \sum_{j=1}^{J}g_{j}:\mbox{ }g_{j}\in\mathcal{G}_{j},\sum_{j=1}^{J}\|g_{j}\|^{2}\le\tilde{M}\|\sum_{j=1}^{J}g_{j}\|^{2}\right\} 
-\]
-
-
-for some constant $\tilde{M}$. (Assume $\sum_{j=1}^{J}g_{j}^{*}\in\mathcal{G}$)
-
 Suppose there exist constants $M$,$M_{0}$ s.t. for all $j$ and
 all $\lambda\in\Lambda$ 
 
@@ -344,11 +342,14 @@ I_{j}\left(\hat{g}_{\lambda,j}\right)\le M\|\hat{g}_{\lambda,j}\|_{V}^{2}+M_{0}
 \]
 
 
+\textbf{Special assumption:} Suppose the incoherence condition $\gamma_{V}<1/(J-1)$.
+We will also suppose $\int g_{j}p_{Vj}d\mu=0$ for $j=2,...,J$.
+
 Let $\tilde{\lambda}$ be the optimal $\lambda$ as specified in Result
 2. Then
 
 \[
-\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\|_{V}=O_{p}\left(n^{-1/(2+\alpha)}\right)\left(\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha/(2+\alpha)}+\sum_{j=1}^{J}I_{j}(g_{j}^{*})+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}^{\alpha/2(2+\alpha)}\right)
+\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\|_{V}=O_{p}\left(n^{-1/(2+\alpha)}\right)\left(1-\gamma(J-1)\right)^{\alpha/(2+\alpha)}\left(\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha/(2+\alpha)}+\sum_{j=1}^{J}I_{j}(g_{j}^{*})+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}^{\alpha/2(2+\alpha)}\right)
 \]
 
 
@@ -392,25 +393,27 @@ By Vandegeer (10.6),
 If $\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})\ge\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j})$,
 we're done.
 
-Otherwise, suppose $\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})<\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j})$.
-By the assumptions,
+Otherwise, suppose $\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})<\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j})$. 
+
+By the incoherence assumption, we can apply Lemma 4
+
 \begin{eqnarray*}
-\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j}) & \le & M\sum_{j=1}^{J}\|\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}\\
- & \le & M\tilde{M}\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}
+\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j}) & \le & M\sum_{j=1}^{J}\|\hat{g}_{\lambda j}\|_{V}^{2}+M_{0}J\\
+ & \le & M\left(1-\gamma(J-1)\right)\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}J
 \end{eqnarray*}
 
 
 Then
 \begin{eqnarray*}
-\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(M\tilde{M}\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}\right)^{\alpha/2}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(M\left(1-\gamma(J-1)\right)\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}J\right)^{\alpha/2}
 \end{eqnarray*}
 
 
-If $M_{0}$ is the biggest, we're done. Otherwise,
+If $M_{0}J$ is the biggest, we're done. Otherwise,
 
 \begin{eqnarray*}
-\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{\alpha}\\
- & \le & O_{p}(n^{-1/2})\left(\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-g_{j}^{*}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}\right)^{\alpha}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(1-\gamma(J-1)\right)^{\alpha/2}\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{\alpha}\\
+ & \le & O_{p}(n^{-1/2})\left(1-\gamma(J-1)\right)^{\alpha/2}\left(\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-g_{j}^{*}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}\right)^{\alpha}
 \end{eqnarray*}
 
 
@@ -655,5 +658,49 @@ Hence
 \[
 H\left(2J\delta,\left\{ \frac{\sum_{j=1}^{J}f_{j}-f_{j}^{*}}{\sum_{j=1}^{J}I_{j}(f_{j})+I_{j}(f_{j}^{*})}:f_{j}\in\mathcal{F}_{j},I_{j}(f_{j})+I_{j}(f_{j}^{*})>0\right\} ,\|\cdot\|_{n}\right)\le2\sum_{j=1}^{J}A_{j}\delta^{-\alpha_{j}}
 \]
+
+
+
+\subsubsection*{Lemma 4:}
+
+Let $p_{n}(\vec{x})$ be some empirical density and let $p_{nj}$
+be the corresponding empirical marginal density of $x_{j}$. Let 
+\[
+r(\vec{x})=\frac{p_{n}(\vec{x})}{\Pi_{j=1}^{J}p_{nj}(x_{j})},\mbox{ }\gamma^{2}=\int(r(\vec{x})-1)^{2}\Pi_{j=1}^{J}p_{nj}(x_{j})d\mu
+\]
+Suppose $\gamma<1/(J-1)$. Furthermore, suppose $\int g_{j}p_{nj}d\mu=0$
+for $j=2,...,J$. Then 
+\[
+\left\Vert \sum_{j=1}^{J}g_{j}\right\Vert _{n}^{2}\ge(1-\gamma(J-1))\left(\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}\right)
+\]
+
+
+
+\paragraph*{Proof:}
+
+The proof is very similar to Lemma 5.1 in Vandegeer 2014 ``The additive
+model with different smoothness for the components.''
+
+\[
+\left\Vert \sum_{j=1}^{J}g_{j}\right\Vert _{n}^{2}=\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}+\sum_{j\ne k}\int g_{j}g_{k}p_{n}(\vec{x})d\mu
+\]
+
+
+We bound the latter term:
+
+\begin{eqnarray*}
+\left|\int g_{j}g_{k}p_{n}(\vec{x})d\mu\right| & = & \left|\int g_{j}g_{k}\left(r(\vec{x})-1\right)\Pi_{j=1}^{J}p_{nj}(x_{j})d\mu\right|\\
+ & \le & \gamma\left|\int g_{j}^{2}g_{k}^{2}\Pi_{j=1}^{J}p_{nj}(x_{j})d\mu\right|^{1/2}\\
+ & = & \gamma\|g_{j}\|_{n}\|g_{k}\|_{n}
+\end{eqnarray*}
+
+
+Hence
+
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}g_{j}\right\Vert _{n}^{2} & \ge & \sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}-\gamma\sum_{j\ne k}\|g_{j}\|_{n}\|g_{k}\|_{n}\\
+ & \ge & (1-\gamma(J-1))\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}+\gamma\sum_{j<k}\left(\|g_{j}\|_{n}-\|g_{k}\|_{n}\right)^{2}\\
+ & \ge & (1-\gamma(J-1))\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}
+\end{eqnarray*}
 
 \end{document}
