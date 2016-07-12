@@ -5,6 +5,8 @@
 \usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{esint}
 \usepackage{babel}
 \begin{document}
@@ -436,7 +438,170 @@ By Cauchy Schwarz,
 \begin{eqnarray*}
 \left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V} & \le & O_{p}(1)\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}
 \end{eqnarray*}
+\pagebreak{}
 
+
+\section{General Additive Model: Multiple Lambdas}
+
+
+\subsection*{Definitions}
+
+We find the best model for $y$ over function classes $\mathcal{G}=\left\{ \sum_{j=1}^{J}g_{j}:\mbox{ }g_{j}\in\mathcal{G}_{j}\right\} $.
+Suppose we observe:
+
+\[
+y=\sum_{j=1}^{J}g_{j}^{*}+\epsilon
+\]
+ where $\sum_{j=1}^{J}g_{j}^{*}\in\mathcal{G}$. Suppose $\epsilon$
+are sub-Gaussian errors for constants $K$ and $\sigma_{0}^{2}$:
+\[
+\max_{i=1:n}K^{2}\left(E\left[\exp(|\epsilon_{i}|^{2}K^{2})-1\right]\right)\le\sigma_{0}^{2}
+\]
+
+
+Given a training set $T$ , we fit models by least squares with multiple
+penalties and tuning parameters 
+\[
+\{\hat{g}_{\lambda,j}\}_{j=1}^{J}=\arg\min_{\sum g_{j}\in\mathcal{G}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{v_{j}}(g_{j})
+\]
+
+
+Suppose $1\le v_{j}\le2$.
+
+Given a validation set $V$ , let the CV-fitted model be 
+\[
+\{\hat{g}_{\hat{\lambda},j}\}_{j=1}^{J}=\arg\min_{\lambda}\|y-\sum_{j=1}^{J}\hat{g}_{\lambda,j}\|_{V}^{2}
+\]
+
+
+
+\subsection*{Result 4: Additive Model, Oracle $\{\lambda_{i}\}$ given $X_{T}$}
+
+These results are implied by Vandegeer's paper ``The additive model
+with different smoothness for the components.'' 
+
+Suppose for all $j=1:J$
+\[
+\mathcal{H}\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}\right\} ,\|\cdot\|_{n}\right)\le A_{j}\delta^{-\alpha_{j}}\forall\delta>0
+\]
+
+
+Let
+\[
+\lambda_{j}=O_{p}(n^{-1/(2+\alpha_{j})})
+\]
+
+
+and 
+
+\[
+\left(\sum_{j=1}^{J}I_{j}^{q_{j}}(g_{j}^{*})\right)^{1/2}\lambda_{\max}=O_{P}(1)R
+\]
+
+
+There are some constants $c_{1},c_{2}$ s.t. for $\lambda_{j}=O_{p}(n^{-1/(2+\alpha_{j})})$,
+we have 
+\[
+\|\sum g_{j}^{*}-\sum\hat{g}_{\tilde{\lambda},j}\|\le c_{2}\lambda_{(j)}
+\]
+
+
+where $(j)=\arg\max\alpha_{j}$. That is, the convergence rate depends
+on the highest-entropy function class (with respect to the penalty)
+
+\[
+\|\sum_{j=1}^{J}g_{j}^{*}-\sum_{j=1}^{J}\hat{g_{j}}\|_{T}=O_{p}(n^{-1/(2+\alpha_{(j)})})
+\]
+
+
+\textbf{Jean's version of the Proof for Vandegeer Thrm 3.1:}
+
+Suppose for some constant $R$ , we define the function class $\mathcal{M}(R)=\left\{ \{g_{j}\}:(\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(g_{j}-g_{j}^{*})\le R,\mbox{ }\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}\le R\right\} $. 
+
+Recall that 
+\[
+\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\left|(\epsilon^{T},g_{j}-g_{j}^{*})\right|}{\left(I_{j}(g_{j})+I_{j}(g_{j}^{*})\right)^{\alpha_{j}/2}\|g_{j}-g_{j}^{*}\|^{1-\alpha_{j}/2}}=O_{p}(n^{-1/2})
+\]
+
+
+By our choice of $\lambda$, we have that for function sets $\{g_{j}-g_{j}^{*}\}\in\mathcal{M}(R)$,
+the empirical process term decreases with $n$: 
+\begin{eqnarray*}
+\left|(\epsilon^{T},g_{j}-g_{j}^{*})\right| & \le & O_{P}(n^{-1/2})\left(I_{j}(g_{j})+I_{j}(g_{j}^{*})\right)^{\alpha_{j}/2}\|g_{j}-g_{j}^{*}\|^{1-\alpha_{j}/2}\\
+ & \le & O_{P}(n^{-1/2})\left(\lambda_{j}^{-1/q_{j}}R^{1/q_{j}}\right)^{\alpha_{j}/2}R^{1-\alpha_{j}/2}\\
+ & \le & O_{P}(n^{-1/(2+\alpha_{j})})R^{2}
+\end{eqnarray*}
+
+
+Hence for sufficiently large $n$, Vandegeer Lemma's 5.4 (Jean's version
+below) states that the fitted functions $\hat{g_{j}}$ are also with
+$R$ of the truth: 
+\[
+\{\hat{g_{j}}-g_{j}^{*}\}\in\mathcal{M}(R)\implies\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g_{j}}\|_{T}\le R
+\]
+
+
+Now we just need to determine the right value for $R$. Choose $n$
+sufficiently large s.t. the penalty term for function $(j)$ is the
+highest (for the truth) 
+\[
+\lambda_{j}^{2}I_{j}^{q_{j}}(g_{j}^{*})\le\lambda_{(j)}^{2}I_{(j)}^{q_{(j)}}(g_{(j)}^{*})\mbox{ }\forall j
+\]
+
+
+Then choose $R$ s.t. 
+\[
+\left(\lambda_{(j)}^{2}I_{(j)}^{q_{(j)}}(g_{(j)}^{*})\right)^{1/2}J^{1/2}=O_{P}(1)R
+\]
+
+
+Hence
+
+\[
+\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g_{j}}\|_{T}\le n^{-1/(2+\alpha_{(j)})}J^{1/2}I_{(j)}^{q_{(j)}/2}(g_{(j)}^{*})
+\]
+
+
+
+\subsection*{Result 5: Additive Model, Cross-validated $\{\lambda_{i}\}$ over
+general $X_{T},X_{V}$}
+
+Assume the same conditions as result 4, but also for the validation
+set.
+
+\textbf{Condition 2.4:} Incoherence condition on the validation set.
+Let $p_{V}(\vec{x})$ be the empirical density over the validation
+set. Let $p_{Vj}$ be the marginal density of $x_{j}$ for the empirical
+distribution of the validation set. Let 
+\[
+r_{V}(\vec{x})=\frac{p_{V}(\vec{x})}{\Pi_{j=1}^{J}p_{Vj}(x_{j})},\mbox{ }\gamma_{V}^{2}=\int r_{V}(\vec{x})\Pi_{j=1}^{J}p_{Vj}(x_{j})d\mu
+\]
+Suppose that $\gamma_{V}<1/(J-1)$. Furthermore, we will suppose that
+$\int g_{j}p_{Vj}d\mu=0$ for $j=2,...,J$.
+
+Additionally, suppose there exist constants $M$,$M_{0}$ s.t. for
+all $j$ and all $\lambda\in\Lambda$ 
+
+\[
+I_{j}\left(\hat{g}_{\lambda,j}\right)\le M\|\hat{g}_{\lambda,j}\|_{V}^{2}+M_{0}
+\]
+
+
+Let $\tilde{\lambda}$ be the optimal $\{\lambda_{i}\}$ as specified
+in Result 4. Then
+
+\[
+\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\|_{V}=O_{p}\left(n^{-1/(2+\alpha_{(j)})}\right)\left(1-\gamma(J-1)\right)^{\alpha_{(j)}/(2+\alpha_{(j)})}\left(\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha_{(j)}/(2+\alpha_{(j)})}+\sum_{j=1}^{J}I_{j}(g_{j}^{*})+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}^{\alpha_{(j)}/2(2+\alpha_{(j)})}\right)
+\]
+
+
+and $\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}=O_{p}(1)\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right\Vert _{T}$
+.
+
+
+\subsubsection*{Proof: }
+
+Exactly the same as Result 3
 
 \pagebreak{}
 
@@ -703,4 +868,164 @@ Hence
  & \ge & (1-\gamma(J-1))\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}
 \end{eqnarray*}
 
+
+
+\subsubsection*{Vandegeer's Lemma 5.4 (Jean's version)}
+
+Let 
+\[
+\tau_{R}(\{f_{j}\})=\|\sum f_{j}\|_{T}+\sum_{j=1}^{J}(\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(f_{j})
+\]
+
+
+Suppose 
+\[
+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(f_{j}^{*})\le\delta_{0}^{2}R^{2}
+\]
+
+
+and for all function sets $\{f_{j}\}$ s.t. $\tau_{R}(\{f_{j}\})\le R$,
+suppose 
+\[
+\sup_{f_{j}}\left|\left(\epsilon_{T},f_{j}\right)\right|\le\delta_{0}^{2}R^{2}
+\]
+
+
+Let 
+\[
+\hat{f}_{j}=\arg\min\|y-\sum_{j=1}^{J}f_{j}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(f_{j})
+\]
+
+
+Then $\tau_{R}\left(\left\{ \hat{f}_{\lambda,j}-f_{j}^{*}\right\} \right)\le R$.
+
+
+\paragraph*{Proof}
+
+We use the convexity of the penalties and the least squares function.
+Consider $\tilde{f_{j}}=t\hat{f}_{j}+(1-t)f_{j}^{*}$ where 
+\begin{eqnarray*}
+t & = & \frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}
+\end{eqnarray*}
+
+
+Then 
+\begin{eqnarray*}
+\tau_{R}(\{\tilde{f_{j}}-f_{j}^{*}\}) & = & \frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})\le R
+\end{eqnarray*}
+
+
+Also, by the basic inequality, we can see that
+
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}f_{j}^{*}-\sum_{j=1}^{J}\tilde{f_{j}}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(\tilde{f_{j}}) & \le & \sum_{j=1}^{J}\left|\left(\epsilon_{T},f_{j}^{*}-\tilde{f_{j}}\right)\right|+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(f_{j}^{*})
+\end{eqnarray*}
+
+
+With gross algebra, we show that
+
+\[
+(\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(\tilde{f_{j}}-f_{j}^{*})\le4\delta_{0}R
+\]
+
+
+Since
+
+\[
+\tau_{R}(\{\tilde{f_{j}}-f_{j}^{*}\})=\frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})\le O_{P}(1)J\delta_{0}R
+\]
+
+
+Then for small enough $\delta_{0}$, we have that
+\[
+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})\le R
+\]
+
+
+\pagebreak{}
+
+
+\section{Examples}
+
+Our goal here is to show that the assumptions hold for various examples.
+
+
+\subsection{Sobolev Norm}
+
+Suppose $\mathcal{G}$ is the class of smooth functions $g:[0,1]\mapsto\mathbb{R}$
+s.t. $I_{(k)}^{2}(g)=\int_{0}^{1}g^{(k)}(t)^{2}dt<\infty$. 
+
+\[
+\arg\min_{g\in\mathcal{G},f\in\mathcal{F}}\|y-g(x_{1})+f(x_{2})\|_{T}^{2}+\lambda_{g}^{2}I_{(k)}(g)+\lambda_{f}^{2}I_{(k)}(f)
+\]
+
+
+Note that it can be shown that $g$ can always be expressed using
+natural $2k$-order B-splines with knots at the training points $x_{1T}$.
+(De Boor, Thrm XIII.5) So we can express $g(t)=\sum_{i=1}^{n}\beta_{i}(t)\gamma_{i}=B\gamma$
+where $B$ is positive definite. Similarly, $I_{(k)}^{2}(g)=\gamma^{T}\Omega\gamma$
+where $\Omega_{ij}=\int_{0}^{1}\beta_{i}^{(k)}(u)\beta_{j}^{(k)}(u)du$.
+
+\textbf{Assumption 1:} Show for some constant $K$, 
+\[
+\frac{\|g\|_{\infty}}{I_{(k)}(g)}\le K
+\]
+
+
+\textbf{Proof:}
+
+From De Boor (p.110), B-splines have the property that $\left|\beta_{i}(t)\right|\le1$
+and $\beta_{i}(t)\ge0$. Hence $\|g\|_{\infty}\le\max_{i}|\gamma_{i}|$.
+Then
+\[
+\frac{\|g\|_{\infty}}{I_{(k)}(g)}\le\frac{\|\gamma\|_{\infty}}{\|\Omega^{1/2}\gamma\|}
+\]
+
+
+Assuming that the smallest nonzero eigenvalue of $\Omega^{1/2}$ is
+at least greater than some constant $c>0$ (in fact, the nonzero eigenvalues
+of $\Omega^{1/2}$ likely grow with $n$), then
+
+\[
+\frac{\|g\|_{\infty}}{I_{(k)}(g)}\le\frac{\|\gamma\|_{\infty}}{c\|\gamma\|_{2}}\le\frac{1}{c}
+\]
+
+
+\textbf{Assumption 2: }Show that there are constants $M,M_{0}$ s.t.
+the penalty is bounded by the squared L2 norm: 
+\[
+I_{(k)}^{2}(g_{\hat{\lambda}})=MI_{(k)}^{2}(g_{\tilde{\lambda}})\|g_{\hat{\lambda}}\|^{2}+M_{0}
+\]
+
+
+\textbf{Proof:}
+
+Let's suppose that $I_{(k)}^{2}(g_{\tilde{\lambda}})\ne0$. Hence
+$\gamma_{\lambda}\notin\mathcal{N}(\Omega)$. Let $c$ be the smallest
+nonzero eigenvalue and $C$ be the largest eigenvalue of $\Omega$
+(largest and smallest by absolute value). 
+
+Then 
+\[
+\frac{I_{(k)}^{2}(g_{\lambda})}{I_{(k)}^{2}(g_{\tilde{\lambda}})}=\frac{\gamma_{\lambda}^{T}\Omega\gamma_{\lambda}}{\gamma_{\tilde{\lambda}}\Omega\gamma_{\tilde{\lambda}}}\le\frac{C\|\gamma_{\lambda}\|^{2}}{c\|\gamma_{\tilde{\lambda}}\|^{2}}
+\]
+
+
+Let's suppose the as $n$ increases, suppose $C/c=O_{p}(1)$. For
+example, in the case where the points are uniformly spaced $1/n$,
+$\int_{0}^{1}\beta_{i}^{(k)}(u)\beta_{j}^{(k)}(u)du$ grows at a rate
+of $O_{p}(n^{2k-1})$, but this is fine since the condition number
+of $\Omega$ remains constant. In a sense, we are assuming that $\Omega$
+stays ``well-conditioned'' as $n$ grows, though the formal definition
+of a condition number is slightly different. 
+
+Since $\|\gamma_{\lambda}\|=\|B^{-1}g_{\lambda}\|$ and $\|g^{*}-g_{\tilde{\lambda}}\|=O_{p}(n^{-1/(2+\alpha)})$,
+then there are constants $M,M_{0}$ s.t. 
+\[
+I_{(k)}^{2}(g_{\lambda})\le MI_{(k)}^{2}(g_{\tilde{\lambda}})\|g_{\lambda}\|^{2}+M_{0}
+\]
+
+
+(and obviously we also have $I_{(k)}(g_{\lambda})$ is bounded by
+$\|g_{\lambda}\|^{2}$ modulo some other set of constants)
 \end{document}
