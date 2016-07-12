@@ -538,7 +538,7 @@ the empirical process term decreases with $n$:
 
 
 Hence for sufficiently large $n$, Vandegeer Lemma's 5.4 (Jean's version
-below) states that the fitted functions $\hat{g_{j}}$ are also with
+below) states that the fitted functions $\hat{g_{j}}$ are also within
 $R$ of the truth: 
 \[
 \{\hat{g_{j}}-g_{j}^{*}\}\in\mathcal{M}(R)\implies\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g_{j}}\|_{T}\le R
@@ -913,34 +913,42 @@ t & = & \frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}
 \end{eqnarray*}
 
 
-Then 
+First note that by convexity, 
 \begin{eqnarray*}
 \tau_{R}(\{\tilde{f_{j}}-f_{j}^{*}\}) & = & \frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})\le R
 \end{eqnarray*}
 
 
-Also, by the basic inequality, we can see that
+Hence 
+\[
+\sup_{f_{j}}\left|\left(\epsilon_{T},f_{j}^{*}-\tilde{f_{j}}\right)\right|\le\delta_{0}^{2}R^{2}
+\]
+
+
+So by the basic inequality,
 
 \begin{eqnarray*}
 \|\sum_{j=1}^{J}f_{j}^{*}-\sum_{j=1}^{J}\tilde{f_{j}}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(\tilde{f_{j}}) & \le & \sum_{j=1}^{J}\left|\left(\epsilon_{T},f_{j}^{*}-\tilde{f_{j}}\right)\right|+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(f_{j}^{*})
 \end{eqnarray*}
 
 
-With gross algebra, we show that
+and with gross algebra, we can show that
 
 \[
 (\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(\tilde{f_{j}}-f_{j}^{*})\le4\delta_{0}R
 \]
 
 
-Since
+Then
 
-\[
-\tau_{R}(\{\tilde{f_{j}}-f_{j}^{*}\})=\frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})\le O_{P}(1)J\delta_{0}R
-\]
+\begin{eqnarray*}
+\frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\}) & = & \tau_{R}(\{\tilde{f_{j}}-f_{j}^{*}\})\\
+ & = & \|\sum\tilde{f_{j}}-f_{j}^{*}\|_{T}+\sum_{j=1}^{J}(\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(\tilde{f_{j}}-f_{j}^{*})\\
+ & \le & O_{P}(1)J\delta_{0}R
+\end{eqnarray*}
 
 
-Then for small enough $\delta_{0}$, we have that
+So for small enough $\delta_{0}$, we have 
 \[
 \tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})\le R
 \]
