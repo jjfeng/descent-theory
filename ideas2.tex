@@ -397,13 +397,16 @@ we're done.
 
 Otherwise, suppose $\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})<\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j})$. 
 
-By the incoherence assumption, we can apply Lemma 4
+Since all the penalties are bounded by the L2 norm, 
 
 \begin{eqnarray*}
 \sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j}) & \le & M\sum_{j=1}^{J}\|\hat{g}_{\lambda j}\|_{V}^{2}+M_{0}J\\
  & \le & M\left(1-\gamma(J-1)\right)\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}J
 \end{eqnarray*}
 
+
+where the latter inequality is due to the incoherence assumption and
+Lemma 4.
 
 Then
 \begin{eqnarray*}
@@ -1006,16 +1009,20 @@ of $\Omega^{1/2}$ likely grow with $n$), then
 \textbf{Assumption 2: }Show that there are constants $M,M_{0}$ s.t.
 the penalty is bounded by the squared L2 norm: 
 \[
-I_{(k)}^{2}(g_{\lambda})=M\|g_{\lambda}\|^{2}+M_{0}
+I_{(k)}^{2}(g_{\lambda})=M\|Proj_{\mathcal{H}}(g_{\lambda})\|^{2}+M_{0}
 \]
 
+
+where $\mathcal{H}$ is the Reproducing Kernel Hilbert space from
+Noah's document and $Proj_{\mathcal{H}}(g_{\lambda})$ means we are
+projecting $g_{\lambda}$ onto $\mathcal{H}$.
 
 \textbf{Proof:}
 
 By Noah's reformulation of the smoothing spline problem in terms of
-the reproducing Kernel Hilbert space, we have 
+the Reproducing Kernel Hilbert space, we have 
 \[
-\|g_{\lambda}\|_{n}^{2}=\|\Omega\alpha\|_{2}^{2},\mbox{ }I_{(k)}^{2}(g_{\lambda})=\alpha^{T}\Omega\alpha
+Proj_{\mathcal{H}}(g_{\lambda})=\Omega\alpha,\mbox{ }I_{(k)}^{2}(g_{\lambda})=\alpha^{T}\Omega\alpha
 \]
 
 
@@ -1025,13 +1032,13 @@ some constant $\tau$. Then
 I_{(k)}^{2}(g_{\lambda}) & = & \alpha^{T}\Omega\alpha\\
  & \le & \|\alpha\|\|\Omega\alpha\|\\
  & = & O_{p}(n^{\tau})\|\alpha\|_{2}^{2}\\
- & \le & O_{p}(n^{-\tau})\|\Omega\alpha\|_{2}^{2}\\
+ & = & O_{p}(n^{-\tau})\|\Omega\alpha\|_{2}^{2}\\
  & \le & \|\Omega\alpha\|_{2}^{2}+M_{0}\\
- & = & \|g_{\lambda}\|_{2}^{2}+M_{0}
+ & = & \|Proj_{\mathcal{H}}(g_{\lambda})\|_{2}^{2}+M_{0}
 \end{eqnarray*}
 
 
 (That is, for sufficiently large $n$, we bound the penalty with the
-constant $M_{0}$ if $\tau<0$ and we bound the penalty with $\|g_{\lambda}\|_{2}^{2}$
+constant $M_{0}$ if $\tau<0$ and we bound the penalty with $\|Proj_{\mathcal{H}}(g_{\lambda})\|_{2}^{2}$
 if $\tau>0$)
 \end{document}
