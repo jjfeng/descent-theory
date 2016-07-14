@@ -1006,21 +1006,17 @@ of $\Omega^{1/2}$ likely grow with $n$), then
 \]
 
 
-\textbf{Assumption 2: }Show that there are constants $M,M_{0}$ s.t.
-the penalty is bounded by the squared L2 norm: 
+\textbf{Assumption 2: }Show that there exist constants $M,M_{0}$
+s.t. the penalty is bounded by the squared L2 norm: 
 \[
-I_{(k)}^{2}(g_{\lambda})=M\|Proj_{\mathcal{H}}(g_{\lambda})\|^{2}+M_{0}
+I_{(k)}^{2}(g_{\lambda})=\|g_{\lambda}\|^{2}+M_{0}
 \]
 
-
-where $\mathcal{H}$ is the Reproducing Kernel Hilbert space from
-Noah's document and $Proj_{\mathcal{H}}(g_{\lambda})$ means we are
-projecting $g_{\lambda}$ onto $\mathcal{H}$.
 
 \textbf{Proof:}
 
 By Noah's reformulation of the smoothing spline problem in terms of
-the Reproducing Kernel Hilbert space, we have 
+the Reproducing Kernel Hilbert space $\mathcal{H}$, we have 
 \[
 Proj_{\mathcal{H}}(g_{\lambda})=\Omega\alpha,\mbox{ }I_{(k)}^{2}(g_{\lambda})=\alpha^{T}\Omega\alpha
 \]
@@ -1034,11 +1030,14 @@ I_{(k)}^{2}(g_{\lambda}) & = & \alpha^{T}\Omega\alpha\\
  & = & O_{p}(n^{\tau})\|\alpha\|_{2}^{2}\\
  & = & O_{p}(n^{-\tau})\|\Omega\alpha\|_{2}^{2}\\
  & \le & \|\Omega\alpha\|_{2}^{2}+M_{0}\\
- & = & \|Proj_{\mathcal{H}}(g_{\lambda})\|_{2}^{2}+M_{0}
+ & \le & \|Proj_{\mathcal{H}}(g_{\lambda})\|_{2}^{2}+\|Proj_{\mathcal{H}^{\perp}}(g_{\lambda})\|_{2}^{2}+M_{0}\\
+ & = & \|g_{\lambda}\|_{2}^{2}+M_{0}
 \end{eqnarray*}
 
 
+where the last step follows from the generalized Pythagorean theorem.
+
 (That is, for sufficiently large $n$, we bound the penalty with the
-constant $M_{0}$ if $\tau<0$ and we bound the penalty with $\|Proj_{\mathcal{H}}(g_{\lambda})\|_{2}^{2}$
+constant $M_{0}$ if $\tau<0$ and we bound the penalty with $\|g_{\lambda}\|_{2}^{2}$
 if $\tau>0$)
 \end{document}
