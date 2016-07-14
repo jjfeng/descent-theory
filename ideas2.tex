@@ -1006,38 +1006,32 @@ of $\Omega^{1/2}$ likely grow with $n$), then
 \textbf{Assumption 2: }Show that there are constants $M,M_{0}$ s.t.
 the penalty is bounded by the squared L2 norm: 
 \[
-I_{(k)}^{2}(g_{\hat{\lambda}})=MI_{(k)}^{2}(g_{\tilde{\lambda}})\|g_{\hat{\lambda}}\|^{2}+M_{0}
+I_{(k)}^{2}(g_{\lambda})=M\|g_{\lambda}\|^{2}+M_{0}
 \]
 
 
 \textbf{Proof:}
 
-Let's suppose that $I_{(k)}^{2}(g_{\tilde{\lambda}})\ne0$. Hence
-$\gamma_{\lambda}\notin\mathcal{N}(\Omega)$. Let $c$ be the smallest
-nonzero eigenvalue and $C$ be the largest eigenvalue of $\Omega$
-(largest and smallest by absolute value). 
-
-Then 
+By Noah's reformulation of the smoothing spline problem in terms of
+the reproducing Hilbert kernel space, we have 
 \[
-\frac{I_{(k)}^{2}(g_{\lambda})}{I_{(k)}^{2}(g_{\tilde{\lambda}})}=\frac{\gamma_{\lambda}^{T}\Omega\gamma_{\lambda}}{\gamma_{\tilde{\lambda}}\Omega\gamma_{\tilde{\lambda}}}\le\frac{C\|\gamma_{\lambda}\|^{2}}{c\|\gamma_{\tilde{\lambda}}\|^{2}}
+\|g_{\lambda}\|_{n}^{2}=\Omega\alpha,\mbox{ }I_{(k)}^{2}(g_{\lambda})=\alpha^{T}\Omega\alpha
 \]
 
 
-Let's suppose the as $n$ increases, suppose $C/c=O_{p}(1)$. For
-example, in the case where the points are uniformly spaced $1/n$,
-$\int_{0}^{1}\beta_{i}^{(k)}(u)\beta_{j}^{(k)}(u)du$ grows at a rate
-of $O_{p}(n^{2k-1})$, but this is fine since the condition number
-of $\Omega$ remains constant. In a sense, we are assuming that $\Omega$
-stays ``well-conditioned'' as $n$ grows, though the formal definition
-of a condition number is slightly different. 
-
-Since $\|\gamma_{\lambda}\|=\|B^{-1}g_{\lambda}\|$ and $\|g^{*}-g_{\tilde{\lambda}}\|=O_{p}(n^{-1/(2+\alpha)})$,
-then there are constants $M,M_{0}$ s.t. 
-\[
-I_{(k)}^{2}(g_{\lambda})\le MI_{(k)}^{2}(g_{\tilde{\lambda}})\|g_{\lambda}\|^{2}+M_{0}
-\]
+Then suppose $\|\Omega\alpha\|=O_{p}(n^{\tau})\|\alpha\|_{2}^{2}$
+for some constant $\tau$. Then
+\begin{eqnarray*}
+I_{(k)}^{2}(g_{\lambda}) & = & \alpha^{T}\Omega\alpha\\
+ & \le & \|\alpha\|\|\Omega\alpha\|\\
+ & = & O_{p}(n^{\tau})\|\alpha\|_{2}^{2}\\
+ & \le & O_{p}(n^{-\tau})\|\Omega\alpha\|_{2}^{2}\\
+ & \le & \|\Omega\alpha\|_{2}^{2}+M_{0}\\
+ & = & \|g_{\lambda}\|_{2}^{2}+M_{0}
+\end{eqnarray*}
 
 
-(and obviously we also have $I_{(k)}(g_{\lambda})$ is bounded by
-$\|g_{\lambda}\|^{2}$ modulo some other set of constants)
+(That is, for sufficiently large $n$, we bound the penalty with the
+constant $M_{0}$ if $\tau<0$ and we bound the penalty with $\|g_{\lambda}\|_{2}^{2}$
+if $\tau>0$)
 \end{document}
