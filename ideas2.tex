@@ -72,9 +72,9 @@ $(-R_{X},R_{X})$.
 Suppose the same entropy bound (2) for both the training set $P_{T}$
 and validation set $P_{V}$.
 
-Suppose for all $\lambda\in\Lambda$, $I^{v}(\hat{g}_{\lambda})$
-is upper bounded by its $L_{2}$-norm with some constant $M$ and
-$M_{0}$ such that
+Suppose for all $\lambda\in\Lambda$, there exists a compatibility
+constant $M$ s.t. $I^{v}(\hat{g}_{\lambda})$ is upper bounded by
+its $L_{2}$-norm with some constant $M$ (and $M_{0}$) such that
 
 \[
 I^{v}(\hat{g}_{\lambda})\le M\|\hat{g}_{\lambda}\|_{n}^{2}+M_{0}
@@ -960,26 +960,147 @@ So for small enough $\delta_{0}$, we have
 \pagebreak{}
 
 
+\section{What if we can't bound the penalty?}
+
+Now suppose the problem does not satisfy the assumption that 
+\[
+I(g_{\lambda})\le M\|g_{\lambda}\|^{2}+M_{0}
+\]
+
+
+Then let's consider a modified way of choosing $\lambda$.
+
+Select lambda s.t. 
+\[
+\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\|y-g_{\lambda}\|_{V}^{2}\mbox{ where }\Lambda=\left\{ \lambda:n^{-\tau}I(\hat{g}_{\lambda})\le\|y-\hat{g}_{\lambda}\|_{V}\right\} 
+\]
+
+
+To get the optimal convergence rate for $\|g^{*}-\hat{g}_{\lambda}\|_{V}$
+, choose $\tau=\frac{1}{2(1+\alpha)}$. Then we get the rate 
+\[
+\|g^{*}-\hat{g}_{\lambda}\|_{V}=O_{P}(n^{-1/2(1+\alpha)})
+\]
+
+
+
+\subsubsection*{Proof:}
+
+For sufficiently large $n$, $\tilde{\lambda}$ will be in the set
+$\Lambda$ with high probability. To see this, note that 
+\begin{eqnarray*}
+n^{-\tau}I(\hat{g}_{\tilde{\lambda}}) & = & O_{p}(n^{-\tau})I(g^{*})\\
+ & \le & \left|\|y-g^{*}\|_{V}-\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}\right|\\
+ & \le & \|y-\hat{g}_{\tilde{\lambda}}\|_{V}
+\end{eqnarray*}
+
+
+where the first inequality comes from the fact that $\|y-g^{*}\|_{V}=O_{P}(\sigma)$
+with high probability and $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}=O_{P}(n^{-1/(2+\alpha)})$.
+
+Now proceed with the basic inequality. We know that
+
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|+2\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|
+\]
+
+
+The problematic case is when$\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{T}\right|$
+is the bigger term on the RHS.
+
+By Vandegeer (10.6),
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2} & \le & O_{P}(n^{-1/2})\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|^{1-\alpha/2}\left(I(\hat{g}_{\tilde{\lambda}})+I(\hat{g}_{\hat{\lambda}})\right)^{\alpha/2}
+\end{eqnarray*}
+
+
+We're done if $I(\hat{g}_{\tilde{\lambda}})>I(\hat{g}_{\hat{\lambda}})$.
+Otherwise, suppose $I(\hat{g}_{\tilde{\lambda}})<I(\hat{g}_{\hat{\lambda}})$.
+By definition of $\Lambda$ , we have
+
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{1+\alpha/2} & \le & O_{P}(n^{-1/2})I(\hat{g}_{\hat{\lambda}})^{\alpha/2}\\
+ & \le & O_{P}(n^{(-1+\tau\alpha)/2})\|y-\hat{g}_{\hat{\lambda}}\|_{V}^{\alpha/2}\\
+ & \le & O_{P}(n^{(-1+\tau\alpha)/2})\left(\|y-g^{*}\|_{V}+\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}+\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|_{V}\right)^{\alpha/2}
+\end{eqnarray*}
+
+
+The slowest case is when $\|y-g^{*}\|_{V}$ is the largest among the
+three terms. We have the rate
+
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(n^{(-1+\tau\alpha)/(2+\alpha)})
+\]
+
+
+The optimal convergence rate is attained if we choose 
+\[
+-\tau=\frac{-1+\tau\alpha}{2+\alpha}
+\]
+
+
+That is, we get 
+\[
+\tau=\frac{1}{2(1+\alpha)}
+\]
+
+
+\pagebreak{}
+
+
 \section{Examples}
 
 Our goal here is to show that the assumptions hold for various examples.
 
 
+\subsection{Penalties that are compatible with the L2 norm}
+
+Lasso, Fused Lasso, Generalized Lasso, Ridge, Elastic Net
+
+To see this works for the Generalized lasso:
+
+Let $D$ be the fixed penalty matrix. Let $D_{max}$ be its maximum
+eigenvalue. Suppose the smallest eigenvalue of $X^{T}X$ stays away
+from zero. Then for some constants $M_{0}$ and $M$,
+
+\begin{eqnarray*}
+\|D\beta\|_{1} & \le & D_{max}\|\beta\|_{1}\\
+ & \le & D_{max}M\|X^{T}\beta\|_{2}^{2}+M_{0}
+\end{eqnarray*}
+
+
+
 \subsection{Sobolev Norm}
 
 Suppose $\mathcal{G}$ is the class of smooth functions $g:[0,1]\mapsto\mathbb{R}$
-s.t. $I_{(k)}^{2}(g)=\int_{0}^{1}g^{(k)}(t)^{2}dt<\infty$. 
+s.t. $I_{(k)}(g)=\sqrt{\int_{0}^{1}g(t)^{2}dt}+\sqrt{\int_{0}^{1}g^{(k)}(t)^{2}dt}<\infty$. 
 
 \[
-\arg\min_{g\in\mathcal{G},f\in\mathcal{F}}\|y-g(x_{1})+f(x_{2})\|_{T}^{2}+\lambda_{g}^{2}I_{(k)}(g)+\lambda_{f}^{2}I_{(k)}(f)
+\arg\min_{g\in\mathcal{G}}\|y-g(x_{1})\|_{T}^{2}+\lambda_{g}^{2}I_{(k)}^{2}(g)
 \]
 
 
-Note that it can be shown that $g$ can always be expressed using
-natural $2k$-order B-splines with knots at the training points $x_{1T}$.
-(De Boor, Thrm XIII.5) So we can express $g(t)=\sum_{i=1}^{n}\beta_{i}(t)\gamma_{i}=B\gamma$
-where $B$ is positive definite. Similarly, $I_{(k)}^{2}(g)=\gamma^{T}\Omega\gamma$
-where $\Omega_{ij}=\int_{0}^{1}\beta_{i}^{(k)}(u)\beta_{j}^{(k)}(u)du$.
+If we reformulate this using the Reproducing Kernel Hilbert space
+$\mathcal{H}$, the criterion becomes
+
+\[
+\arg\min_{g_{H}\in\mathcal{H},g_{\perp}\in\mathcal{H}^{\perp}}\|y-g_{H}(x_{1})+g_{\perp}(x_{1})\|_{T}^{2}+\lambda_{g}^{2}I_{(k)}^{2}(g_{H})
+\]
+
+
+If $\Omega$ is the kernel for $\mathcal{H}$ (with respect to this
+dataset), then
+
+\[
+g_{H}=\Omega_{n}\alpha,\mbox{ }I_{(k)}^{2}(g_{H})=\alpha^{T}\Omega_{n}\alpha
+\]
+
+
+and for some other matrix $\Sigma$, we have 
+\[
+g_{\perp}=\Sigma\beta
+\]
+
 
 \textbf{Assumption 1:} Show for some constant $K$, 
 \[
@@ -989,21 +1110,16 @@ where $\Omega_{ij}=\int_{0}^{1}\beta_{i}^{(k)}(u)\beta_{j}^{(k)}(u)du$.
 
 \textbf{Proof:}
 
-From De Boor (p.110), B-splines have the property that $\left|\beta_{i}(t)\right|\le1$
-and $\beta_{i}(t)\ge0$. Hence $\|g\|_{\infty}\le\max_{i}|\gamma_{i}|$.
-Then
-\[
-\frac{\|g\|_{\infty}}{I_{(k)}(g)}\le\frac{\|\gamma\|_{\infty}}{\|\Omega^{1/2}\gamma\|}
-\]
+Let $c$ be some value s.t. $\|g\|_{2}=g(c)$. This must exist since
+$g$ is continuous.
 
-
-Assuming that the smallest nonzero eigenvalue of $\Omega^{1/2}$ is
-at least greater than some constant $c>0$ (in fact, the nonzero eigenvalues
-of $\Omega^{1/2}$ likely grow with $n$), then
-
-\[
-\frac{\|g\|_{\infty}}{I_{(k)}(g)}\le\frac{\|\gamma\|_{\infty}}{c\|\gamma\|_{2}}\le\frac{1}{c}
-\]
+\begin{eqnarray*}
+g(x) & \le & g(c)+\int_{c}^{x}g'(u)du\\
+ & \le & \|g\|_{2}+\int_{0}^{1}g^{(m)}(u)du\\
+ & \le & \|g\|_{2}+\int_{0}^{1}\left|g^{(m)}(u)\right|du\\
+ & \le & \|g\|_{2}+C\sqrt{\int_{0}^{1}\left|g^{(m)}(u)\right|^{2}du}\\
+ & \le & CI_{(k)}(g)
+\end{eqnarray*}
 
 
 \textbf{Assumption 2: }Show that there exist constants $M,M_{0}$
@@ -1015,29 +1131,6 @@ I_{(k)}^{2}(g_{\lambda})\le M\|g_{\lambda}\|^{2}+M_{0}
 
 \textbf{Proof:}
 
-By Noah's reformulation of the smoothing spline problem in terms of
-the Reproducing Kernel Hilbert space $\mathcal{H}$, we have 
-\[
-Proj_{\mathcal{H}}(g_{\lambda})=\Omega\alpha,\mbox{ }I_{(k)}^{2}(g_{\lambda})=\alpha^{T}\Omega\alpha
-\]
-
-
-Then suppose $\|\Omega\alpha\|=O_{p}(n^{\tau})\|\alpha\|_{2}$ for
-some constant $\tau$. Then for large enough $n$ 
-\begin{eqnarray*}
-I_{(k)}^{2}(g_{\lambda}) & = & \alpha^{T}\Omega\alpha\\
- & \le & \|\alpha\|\|\Omega\alpha\|\\
- & = & O_{p}(n^{\tau})\|\alpha\|_{2}^{2}\\
- & = & O_{p}(n^{-\tau})\|\Omega\alpha\|_{2}^{2}\\
- & \le & \|\Omega\alpha\|_{2}^{2}+M_{0}\\
- & \le & \|Proj_{\mathcal{H}}(g_{\lambda})\|_{2}^{2}+\|Proj_{\mathcal{H}^{\perp}}(g_{\lambda})\|_{2}^{2}+M_{0}\\
- & = & \|g_{\lambda}\|_{2}^{2}+M_{0}
-\end{eqnarray*}
-
-
-where the last step follows from the generalized Pythagorean theorem.
-
-(That is, for sufficiently large $n$, we bound the penalty with the
-constant $M_{0}$ if $\tau<0$ and we bound the penalty with $\|g_{\lambda}\|_{2}^{2}$
-if $\tau>0$)
+I don't think this can be done unless you have assumptions on the
+minimum eigenvalue of $\Omega$.
 \end{document}
