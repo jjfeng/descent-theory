@@ -1122,15 +1122,153 @@ g(x) & \le & g(c)+\int_{c}^{x}g'(u)du\\
 \end{eqnarray*}
 
 
-\textbf{Assumption 2: }Show that there exist constants $M,M_{0}$
-s.t. the penalty is bounded by the squared L2 norm: 
+\textbf{Lemma: }The entropy is bounded for the fitted model:
+
 \[
-I_{(k)}^{2}(g_{\lambda})\le M\|g_{\lambda}\|^{2}+M_{0}
+\arg\min_{g_{H}\in\mathcal{H},g_{\perp}\in\mathcal{H}^{\perp}}\|y-g_{H}(x_{1})+g_{\perp}(x_{1})\|_{T}^{2}+\lambda_{g}^{2}I_{(k)}^{2}(g_{H})
 \]
 
 
+Using the Hilbert Space reproducing kernel, we find that an equivalent
+optimization problem is 
+\[
+\hat{\alpha}_{\lambda^{2}},\hat{\beta}=\arg\min_{\alpha,\beta}\|y-Y\beta-\Omega\alpha\|_{T}^{2}+\lambda^{2}\alpha^{T}\Omega\alpha
+\]
+
+
+where $Y^{T}\Omega=0$. Suppose the $Y^{T}Y$ has its minimum eigenvalue
+bounded away from zero and the minimum eigenvalue of $\Omega$ is
+on the order of$O_{p}(n^{-\tau})$.
+
+Suppose the maximum $\lambda\in\Lambda$ is 1. Then the entropy is
+\[
+H\left(\delta,\{\Omega\hat{\alpha}_{\lambda}:\lambda\in\Lambda\},\|\cdot\|_{T}\right)\le\log\left(\frac{K}{\delta}\right)+(\tau+1)\log n
+\]
+
+
+where $K$ is a constant s.t. $\|y-Y\hat{\beta}\|\le K$.
+
 \textbf{Proof:}
 
-I don't think this can be done unless you have assumptions on the
-minimum eigenvalue of $\Omega$.
+First note that we know that 
+\begin{eqnarray*}
+\hat{\beta} & = & (Y^{T}Y)^{-1}Y^{T}y_{T}
+\end{eqnarray*}
+
+
+Given that $Y^{T}Y$ has a minimum eigenvalue value bounded away from
+zero, there is some $K$ s.t. $\|y-Y\hat{\beta}\|\le K$.
+
+Given $\hat{\beta}$ , we have 
+\begin{eqnarray*}
+\hat{\alpha}_{\lambda^{2}} & = & \frac{1}{n}\left(\frac{1}{n}\Omega^{T}\Omega+\lambda^{2}\Omega\right)^{-1}\Omega^{T}(y-Y\hat{\beta})
+\end{eqnarray*}
+
+
+We know that $\Omega$ is a PD matrix. We express $\Omega=QDQ^{T}$
+where $Q$ is orthogonal and $D$ is a diagonal matrix with entries
+$\omega_{i}$. Then
+
+\[
+\Omega\hat{\alpha}_{\lambda^{2}}=Q\left(D+n\lambda^{2}\right)^{-1}DQ^{T}(y-Y\hat{\beta})
+\]
+
+
+Hence we can measure the difference between models fitted with different
+$\lambda$ values:
+
+\begin{eqnarray*}
+\|\Omega\hat{\alpha}_{\lambda^{2}}-\Omega\hat{\alpha}_{\lambda^{2}+\delta}\| & = & \left\Vert Q\left(\left(D+n\lambda^{2}\right)^{-1}-\left(D+n\lambda^{2}+n\delta\right)^{-1}\right)DQ^{T}(y-Y\hat{\beta})\right\Vert \\
+ & \le & \max_{i=1:n}\left|\frac{n\delta\omega_{i}}{(\omega_{i}+n\lambda^{2})(\omega_{i}+n\lambda^{2}+n\delta)}\right|\|y-Y\hat{\beta}\|\\
+ & \le & \delta n\max_{i=1:n}\left|\frac{\omega_{i}}{(\omega_{i}+n\lambda^{2})^{2}}\right|\|y-Y\hat{\beta}\|\\
+ & \le & \delta n\max_{i=1:n}\left|\omega_{i}^{-1}\right|\|y-Y\hat{\beta}\|\\
+ & = & \delta nO_{P}(n^{\tau})\|y-Y\hat{\beta}\|
+\end{eqnarray*}
+
+
+Suppose we have $\lambda_{max}^{2}=1$. 
+
+Hence
+\[
+\|\Omega\hat{\alpha}_{\lambda^{2}}-\Omega\hat{\alpha}_{\lambda^{2}+\delta}\|\le\delta O_{P}(n^{\tau+1})K
+\]
+
+
+So we can define a $\tilde{\delta}$-covering set for $\{\Omega\hat{\alpha}_{\lambda^{2}}\}$
+using $\{\Omega\hat{\alpha}_{i\delta}:i=0,1,...,\frac{1}{\delta}\}$
+where $\delta=\tilde{\delta}O_{P}(n^{-(\tau+1)})/K$. So the covering
+set contains a total of $\frac{K}{\tilde{\delta}}O_{P}(n^{\tau+1})$
+functions. Hence the entropy is 
+\[
+\log\left(\frac{K}{\tilde{\delta}}\right)+(\tau+1)\log n
+\]
+
+
+\textbf{Corrollary:}
+
+Now suppose we have a training and validation sets $(y_{T},X_{T})$
+and $(y_{V},X_{V})$. We rewrite the joint optimization problem with
+two kernel matrices $\Omega_{T}$ and$\Omega_{V}$
+
+\[
+\arg\min_{\lambda}\|y-Y\hat{\beta}-\Omega_{V}\hat{\alpha}_{\lambda^{2}}\|_{V}^{2}
+\]
+
+
+\[
+\hat{\alpha}_{\lambda^{2}},\hat{\beta}=\arg\min_{\alpha,\beta}\|y-Y\beta-\Omega_{T}\alpha\|_{T}^{2}+\lambda^{2}\alpha^{T}\Omega_{T}\alpha
+\]
+
+
+where $Y^{T}\Omega_{T}=0$ and $Y^{T}\Omega_{V}=0$. Suppose the $Y^{T}Y$
+has its minimum eigenvalue bounded away from zero.
+
+Let $\vec{\omega_{T}}$ and $\vec{\omega_{V}}$ be the eigenvalues
+of $\Omega_{V}$ and $\Omega_{T}$. Suppose that
+
+\[
+\frac{\max_{i=1:n}\left|\omega_{Vi}\right|}{\min_{i=1:n}\left|\omega_{Ti}\right|^{2}}=O_{p}(n^{\tau})
+\]
+
+
+Suppose the maximum $\lambda\in\Lambda$ is 1. 
+
+Then the entropy is
+\[
+H\left(\delta,\{\Omega_{V}\hat{\alpha}_{\lambda}:\lambda\in\Lambda\},\|\cdot\|_{T}\right)\le\log\left(\frac{K}{\delta}\right)+(\tau+1)\log n
+\]
+
+
+where $K$ is a constant s.t. $\|y-Y\hat{\beta}\|\le K$.
+
+\textbf{Proof:}
+
+Proof structure is similar to above.
+
+\begin{eqnarray*}
+\Omega_{V}\hat{\alpha}_{\lambda^{2}} & = & \Omega_{V}\Omega^{-1}\left(\Omega+n\lambda^{2}I\right)^{-1}\Omega^{T}(y-Y\hat{\beta})\\
+ & = & \Omega_{V}Q_{T}D_{T}^{-1}\left(D_{T}+n\lambda^{2}I\right)^{-1}D_{T}Q_{T}^{T}(y-Y\hat{\beta})
+\end{eqnarray*}
+
+
+Hence we can measure the difference between models fitted with different
+$\lambda$ values:
+
+\begin{eqnarray*}
+\|\Omega_{V}\hat{\alpha}_{\lambda^{2}}-\Omega_{V}\hat{\alpha}_{\lambda^{2}+\delta}\| & = & \left\Vert \Omega_{V}Q_{T}D_{T}^{-1}\left(\left(D_{T}+n\lambda^{2}I\right)^{-1}-\left(D_{T}+n(\lambda^{2}+\delta)I\right)^{-1}\right)D_{T}Q_{T}^{T}(y-Y\hat{\beta})\right\Vert \\
+ & \le & n\delta\max\left|\omega_{Vi}\right|\max_{i=1:n}\left|\frac{1}{(\omega_{Ti}+n\lambda^{2})(\omega_{Ti}+n\lambda^{2}+n\delta)}\right|\|y-Y\hat{\beta}\|\\
+ & \le & \delta n\frac{\max_{i=1:n}|\omega_{Vi}|}{\min_{i=1:n}|\omega_{Ti}^{2}|}K\\
+ & = & \delta O_{P}(n^{\tau+1})K
+\end{eqnarray*}
+
+
+So we can define a $\tilde{\delta}$-covering set for $\{\Omega_{V}\hat{\alpha}_{\lambda^{2}}\}$
+using $\{\Omega_{V}\hat{\alpha}_{i\delta}:i=0,1,...,\frac{1}{\delta}\}$
+where $\delta=\tilde{\delta}O_{P}(n^{-(\tau+1)})/K$. So the covering
+set contains a total of $\frac{K}{\tilde{\delta}}O_{P}(n^{\tau+1})$
+functions. Hence the entropy is 
+\[
+\log\left(\frac{K}{\tilde{\delta}}\right)+(\tau+1)\log n
+\]
+
 \end{document}

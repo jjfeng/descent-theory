@@ -230,6 +230,67 @@ that the empirical process term is bigger, we have
 
 
 
+\section{Lemmas}
+
+
+\subsection*{Convergence Rate Equivalence between the original regression problem
+and the perturbed ridge problem}
+
+Suppose the original regression problem is 
+\[
+\hat{\beta}(\lambda)=\arg\min_{\beta\in\Theta}\frac{1}{2}\|y-g_{\beta}\|_{T}^{2}+\lambda P(\beta)
+\]
+
+
+and the new perturbed ridge problem is 
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta\in\Theta}\frac{1}{2}\|y-g_{\theta}\|_{T}^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right)
+\]
+
+
+Let $\theta^{*}$ be the true model parameters. Suppose there are
+constants $K_{0},K_{1}>0$ s.t. 
+\[
+\frac{w}{2}\|\theta^{*}\|_{2}^{2}\le K_{0}P(\theta^{*})+K_{1}
+\]
+
+
+Then the rate of convergence of $\left\Vert g_{\hat{\beta}(\lambda)}-g^{*}\right\Vert $
+is the same as $\left\Vert g_{\hat{\theta}(\lambda)}-g^{*}\right\Vert $
+modulo some constant.
+
+
+\subsubsection*{Proof}
+
+For ease of notation, we will write $\hat{\theta}=\hat{\theta}(\lambda)$
+and $\hat{\beta}=\hat{\beta}(\lambda)$.
+
+By definition, 
+\begin{eqnarray*}
+\frac{1}{2}\|y-g_{\hat{\theta}}\|^{2}+\tilde{\lambda}\left(P(\hat{\theta})+\frac{w}{2}\|\hat{\theta}\|^{2}\right) & \le & \frac{1}{2}\|y-g_{\theta^{*}}\|^{2}+\tilde{\lambda}\left(P(\theta^{*})+\frac{w}{2}\|\theta^{*}\|^{2}\right)\\
+ & \le & \frac{1}{2}\|y-g_{\theta^{*}}\|^{2}+\tilde{\lambda}(1+K_{0})P(\theta^{*})+\tilde{\lambda}K_{1}
+\end{eqnarray*}
+
+
+Therefore
+\[
+\frac{1}{2}\|y-g_{\hat{\theta}}\|^{2}+\tilde{\lambda}P(\hat{\theta})\le\frac{1}{2}\|y-g_{\theta^{*}}\|^{2}+\tilde{\lambda}(1+K_{0})P(\theta^{*})+\tilde{\lambda}K_{1}
+\]
+
+
+Notice that this inequality is very similar to the inequality from
+the original regression problem
+
+\[
+\frac{1}{2}\|y-g_{\hat{\beta}}\|^{2}+\tilde{\lambda}P(\hat{\beta})\le\frac{1}{2}\|y-g_{\theta^{*}}\|^{2}+\tilde{\lambda}P(\theta^{*})
+\]
+
+
+Therefore the same arguments to prove the convergence rate of $\left\Vert g_{\hat{\beta}(\lambda)}-g^{*}\right\Vert $
+give the same convergence rate for $\left\Vert g_{\hat{\theta}(\lambda)}-g^{*}\right\Vert $.
+(Example: refer to Them 10.2 in Vandegeer)
+
+
 \section{Examples}
 
 
