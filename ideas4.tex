@@ -1,0 +1,324 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsmath}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+
+\section{Cross-validation Proof}
+
+
+\subsubsection*{The problem}
+
+Let $\theta^{*}$ be the true model parameters and suppose we observe
+\[
+y=g_{\theta^{*}}+\epsilon
+\]
+
+
+where $\epsilon$ are the sub-gaussian random errors. Let $T$ be
+the training set and $V$ be the validation set.
+
+Let the loss function for our regression problem be least squares.
+We denote it as $\|h\|_{T}^{2}=\frac{1}{n}\sum_{i\in T}h(x_{i})^{2}$
+and similarly for $\|\cdot\|_{V}$. 
+
+Consider the joint optimization problem on a training/validation split
+to find the best regularization parameter $\lambda$ in $\Lambda$:
+
+\[
+\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\frac{1}{2}\|y-g_{\hat{\theta}(\lambda)}\|_{V}^{2}
+\]
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta}\frac{1}{2}\|y-g_{\theta}\|_{T}^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right)
+\]
+
+
+Here $w>0$ is some fixed parameter. (One should choose this to be
+on the order of 1e-15 or smaller. In practice, we can probably just
+drop it entirely.)
+
+Let the range of $\Lambda$ be from $[\lambda_{min},\lambda_{max}]$.
+Both can grow and shrink at any polynomial rate, e.g. $\mbox{\ensuremath{\lambda}}_{max}=O_{P}(n^{\tau_{max}})$
+and $\mbox{\ensuremath{\lambda}}_{min}=O_{P}(n^{-\tau_{min}})$. 
+
+Suppose there is an optimal $\tilde{\lambda}$ s.t. $\|g_{\hat{\theta}(\lambda)}-g^{*}\|$
+is some optimal rate $O_{p}(n^{-r})$ where $r\ge1/2$.
+
+We show that $\hat{\lambda}$will converge to $\tilde{\lambda}$ at
+an almost-parametric rate or just the optimal rate $O_{p}(n^{-r})$.
+
+The almost-parametric rate is
+
+\[
+\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\le\left(\frac{1-\log w+\kappa\log n}{n}\right)^{1/2}
+\]
+
+
+where $\kappa$ is a constant that depends on known constants, including
+$\tau_{max}$ and $\tau_{\min}$.
+
+
+\subsubsection*{Other Assumptions}
+\begin{itemize}
+\item Suppose that penalty $P$ is smooth and convex -- its $m$-th derivative
+$\nabla_{\theta}^{(m)}P(\theta)$ is defined. Suppose $\|\nabla_{\theta}P(\theta)|_{\hat{\theta}(\lambda)}\|\le O_{p}(n^{k_{1}})$.
+For $m\ge2$, suppose the derivative is bounded $\nabla_{\theta}^{(m)}P(\theta)\le K_{m}$.
+\item Suppose that the $m$-th derivative $\nabla_{\theta}^{(m)}g_{\theta}$
+exists. Suppose $\|\nabla_{\theta}g_{\theta=\hat{\theta}(\lambda)}\|\le O_{p}(n^{g_{1}})$.
+Suppose the same things as above for the $m$th derivatives of $g_{\theta}$
+wrt $\theta$.
+\item Suppose $g_{\theta}$ is Lipschitz with constant $L$ s.t. 
+\[
+\|g_{\theta_{1}}-g_{\theta_{2}}\|_{n}\le L\left\Vert \theta_{1}-\theta_{2}\right\Vert _{2}
+\]
+
+\end{itemize}
+
+\subsubsection*{Proof}
+
+\textbf{Step 1: Find the entropy of the model class $\mathcal{G}_{\lambda}$}
+
+First we show that the entropy $H(u,\mathcal{G}_{\lambda},\|\cdot\|_{V})$
+of the class 
+\[
+\mathcal{G}_{\lambda}=\left\{ \theta_{\lambda}:\lambda\in\Lambda\right\} 
+\]
+ 
+
+is bounded at a near-parametric rate:
+\[
+H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le\log\left(\frac{L}{uw}\right)+\kappa\log n
+\]
+
+
+Using a Taylor expansion, we know that for some $\delta>0$, then
+\[
+\|\hat{\theta}(\ell)-\hat{\theta}(\ell+\delta)\|=\delta\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)|_{\lambda=\ell}\right\Vert +O_{P}(\delta^{2})
+\]
+
+
+Since the problem is smooth, we can find the second derivative via
+implicit differentiation:
+
+\[
+\nabla_{\lambda}\hat{\theta}(\lambda)=\left[\nabla_{\theta}^{2}L_{T}(y,g_{\theta})\right]^{-1}\left(\nabla_{\theta}P(\theta)+w\theta\right)
+\]
+
+
+Note that the Hessian has the form
+\[
+\nabla_{\theta}^{2}L_{T}(y,g_{\theta})=\nabla_{\theta}^{2}\left(\|y-g_{\theta}\|^{2}+\lambda P(\theta)\right)+\lambda wI
+\]
+which means its minimum eigenvalue is at least $\lambda w=O_{p}(n^{-\tau_{min}})w$.
+
+From the asumptions, we have that
+
+\begin{eqnarray*}
+\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)\right\Vert  & \le & \left\Vert \left[\nabla_{\theta}^{2}L_{T}(y,g_{\theta})\right]^{-1}\left(\nabla_{\theta}P(\theta)+w\hat{\theta}(\lambda)\right)\right\Vert \\
+ & \le & O_{p}(n^{\tau_{min}})w^{-1}\left(O_{p}(n^{k_{1}})+\|\hat{\theta}(\lambda)\|\right)
+\end{eqnarray*}
+
+
+Note that $\|\hat{\theta}(\lambda)\|$ is easily bounded by the solution
+to the ridge regression problem:
+
+\[
+\hat{\theta}_{r}(\lambda)=\arg\min\|y-g_{\theta}\|^{2}+\lambda\|\theta\|_{2}^{2}
+\]
+
+
+The solution $\hat{\theta}_{r}(\lambda)$ has norm at most $O_{P}(n^{\tau_{\min}})$.
+It is straightforward to show that
+
+\[
+\|\hat{\theta}(\lambda)\|\le\|\hat{\theta}_{r}(\lambda)\|
+\]
+
+
+Therefore
+
+\[
+\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)\right\Vert =w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})
+\]
+
+
+Using the Taylor's expansion from above, then we can know bound the
+distance between $g_{\hat{\theta}(\ell)}$ and $g_{\hat{\theta}(\ell+\delta)}$
+
+\begin{eqnarray*}
+\|g_{\hat{\theta}(\ell)}-g_{\hat{\theta}(\ell+\delta)}\|_{V} & \le & L\left\Vert \hat{\theta}(\ell)-\hat{\theta}(\ell+\delta)\right\Vert _{2}\\
+ & = & L\left(\delta w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})+O_{p}(\delta^{2})\right)
+\end{eqnarray*}
+
+
+Then the covering number is on the order of $n^{\kappa}$ where $\kappa$
+grows linearly in $\tau_{min},\tau_{max}$ and $k_{1}$. 
+\[
+N\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le\frac{L}{uw}O_{p}(n^{\kappa})\implies H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le\log\left(\frac{L}{uw}\right)+\kappa\log n
+\]
+
+
+\textbf{Step 2: Find the basic inequality}
+
+By definition, 
+\[
+\|y-g_{\hat{\theta}(\hat{\lambda})}\|_{V}^{2}\le\|y-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}^{2}
+\]
+
+
+Rearranging, we get the basic inequality
+
+\[
+\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}^{2}\le2\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}+\left|\left(g^{*}-g_{\hat{\theta}(\tilde{\lambda})},g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}
+\]
+
+
+Clearly if the second term dominates, Cauchy Schwarz (and a symmetrization
+argument) give us that $\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|$
+converges that the same rate as $\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|$.
+
+In the next step we bound the empirical process term.
+
+\textbf{Step 3: Bound the empirical process with high probability}
+
+We apply Corollary 8.3 in Vandegeer to determine the value $\delta$
+s.t. $\delta$ bounds the empirical process term with high probability.
+
+Let 
+\[
+\tilde{\mathcal{G}_{\lambda}}=\left\{ \frac{g_{\hat{\theta}(\lambda)}-g_{\hat{\theta}(\tilde{\lambda})}}{\|g_{\hat{\theta}(\lambda)}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}}:\lambda\in\Lambda\right\} 
+\]
+
+
+Consequently, 
+
+\begin{eqnarray*}
+\int_{0}^{1}H^{1/2}\left(u,\tilde{\mathcal{G}_{\lambda}},\|\cdot\|_{V}\right)du & = & \int_{0}^{1}\left(\log\left(\frac{1}{uw}\right)+\kappa\log n\right)^{1/2}du\\
+ & \le & \left(\int_{0}^{1}\log\left(\frac{1}{uw}\right)+\kappa\log ndu\right)^{1/2}\\
+ & \le & \left(1-\log w+\kappa\log n\right)^{1/2}
+\end{eqnarray*}
+
+
+By Corollary 8.3, if we choose 
+\[
+\delta\ge\left(\frac{1-\log w+\kappa\log n}{n}\right)^{1/2}
+\]
+
+
+then
+
+\[
+Pr\left(\frac{\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}}{\|g_{\hat{\theta}(\lambda)}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}}\ge\delta\right)\le\exp\left(-n\frac{\delta^{2}}{C^{2}}\right)
+\]
+
+
+\textbf{Step 4: Win}
+
+Returning to the basic inequality in Step 2, we find that in the case
+that the empirical process term is bigger, we have
+
+\begin{eqnarray*}
+\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V} & \le & 4\left|\frac{(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})})_{V}}{\|g_{\hat{\theta}(\lambda)}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}}\right|\\
+ & \le & 4\left(\frac{1-\log w+\kappa\log n}{n}\right)^{1/2}
+\end{eqnarray*}
+
+
+
+\section{Examples}
+
+
+\subsubsection*{Ridge Regression}
+
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta}\frac{1}{2}\|y-X\theta\|_{T}^{2}+\frac{\lambda}{2}\|\theta\|^{2}
+\]
+
+
+The Hessian is 
+\[
+X^{T}X+\lambda I
+\]
+so its minimum eigenvalue is $\lambda$.
+
+The derivative of the penalty wrt $\theta$ is 
+\[
+\nabla_{\theta}P(\theta)=\theta
+\]
+
+
+Since $\theta=(X^{T}X+\lambda I)^{-1}X^{T}y$, the derivative has
+bounded norm $\|\nabla_{\theta}P(\theta)\|=O_{P}(n^{\tau_{min}})$.
+
+All other assumptions are obviously satisfied. Note that in this problem,
+we can drop the tiny additional ridge penalty entirely.
+
+
+\subsubsection*{Smoothing Splines with a Sobolev Penalty}
+
+The optimization problem can be formulated as
+
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta}\frac{1}{2}\|y-\theta\|_{T}^{2}+\frac{\lambda}{2}\theta^{T}K\theta
+\]
+
+
+where $K=N^{-T}\Omega N$, $N$ is the normalized B-splines evaluated
+at the input points, and $\Omega$ has entries $\Omega_{ij}=\int b_{i}"(x)b_{j}"(x)dx$.
+
+Assume the input points $i/n$ for $i=1:n$ and we fit $y$ with cubic
+B-splines. Then $K=DC^{-1}Dn^{3}$ where $D$ is the (universal, non-data-dependent)
+second-order discrete diference operator and $C$ is a tridiagonal
+matrix with diagonal elements equal to 2/3 and off-diagonal elements
+equal to 1/6.
+
+The Hessian is 
+\[
+I+\lambda K
+\]
+so its minimum eigenvalue is 1.
+
+The derivative of the penalty wrt $\theta$ is 
+\[
+\nabla_{\theta}P(\theta)=K\theta
+\]
+
+
+The maximum eigenvalue of $K$ is on the order of $O_{p}(n^{-3})$.
+Clearly$\|\theta\|$ can be bounded by $\|y\|$ modulo a constant.
+So $\|\nabla_{\theta}P(\theta)\|=O_{P}(n^{3})$. Also, $\nabla_{\theta}^{2}P(\theta)=K$
+so its norm is shrinking at a rate of $O_{P}(n^{-3})$.
+
+All other assumptions are obviously satisfied. Note that in this problem,
+we can drop the tiny additional ridge penalty entirely.
+
+\textbf{Lasso (with a tiny ridge)}
+
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta}\frac{1}{2}\|y-X\theta\|_{T}^{2}+\lambda\left(\|\theta\|_{1}+\frac{w}{2}\|\theta\|_{2}^{2}\right)
+\]
+
+
+With modifications to the proof above, we can probably show that the
+proof carries through for penalties that are smooth almost everywhere.
+The main tricky part is dealing with the fact that the Hessian with
+respect to the differentiable space changes in size for different
+values of $\lambda$.
+
+Anyhow, by a hand-wavy argument, we have that the Hessian matrix with
+respect to the differentiable space $S_{\lambda}$ is 
+\[
+X_{S_{\lambda}}^{T}X_{S_{\lambda}}+\lambda wI_{S_{\lambda}}
+\]
+ so its minimum eigenvalue is $w\lambda$.
+
+The lasso penalty clearly satisfies our assumptions since its derivative
+$\nabla_{\theta}\|\theta\|_{1}=sgn(\theta)$ has bounded norm $\|\nabla_{\theta}\|\theta\|_{1}\|\le p$.
+
+All other assumptions are satisfied.
+\end{document}
