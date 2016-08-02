@@ -54,11 +54,11 @@ Let the range of $\Lambda$ be from $[\lambda_{min},\lambda_{max}]$.
 Both limits can grow and shrink at any polynomial rate, e.g. $\mbox{\ensuremath{\lambda}}_{max}=O_{P}(n^{\tau_{max}})$
 and $\mbox{\ensuremath{\lambda}}_{min}=O_{P}(n^{-\tau_{min}})$. 
 
-Suppose there is an optimal $\tilde{\lambda}$ s.t. $\|g_{\hat{\theta}(\lambda)}-g^{*}\|$
-is some optimal rate $O_{p}(n^{-r})$ where $r\ge1/2$.
+Suppose there is an optimal $\tilde{\lambda}$ s.t. $\|g_{\hat{\theta}(\lambda)}-g^{*}\|_{V}$
+attains some optimal rate.
 
 We show that $\hat{\lambda}$ will converge to $\tilde{\lambda}$
-at an almost-parametric rate or just the optimal rate $O_{p}(n^{-r})$.
+at an almost-parametric rate or just the optimal rate.
 
 \[
 \|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}=O_{P}(1)\left(C\left(\frac{1-\log w+\kappa\log n}{|V|}\right)^{1/2}\vee\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\right)
@@ -197,55 +197,12 @@ converges that the same rate as $\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|$.
 In the next step we bound the empirical process term.
 
 
-\subsubsection*{Step 3: Bound the empirical process with high probability}
-
-Now let's bound 
-\[
-Pr\left(\sup_{\lambda_{1},\lambda_{2}:g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\le R}\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right)
-\]
-
-
-We apply Corollary 8.3 in Vandegeer to determine the value $\delta$
-s.t. $\delta$ bounds the empirical process term with high probability.
-
-Let 
-\[
-\bar{\mathcal{G}_{\lambda}}=\left\{ g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}:\lambda_{1},\lambda_{2}\in\Lambda\right\} 
-\]
-
-
-Consequently, for $R\ge\delta/\sqrt{2}\sigma$ ,
-
-\begin{eqnarray*}
-\int_{0}^{R}H^{1/2}\left(u,\bar{\mathcal{G}_{\lambda}},\|\cdot\|_{V}\right)du & = & \sqrt{2}\int_{0}^{R}\left(\log\frac{1}{u}+\log\left(\frac{M}{w}\right)+\kappa\log n\right)^{1/2}du\\
- & = & RO_{P}(1)\left(\int_{0}^{1}\log\left(\frac{1}{u}\right)+\log\left(\frac{M}{w}\right)+\kappa\log ndu\right)^{1/2}\\
- & \le & RO_{P}(1)\left(1-\log(M/w)+\kappa\log n\right)^{1/2}
-\end{eqnarray*}
-
-
-where $C$ depends on the sub-gaussian parameters for $\epsilon$
-($\sigma$ and $K$) and $c$ depends on $M$.
-
-By Corollary 8.3, there is some constant $C$ s.t. for all 
-\[
-\delta\ge CR\left(\frac{1-\log(M/w)+\kappa\log n}{|V|}\right)^{1/2}
-\]
-
-
-we have
-
-\[
-Pr\left(\sup_{\lambda_{1},\lambda_{2}:g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\le R}\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right)\le C\exp\left(-|V|\frac{\delta^{2}}{C^{2}R^{2}}\right)
-\]
-
-
-
-\subsubsection*{Step 4: Bound empirical process by a chaining argument}
+\subsubsection*{Step 3: Bound empirical process with a chaining argument}
 
 If $\|\epsilon\|_{V}\le2\sigma$, the basic inequality implies that
 $\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\le2\sigma$.
-Therefore we can bound the empirical process term by a chaining argument
-(like Thrm 9.1 in Vandegeer).
+Therefore we can bound the empirical process term by a standard chaining
+argument (basically a copy of Thrm 9.1 in Vandegeer).
 
 Let $S=\min\{s\in\{0,1,...\}:2^{s}>2\sigma\}$. For 
 \[
@@ -256,11 +213,12 @@ Let $S=\min\{s\in\{0,1,...\}:2^{s}>2\sigma\}$. For
 we have
 
 \begin{eqnarray*}
-Pr\left(\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right) & \le & \sum_{s=0}^{S}Pr\left(\sup_{\lambda_{1},\lambda_{2}:\|g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\|_{2}\le2^{s+1}\delta}\left|\left(\epsilon,g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\right)\right|_{V}\ge2^{2s-1}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right)\\
+ &  & Pr\left(\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right)\\
+ & \le & \sum_{s=0}^{S}Pr\left(\sup_{\lambda_{1},\lambda_{2}:\|g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\|_{2}\le2^{s+1}\delta}\left|\left(\epsilon,g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\right)\right|_{V}\ge2^{2s-1}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right)\\
  & \le & \sum_{s=0}^{S}C\exp\left(-|V|\frac{2^{4s-2}\delta^{4}}{4C^{2}2^{2s+2}\delta^{2}}\right)\\
  & \le & C\exp\left(-|V|\frac{\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
-The third inequality comes from Step 3. We can apply it since for
+The third inequality comes from Lemma 1. We can apply it since for
 $s=0,...,S$, 
 \[
 \sqrt{|V|}2^{2s+2}\delta^{2}\ge16C2^{s+1}\delta\left(1-\log(M/w)+\kappa\log n\right)^{1/2}
@@ -268,9 +226,9 @@ $s=0,...,S$,
 
 
 
-\subsubsection*{Step 5: Win}
+\subsubsection*{Step 4: Win}
 
-Using Step 4 and the basic inequality, we can now bound $\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}$
+We can now bound $\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}$
 with high probability. Let
 
 \[
@@ -281,7 +239,8 @@ with high probability. Let
 Then
 
 \begin{eqnarray*}
-Pr\left(\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right) & \le & Pr\left(\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)+Pr\left(\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta^{2}\right)\\
+ &  & Pr\left(\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)\\
+ & \le & Pr\left(\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)+Pr\left(\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta^{2}\right)\\
  & \le & Pr\left(\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right)+Pr\left(\|\epsilon\|_{V}>2\sigma\right)+Pr\left(\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)\\
  & \le & C\exp\left(-|V|\frac{\delta^{2}}{c^{2}}\right)+Pr\left(\|\epsilon\|_{V}>2\sigma\right)+Pr\left(\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)
 \end{eqnarray*}
@@ -302,6 +261,70 @@ convergence rate.
 
 
 \section{Lemmas}
+
+
+\subsubsection*{Lemma 1}
+
+Suppose function class $\mathcal{F}$ has 
+\[
+H\left(u,\mathcal{F},\|\cdot\|_{n}\right)\le J\left(\log\left(\frac{M}{uw}\right)+\kappa\log n\right)
+\]
+
+
+for positive constants $J,M,w,\kappa$.
+
+Suppose $\sup_{f\in\mathcal{F}}\|f\|_{n}\le R$. 
+
+Suppose $\epsilon$ are independent sub-gaussian RV with constants
+$K$ and $\sigma$.
+
+Then there exists some $C$ s.t. for all $\delta$ s.t. $R\ge\delta/\sigma$
+and
+
+\[
+\delta\ge CRJ^{1/2}\left(\frac{1-\log(M/w)+\kappa\log n}{|V|}\right)^{1/2}
+\]
+
+
+we have
+
+\[
+Pr\left(\sup_{f_{1},f_{2}\in\mathcal{F}}\left|\left(\epsilon,f_{1}-f_{2}\right)\right|_{V}\ge\delta\wedge\|\epsilon\|_{V}\le\sigma\right)\le C\exp\left(-|V|\frac{\delta^{2}}{C^{2}R^{2}}\right)
+\]
+
+
+
+\subsubsection*{Proof}
+
+We apply Corollary 8.3 in Vandegeer to determine the value $\delta$
+s.t. $\delta$ bounds the empirical process term with high probability.
+
+Let 
+\[
+\bar{\mathcal{F}}=\left\{ f_{1}-f_{2}:f_{1},f_{2}\in\mathcal{F}\right\} 
+\]
+
+
+Consequently, for $R\ge\delta/\sqrt{2}\sigma$ ,
+
+\begin{eqnarray*}
+\int_{0}^{R}H^{1/2}\left(u,\bar{\mathcal{F}},\|\cdot\|_{V}\right)du & = & \sqrt{2J}\int_{0}^{R}\left(\log\frac{1}{u}+\log\left(\frac{M}{w}\right)+\kappa\log n\right)^{1/2}du\\
+ & = & O_{P}(1)R\sqrt{J}\left(\int_{0}^{1}\log\left(\frac{1}{u}\right)+\log\left(\frac{M}{w}\right)+\kappa\log ndu\right)^{1/2}\\
+ & \le & O_{P}(1)R\sqrt{J}\left(1-\log(M/w)+\kappa\log n\right)^{1/2}
+\end{eqnarray*}
+
+
+where $C$ depends on the sub-gaussian parameters for $\epsilon$
+($\sigma$ and $K$) and $c$ depends on $M$.
+
+Then apply Corollary 8.3 for all 
+\[
+\delta\ge CR\sqrt{J}\left(\frac{1-\log(M/w)+\kappa\log n}{|V|}\right)^{1/2}
+\]
+
+
+
+\section{Corollaries}
 
 
 \subsection{Convergence Rate Equivalence between the original regression problem
@@ -326,8 +349,8 @@ constants $K_{0},K_{1}>0$ s.t.
 \]
 
 
-Then the rate of convergence of $\left\Vert g_{\hat{\beta}(\lambda)}-g^{*}\right\Vert $
-is the same as $\left\Vert g_{\hat{\theta}(\lambda)}-g^{*}\right\Vert $
+Then the rate of convergence of $\left\Vert g_{\hat{\beta}(\lambda)}-g^{*}\right\Vert _{T}$
+is the same as $\left\Vert g_{\hat{\theta}(\lambda)}-g^{*}\right\Vert _{T}$
 modulo some constant.
 
 
@@ -338,14 +361,14 @@ and $\hat{\beta}=\hat{\beta}(\lambda)$.
 
 By definition, 
 \begin{eqnarray*}
-\frac{1}{2}\|y-g_{\hat{\theta}}\|^{2}+\tilde{\lambda}\left(P(\hat{\theta})+\frac{w}{2}\|\hat{\theta}\|^{2}\right) & \le & \frac{1}{2}\|y-g_{\theta^{*}}\|^{2}+\tilde{\lambda}\left(P(\theta^{*})+\frac{w}{2}\|\theta^{*}\|^{2}\right)\\
- & \le & \frac{1}{2}\|y-g_{\theta^{*}}\|^{2}+\tilde{\lambda}(1+K_{0})P(\theta^{*})+\tilde{\lambda}K_{1}
+\frac{1}{2}\|y-g_{\hat{\theta}}\|_{T}^{2}+\tilde{\lambda}\left(P(\hat{\theta})+\frac{w}{2}\|\hat{\theta}\|^{2}\right) & \le & \frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\tilde{\lambda}\left(P(\theta^{*})+\frac{w}{2}\|\theta^{*}\|^{2}\right)\\
+ & \le & \frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\tilde{\lambda}(1+K_{0})P(\theta^{*})+\tilde{\lambda}K_{1}
 \end{eqnarray*}
 
 
 Therefore
 \[
-\frac{1}{2}\|y-g_{\hat{\theta}}\|^{2}+\tilde{\lambda}P(\hat{\theta})\le\frac{1}{2}\|y-g_{\theta^{*}}\|^{2}+\tilde{\lambda}(1+K_{0})P(\theta^{*})+\tilde{\lambda}K_{1}
+\frac{1}{2}\|y-g_{\hat{\theta}}\|_{T}^{2}+\tilde{\lambda}P(\hat{\theta})\le\frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\tilde{\lambda}(1+K_{0})P(\theta^{*})+\tilde{\lambda}K_{1}
 \]
 
 
@@ -353,12 +376,12 @@ Notice that this inequality is very similar to the inequality from
 the original regression problem
 
 \[
-\frac{1}{2}\|y-g_{\hat{\beta}}\|^{2}+\tilde{\lambda}P(\hat{\beta})\le\frac{1}{2}\|y-g_{\theta^{*}}\|^{2}+\tilde{\lambda}P(\theta^{*})
+\frac{1}{2}\|y-g_{\hat{\beta}}\|_{T}^{2}+\tilde{\lambda}P(\hat{\beta})\le\frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\tilde{\lambda}P(\theta^{*})
 \]
 
 
-Therefore the same arguments to prove the convergence rate of $\left\Vert g_{\hat{\beta}(\lambda)}-g^{*}\right\Vert $
-give the same convergence rate for $\left\Vert g_{\hat{\theta}(\lambda)}-g^{*}\right\Vert $.
+Therefore the same arguments to prove the convergence rate of $\left\Vert g_{\hat{\beta}(\lambda)}-g^{*}\right\Vert _{T}$
+give the same convergence rate for $\left\Vert g_{\hat{\theta}(\lambda)}-g^{*}\right\Vert _{T}$.
 (Example: refer to Thrm 10.2 in Vandegeer)
 
 
@@ -385,9 +408,8 @@ does not exist. Since the regression problem is smooth almost everywhere,
 $S$ should have measure zero.
 
 First we apply the mean value theorem to two points $\ell$ and $\ell+\delta$
-that have no knots in between. (Think about what happens when $\lambda$
-is multi-dim?) That is, for any $\delta>0$, there is some $\alpha\in[0,1]$
-s.t. 
+that have no knots in between. That is, for any $\delta>0$, there
+is some $\alpha\in[0,1]$ s.t. 
 \[
 \|\hat{\theta}(\ell)-\hat{\theta}(\ell+\delta)\|=\delta\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)|_{\lambda=\ell+\alpha\delta}\right\Vert 
 \]
@@ -495,12 +517,12 @@ The joint optimization problem for k-fold cross-validation is
 \]
 
 
-We show that the convergence rate of $\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2}}$
+We show that the convergence rate of $\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2}$
 is either nearly-parametric or is the same as the optimal convergence
-rate of $\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\theta^{*}}\|_{k}^{2}}$.
-The nearly-parametric rate is 
+rate:
+
 \[
-O_{P}(1)\left(1-2\log w+\kappa\log n\right)^{1/2}\left(\sum_{k=1}^{K}|D_{k}|^{-1/2}\right)
+\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2}}=O_{P}(1)\left(\left(\frac{1-2\log w+\kappa\log n}{\min_{k\in1:K}|D_{k}|}\right)^{1/2}\vee\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\theta^{*}}\|_{k}^{2}}\right)
 \]
 
 
@@ -550,31 +572,42 @@ is bigger
 \end{eqnarray*}
 
 
-Obviously 
-
+Like Step 3, suppose $\|\epsilon\|_{n}\le2\sigma$. Then the basic
+inequality allows us to bound 
 \begin{eqnarray*}
-\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2}} & \le & 4\left|\frac{\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}}{\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2}}}\right|\\
- & \le & 4\sum_{k=1}^{K}\frac{\left|\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|}{\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}}
+\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2} & \le & O_{p}(1)\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\\
+ & \le & O_{p}(1)\sqrt{\sum_{k=1}^{K}\|\epsilon\|_{k}^{2}}\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2}}
 \end{eqnarray*}
 
 
-Consider model classes $\mathcal{G}_{\lambda,k}=\left\{ g_{\hat{\theta_{k}}(\lambda)}:\lambda\in\Lambda\right\} $
-for $k=1,...,K$. Apply Step 1 from the main proof to each $\mathcal{G}_{\lambda,k}$.
-The entropy bound for each class is 
+Hence we can suppose 
 \[
-H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{k}\right)\le\log\left(\frac{M}{uw}\right)+\kappa\log n
+\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2}}\le2\sigma
 \]
 
 
-Then for every $k$, 
+Now we can bound each of the $k$ empirical process terms $\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}$
+by a chaining argument. Following the same argument as Step 3 in the
+main proof above, we get for $k=1:K$, 
 \[
-\frac{\left|\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|}{\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}}=O_{P}(1)\left(\frac{1-2\log w+\kappa\log n}{|D_{k}|}\right)^{1/2}
+Pr\left(\left|\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\ge\delta^{2}\wedge\|\epsilon\|_{n}\le2\sigma\right)\le C\exp\left(-|D_{k}|\frac{\delta^{2}}{c^{2}}\right)
 \]
 
 
-Therefore
+Putting Case 1 and 2 together, we get for all $\delta$ s.t.
+
+\[
+\delta\ge O_{p}(1)\left(\frac{1-\log w+\kappa\log n}{\min_{k\in1:K}|D_{k}|}\right)^{1/2}
+\]
+
+
+we have
+
 \begin{eqnarray*}
-\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2}} & \le & O_{P}(1)\left(1-2\log w+\kappa\log n\right)^{1/2}\left(\sum_{k=1}^{K}|D_{k}|^{-1/2}\right)
+ &  & Pr\left(\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2}\ge\delta^{2}\right)\\
+ & \le & Pr\left(\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\ge\delta^{2}\wedge\|\epsilon\|_{n}\le2\sigma\right)+Pr\left(\|\epsilon\|_{n}\le2\sigma\right)+Pr\left(\sum_{k=1}^{K}\left\Vert g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\ge\delta^{2}\right)\\
+ & \le & \sum_{k=1}^{K}Pr\left(\left|\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\ge\delta^{2}/K\wedge\|\epsilon\|_{n}\le2\sigma\right)+Pr\left(\|\epsilon\|_{n}\le2\sigma\right)+Pr\left(\sum_{k=1}^{K}\left\Vert g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\ge\delta^{2}\right)\\
+ & \le & C\sum_{k=1}^{K}\exp\left(-|D_{k}|\frac{\delta^{2}}{c^{2}K}\right)+\exp\left(-\frac{n\sigma^{2}}{12K^{2}}\right)+Pr\left(\sum_{k=1}^{K}\left\Vert g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\ge\delta^{2}\right)
 \end{eqnarray*}
 
 
@@ -604,10 +637,9 @@ Consider the joint optimization problem
 
 
 The convergence rate of $\|g_{\hat{\theta}(\hat{\boldsymbol{\lambda}})}-g_{\hat{\theta}(\tilde{\boldsymbol{\lambda}})}\|_{V}$
-is either nearly-parametric or the same convergence rate as $\|g_{\theta^{*}}-g_{\hat{\theta}(\tilde{\boldsymbol{\lambda}})}\|_{V}$.
-The nearly-parametric rate is 
+is either nearly-parametric or the optimal convergence rate 
 \begin{eqnarray*}
-\|g_{\hat{\theta}(\hat{\boldsymbol{\lambda}})}-g_{\hat{\theta}(\tilde{\boldsymbol{\lambda}})}\|_{V} & = & O_{P}(1)\left(\frac{J(1-\log w+\kappa\log n)}{|V|}\right)^{1/2}
+\|g_{\hat{\theta}(\hat{\boldsymbol{\lambda}})}-g_{\hat{\theta}(\tilde{\boldsymbol{\lambda}})}\|_{V} & = & O_{P}(1)\left(\left(\frac{J(1-\log w+\kappa\log n)}{|V|}\right)^{1/2}\vee\|g_{\theta^{*}}-g_{\hat{\theta}(\tilde{\boldsymbol{\lambda}})}\|_{V}\right)
 \end{eqnarray*}
 
 
@@ -616,8 +648,9 @@ Note that we do indeed have to pay a price for tuning over $J$ dimensions.
 
 \subsubsection*{Proof}
 
-\textbf{Step 0: Find }$\nabla_{\lambda_{j}}\hat{\theta}(\boldsymbol{\lambda})$
-\textbf{via implicit differentiation}
+
+\subsubsection*{Step 0: Find $\nabla_{\lambda_{j}}\hat{\theta}(\boldsymbol{\lambda})$
+via implicit differentiation}
 
 We can again use implicit differentiation to get $\nabla_{\lambda_{j}}\hat{\theta}(\boldsymbol{\lambda})$.
 The equations get bulky, but the logic is straightforward.
@@ -649,7 +682,8 @@ gives us
 
 where $I_{j}$ are appropriately-sized identity matrices.
 
-\textbf{Step 1: Find the entropy of the model class $\mathcal{G}_{\boldsymbol{\lambda}}$}
+
+\subsubsection*{Step 1: Find the entropy of the model class $\mathcal{G}_{\boldsymbol{\lambda}}$}
 
 First we show that the entropy $H(u,\mathcal{G}_{\boldsymbol{\lambda}},\|\cdot\|_{V})$
 of the class 
@@ -660,7 +694,7 @@ of the class
 
 is bounded at a near-parametric rate:
 \[
-H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le??
+H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le J\left(\log\left(\frac{M}{uw}\right)+\kappa\log n\right)
 \]
 
 
@@ -737,34 +771,14 @@ N\left(u,\mathcal{G}_{\boldsymbol{\lambda}},\|\cdot\|_{V}\right)\le\left(\frac{M
 \]
 
 
-\textbf{Step 2: Exactly the same}
 
-\textbf{Step 3: Bound the empirical process with high probability}
-
-We apply Corollary 8.3 in Vandegeer to determine the value $\delta$
-s.t. $\delta$ bounds the empirical process term with high probability.
-
-From Step 1, we have that
-
-\begin{eqnarray*}
-\int_{0}^{1}H^{1/2}\left(u,\tilde{\mathcal{G}_{\lambda}},\|\cdot\|_{V}\right)du & \le & \left(J\left(1-\log w+\kappa\log n\right)\right)^{1/2}
-\end{eqnarray*}
+\subsubsection*{Step 2: Exactly the same}
 
 
-By Corollary 8.3, if we choose 
-\[
-\delta\ge\left(\frac{J(1-\log w+\kappa\log n)}{|V|}\right)^{1/2}
-\]
+\subsubsection*{Step 3: Exactly the same with additional term $J^{1/2}$}
 
 
-then
-
-\[
-Pr\left(\frac{\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}}{\|g_{\hat{\theta}(\lambda)}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}}\ge\delta\right)\le\exp\left(-|V|\frac{\delta^{2}}{C^{2}}\right)
-\]
-
-
-\textbf{Step 4: Same with an additional term $J$}
+\subsubsection*{Step 4: Same with an additional term $J^{1/2}$}
 
 
 \section{Examples}
