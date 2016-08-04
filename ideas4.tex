@@ -63,26 +63,26 @@ We show that $\hat{\lambda}$ will converge to $\tilde{\lambda}$
 at an almost-parametric rate or just the optimal rate.
 
 \[
-\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}=O_{P}(1)\left(C\left(\frac{1-\log w+\kappa\log n}{|V|}\right)^{1/2}\vee\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\right)
+\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}=O_{P}(1)\left(C\left(\frac{1-\log w+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}\vee\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\right)
 \]
 
 
-where $\kappa$ is a constant that depends on known constants, including
-$\tau_{max}$ and $\tau_{\min}$ and $C$ depends on the Lipschitz
-constant $M$ (see assumptions below) and the sub-gaussian parameters.
+where $\kappa_{1},\kappa_{2}$ are constants that depends on other
+known constants, such as $\tau_{max},\tau_{\min},k_{1},k_{2}$. The
+constant $C$ depends on the sub-gaussian parameters.
 
 
 \subsubsection*{Other Assumptions}
 \begin{itemize}
 \item Suppose that penalty $P(\theta)$ is smooth and convex wrt $\theta$
 -- its 1st and 2nd derivatives wrt $\theta$ are defined. Suppose
-$\|\nabla_{\theta}P(\theta)|_{\hat{\theta}(\lambda)}\|\le O_{p}(n^{k_{1}})$.
+$\|\nabla_{\theta}P(\theta)|_{\hat{\theta}(\lambda)}\|\le O_{p}(n^{k_{1}}p^{k_{2}})$.
 \item Suppose $g_{\theta}$ is a smooth convex functions wrt $\theta$ --
 its 1st and 2nd derivatives wrt $\theta$ are defined.
-\item Suppose $g_{\theta}$ is Lipschitz with constant $M$ s.t. for any
-subset $D_{0}\subseteq D$ 
+\item Suppose $g_{\theta}$ is Lipschitz with constant $O_{P}(n^{k_{3}}p^{k_{4}})$
+s.t. for any subset $D_{0}\subseteq D$ 
 \[
-\|g_{\theta_{1}}-g_{\theta_{2}}\|_{D_{0}}\le M\left\Vert \theta_{1}-\theta_{2}\right\Vert _{2}
+\|g_{\theta_{1}}-g_{\theta_{2}}\|_{D_{0}}\le O_{P}(n^{k_{3}}p^{k_{4}})\left\Vert \theta_{1}-\theta_{2}\right\Vert _{2}
 \]
 
 \end{itemize}
@@ -101,7 +101,7 @@ $H(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}})$ of the class
 
 is bounded at a near-parametric rate:
 \[
-H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\log\left(\frac{M}{uw}\right)+\kappa\log n
+H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\log\left(\frac{1}{uw}\right)+\kappa_{1}\log n+\kappa_{2}\log p
 \]
 
 
@@ -134,7 +134,7 @@ From the asumptions, we have that
 
 \begin{eqnarray*}
 \left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)\right\Vert  & \le & \left\Vert H(\lambda)^{-1}\left(\nabla_{\theta}P(\theta)+w\hat{\theta}(\lambda)\right)\right\Vert \\
- & \le & O_{p}(n^{\tau_{min}})w^{-1}\left(O_{p}(n^{k_{1}})+w\|\hat{\theta}(\lambda)\|\right)
+ & \le & O_{p}(n^{\tau_{min}})w^{-1}\left(O_{p}(n^{k_{1}}p^{k_{2}})+w\|\hat{\theta}(\lambda)\|\right)
 \end{eqnarray*}
 
 
@@ -157,7 +157,7 @@ It is straightforward to show that
 Therefore
 
 \[
-\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)\right\Vert =w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})
+\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)\right\Vert =w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})}p^{k_{2}})
 \]
 
 
@@ -165,15 +165,14 @@ Now we can know bound the distance between $g_{\hat{\theta}(\ell)}$
 and $g_{\hat{\theta}(\ell+\delta)}$
 
 \begin{eqnarray*}
-\|g_{\hat{\theta}(\ell)}-g_{\hat{\theta}(\ell+\delta)}\|_{D_{0}} & \le & M\left\Vert \hat{\theta}(\ell)-\hat{\theta}(\ell+\delta)\right\Vert _{2}\\
- & = & M\delta w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})
+\|g_{\hat{\theta}(\ell)}-g_{\hat{\theta}(\ell+\delta)}\|_{D_{0}} & \le & O_{P}(n^{k_{3}}p^{k_{4}})\left\Vert \hat{\theta}(\ell)-\hat{\theta}(\ell+\delta)\right\Vert _{2}\\
+ & = & \delta w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})+k_{3}}p^{k_{2}+k_{4}})
 \end{eqnarray*}
 
 
-Then the covering number is on the order of $n^{\kappa}$ where $\kappa$
-grows linearly in $\tau_{min},\tau_{max}$ and $k_{1}$. 
+Then the covering number is , for constants $\kappa_{1},\kappa_{2}$,
 \[
-N\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\frac{M}{uw}O_{p}(n^{\kappa})\implies H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\log\left(\frac{M}{uw}\right)+\kappa\log n
+N\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\frac{1}{uw}O_{p}(n^{\kappa_{1}}p^{\kappa_{2}})\implies H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\log\left(\frac{1}{uw}\right)+\kappa_{1}\log n+\kappa_{2}\log p
 \]
 
 
@@ -212,7 +211,7 @@ that there exists some $C$ s.t. for all $\delta$ s.t. $R\ge\delta/\sigma$
 and
 
 \[
-\delta\ge CR\left(\frac{1-\log(M/w)+\kappa\log n}{|V|}\right)^{1/2}
+\delta\ge CR\left(\frac{1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}
 \]
 
 
@@ -225,7 +224,7 @@ Pr\left(\sup_{\lambda_{1},\lambda_{2}:\|g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\t
 
 Next we chain. Let $S=\min\{s\in\{0,1,...\}:2^{s}>2\sigma\}$. For
 \[
-\delta\ge16C\left(\frac{1-\log w+\kappa\log n}{|V|}\right)^{1/2}
+\delta\ge16C\left(\frac{1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}
 \]
 
 
@@ -239,7 +238,7 @@ we have
 \end{eqnarray*}
 Note that Lemma 1 can be applied since for $s=0,...,S$, 
 \[
-\sqrt{|V|}2^{2s+2}\delta^{2}\ge16C2^{s+1}\delta\left(1-\log(M/w)+\kappa\log n\right)^{1/2}
+\sqrt{|V|}2^{2s+2}\delta^{2}\ge16C2^{s+1}\delta\left(1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p\right)^{1/2}
 \]
 
 
@@ -250,7 +249,7 @@ We can now bound $\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lamb
 with high probability. Let
 
 \[
-\delta\ge16C\left(\frac{1-\log(M/w)+\kappa\log n}{|V|}\right)^{1/2}
+\delta\ge16C\left(\frac{1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}
 \]
 
 
@@ -273,7 +272,7 @@ Pr\left(\|\epsilon\|_{V}\ge2\sigma\right)\le\exp\left(-\frac{|V|\sigma^{2}}{12K^
 Therefore we either recover a near-parametric rate or the optimal
 convergence rate. 
 \[
-\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}=O_{P}(1)\left(C\left(\frac{1-\log(M/w)+\kappa\log n}{|V|}\right)^{1/2}\vee\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\right)
+\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}=O_{P}(1)\left(C\left(\frac{1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}\vee\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\right)
 \]
 
 
@@ -285,11 +284,11 @@ convergence rate.
 
 Suppose function class $\mathcal{F}$ has 
 \[
-H\left(u,\mathcal{F},\|\cdot\|_{n}\right)\le J\left(\log\left(\frac{M}{uw}\right)+\kappa\log n\right)
+H\left(u,\mathcal{F},\|\cdot\|_{n}\right)\le J\left(\log\left(\frac{1}{uw}\right)+\kappa_{1}\log n+\kappa_{2}\log p\right)
 \]
 
 
-for positive constants $J,M,w,\kappa$.
+for positive constants $J,M,w,\kappa_{1},\kappa_{2}$.
 
 Suppose $\sup_{f\in\mathcal{F}}\|f\|_{n}\le R$. 
 
@@ -300,7 +299,7 @@ Then there exists some $C$ s.t. for all $\delta$ s.t. $R\ge\delta/\sigma$
 and
 
 \[
-\delta\ge CRJ^{1/2}\left(\frac{1-\log(M/w)+\kappa\log n}{n}\right)^{1/2}
+\delta\ge CRJ^{1/2}\left(\frac{1-\log w+\kappa_{1}\log n+\kappa_{2}\log p}{n}\right)^{1/2}
 \]
 
 
@@ -326,9 +325,9 @@ Let
 Consequently, for $R\ge\delta/\sqrt{2}\sigma$ ,
 
 \begin{eqnarray*}
-\int_{0}^{R}H^{1/2}\left(u,\bar{\mathcal{F}},\|\cdot\|_{n}\right)du & = & \sqrt{2J}\int_{0}^{R}\left(\log\frac{1}{u}+\log\left(\frac{M}{w}\right)+\kappa\log n\right)^{1/2}du\\
- & = & O_{P}(1)R\sqrt{J}\left(\int_{0}^{1}\log\left(\frac{1}{u}\right)+\log\left(\frac{M}{w}\right)+\kappa\log ndu\right)^{1/2}\\
- & \le & O_{P}(1)R\sqrt{J}\left(1-\log(M/w)+\kappa\log n\right)^{1/2}
+\int_{0}^{R}H^{1/2}\left(u,\bar{\mathcal{F}},\|\cdot\|_{n}\right)du & = & \sqrt{2J}\int_{0}^{R}\left(\log\left(\frac{1}{u}\right)-\log w+\kappa_{1}\log n+\kappa_{2}\log p\right)^{1/2}du\\
+ & = & O_{P}(1)R\sqrt{J}\left(\int_{0}^{1}\log\left(\frac{1}{u}\right)-\log w+\kappa_{1}\log n+\kappa_{2}\log pdu\right)^{1/2}\\
+ & \le & O_{P}(1)R\sqrt{J}\left(1-\log w+\kappa_{1}\log n+\kappa_{2}\log p\right)^{1/2}
 \end{eqnarray*}
 
 
@@ -337,7 +336,7 @@ where $C$ depends on the sub-gaussian parameters for $\epsilon$
 
 Then apply Corollary 8.3 for all 
 \[
-\delta\ge CR\sqrt{J}\left(\frac{1-\log(M/w)+\kappa\log n}{n}\right)^{1/2}
+\delta\ge CR\sqrt{J}\left(\frac{1-\log w+\kappa_{1}\log n+\kappa_{2}\log p}{n}\right)^{1/2}
 \]
 
 
@@ -968,10 +967,10 @@ The derivative of the penalty wrt $\theta$ is
 \]
 
 
-The maximum eigenvalue of $K$ is on the order of $O_{p}(n^{-3})$.
+The maximum eigenvalue of $K$ is on the order of $O_{p}(n^{3})$.
 Clearly$\|\theta\|$ can be bounded by $\|y\|$ modulo a constant.
 So $\|\nabla_{\theta}P(\theta)\|=O_{P}(n^{3})$. Also, $\nabla_{\theta}^{2}P(\theta)=K$
-so its norm is shrinking at a rate of $O_{P}(n^{-3})$.
+so its norm grows at a rate of $O_{P}(n^{3})$.
 
 All other assumptions are obviously satisfied. Note that in this problem,
 we can drop the tiny additional ridge penalty entirely.
