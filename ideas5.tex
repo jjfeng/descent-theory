@@ -1,0 +1,718 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amssymb}
+\usepackage{wasysym}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+
+\section{K-Fold Cross-Validation}
+
+Consider the joint optimization problem to find the best regularization
+parameter $\lambda$ in $\Lambda$ via $K$-fold cross validation.
+Let $D$ be the entire dataset (so both $y,X$). For $k=1,...,K$,
+let $D_{k}$ represent the $k$th fold and $D_{-k}$ denote all the
+folds minus the $k$th fold. For a given $\lambda$, train over $D_{-k}$
+and then validate over $D_{k}$. Let the number of observations for
+each fold be $n_{k}$ and let the total number of observations be
+$n$.
+
+Suppose the penalty function $P$ is a semi-norm, smooth, and convex.
+Suppose the penalty function is taken to the power $v\ge1$.
+
+We will presume that the domain of the function class is bounded.
+
+Suppose that there is some $G$ s.t. $\sup_{g\in\mathcal{G}}\|g\|^{2}\le G$.
+
+Let $\|h\|^{2}=\int h(x)d\mu(x)$. Let $\|h\|_{k}^{2}=\frac{1}{n_{k}}\sum_{i\in D_{k}}h(x_{i})^{2}$
+and similarly for $\|h\|_{-k}^{2}$ for the set $D_{-k}$ and $\|h\|_{D}^{2}$
+for the set $D$. Let $\langle h,g\rangle_{k}=\frac{1}{n_{k}}\sum_{i\in D_{k}}h(x_{i})g(x_{i})$
+and $\langle h,g\rangle_{-k}$ for the set $D_{-k}$ and $\langle h,g\rangle_{D}$
+for the set $D$.
+
+Let us define
+
+\[
+\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D_{-k})\|_{k}^{2}
+\]
+\[
+\hat{g}(\lambda|D_{-k})=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{-k}^{2}+\lambda\left(P^{v}(g)+\frac{w}{2}\|g\|^{2}\right)
+\]
+
+
+The $K$-fold CV model is 
+\[
+\hat{g}(\lambda|D)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{D}^{2}+\lambda\left(P^{v}(g)+\frac{w}{2}\|g\|^{2}\right)
+\]
+
+
+Let the range of $\Lambda$ be from $\lambda_{min}=O_{P}(n^{-\tau_{min}})$
+to $\lambda_{max}=O_{P}(1)$.
+
+We show that
+\[
+\|\hat{g}_{\hat{\lambda}}(\cdot|D)-g^{*}\|_{D}\apprle\sqrt{\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}}+\left(\frac{1+\log(4\sigma^{2})+\kappa\log n}{\min_{k=1:K}\{n_{k}\}}\right)^{1/2}
+\]
+
+
+
+\subsubsection*{Notation}
+
+$a\lesssim b$ means that $a\le Cb+c$ where $C>0,c$ are constants
+independent of $n$.
+
+
+\section{Proof}
+
+The proof is based on two main ideas.
+
+First, we bound the error of the retrained $K$-fold CV model by a
+convex combination of the $K$ trained models from each fold.
+
+Second, we bound the entropy of $\hat{\mathcal{G}}(D_{-k})=\left\{ \hat{g}_{\lambda}(\cdot|D_{-k}):\lambda\in\Lambda\right\} $,
+which in turn allows us to bound empirical and Rademacher processes.
+
+
+\subsubsection*{Step 1:}
+
+Define the convex combination 
+\[
+\hat{\xi}_{\lambda}(x)=\frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\hat{g}_{\lambda}(x|D_{-k})
+\]
+
+
+By the triangle inequality,
+\begin{eqnarray*}
+\|\hat{g}_{\hat{\lambda}}(\cdot|D)-g^{*}\|_{D} & \le & \|\hat{g}_{\hat{\lambda}}(\cdot|D)-\hat{\xi}_{\hat{\lambda}}\|_{D}+\|\hat{\xi}_{\hat{\lambda}}-g^{*}\|_{D}
+\end{eqnarray*}
+
+
+We bound the first and second summands in steps 2 and 3, respectively.
+
+
+\subsubsection*{Step 2: Bound $\|\hat{g}_{\hat{\lambda}}(\cdot|D)-\xi_{\hat{\lambda}}\|_{D}$}
+
+Adding the two inequalities from Lemma 1 and 2, we have
+
+\begin{eqnarray*}
+ &  & \|\hat{g}_{\hat{\lambda}}(\cdot|D)-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}\\
+ & \le & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\left|\langle\epsilon,\hat{\xi}_{\hat{\lambda}}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\rangle_{-k}\right|+\left|\langle g^{*}-\hat{\xi}_{\hat{\lambda}},\hat{\xi}_{\hat{\lambda}}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\rangle_{-k}\right|\right)\\
+ & \apprle & \sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\left(\sum_{\ell=1}^{K}\left|\langle\epsilon,\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\rangle_{-\ell}\right|+\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{\ell}^{2}-\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}\right)
+\end{eqnarray*}
+
+
+Our goal is to bound the empirical process and the rademacher process
+terms using Lemma 3 and 4.
+
+By Lemma 0, if $\|\epsilon\|_{k}\le2\sigma$ for all folds $D_{k}$,
+then for any empirical distribution $Q$, 
+\[
+H\left(d,\hat{\mathcal{G}}(D_{-k}),\|\cdot\|_{Q}\right)\apprle\psi(u)=\log\left(\frac{1}{wd}\right)+\kappa\log n+\log(4\sigma^{2})
+\]
+
+
+So we have
+
+\begin{eqnarray*}
+\int_{0}^{R}\psi^{1/2}(u)du & = & \int_{0}^{R}\left(\log\left(\frac{1}{uw}\right)+\kappa\log n+\log(4\sigma^{2})\right)^{1/2}du\\
+ & \apprle & R\left(\int_{0}^{1}\log\left(\frac{1}{u}\right)-\log w+\kappa\log n+\log(4\sigma^{2})du\right)^{1/2}\\
+ & \le & R\left(1+\log(4\sigma^{2})-\log w+\kappa\log n\right)^{1/2}
+\end{eqnarray*}
+
+
+Let 
+\[
+\delta_{max}=CR\left(\left(\frac{1+\log(4\sigma^{2})+\kappa\log n}{\min_{k=1:K}\{n_{k}\}}\right)^{1/2}\vee1\right)
+\]
+
+
+By Lemma 3, for some constant $c$, for all $\ell,k=1:K$ (and $\ell\ne k$),
+we have 
+\[
+Pr\left(\sup_{\lambda\in\Lambda}\frac{\left|\langle\epsilon,\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\rangle_{-\ell}\right|}{\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\|_{-\ell}}\ge\delta_{max}\wedge\|\epsilon\|_{-k}\le2\sigma\wedge\|\epsilon\|_{-\ell}\le2\sigma\right)\le c\exp\left(-(n-n_{k})\frac{\delta_{max}^{2}}{c^{2}R^{2}}\right)
+\]
+
+
+By Lemma 4, for some constant $c$, we have for all $\ell,k=1:K$
+(and $\ell\ne k$), we have 
+\[
+Pr\left(\sup_{\lambda\in\Lambda}\frac{\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{\ell}^{2}-\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}}{\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k\cup\ell}}\ge\delta_{max}\wedge\|\epsilon\|_{-k}\le2\sigma\right)\le c\exp\left(-n_{\ell}\frac{\delta_{max}^{2}}{c^{2}R^{2}}\right)+c\exp\left(-n_{k}\frac{\delta_{max}^{2}}{c^{2}R^{2}}\right)
+\]
+
+
+Hence with high probability, we have
+
+\[
+\|\hat{g}_{\hat{\lambda}}(\cdot|D)-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}\apprle\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta_{max}\sum_{\ell=1}^{K}\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\|_{-\ell}
+\]
+
+
+Combining Easy Lemma 1 and Lemma 5, we get 
+\[
+\|\hat{g}_{\hat{\lambda}}(\cdot|D)-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}\apprle\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta_{max}\|\hat{g}_{\tilde{\lambda}}(x|D_{-k})-g^{*}\|_{k}+\delta_{max}^{2}
+\]
+
+
+
+\subsubsection*{Step 3:}
+
+For every $k$, we have
+
+\begin{eqnarray*}
+\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{D}^{2} & \apprle & \sum_{\ell=1}^{k}\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}^{2}+\left(\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{\ell}^{2}-\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}^{2}\right)
+\end{eqnarray*}
+
+
+Lemma 5 directly bounds $\sum_{\ell=1}^{k}\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-\hat{g}_{\tilde{\lambda}}(x|D_{-k})\|_{k}^{2}$.
+
+By Lemma 4 and Easy Lemma 1, we have 
+\[
+\left|\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{\ell}^{2}-\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}^{2}\right|\le\delta_{max}\left(\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}+\delta_{max}\right)
+\]
+
+
+Hence
+
+\begin{eqnarray*}
+\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{D}^{2} & \apprle & \sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta_{max}\|\hat{g}_{\tilde{\lambda}}(x|D_{-k})-g^{*}\|_{k}+\delta_{max}^{2}
+\end{eqnarray*}
+
+
+
+\subsection{Lemmas}
+
+
+\subsubsection{Lemma 0}
+
+Consider any empirical distributions $T$ and $Q$.
+
+Consider the function class 
+\[
+\hat{\mathcal{G}}(T,\epsilon_{T})=\left\{ \hat{g}_{\lambda}(\cdot|T,\epsilon_{T})=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{T}^{2}+\lambda\left(P^{v}(g)+\frac{w}{2}\|g\|^{2}\right):\lambda\in\Lambda\right\} 
+\]
+
+
+Suppose the penalty function $P$ is a semi-norm, smooth, and convex.
+Suppose $\min_{h\in\mathcal{G}:P(h)=1}\|h\|^{2}=O_{p}(n^{-u})$ and
+for all $h$, $\|h\|_{Q}\le O_{p}(n^{p})P(h)$. 
+
+Suppose $v\ge1$.
+
+Suppose $\lambda_{min}=O_{P}(n^{-\tau_{min}})$ and $\lambda_{max}=O_{P}(1)$.
+
+Then the entropy bound is 
+\[
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\log\left(\frac{1}{dw}\right)+\kappa\log n+\log\|\epsilon\|_{T}^{2}
+\]
+
+
+where $\kappa$ depends on $\tau_{min},v,u,p$.
+
+
+\subsubsection*{Proof}
+
+To find the covering number for $\hat{\mathcal{G}}$, we bound the
+distance$\|\hat{g}_{\lambda_{0}}(\cdot|T)-\hat{g}_{\lambda_{0}+\delta}(\cdot|T)\|_{Q}$
+for every $\lambda_{0}\in\Lambda$.
+
+Consider the function $h=c\left(\hat{g}_{\lambda_{0}}-\hat{g}_{\lambda_{0}+\delta}\right)$
+where $c>0$ is some constant s.t. $P(h)=1$. (We'll assume that $\|\hat{g}_{\lambda_{0}}-\hat{g}_{\lambda_{0}+\delta}\|_{Q}>0$,
+since we'll be done otherwise.) Consider the 1-dimensional optimization
+problem
+
+\[
+\hat{m}_{h}(\lambda)=\arg\min_{m}\frac{1}{2}\|y-(\hat{g}_{\lambda_{0}}+mh)\|_{T}^{2}+\lambda\left(P^{v}(\hat{g}_{\lambda_{0}}+mh)+\frac{w}{2}\|\hat{g}_{\lambda_{0}}+mh\|^{2}\right)
+\]
+
+
+Taking the derivative of the criterion wrt $m$, we get
+
+\[
+\left.-\langle h,y-(\hat{g}_{\lambda_{0}}+mh)\rangle_{T}+\lambda\left(\frac{\partial}{\partial m}P^{v}(\hat{g}_{\lambda_{0}}+mh)+w\langle h,\hat{g}_{\lambda_{0}}+mh\rangle\right)\right|_{m=\hat{m}_{h}(\lambda)}=0
+\]
+
+
+By implicit differentiation wrt $\lambda$, we have 
+\begin{eqnarray*}
+\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda) & = & \left.-\left(\|h\|_{T}^{2}+\lambda\frac{\partial^{2}}{\partial m^{2}}P^{v}\left(\hat{g}_{\lambda_{0}}+mh\right)+\lambda w\|h\|^{2}\right)^{-1}\left(\frac{\partial}{\partial m}P^{v}(\hat{g}_{\lambda_{0}}+mh)+w\langle h,\hat{g}_{\lambda_{0}}+mh\rangle\right)\right|_{m=\hat{m}_{\lambda}(\delta)}
+\end{eqnarray*}
+
+
+To bound $|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)|$,
+we bound each multiplicand.
+
+1st multiplicand: Since penalty $P$ is convex (regardless of the
+direction of $h$),
+
+\begin{eqnarray*}
+\left|\|h\|_{T}^{2}+\lambda\frac{\partial^{2}}{\partial m^{2}}P^{v}\left(\hat{g}_{\lambda_{0}}+mh\right)+\lambda w\|h\|^{2}\right|^{-1} & \le & \lambda w\|h\|^{-2}\\
+ & \apprle & \lambda^{-1}w^{-1}n^{u}
+\end{eqnarray*}
+
+
+2nd multiplicand: By definition of $\hat{g}_{\lambda_{0}}$,
+
+\[
+\lambda_{0}P^{v}(\hat{g}_{\lambda_{0}}+mh)\le\frac{1}{2}\|y-g^{*}\|_{T}^{2}+\lambda_{0}P^{v}(g^{*})
+\]
+
+
+Hence
+
+\begin{eqnarray*}
+P^{v-1}(\hat{g}_{\lambda_{0}}+mh) & \le & \left(\frac{1}{2\lambda_{0}}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})\right)^{(v-1)/v}\\
+ & \apprle & \left(n^{\tau_{min}}\|\epsilon\|_{T}^{2}\right)^{(v-1)/v}
+\end{eqnarray*}
+
+
+3rd multiplicand: Note that since $P$ is a semi-norm, then
+
+\[
+\left|P(\hat{g}_{\lambda}+mh)-P(\hat{g}_{\lambda})\right|\le mP(h)
+\]
+
+
+Therefore as we take $m\rightarrow0$, we have 
+\[
+\left|\frac{\partial}{\partial m}P(\hat{g}_{\lambda}+mh)\right|\le P(h)=1
+\]
+
+
+Also by Cauchy Schwarz and the assumption that $\sup_{g\in\mathcal{G}}\|g\|\le G$,
+we have 
+\begin{eqnarray*}
+\left|\langle h,\hat{g}_{\lambda_{0}}+mh\rangle\right| & \le & \|h\|\|\hat{g}_{\lambda_{0}}+mh\|\le n^{p}G
+\end{eqnarray*}
+
+
+Conbining the above bounds, we have 
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial\delta}\hat{m}_{\lambda}(\delta)\right| & \apprle & n^{\tau_{min}+u}w^{-1}\left(v\left(n^{\tau_{min}}\|\epsilon\|_{T}^{2}\right)^{(v-1)/v}+wn^{p}G\right)\\
+ & \le & n^{\tau_{min}(2v-1)/v+u}w^{-1}v\|\epsilon\|_{T}^{2(v-1)/v}+n^{\tau_{min}+u+p}G
+\end{eqnarray*}
+
+
+By the mean value theorem, there is some $\alpha\in[0,1]$ s.t 
+
+\begin{eqnarray*}
+\|\hat{g}_{\lambda}(\cdot|D_{-k})-\hat{g}_{\lambda+\delta}(\cdot|D_{-k})\|_{Q} & = & \hat{m}_{\lambda}(\delta)\|h\|_{Q}\\
+ & \le & n^{p}\delta\left|\frac{\partial}{\partial a}\hat{m}_{\lambda}(a)\right|_{a=\alpha\delta}\\
+ & \apprle & \delta\left(n^{\tau_{min}(2v-1)/v+u+p}w^{-1}v\|\epsilon\|_{T}^{2(v-1)/v}+n^{\tau_{min}+u+2p}G\right)
+\end{eqnarray*}
+
+
+Therefore the covering number is for some constant $\kappa$ that
+depends on $\tau_{min},u,p.v$
+
+\[
+N\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\frac{1}{d}n^{\kappa}w^{-1}vG\|\epsilon\|_{T}^{2(v-1)/v}
+\]
+
+
+so the entropy is 
+\[
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\log\left(\frac{1}{dw}\right)+\kappa\log n+\log\|\epsilon\|_{T}^{2}
+\]
+
+
+
+\subsubsection{Lemma 1}
+
+Define the convex combination $\hat{\xi}_{\lambda}(x)=\frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\hat{g}_{\lambda}(x|D_{-k})$.
+Then
+
+\begin{eqnarray*}
+\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{D}^{2}+\hat{\lambda}P(\hat{g}_{\hat{\lambda}}(\cdot|D)) & \ge & \frac{1}{2}\|y-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}+\hat{\lambda}P(\hat{\xi}_{\hat{\lambda}})+\frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\langle y-\hat{\xi}_{\hat{\lambda}},\hat{\xi}_{\hat{\lambda}}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\rangle_{-k}
+\end{eqnarray*}
+
+
+(This is Thrm 1 in Chetverikov, Chaterjee probably does the same thing.)
+
+
+\subsubsection*{Proof}
+
+\begin{eqnarray*}
+ &  & \frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{D}^{2}+\hat{\lambda}P(\hat{g}_{\hat{\lambda}}(\cdot|D))\\
+ & = & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{-k}^{2}+\hat{\lambda}P(\hat{g}_{\hat{\lambda}}(\cdot|D))\right)\\
+ & \ge & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|_{-k}^{2}+\hat{\lambda}P(\hat{g}_{\hat{\lambda}}(\cdot|D_{-k}))\right)\\
+ & \ge & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|_{-k}^{2}\right)+\hat{\lambda}P(\hat{\xi}_{\hat{\lambda}})
+\end{eqnarray*}
+
+
+The second inequality follows by convexity of $P$.
+
+Now note that 
+\begin{eqnarray*}
+\frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|_{-k}^{2} & = & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\frac{1}{2}\|y-\hat{\xi}_{\hat{\lambda}}+\hat{\xi}_{\hat{\lambda}}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|_{-k}^{2}\\
+ & \ge & \frac{1}{2}\|y-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}+\frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\langle y-\hat{\xi}_{\hat{\lambda}},\hat{\xi}_{\hat{\lambda}}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\rangle_{-k}
+\end{eqnarray*}
+
+
+
+\subsubsection{Lemma 2}
+
+Consider any $\xi\in\mathcal{G}$ and $\lambda\in\Lambda$. Suppose
+$P$ is convex.
+
+Then
+
+\[
+\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-\xi\|_{D}^{2}\le\frac{1}{2}\|y-\xi\|_{D}^{2}-\frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+\lambda P(\xi)-\lambda P(\hat{g}_{\lambda}(\cdot|D))
+\]
+
+
+(This is Lemma 10 in Chetverikov, which is based on Chaterjee.)
+
+
+\subsubsection*{Proof}
+
+Since $P$ is convex, then for $t\in(0,1)$, we have
+
+\begin{eqnarray*}
+ &  & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+\lambda P(\hat{g}_{\lambda}(\cdot|D))\\
+ & \le & \frac{1}{2}\|y-\left(t\xi+(1-t)\hat{g}_{\lambda}(\cdot|D)\right)\|_{D}^{2}+\lambda P(t\xi+(1-t)\hat{g}_{\lambda}(\cdot|D))\\
+ & \le & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+t\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+t^{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}+\lambda\left(tP(\xi)+(1-t)P\left(\hat{g}_{\lambda}(\cdot|D)\right)\right)\\
+ & \le & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+t\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+\frac{t^{2}}{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}+\lambda\left(tP(\xi)+(1-t)P\left(\hat{g}_{\lambda}(\cdot|D)\right)\right)
+\end{eqnarray*}
+
+
+Rearranging terms, we obain
+\[
+\lambda\left(P\left(\hat{g}_{\lambda}(\cdot|D)\right)-P(\xi)\right)\le\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+\frac{t}{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}
+\]
+
+
+Since this is true for any $t$, we have that
+
+\[
+\lambda\left(P\left(\hat{g}_{\lambda}(\cdot|D)\right)-P(\xi)\right)\le\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}
+\]
+
+
+Thus
+\begin{eqnarray*}
+\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-\xi\|_{D}^{2} & = & \frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y+y-\xi\|_{D}^{2}\\
+ & = & \frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y\|_{D}^{2}+\frac{1}{2}\|y-\xi\|_{D}^{2}-\langle\hat{g}_{\lambda}(\cdot|D)-y,\xi-y\rangle_{D}\\
+ & = & -\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y\|_{D}^{2}+\frac{1}{2}\|y-\xi\|_{D}^{2}-\langle\hat{g}_{\lambda}(\cdot|D)-y,\xi-\hat{g}_{\lambda}(\cdot|D)\rangle_{D}\\
+ & \le & -\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y\|_{D}^{2}+\frac{1}{2}\|y-\xi\|_{D}^{2}-\lambda\left(P\left(\hat{g}_{\lambda}(\cdot|D)\right)-P(\xi)\right)
+\end{eqnarray*}
+
+
+
+\subsubsection{Lemma 3}
+
+Suppose $X,T$ are random (or fixed) covariate values. $X$ and $T$
+might overlap.
+
+Suppose $\epsilon_{X}$ are independent sub-gaussian RVs with constants
+$K$ and $\sigma$ (corresponding to $X$). Same fot $\epsilon_{T}$.
+Again, $\epsilon_{T}$ and $\epsilon_{X}$ might have overlapping
+samples.
+
+Suppose the (random) function class $\mathcal{F}(T,\epsilon_{T})$
+has its entropy uniformly bounded by $\psi(\cdot)$, as long as $\|\epsilon\|_{T}\le\sigma$:
+\[
+H\left(u,\mathcal{F}(T,\epsilon_{T}),\|\cdot\|_{X}\right)\le\psi(u)
+\]
+
+
+Suppose $\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\|f\|_{X}\le R$. 
+
+Then there exists some $C$ s.t. for all $\delta$ s.t.
+
+\[
+\sqrt{|X|}\delta\ge C\left(\int_{0}^{R}\psi^{1/2}(u)du\vee1\right)
+\]
+
+
+we have for some constant $c$
+
+\[
+Pr_{\epsilon}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle\epsilon,f\rangle_{X}\right|}{\|f\|_{X}}\ge\delta\wedge\|\epsilon\|_{X}\le\sigma\wedge\|\epsilon\|_{T}\le\sigma\right)\le C\exp\left(-|X|\frac{\delta^{2}}{c^{2}}\right)
+\]
+
+
+
+\subsubsection*{Proof}
+
+We use the peeling device. Let $S=\min\{s\in0,1,...:2^{s}\delta>R\}$.
+Conditional on $\|\epsilon\|_{X}\le\sigma$ and $\|\epsilon\|_{T}\le\sigma$,
+we have
+
+\begin{eqnarray*}
+ &  & Pr_{\epsilon}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle\epsilon,f\rangle_{X}\right|}{\|f\|_{X}}\ge\delta\right)\\
+ & = & \int1\left[\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle\epsilon,f\rangle_{X}\right|}{\|f\|_{X}}\ge\delta\right]dF(\epsilon)\\
+ & = & \int\sum_{s=0}^{S}1\left[\sup_{f\in\mathcal{F}(T,\epsilon_{T}):2^{s}\delta\le\|f\|_{X}\le2^{s+1}\delta}\frac{\left|\langle\epsilon,f\rangle_{X}\right|}{\|f\|_{X}}\ge\delta\right]dF(\epsilon)\\
+ & = & \sum_{s=0}^{S}Pr\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T}):2^{s}\delta\le\|f\|_{X}\le2^{s+1}\delta}\frac{\left|\langle\epsilon,f\rangle_{X}\right|}{\|f\|_{X}}\ge\delta\right)\\
+ & \le & \sum_{s=0}^{S}Pr\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T}):\|f\|_{X}\le2^{s+1}\delta}\left|\langle\epsilon,f\rangle_{X}\right|\ge2^{s}\delta^{2}\right)
+\end{eqnarray*}
+
+
+In the last equality, we swap the order of integration and summation.
+This is allowed under the assumption that the identity functions are
+measurable, which should be okay.
+
+To bound the summation, apply Lemma 10. For all 
+\[
+\sqrt{|X|}\delta\ge C\left(\int_{0}^{R}\psi^{1/2}(u)du\vee1\right)
+\]
+
+
+there is some constant $c$ s.t.
+
+\begin{eqnarray*}
+Pr_{\epsilon}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle\epsilon,f(\cdot|\epsilon)\rangle_{X}\right|}{\|f(\cdot|\epsilon)\|_{X}}\ge\delta\wedge\|\epsilon\|_{X}\le\sigma\wedge\|\epsilon\|_{T}\le\sigma\right) & \le & \sum_{s=0}^{S}C\exp\left(-|X|\frac{2^{2s}\delta^{4}}{C^{2}2^{2s+2}\delta^{2}}\right)\\
+ & \le & c\exp\left(-|X|\frac{\delta^{2}}{c^{2}}\right)
+\end{eqnarray*}
+
+
+
+\subsubsection{Lemma 4}
+
+Suppose $X,Z,T$ are random (or fixed) covariate values. $X,Z,T$
+might overlap.
+
+Suppose $\epsilon_{X}$ are independent sub-gaussian RVs with constants
+$K$ and $\sigma$ (corresponding to $X$). Same fot $\epsilon_{T}$.
+Again, $\epsilon_{T}$ and $\epsilon_{X}$ might have overlapping
+samples.
+
+Suppose the (random) function class $\mathcal{F}(T,\epsilon_{T})$
+has its entropy uniformly bounded by $\psi(\cdot)$, as long as $\|\epsilon\|_{T}\le\sigma$:
+\[
+H\left(u,\mathcal{F}(T,\epsilon_{T}),\|\cdot\|_{X\cup Z}\right)\le\psi(u)
+\]
+
+
+Suppose $\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\|f\|_{X}\le R$. 
+
+Then there exists some $C$ s.t. for all $\delta$ s.t.
+
+\[
+\left(\min\{|X|,|Z|\}\right)^{1/2}\delta\ge C\left(\int_{0}^{R}\psi^{1/2}(u)du\vee1\right)
+\]
+
+
+we have
+
+\[
+Pr\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\left\Vert f\right\Vert _{X}^{2}-\left\Vert f\right\Vert _{Z}^{2}\right|}{\left\Vert f\right\Vert _{X\cup Z}}\ge\delta\wedge\|\epsilon\|_{T}\le\sigma\right)\le c\exp\left(-|X|\frac{\delta^{2}}{c^{2}R^{2}}\right)+c\exp\left(-|X|\frac{\delta^{2}}{c^{2}R^{2}}\right)
+\]
+
+
+
+\subsubsection*{Proof}
+
+We use a symmetrization argument. Let $W_{i}$ be Rademacher-like
+RV s.t. $Pr(W_{i}=1)=\frac{|T|}{|T|+|X|}$ and $Pr(W_{i}=-\frac{|T|+|X|}{|T|})=\frac{|X|}{|T|+|X|}$
+(so $EW_{i}=0$). Note that $W_{i}$ are sub-gaussian by Hoeffding's
+inequality. Conditional on $\|\epsilon\|_{T}\le\sigma$, we have 
+\begin{eqnarray*}
+ &  & Pr_{X,T}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\left\Vert f\right\Vert _{X}^{2}-\left\Vert f\right\Vert _{Z}^{2}\right|}{\left\Vert f\right\Vert _{X\cup Z}}\ge\delta\right)\\
+ & = & Pr_{W,X,T}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle W,f^{2}\rangle_{X}+\langle W,f^{2}\rangle_{T}\right|}{\left\Vert f\right\Vert _{X\cup Z}}\ge\delta\right)\\
+ & \le & Pr_{W,X,T}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle W,f^{2}\rangle_{X}\right|}{\left\Vert f\right\Vert _{X}}\ge\frac{\delta}{2}\frac{|X|}{|T|+|X|}\right)+Pr_{W,X,T}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle W,f^{2}\rangle_{Z}\right|}{\left\Vert f\right\Vert _{Z}}\ge\frac{\delta}{2}\frac{|T|}{|T|+|X|}\right)
+\end{eqnarray*}
+
+
+Therefore we apply Lemma 3. (Note that the RVs $W$ determine the
+model class $\hat{\mathcal{G}}(D_{-\ell})$, but Lemma 3 allows for
+this.) 
+
+Then there is a constant $C$ such that for all 
+\[
+\left(\min\{|X|,|Z|\}\right)^{1/2}\delta\ge C\left(\int_{0}^{R}\psi^{1/2}(u)du\vee1\right)
+\]
+
+
+we have for some constant $c$ (depends on the ratio $|X|/|Z|$),
+
+\[
+Pr_{W,X,T}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle W,f^{2}\rangle_{X}\right|}{\left\Vert f\right\Vert _{X}}\ge\frac{\delta}{2}\frac{|X|}{|T|+|X|}\wedge\|\epsilon\|_{T}\le\sigma\right)\le c\exp\left(-|X|\frac{\delta^{2}}{c^{2}R^{2}}\right)
+\]
+
+
+and similarly 
+
+\[
+Pr_{W,X,T}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle W,f^{2}\rangle_{Z}\right|}{\left\Vert f\right\Vert _{Z}}\ge\frac{\delta}{2}\frac{|T|}{|T|+|X|}\wedge\|\epsilon\|_{T}\le\sigma\right)\le c\exp\left(-|Z|\frac{\delta^{2}}{c^{2}R^{2}}\right)
+\]
+
+
+
+\subsubsection{Lemma 5}
+
+Let $\hat{\lambda}$ be chosen by CV. Let $\tilde{\lambda}$ be the
+oracle. Then with high probability,
+
+\[
+\sqrt{\sum_{k=1}^{K}\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}\apprle\left(\frac{1+\log4\sigma^{2}-\log w+\kappa\log n}{n}\right)^{1/2}+\sqrt{\sum_{k=1}^{K}\|g_{\tilde{\lambda}}(\cdot|D_{-k})-g^{*}\|_{k}^{2}}
+\]
+
+
+
+\subsubsection*{Proof}
+
+The basic inequality gives us
+
+\begin{eqnarray*}
+ &  & \sum_{k=1}^{K}\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}\\
+ & \le & 2\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|+2\left|\sum_{k=1}^{K}\left(g^{*}-g_{\tilde{\lambda}}(\cdot|D_{-k}),g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|
+\end{eqnarray*}
+
+
+We bound the empirical process term by a standard peeling argument
+(omitted). One can show that for all 
+\[
+\delta\ge C\left(\frac{1+\log4\sigma^{2}-\log w+\kappa\log n}{n}\right)^{1/2}
+\]
+
+
+we have for constants $c_{k}$ (which depend on $n_{k}/n$), 
+\begin{eqnarray*}
+ &  & Pr\left(\frac{\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|}{\sqrt{\sum_{k=1}^{K}\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}}\ge\delta\wedge\|\epsilon\|_{D}\le2\sigma\right)\\
+ & \le & \sum_{k=1}^{K}Pr\left(\frac{\left|\left(\epsilon,g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|}{\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}\ge\frac{\delta c_{k}}{k}\wedge\|\epsilon\|_{D}\le2\sigma\right)\\
+ & \le & c\exp\left(-\min_{k=1:K}\{n_{k}\}\frac{\delta^{2}}{c^{2}}\right)
+\end{eqnarray*}
+
+
+Also, by Cauchy-Schwarz, we have
+\[
+\frac{\left|\sum_{k=1}^{K}\left(g^{*}-g_{\tilde{\lambda}}(\cdot|D_{-k}),g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|}{\sqrt{\sum_{k=1}^{K}\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}}\le\sqrt{\sum_{k=1}^{K}\|g^{*}-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}
+\]
+
+
+Hence the result follows.
+
+
+\subsubsection{Lemma 10}
+
+Let $X$ be $n$ covariate values (potentially randomly drawn). It
+is also possible for $T$ and $X$ to contain overlapping samples.
+
+Suppose $\epsilon_{X}$ is a set of $n$ independent sub-gaussian
+RVs with constants $K$ and $\sigma$ (corresponding to $X$). Suppose
+$\epsilon_{T}$ are also independent sub-gaussian RVs with constants
+$K$ and $\sigma$ (corresponding to $T$). Again, it is possible
+for$\epsilon_{T}$ and $\epsilon_{X}$ can have overlapping samples. 
+
+Suppose $\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\|f\|_{X}\le R$.
+
+Suppose we have (random) function classes $\mathcal{F}(T,\epsilon_{T})$
+with entropy $H\left(\delta,\mathcal{F}(T,\epsilon_{T}),\|\cdot\|_{X}\right)$.
+Suppose that there is a universal bound on the entropy if $\|\epsilon_{T}\|\le\sigma$:
+\[
+H\left(u,\mathcal{F}(T,\epsilon_{T}),\|\cdot\|_{X}\right)\le\psi(u)
+\]
+
+
+Then there exists some $C$ dependent only on $K,\sigma$ s.t. for
+all
+
+\[
+\sqrt{n}\delta\ge C\left(\int_{0}^{R}\psi^{1/2}(u)du\vee R\right)
+\]
+
+
+we have
+
+\[
+Pr_{\epsilon}\left(\sup_{f_{\theta}(\cdot|\epsilon)\in\mathcal{F}(T,\epsilon_{T})}\left|\langle\epsilon,f_{\theta}(\cdot|\epsilon_{T})\rangle_{X}\right|\ge\delta\wedge\|\epsilon\|_{X}\le\sigma\wedge\|\epsilon\|_{T}\le\sigma\right)\le C\exp\left(-n\frac{\delta^{2}}{C^{2}R^{2}}\right)
+\]
+
+
+
+\subsubsection*{Proof}
+
+Proof closely follows Lemma 3.2 from Vandegeer.
+
+For a given set of RVs $\epsilon$, let $\{f_{j}^{s}(\cdot|\epsilon)\}_{j=1}^{N_{s}}$
+be the $2^{-s}R$-covering set of $\mathcal{F}(T,\epsilon)$ where
+$N_{s}=N_{s}(2^{-s}R,\mathcal{F}(T,\epsilon),\|\cdot\|_{X})\le\exp\left(\psi(2^{-s}R)\right)$.
+Let $S=\min\{s:2^{-s}R\le\delta/2\sigma\}$. We can write $f_{\theta}^{S}(\cdot|\epsilon)=\sum_{s=1}^{S}f_{\theta}^{s}(\cdot|\epsilon)-f_{\theta}^{s-1}(\cdot|\epsilon)$
+where $f_{\theta}^{0}(\cdot|\epsilon)=0$.
+
+Also, consider a set of constants $\eta_{s}$ s.t. $\sum_{s=1}^{S}\eta_{s}\le1$.
+
+Then as long as $\|\epsilon\|_{X}\le\sigma$ and $\|\epsilon\|_{T}\le\sigma$,
+we have
+
+\begin{eqnarray*}
+ &  & Pr_{\epsilon}\left(\sup_{\theta\in\mathcal{F}(T,\epsilon_{T})}\left|\langle\epsilon,f_{\theta}(\cdot|\epsilon)\rangle_{X}\right|\ge\delta\right)\\
+ & = & \int1\left[\sup_{\theta\in\mathcal{F}(T,\epsilon_{T})}\left|\langle\epsilon,f_{\theta}(\cdot|\epsilon)\rangle_{X}\right|\ge\delta/2\right]dF(\epsilon)\\
+ & = & \int1\left[\sup_{\theta\in\mathcal{F}(T,\epsilon_{T})}\left|\left\langle \epsilon,f_{\theta}(\cdot|\epsilon)-f_{\theta}^{S}(\cdot|\epsilon)+\sum_{s=1}^{S}f_{\theta}^{s}(\cdot|\epsilon)-f_{\theta}^{s-1}(\cdot|\epsilon)\right\rangle _{X}\right|\ge\delta/2\right]dF(\epsilon)\\
+ & \le & \int1\left[\sup_{\theta\in\mathcal{F}(T,\epsilon_{T})}\left|\left\langle \epsilon,f_{\theta}-f_{\theta}^{S}(\cdot|\epsilon)\right\rangle _{X}\right|\ge\delta/2\right]+\sum_{s=1}^{S}1\left[\sup_{\theta\in\mathcal{F}(T,\epsilon_{T})}\left|\left\langle \epsilon,f_{\theta}^{s}(\cdot|\epsilon)-f_{\theta}^{s-1}(\cdot|\epsilon)\right\rangle _{X}\right|\ge\delta\eta_{s}/2\right]dF(\epsilon)\\
+ & = & Pr_{\epsilon}\left(\sup_{\theta\in\mathcal{F}(T,\epsilon_{T})}\left|\left\langle \epsilon,f_{\theta}-f_{\theta}^{S}(\cdot|\epsilon)\right\rangle _{X}\right|\ge\delta/2\right)+\sum_{s=1}^{S}Pr_{\epsilon}\left(\sup_{\theta\in\mathcal{F}(T,\epsilon_{T})}\left|\left\langle \epsilon,f_{\theta}^{s}(\cdot|\epsilon)-f_{\theta}^{s-1}(\cdot|\epsilon)\right\rangle _{X}\right|\ge\delta\eta_{s}/2\right)
+\end{eqnarray*}
+
+
+In the last equality, we swap the order of the summation and integration,
+which is allowed under the assumption that identity functions are
+measurable (I think this is the measurability assumption required
+here) (If $\epsilon$ has a continuous probability measure, I think
+this holds).
+
+We know that the first summand is zero since by Cauchy-Schwarz,
+
+\begin{eqnarray*}
+\left|\langle\epsilon,f_{\theta}-f_{\theta}^{S}(\cdot|\epsilon)\rangle_{X}\right| & \le & \sigma\|f_{\theta}-f_{\theta}^{S}(\cdot|\epsilon)\|_{X}\\
+ & \le & \delta/2
+\end{eqnarray*}
+
+
+Also, for any $\epsilon$, we must have$\|f_{\theta}^{s}(\cdot|\epsilon)-f_{\theta}^{s-1}(\cdot|\epsilon)\|\le3(2^{-s}R)$.
+Furthermore, since$\epsilon$ is sub-gaussian,
+
+\begin{eqnarray*}
+Pr_{\epsilon}\left(\sup_{\theta\in\mathcal{F}(T,\epsilon_{T})}\left|\left\langle \epsilon,f_{\theta}^{s}(\cdot|\epsilon)-f_{\theta}^{s-1}(\cdot|\epsilon)\right\rangle _{X}\right|\ge\delta\eta_{s}/2\right) & \le & \exp\left(2\psi(2^{-s}R)-C\frac{n(\delta/2)^{2}\eta_{s}^{2}}{9(2^{-2s}R^{2})}\right)
+\end{eqnarray*}
+
+
+Now choose $\eta_{s}$ as Vandegeer does in Lemma 3.2. After a lot
+of algebraic massaging, we get that for some constants $C_{1},C_{2}$
+
+\[
+Pr_{\epsilon}\left(\sup_{f_{\theta}\in\mathcal{F}(T,\epsilon_{T})}\left|\langle\epsilon,f_{\theta}\rangle_{X}\right|\ge\delta\wedge\|\epsilon\|_{X}\le\sigma\wedge\|\epsilon\|_{T}\le\sigma\right)\le C_{1}\exp\left(-n\frac{\delta^{2}}{C_{2}^{2}R^{2}}\right)
+\]
+
+
+
+\subsection{Easy algebra notes}
+
+
+\subsubsection{Easy Lemma 1}
+
+Suppose 
+\[
+\frac{\left|\left\Vert f\right\Vert _{X}^{2}-\left\Vert f\right\Vert _{Z}^{2}\right|}{\left\Vert f\right\Vert _{X\cup Z}}\le\delta
+\]
+
+
+then
+\[
+\left|\left\Vert f\right\Vert _{X}-\left\Vert f\right\Vert _{Z}\right|\le\delta
+\]
+
+
+
+\subsubsection*{Proof}
+
+We know 
+\begin{eqnarray*}
+\sqrt{\left\Vert f\right\Vert _{X}^{2}+\left\Vert f\right\Vert _{Z}^{2}}\left|\left\Vert f\right\Vert _{X}-\left\Vert f\right\Vert _{Z}\right| & \le & \left|\left\Vert f\right\Vert _{X}+\left\Vert f\right\Vert _{Z}\right|\left|\left\Vert f\right\Vert _{X}-\left\Vert f\right\Vert _{Z}\right|\\
+ & = & \left|\left\Vert f\right\Vert _{X}^{2}-\left\Vert f\right\Vert _{Z}^{2}\right|\\
+ & \le & \delta\sqrt{\frac{|X|}{|X|+|Z|}\left\Vert f\right\Vert _{X}^{2}+\frac{|Z|}{|X|+|Z|}\left\Vert f\right\Vert _{Z}^{2}}\\
+ & \le & \delta\sqrt{\left\Vert f\right\Vert _{X}^{2}+\left\Vert f\right\Vert _{Z}^{2}}
+\end{eqnarray*}
+
+
+hence 
+\[
+\left|\left\Vert f\right\Vert _{X}-\left\Vert f\right\Vert _{Z}\right|\le\delta
+\]
+
+\end{document}
