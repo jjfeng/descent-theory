@@ -5,6 +5,7 @@
 \usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsbsy}
 \usepackage{amssymb}
 \usepackage{wasysym}
 \usepackage{esint}
@@ -818,4 +819,185 @@ the original regression problem
 Therefore the arguments to bound the convergence rate of $\left\Vert \hat{g}-g^{*}\right\Vert _{D}$
 should give the same convergence rate for $\left\Vert \hat{f}-g^{*}\right\Vert _{D}$.
 (Example: refer to Thrm 10.2 in Vandegeer)
+
+
+\subsection{Regression problems with smooth-almost-everywhere penalty functions}
+
+If the regularization functions contain smooth-almost-everywhere penalty
+functions, we still have the same convergence rate. To prove this,
+we need an additional assumption similar to Condition 1 in the hillclimbing
+paper. However since our function classes may be infinite-dimensional,
+we need to generalize the definitions/condition:
+
+Let $L_{T}(g,\lambda)$ be the penalized training criterion
+\[
+L_{T}(g,\lambda)=\frac{1}{2}\|y-g\|_{n}^{2}+\lambda\left(P^{v}(g)+\frac{w}{2}\|g\|^{2}\right)
+\]
+
+
+\textbf{Definition 1:} The differentiable space of $L_{T}$ at $g$
+are the functions along which the directional derivative of $L_{T}$
+exists: 
+\[
+\Omega^{L_{T}}(g)=\left\{ h:\lim_{r\rightarrow0}\frac{L_{T}(g+rh)+L_{T}(g)}{r}\mbox{ exists}\right\} 
+\]
+
+
+\textbf{Definition 2:} $S_{\lambda_{0}}$ is a local optimality space
+of $L_{T}$ at $\lambda_{0}$ if there is a neighborhood containing
+$\lambda_{0}$ s.t. for all $\lambda\in W$ 
+\[
+\arg\min_{g\in\mathcal{G}}L_{T}(g,\lambda)=\arg\min_{g\in S_{\lambda_{0}}}L_{T}(g,\lambda)
+\]
+
+
+\textbf{Assumption A:} For almost every $\lambda$, the differentiable
+space $\Omega^{L_{T}}(\hat{g}(\lambda))$ contains the local optimality
+space $S_{\lambda_{0}}$.
+
+Now consider the function class 
+\[
+\hat{\mathcal{G}}(T,\epsilon_{T})=\left\{ \hat{g}_{\lambda}(\cdot|T,\epsilon_{T})=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{T}^{2}+\lambda\left(P^{v}(g)+\frac{w}{2}\|g\|^{2}\right):\lambda\in\Lambda\right\} 
+\]
+
+
+We have all the same assumptions as in Lemma 0, except that $P^{v}$
+can be smooth almost everywhere. Also, we have assumed ``Assumption
+A'' above. Then the same entropy bound holds:
+
+\[
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\log\left(\frac{1}{dw}\right)+\kappa\log n+\log\|\epsilon\|_{T}^{2}
+\]
+
+
+where $\kappa$ depends on $\tau_{min},v,u,p$.
+
+
+\subsubsection*{Proof}
+
+Using a generalized verion of Theorem 1 in the hillclimbing paper
+(we should probably show this), we have that $L_{T}(\hat{g}(\lambda),\lambda)$
+is continuously differentiable with respect to $\lambda$ for almost
+every $\lambda$. Let $S$ be the set of knots at which $\frac{\partial}{\partial\lambda}L_{T}(\hat{g}(\lambda),\lambda)|_{\lambda=s}$
+does not exist.
+
+We are interested in bounding $\|\hat{g}_{\lambda}-\hat{g}_{\lambda+\delta}\|_{Q}$.
+Suppose knots $s_{1}<s_{2}<...<s_{L}$ (where $L$ might equal infinity)
+are in between between $\lambda$ and $\lambda+\delta$.
+
+As done in Lemma 0, we can bound 
+\[
+\|\hat{g}_{s_{i}}-\hat{g}_{s_{i+1}}\|_{Q}\le(s_{i+1}-s_{i})n^{\kappa}w^{-1}v\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)
+\]
+
+
+for some constant $\kappa$ (for details, go to Lemma 0).
+
+Then
+
+\begin{eqnarray*}
+ &  & \|\hat{g}_{\lambda}-\hat{g}_{\lambda+\delta}\|_{Q}\\
+ & \le & \|g_{\lambda}-g_{s_{1}}\|_{Q}+\|g_{\lambda+\delta}-g_{s_{L}}\|_{Q}+\sum_{i=1}^{L-1}\|g_{s_{i}}-g_{s_{i+1}}\|_{Q}\\
+ & \le & n^{\kappa}w^{-1}v\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)\left(s_{1}-\lambda+\lambda+\delta-s_{L}+\sum_{i=1}^{L-1}(s_{i+1}-s_{i})\right)\\
+ & = & \delta n^{\kappa}w^{-1}v\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)
+\end{eqnarray*}
+
+
+Therefore we have the same entropy bound as before.
+
+
+\subsection{Multiple Regularization Parameters}
+
+Suppose we are fitting model parameters $\theta$ but we'd like to
+apply a separate penalty to $J$ partitions of the model parameters:
+$P_{j}(\theta_{j})$ for $j=1,...,J$. Let $\boldsymbol{\lambda}=(\lambda_{1},...,\lambda_{J})$
+be their corresponding penalty parameters. We suppose that $\Lambda$
+is the box $[\lambda_{min},\lambda_{max}]^{J}$ where $\lambda_{min}=O_{p}(n^{-\tau_{min}})$
+and $\lambda_{max}=O_{p}(1)$.
+
+That is, the training criterion is now
+
+\[
+\hat{g}(\boldsymbol{\lambda}|D_{-k})=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{D_{-k}}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}^{v}(g)+\frac{w}{2}\|g\|^{2}\right)
+\]
+
+
+For simplicity, suppose the problem is smooth. (One can probably use
+the same arguments to extend this to the case where the problem is
+smooth almost everywhere.)
+
+We show that the entropy is off by a constant from Lemma 0: 
+
+\[
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\le J\left(\log\frac{1}{d}+\kappa\log n+\log\left(\frac{v}{wJ}\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)\right)\right)
+\]
+
+
+Hence the convergence rate is essentially increased by a factor of
+$J^{1/2}$:
+
+\[
+\|\hat{g}_{\hat{\lambda}}(\cdot|D)-g^{*}\|_{D}\apprle\sqrt{\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}}+G\left(\frac{J\left(1+\kappa\log n+\log\left(\frac{v}{wJ}\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)\right)\right)}{\min_{k=1:K}\{n_{k}\}}\right)^{1/2}
+\]
+
+
+
+\subsubsection*{Proof for the entropy of the function class}
+
+We first determine $\nabla_{\lambda_{j}}\hat{m}_{h}(\boldsymbol{\lambda})$
+by implicit differentiation. The equations get bulky, but the logic
+is straightforward.
+
+Use the same directional derivative technique in Lemma 0. Since $\hat{m}_{h}(\boldsymbol{\lambda})$
+is a local minima,
+
+\[
+\left.-\langle h,y-(\hat{g}_{\lambda_{0}}+mh)\rangle_{T}+\sum_{j=1}^{J}\lambda_{j}\left(\frac{\partial}{\partial m}P_{j}^{v}(\hat{g}_{\lambda_{0}}+mh)+w\langle h,\hat{g}_{\lambda_{0}}+mh\rangle\right)\right|_{m=\hat{m}_{h}(\boldsymbol{\lambda})}=0
+\]
+
+
+By implicit differentiation wrt $\lambda_{\ell}$ for $\ell=1:J$,
+we have 
+\begin{eqnarray*}
+\nabla_{\lambda_{\ell}}\hat{m}_{h}(\boldsymbol{\lambda}) & = & \left.-\left(\|h\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\frac{\partial^{2}}{\partial m^{2}}P_{j}^{v}\left(\hat{g}_{\lambda_{0}}+mh\right)+w\|h\|^{2}\sum_{j=1}^{J}\lambda_{j}\right)^{-1}\left(\frac{\partial}{\partial m}P_{\ell}^{v}(\hat{g}_{\lambda_{0}}+mh)+w\langle h,\hat{g}_{\lambda_{0}}+mh\rangle\right)\right|_{m=\hat{m}_{h}(\boldsymbol{\lambda})}
+\end{eqnarray*}
+
+
+Now we can bound $\|\hat{g}(\boldsymbol{\lambda})-\hat{g}(\boldsymbol{\lambda}+\boldsymbol{\delta})\|$.
+Define $h=c\left(\hat{g}(\boldsymbol{\lambda})-\hat{g}(\boldsymbol{\lambda}+\boldsymbol{\delta})\right)$
+where $c$ is some scaling constant s.t. $P(h)=1$. Following the
+same logic given in Lemma 0, we get
+
+\[
+\left|\nabla_{\lambda_{\ell}}\hat{m}_{h}(\boldsymbol{\lambda})\right|\le w^{-1}J^{-1}n^{\tau_{min}+v}v\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)
+\]
+
+
+Therefore, applying the mean value theorem, we get that for any vector
+$\boldsymbol{\delta}$ there is some $\alpha\in[0,1]$ s.t. 
+\begin{eqnarray*}
+\|\hat{g}(\boldsymbol{\lambda})-\hat{g}(\boldsymbol{\lambda}+\boldsymbol{\delta})\|_{Q} & = & \left\Vert \hat{m}_{h}(\boldsymbol{\lambda}+\boldsymbol{\delta})h\right\Vert _{Q}\\
+ & \le & n^{p}\hat{m}_{h}(\boldsymbol{\lambda}+\boldsymbol{\delta})\\
+ & = & n^{p}\left|\langle\boldsymbol{\delta},\nabla_{\boldsymbol{\lambda}}\hat{m}_{h}(\boldsymbol{\lambda}+\alpha\boldsymbol{\delta})\rangle\right|\\
+ & \le & \|\boldsymbol{\delta}\|w^{-1}J^{-1}n^{\kappa}v\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)
+\end{eqnarray*}
+
+
+for some constant $\kappa$ dependent on $v,p,\tau_{min}$.
+
+Hence we can form a $d$-covering set for $\hat{\mathcal{G}}(T,\epsilon_{T})$
+by covering the box $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$ with
+balls of radius $dwJn^{-\kappa}\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)^{-1}$.
+Hence the $u-$covering number is 
+\[
+N\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)=d^{-J}\left(\frac{n^{\kappa}v}{wJ}\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)\right)^{J}
+\]
+
+
+Hence
+
+\[
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\le J\log\frac{1}{d}+J\kappa\log n+J\log\left(\frac{v}{wJ}(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G)\right)
+\]
+
 \end{document}
