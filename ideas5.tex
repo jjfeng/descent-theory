@@ -13,21 +13,21 @@
 
 \section{K-Fold Cross-Validation}
 
-Consider the joint optimization problem to find the best regularization
-parameter $\lambda$ in $\Lambda$ via $K$-fold cross validation.
-Let $D$ be the entire dataset (so both $y,X$). For $k=1,...,K$,
-let $D_{k}$ represent the $k$th fold and $D_{-k}$ denote all the
-folds minus the $k$th fold. For a given $\lambda$, train over $D_{-k}$
-and then validate over $D_{k}$. Let the number of observations for
-each fold be $n_{k}$ and let the total number of observations be
-$n$.
+We are interested in modeling the conditional relationship between
+$y$ and predictors $X$ using function class $\mathcal{G}$. Suppose
+$X$ is from some bounded domain. Suppose $\mathcal{G}$ is a convex
+function class. There is some constant $G$ s.t. $\sup_{g\in\mathcal{G}}\|g\|^{2}\le G<\infty$
+(this envelope condition makes the proof simpler, though I think we
+can easily drop it with some regularity assumptions?).
 
-Suppose the penalty function $P$ is a semi-norm, smooth, and convex.
-Suppose the penalty function is taken to the power $v\ge1$.
+We fit the function using some penalty function $P$ taken to the
+power $v\ge1$. Suppose $P$ is a semi-norm, smooth, and convex. 
 
-We will presume that the domain of the function class is bounded.
-
-Suppose that there is some $G$ s.t. $\sup_{g\in\mathcal{G}}\|g\|^{2}\le G$.
+Consider the joint optimization problem to find the best penalty parameter
+$\lambda$ in $\Lambda$ via $K$-fold cross validation. Let $D$
+be the entire dataset of $n$ observations. For $k=1,...,K$, let
+$D_{k}$ represent the $k$th fold with $n_{k}$ observations and
+$D_{-k}$ denote all the folds minus the $k$th fold.
 
 Let $\|h\|^{2}=\int h(x)d\mu(x)$. Let $\|h\|_{k}^{2}=\frac{1}{n_{k}}\sum_{i\in D_{k}}h(x_{i})^{2}$
 and similarly for $\|h\|_{-k}^{2}$ for the set $D_{-k}$ and $\|h\|_{D}^{2}$
@@ -35,19 +35,20 @@ for the set $D$. Let $\langle h,g\rangle_{k}=\frac{1}{n_{k}}\sum_{i\in D_{k}}h(x
 and $\langle h,g\rangle_{-k}$ for the set $D_{-k}$ and $\langle h,g\rangle_{D}$
 for the set $D$.
 
-Let us define
+We perform $K$-fold cross-validation with a small additional ridge
+penalty.
 
 \[
-\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D_{-k})\|_{k}^{2}
+\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\frac{1}{2}\sum_{k=1}^{K}\|y-\hat{g}_{\lambda}(\cdot|D_{-k})\|_{k}^{2}
 \]
 \[
 \hat{g}(\lambda|D_{-k})=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{-k}^{2}+\lambda\left(P^{v}(g)+\frac{w}{2}\|g\|^{2}\right)
 \]
 
 
-The $K$-fold CV model is 
+The model chosen via $K$-fold CV is 
 \[
-\hat{g}(\lambda|D)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{D}^{2}+\lambda\left(P^{v}(g)+\frac{w}{2}\|g\|^{2}\right)
+\hat{g}(\hat{\lambda}|D)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{D}^{2}+\hat{\lambda}\left(P^{v}(g)+\frac{w}{2}\|g\|^{2}\right)
 \]
 
 
@@ -56,7 +57,7 @@ to $\lambda_{max}=O_{P}(1)$.
 
 We show that
 \[
-\|\hat{g}_{\hat{\lambda}}(\cdot|D)-g^{*}\|_{D}\apprle\sqrt{\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}}+\left(\frac{1+\log(4\sigma^{2})+\kappa\log n}{\min_{k=1:K}\{n_{k}\}}\right)^{1/2}
+\|\hat{g}_{\hat{\lambda}}(\cdot|D)-g^{*}\|_{D}\apprle\sqrt{\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}}+G\left(\frac{(1+\log(v/w)+\log(4\sigma^{2}+P^{v-1}(g^{*})+G)+\kappa\log n)}{\min_{k=1:K}\{n_{k}\}}\right)^{1/2}
 \]
 
 
@@ -68,14 +69,6 @@ independent of $n$.
 
 
 \section{Proof}
-
-The proof is based on two main ideas.
-
-First, we bound the error of the retrained $K$-fold CV model by a
-convex combination of the $K$ trained models from each fold.
-
-Second, we bound the entropy of $\hat{\mathcal{G}}(D_{-k})=\left\{ \hat{g}_{\lambda}(\cdot|D_{-k}):\lambda\in\Lambda\right\} $,
-which in turn allows us to bound empirical and Rademacher processes.
 
 
 \subsubsection*{Step 1:}
@@ -106,80 +99,105 @@ Adding the two inequalities from Lemma 1 and 2, we have
 \end{eqnarray*}
 
 
-Our goal is to bound the empirical process and the rademacher process
-terms using Lemma 3 and 4.
-
-By Lemma 0, if $\|\epsilon\|_{k}\le2\sigma$ for all folds $D_{k}$,
-then for any empirical distribution $Q$, 
+The Lemmas below allow us to bound each of the summands in the inequality.
+Note that all the Lemmas have probability statements that condition
+on $\|\epsilon\|_{k}\le2\sigma$. Recall that since $\epsilon$ is
+sub-gaussian, Bernstein's inequality states that $\|\epsilon\|_{k}\le2\sigma$
+indeed occurs with high probability: 
 \[
-H\left(d,\hat{\mathcal{G}}(D_{-k}),\|\cdot\|_{Q}\right)\apprle\psi(u)=\log\left(\frac{1}{wd}\right)+\kappa\log n+\log(4\sigma^{2})
+Pr\left(\|\epsilon\|_{k}\ge2\sigma\right)\le\exp\left(-n_{k}\frac{\sigma^{2}}{c}\right)
+\]
+
+
+Now to bound the first term, Lemma 5 states that with high probability
+\[
+\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}\apprle\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta^{2}
+\]
+
+
+To bound the last two terms, we first note that the entropy of the
+function class $\hat{\mathcal{G}}(D_{-k})=\left\{ \hat{g}_{\lambda}(\cdot|D_{-k}):\lambda\in\Lambda\right\} $
+is (for any empirical distribution $Q$) 
+\[
+H\left(d,\hat{\mathcal{G}}(D_{-k}),\|\cdot\|_{Q}\right)\apprle\psi(u)=\log\left(\frac{v}{wd}\right)+\kappa\log n+\log(4\sigma^{2}+P^{v-1}(g^{*})+G)
 \]
 
 
 So we have
 
 \begin{eqnarray*}
-\int_{0}^{R}\psi^{1/2}(u)du & = & \int_{0}^{R}\left(\log\left(\frac{1}{uw}\right)+\kappa\log n+\log(4\sigma^{2})\right)^{1/2}du\\
- & \apprle & R\left(\int_{0}^{1}\log\left(\frac{1}{u}\right)-\log w+\kappa\log n+\log(4\sigma^{2})du\right)^{1/2}\\
- & \le & R\left(1+\log(4\sigma^{2})-\log w+\kappa\log n\right)^{1/2}
+\int_{0}^{2G}\psi^{1/2}(u)du & = & \int_{0}^{2G}\left(\log\left(\frac{v}{uw}\right)+\kappa\log n+\log(4\sigma^{2})\right)^{1/2}du\\
+ & \apprle & 2G\left(\int_{0}^{1}\log\left(\frac{1}{u}\right)-\log(v/w)+\kappa\log n+\log(4\sigma^{2})du\right)^{1/2}\\
+ & \le & 2G\left(1+\log(4\sigma^{2}+P^{v-1}(g^{*})+G)+\log(v/w)+\kappa\log n\right)^{1/2}
 \end{eqnarray*}
 
 
-Let 
+By Lemma 3 and 4, let 
 \[
-\delta_{max}=CR\left(\left(\frac{1+\log(4\sigma^{2})+\kappa\log n}{\min_{k=1:K}\{n_{k}\}}\right)^{1/2}\vee1\right)
+\delta=CG\left(\left(\frac{1+\log(v/w)+\log(4\sigma^{2}+P^{v-1}(g^{*})+G)+\kappa\log n}{\min_{k=1:K}\{n_{k}\}}\right)^{1/2}\vee1\right)
 \]
 
 
-By Lemma 3, for some constant $c$, for all $\ell,k=1:K$ (and $\ell\ne k$),
+where the constant $C$ only depends on the subgaussian constants.
+
+By Lemma 3, for some constant $c$, for all $\ell,k=1:K$, we have
+\[
+Pr\left(\sup_{\lambda\in\Lambda}\frac{\left|\langle\epsilon,\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\rangle_{-\ell}\right|}{\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\|_{-\ell}}\ge\delta\wedge\|\epsilon\|_{-k}\le2\sigma\wedge\|\epsilon\|_{-\ell}\le2\sigma\right)\le c\exp\left(-(n-n_{\ell})\frac{\delta^{2}}{c^{2}R^{2}}\right)
+\]
+
+
+By Lemma 4, for some constant $c$, we have for all $\ell,k=1:K$,
 we have 
 \[
-Pr\left(\sup_{\lambda\in\Lambda}\frac{\left|\langle\epsilon,\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\rangle_{-\ell}\right|}{\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\|_{-\ell}}\ge\delta_{max}\wedge\|\epsilon\|_{-k}\le2\sigma\wedge\|\epsilon\|_{-\ell}\le2\sigma\right)\le c\exp\left(-(n-n_{k})\frac{\delta_{max}^{2}}{c^{2}R^{2}}\right)
+Pr\left(\sup_{\lambda\in\Lambda}\frac{\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{\ell}^{2}-\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}}{\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k\cup\ell}}\ge\delta\wedge\|\epsilon\|_{-k}\le2\sigma\right)\le c\exp\left(-n_{\ell}\frac{\delta^{2}}{c^{2}R^{2}}\right)+c\exp\left(-n_{k}\frac{\delta^{2}}{c^{2}R^{2}}\right)
 \]
 
 
-By Lemma 4, for some constant $c$, we have for all $\ell,k=1:K$
-(and $\ell\ne k$), we have 
+Combining all the probability bounds above (and Easy Lemma 1), we
+have with high probability
 \[
-Pr\left(\sup_{\lambda\in\Lambda}\frac{\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{\ell}^{2}-\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}}{\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k\cup\ell}}\ge\delta_{max}\wedge\|\epsilon\|_{-k}\le2\sigma\right)\le c\exp\left(-n_{\ell}\frac{\delta_{max}^{2}}{c^{2}R^{2}}\right)+c\exp\left(-n_{k}\frac{\delta_{max}^{2}}{c^{2}R^{2}}\right)
+\|\hat{g}_{\hat{\lambda}}(\cdot|D)-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}\apprle\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta_{max}^{2}
 \]
 
 
-Hence with high probability, we have
 
+\subsubsection*{Step 3: Bound $\|\hat{\xi}_{\hat{\lambda}}-g^{*}\|_{D}$}
+
+We know that 
 \[
-\|\hat{g}_{\hat{\lambda}}(\cdot|D)-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}\apprle\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta_{max}\sum_{\ell=1}^{K}\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g^{*}\|_{-\ell}
+\|\hat{\xi}_{\hat{\lambda}}-g^{*}\|_{D}\apprle\sum_{k=1}^{k}\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{D}
 \]
 
 
-Combining Easy Lemma 1 and Lemma 5, we get 
-\[
-\|\hat{g}_{\hat{\lambda}}(\cdot|D)-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}\apprle\sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta_{max}\|\hat{g}_{\tilde{\lambda}}(x|D_{-k})-g^{*}\|_{k}+\delta_{max}^{2}
-\]
-
-
-
-\subsubsection*{Step 3:}
-
-For every $k$, we have
+We bound each term in the summation separately. For every $k$, we
+know
 
 \begin{eqnarray*}
 \|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{D}^{2} & \apprle & \sum_{\ell=1}^{k}\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}^{2}+\left(\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{\ell}^{2}-\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}^{2}\right)
 \end{eqnarray*}
 
 
-Lemma 5 directly bounds $\sum_{\ell=1}^{k}\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-\hat{g}_{\tilde{\lambda}}(x|D_{-k})\|_{k}^{2}$.
+Again we know that $\|\epsilon\|_{k}\le2\sigma$ for all folds $D_{k}$
+with high probability.
 
-By Lemma 4 and Easy Lemma 1, we have 
+Conditioning on $\|\epsilon\|_{k}\le2\sigma$, Lemma 5 gives us that
+with high probability 
+\[
+\sum_{\ell=1}^{k}\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}^{2}\apprle\sum_{\ell=1}^{k}\|\hat{g}_{\tilde{\lambda}}(x|D_{-k})-g^{*}\|_{k}^{2}+\delta_{max}^{2}
+\]
+ 
+
+As shown in Step 2, Lemma 4 and Easy Lemma 1 imply that the following
+bound holds for all $\ell=1:K$ with high probability as long as $\|\epsilon\|_{k}\le2\sigma$
 \[
 \left|\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{\ell}^{2}-\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}^{2}\right|\le\delta_{max}\left(\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{k}+\delta_{max}\right)
 \]
 
 
-Hence
+Combining these two results, we get that with high probability,
 
 \begin{eqnarray*}
-\|\hat{g}_{\hat{\lambda}}(x|D_{-k})-g^{*}\|_{D}^{2} & \apprle & \sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta_{max}\|\hat{g}_{\tilde{\lambda}}(x|D_{-k})-g^{*}\|_{k}+\delta_{max}^{2}
+\|\hat{\xi}_{\hat{\lambda}}-g^{*}\|_{D} & \apprle & \sum_{k=1}^{K}\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right\Vert _{k}^{2}+\delta_{max}^{2}
 \end{eqnarray*}
 
 
@@ -246,31 +264,33 @@ By implicit differentiation wrt $\lambda$, we have
 To bound $|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)|$,
 we bound each multiplicand.
 
-1st multiplicand: Since penalty $P$ is convex (regardless of the
-direction of $h$),
+\textbf{1st multiplicand}: Since penalty $P$ is convex (regardless
+of the direction of $h$),
 
 \begin{eqnarray*}
-\left|\|h\|_{T}^{2}+\lambda\frac{\partial^{2}}{\partial m^{2}}P^{v}\left(\hat{g}_{\lambda_{0}}+mh\right)+\lambda w\|h\|^{2}\right|^{-1} & \le & \lambda w\|h\|^{-2}\\
+\left|\|h\|_{T}^{2}+\lambda\frac{\partial^{2}}{\partial m^{2}}P^{v}\left(\hat{g}_{\lambda_{0}}+mh\right)+\lambda w\|h\|^{2}\right|^{-1} & \le & \lambda^{-1}w^{-1}\|h\|^{-2}\\
  & \apprle & \lambda^{-1}w^{-1}n^{u}
 \end{eqnarray*}
 
 
-2nd multiplicand: By definition of $\hat{g}_{\lambda_{0}}$,
+where the second inequality comes from our assumption that $\min_{h:P(h)=1}\|h\|^{-2}=n^{u}$.
+
+\textbf{2nd multiplicand}: By definition of $\hat{g}_{\lambda_{0}}+\hat{m}_{h}(\lambda)h$,
 
 \[
-\lambda_{0}P^{v}(\hat{g}_{\lambda_{0}}+mh)\le\frac{1}{2}\|y-g^{*}\|_{T}^{2}+\lambda_{0}P^{v}(g^{*})
+\lambda P^{v}(\hat{g}_{\lambda_{0}}+\hat{m}_{h}(\lambda)h)\le\frac{1}{2}\|y-g^{*}\|_{T}^{2}+\lambda P^{v}(g^{*})
 \]
 
 
 Hence
 
 \begin{eqnarray*}
-P^{v-1}(\hat{g}_{\lambda_{0}}+mh) & \le & \left(\frac{1}{2\lambda_{0}}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})\right)^{(v-1)/v}\\
- & \apprle & \left(n^{\tau_{min}}\|\epsilon\|_{T}^{2}\right)^{(v-1)/v}
+P^{v-1}(\hat{g}_{\lambda_{0}}+\hat{m}_{h}(\lambda)h) & \le & \left(\frac{1}{2\lambda_{0}}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})\right)^{(v-1)/v}\\
+ & \le & \left(\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})\right)^{(v-1)/v}
 \end{eqnarray*}
 
 
-3rd multiplicand: Note that since $P$ is a semi-norm, then
+\textbf{3rd multiplicand}: Note that since $P$ is a semi-norm, then
 
 \[
 \left|P(\hat{g}_{\lambda}+mh)-P(\hat{g}_{\lambda})\right|\le mP(h)
@@ -292,31 +312,31 @@ we have
 
 Conbining the above bounds, we have 
 \begin{eqnarray*}
-\left|\frac{\partial}{\partial\delta}\hat{m}_{\lambda}(\delta)\right| & \apprle & n^{\tau_{min}+u}w^{-1}\left(v\left(n^{\tau_{min}}\|\epsilon\|_{T}^{2}\right)^{(v-1)/v}+wn^{p}G\right)\\
- & \le & n^{\tau_{min}(2v-1)/v+u}w^{-1}v\|\epsilon\|_{T}^{2(v-1)/v}+n^{\tau_{min}+u+p}G
+\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right| & \apprle & n^{\tau_{min}+u}w^{-1}\left(v\left(\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})\right)^{(v-1)/v}+wn^{p}G\right)\\
+ & \le & n^{\kappa}w^{-1}v\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)
 \end{eqnarray*}
 
+
+for some constant $\kappa$ that depends on $\tau_{min},u,p,v$.
 
 By the mean value theorem, there is some $\alpha\in[0,1]$ s.t 
 
 \begin{eqnarray*}
-\|\hat{g}_{\lambda}(\cdot|D_{-k})-\hat{g}_{\lambda+\delta}(\cdot|D_{-k})\|_{Q} & = & \hat{m}_{\lambda}(\delta)\|h\|_{Q}\\
- & \le & n^{p}\delta\left|\frac{\partial}{\partial a}\hat{m}_{\lambda}(a)\right|_{a=\alpha\delta}\\
- & \apprle & \delta\left(n^{\tau_{min}(2v-1)/v+u+p}w^{-1}v\|\epsilon\|_{T}^{2(v-1)/v}+n^{\tau_{min}+u+2p}G\right)
+\|\hat{g}_{\lambda}(\cdot|D_{-k})-\hat{g}_{\lambda+\delta}(\cdot|D_{-k})\|_{Q} & = & \hat{m}_{h}(\lambda)\|h\|_{Q}\\
+ & \le & n^{p}\delta\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda+\alpha\delta)\right|
 \end{eqnarray*}
 
 
-Therefore the covering number is for some constant $\kappa$ that
-depends on $\tau_{min},u,p.v$
+Combining the inequalities above, we get a bound on the covering number
 
 \[
-N\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\frac{1}{d}n^{\kappa}w^{-1}vG\|\epsilon\|_{T}^{2(v-1)/v}
+N\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\frac{1}{d}n^{\kappa}w^{-1}v\left(\|\epsilon\|_{T}^{2(v-1)/v}+P^{v-1}(g^{*})+G\right)
 \]
 
 
-so the entropy is 
+and the entropy 
 \[
-H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\log\left(\frac{1}{dw}\right)+\kappa\log n+\log\|\epsilon\|_{T}^{2}
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\log\left(\frac{v}{dw}\right)+\kappa\log n+\log\left(\|\epsilon\|_{T}^{2}+P^{v-1}(g^{*})+G\right)
 \]
 
 
@@ -324,27 +344,29 @@ H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{Q}\right)\apprle\log\left(
 \subsubsection{Lemma 1}
 
 Define the convex combination $\hat{\xi}_{\lambda}(x)=\frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\hat{g}_{\lambda}(x|D_{-k})$.
-Then
+Suppose $P^{v}$ is convex. Then
 
 \begin{eqnarray*}
-\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{D}^{2}+\hat{\lambda}P(\hat{g}_{\hat{\lambda}}(\cdot|D)) & \ge & \frac{1}{2}\|y-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}+\hat{\lambda}P(\hat{\xi}_{\hat{\lambda}})+\frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\langle y-\hat{\xi}_{\hat{\lambda}},\hat{\xi}_{\hat{\lambda}}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\rangle_{-k}
+ &  & \frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{D}^{2}+\hat{\lambda}\left(P^{v}(\hat{g}_{\hat{\lambda}}(\cdot|D))+\frac{w}{2}\|\hat{g}_{\hat{\lambda}}(\cdot|D)\|^{2}\right)\\
+ & \ge & \frac{1}{2}\|y-\hat{\xi}_{\hat{\lambda}}\|_{D}^{2}+\hat{\lambda}\left(P^{v}(\hat{\xi}_{\hat{\lambda}})+\frac{w}{2}\|\hat{\xi}_{\hat{\lambda}}\|^{2}\right)+\frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\langle y-\hat{\xi}_{\hat{\lambda}},\hat{\xi}_{\hat{\lambda}}-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\rangle_{-k}
 \end{eqnarray*}
 
 
-(This is Thrm 1 in Chetverikov, Chaterjee probably does the same thing.)
+(This is a version of the beginning of the proof for Thrm 1 in Chetverikov,
+Chaterjee probably does the same thing.)
 
 
 \subsubsection*{Proof}
 
 \begin{eqnarray*}
- &  & \frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{D}^{2}+\hat{\lambda}P(\hat{g}_{\hat{\lambda}}(\cdot|D))\\
- & = & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{-k}^{2}+\hat{\lambda}P(\hat{g}_{\hat{\lambda}}(\cdot|D))\right)\\
- & \ge & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|_{-k}^{2}+\hat{\lambda}P(\hat{g}_{\hat{\lambda}}(\cdot|D_{-k}))\right)\\
- & \ge & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|_{-k}^{2}\right)+\hat{\lambda}P(\hat{\xi}_{\hat{\lambda}})
+ &  & \frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{D}^{2}+\hat{\lambda}\left(P^{v}(\hat{g}_{\hat{\lambda}}(\cdot|D))+\frac{w}{2}\|\hat{g}_{\hat{\lambda}}(\cdot|D)\|^{2}\right)\\
+ & = & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D)\|_{-k}^{2}+\hat{\lambda}\left(P^{v}(\hat{g}_{\hat{\lambda}}(\cdot|D))+\frac{w}{2}\|\hat{g}_{\hat{\lambda}}(\cdot|D)\|^{2}\right)\right)\\
+ & \ge & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|_{-k}^{2}+\hat{\lambda}\left(P^{v}(\hat{g}_{\hat{\lambda}}(\cdot|D_{-k}))+\frac{w}{2}\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right)\right)\\
+ & \ge & \frac{1}{K-1}\sum_{k=1}^{K}\frac{n-n_{k}}{n}\left(\frac{1}{2}\|y-\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|_{-k}^{2}+\hat{\lambda}\frac{w}{2}\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right)+\hat{\lambda}\left(P^{v}(\hat{\xi}_{\hat{\lambda}})+\frac{w}{2}\|\hat{\xi}_{\hat{\lambda}}\|^{2}\right)
 \end{eqnarray*}
 
 
-The second inequality follows by convexity of $P$.
+The second inequality follows by convexity of $P^{v}$ and $\|\cdot\|^{2}$.
 
 Now note that 
 \begin{eqnarray*}
@@ -356,17 +378,17 @@ Now note that
 
 \subsubsection{Lemma 2}
 
-Consider any $\xi\in\mathcal{G}$ and $\lambda\in\Lambda$. Suppose
-$P$ is convex.
+Consider any $\xi\in\mathcal{G}$ and $\lambda$. Suppose $P^{v}$
+is convex.
 
 Then
 
 \[
-\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-\xi\|_{D}^{2}\le\frac{1}{2}\|y-\xi\|_{D}^{2}-\frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+\lambda P(\xi)-\lambda P(\hat{g}_{\lambda}(\cdot|D))
+\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-\xi\|_{D}^{2}\le\frac{1}{2}\|y-\xi\|_{D}^{2}-\frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+\lambda\left(P^{v}(\xi)+\frac{w}{2}\|\xi\|^{2}\right)-\lambda\left(P^{v}(\hat{g}_{\lambda}(\cdot|D))+\frac{w}{2}\|\hat{g}_{\lambda}(\cdot|D)\|^{2}\right)
 \]
 
 
-(This is Lemma 10 in Chetverikov, which is based on Chaterjee.)
+(This is a version of Lemma 10 in Chetverikov, which is based on Chaterjee.)
 
 
 \subsubsection*{Proof}
@@ -374,32 +396,33 @@ Then
 Since $P$ is convex, then for $t\in(0,1)$, we have
 
 \begin{eqnarray*}
- &  & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+\lambda P(\hat{g}_{\lambda}(\cdot|D))\\
- & \le & \frac{1}{2}\|y-\left(t\xi+(1-t)\hat{g}_{\lambda}(\cdot|D)\right)\|_{D}^{2}+\lambda P(t\xi+(1-t)\hat{g}_{\lambda}(\cdot|D))\\
- & \le & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+t\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+t^{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}+\lambda\left(tP(\xi)+(1-t)P\left(\hat{g}_{\lambda}(\cdot|D)\right)\right)\\
- & \le & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+t\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+\frac{t^{2}}{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}+\lambda\left(tP(\xi)+(1-t)P\left(\hat{g}_{\lambda}(\cdot|D)\right)\right)
+ &  & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+\lambda\left(P^{v}(\hat{g}_{\lambda}(\cdot|D))+\frac{w}{2}\|\hat{g}_{\lambda}(\cdot|D)\|^{2}\right)\\
+ & \le & \frac{1}{2}\|y-\left(t\xi+(1-t)\hat{g}_{\lambda}(\cdot|D)\right)\|_{D}^{2}+\lambda\left(P^{v}(t\xi+(1-t)\hat{g}_{\lambda}(\cdot|D))+\frac{w}{2}\|t\xi+(1-t)\hat{g}_{\lambda}(\cdot|D)\|^{2}\right)\\
+ & \le & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+t\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+t^{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}+\lambda\left(tP^{v}(\xi)+(1-t)P^{v}\left(\hat{g}_{\lambda}(\cdot|D)\right)+t\frac{w}{2}\|\xi\|^{2}+(1-t)\frac{w}{2}\|\hat{g}_{\lambda}(\cdot|D)\|^{2}\right)\\
+ & \le & \frac{1}{2}\|y-\hat{g}_{\lambda}(\cdot|D)\|_{D}^{2}+t\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+\frac{t^{2}}{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}+\lambda\left(tP^{v}(\xi)+(1-t)P^{v}\left(\hat{g}_{\lambda}(\cdot|D)\right)+t\frac{w}{2}\|\xi\|^{2}+(1-t)\|\hat{g}_{\lambda}(\cdot|D)\|^{2}\right)
 \end{eqnarray*}
 
 
 Rearranging terms, we obain
 \[
-\lambda\left(P\left(\hat{g}_{\lambda}(\cdot|D)\right)-P(\xi)\right)\le\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+\frac{t}{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}
+\lambda\left(P^{v}\left(\hat{g}_{\lambda}(\cdot|D)\right)+\frac{w}{2}\|\hat{g}_{\lambda}(\cdot|D)\|^{2}-P^{v}(\xi)-\frac{w}{2}\|\xi\|^{2}\right)\le\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}+\frac{t}{2}\|\xi-\hat{g}_{\lambda}\|_{D}^{2}
 \]
 
 
 Since this is true for any $t$, we have that
 
 \[
-\lambda\left(P\left(\hat{g}_{\lambda}(\cdot|D)\right)-P(\xi)\right)\le\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}
+\lambda\left(P^{v}\left(\hat{g}_{\lambda}(\cdot|D)\right)+\frac{w}{2}\|\hat{g}_{\lambda}(\cdot|D)\|^{2}-P^{v}(\xi)-\frac{w}{2}\|\xi\|^{2}\right)\le\langle y-\hat{g}_{\lambda}(\cdot|D),\hat{g}_{\lambda}(\cdot|D)-\xi\rangle_{D}
 \]
 
 
 Thus
 \begin{eqnarray*}
-\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-\xi\|_{D}^{2} & = & \frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y+y-\xi\|_{D}^{2}\\
+ &  & \frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-\xi\|_{D}^{2}\\
+ & \le & \frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y+y-\xi\|_{D}^{2}\\
  & = & \frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y\|_{D}^{2}+\frac{1}{2}\|y-\xi\|_{D}^{2}-\langle\hat{g}_{\lambda}(\cdot|D)-y,\xi-y\rangle_{D}\\
  & = & -\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y\|_{D}^{2}+\frac{1}{2}\|y-\xi\|_{D}^{2}-\langle\hat{g}_{\lambda}(\cdot|D)-y,\xi-\hat{g}_{\lambda}(\cdot|D)\rangle_{D}\\
- & \le & -\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y\|_{D}^{2}+\frac{1}{2}\|y-\xi\|_{D}^{2}-\lambda\left(P\left(\hat{g}_{\lambda}(\cdot|D)\right)-P(\xi)\right)
+ & \le & -\frac{1}{2}\|\hat{g}_{\lambda}(\cdot|D)-y\|_{D}^{2}+\frac{1}{2}\|y-\xi\|_{D}^{2}-\lambda\left(P^{v}\left(\hat{g}_{\lambda}(\cdot|D)\right)+\frac{w}{2}\|\hat{g}_{\lambda}(\cdot|D)\|^{2}-P^{v}(\xi)-\frac{w}{2}\|\xi\|^{2}\right)
 \end{eqnarray*}
 
 
@@ -457,7 +480,7 @@ In the last equality, we swap the order of integration and summation.
 This is allowed under the assumption that the identity functions are
 measurable, which should be okay.
 
-To bound the summation, apply Lemma 10. For all 
+To bound the summation, apply Lemma 6. For all 
 \[
 \sqrt{|X|}\delta\ge C\left(\int_{0}^{R}\psi^{1/2}(u)du\vee1\right)
 \]
@@ -547,10 +570,11 @@ Pr_{W,X,T}\left(\sup_{f\in\mathcal{F}(T,\epsilon_{T})}\frac{\left|\langle W,f^{2
 \subsubsection{Lemma 5}
 
 Let $\hat{\lambda}$ be chosen by CV. Let $\tilde{\lambda}$ be the
-oracle. Then with high probability,
+oracle. Suppose $\sup_{g\in\mathcal{G}}\|g\|_{D}\le G$. Then with
+high probability,
 
 \[
-\sqrt{\sum_{k=1}^{K}\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}\apprle\left(\frac{1+\log4\sigma^{2}-\log w+\kappa\log n}{n}\right)^{1/2}+\sqrt{\sum_{k=1}^{K}\|g_{\tilde{\lambda}}(\cdot|D_{-k})-g^{*}\|_{k}^{2}}
+\sqrt{\sum_{k=1}^{K}\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}\apprle\left(\frac{1+\log4\sigma^{2}-\log w+\kappa\log n}{n}\right)^{1/2}+\sqrt{\sum_{k=1}^{K}\|\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})-g^{*}\|_{k}^{2}}
 \]
 
 
@@ -560,22 +584,28 @@ oracle. Then with high probability,
 The basic inequality gives us
 
 \begin{eqnarray*}
- &  & \sum_{k=1}^{K}\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}\\
- & \le & 2\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|+2\left|\sum_{k=1}^{K}\left(g^{*}-g_{\tilde{\lambda}}(\cdot|D_{-k}),g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|
+ &  & \sum_{k=1}^{K}\|\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}\\
+ & \le & 2\left|\sum_{k=1}^{K}\left(\epsilon,\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|+2\left|\sum_{k=1}^{K}\left(g^{*}-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k}),\hat{g}_{\hat{\lambda}}(\cdot|D_{-k})-\hat{g}_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|
 \end{eqnarray*}
 
 
 We bound the empirical process term by a standard peeling argument
-(omitted). One can show that for all 
+(omitted). That is, one can show that for all 
 \[
-\delta\ge C\left(\frac{1+\log4\sigma^{2}-\log w+\kappa\log n}{n}\right)^{1/2}
+\delta\ge C\left(\frac{1+\log4\sigma^{2}-\log w+\kappa\log n}{\min_{k=1:K}\{n_{k}\}}\right)^{1/2}
 \]
 
 
-we have for constants $c_{k}$ (which depend on $n_{k}/n$), 
+we have that for every $k$, 
+\[
+Pr\left(\frac{\left|\left(\epsilon,g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|}{\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}}\ge\delta\wedge\|\epsilon\|_{k}\le2\sigma\right)\le c\exp\left(-n_{k}\frac{\delta^{2}}{c^{2}}\right)
+\]
+
+
+Hence for constants $c_{k}$ (which depend on $n_{k}/n$), 
 \begin{eqnarray*}
  &  & Pr\left(\frac{\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|}{\sqrt{\sum_{k=1}^{K}\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}}\ge\delta\wedge\|\epsilon\|_{D}\le2\sigma\right)\\
- & \le & \sum_{k=1}^{K}Pr\left(\frac{\left|\left(\epsilon,g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|}{\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}^{2}}\ge\frac{\delta c_{k}}{k}\wedge\|\epsilon\|_{D}\le2\sigma\right)\\
+ & \le & \sum_{k=1}^{K}Pr\left(\frac{\left|\left(\epsilon,g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\right)_{k}\right|}{\|g_{\hat{\lambda}}(\cdot|D_{-k})-g_{\tilde{\lambda}}(\cdot|D_{-k})\|_{k}}\ge\frac{\delta c_{k}}{k}\wedge\|\epsilon\|_{D}\le2\sigma\right)\\
  & \le & c\exp\left(-\min_{k=1:K}\{n_{k}\}\frac{\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
 
@@ -589,7 +619,7 @@ Also, by Cauchy-Schwarz, we have
 Hence the result follows.
 
 
-\subsubsection{Lemma 10}
+\subsubsection{Lemma 6}
 
 Let $X$ be $n$ covariate values (potentially randomly drawn). It
 is also possible for $T$ and $X$ to contain overlapping samples.
@@ -715,4 +745,75 @@ hence
 \left|\left\Vert f\right\Vert _{X}-\left\Vert f\right\Vert _{Z}\right|\le\delta
 \]
 
+
+
+\section{Corollaries}
+
+
+\subsection{Convergence Rate Equivalence between the original regression problem
+and the perturbed ridge problem}
+
+Consider any $\lambda$.
+
+Suppose the original regression problem is 
+\[
+\hat{g}=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{D}^{2}+\lambda P^{v}(g)
+\]
+
+
+and the new perturbed ridge problem is 
+\[
+\hat{f}=\arg\min_{f\in\mathcal{G}}\frac{1}{2}\|y-f\|_{D}^{2}+\lambda\left(P^{v}(f)+\frac{w}{2}\|f\|^{2}\right)
+\]
+
+
+Let $g^{*}$ be the true minimizer 
+\[
+g^{*}=\arg\min_{g\in\mathcal{G}}E\left[\|y-g\|^{2}\right]
+\]
+
+
+Suppose there are constants $K_{0},K_{1}>0$ s.t. 
+\[
+\frac{w}{2}\|g^{*}\|^{2}\le K_{0}P^{v}(g)+K_{1}
+\]
+
+
+Then the rate of convergence of 
+\[
+\left\Vert \hat{f}-g^{*}\right\Vert _{D}\apprle\left\Vert \hat{g}-g^{*}\right\Vert _{D}
+\]
+
+
+That is, the optimal rate of convergence determined by the oracle
+$\tilde{\lambda}$ is preserved under the new perturbed ridge regression
+problem.
+
+
+\subsubsection*{Proof}
+
+By definition, 
+\begin{eqnarray*}
+\frac{1}{2}\|y-\hat{f}\|_{D}^{2}+\lambda\left(P^{v}(\hat{f})+\frac{w}{2}\|\hat{f}\|^{2}\right) & \le & \frac{1}{2}\|y-g^{*}\|_{D}^{2}+\lambda\left(P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|^{2}\right)\\
+ & \le & \frac{1}{2}\|y-g^{*}\|_{D}^{2}+\lambda(1+K_{0})P^{v}(g^{*})+\lambda K_{1}
+\end{eqnarray*}
+
+
+Therefore
+\[
+\frac{1}{2}\|y-\hat{f}\|_{D}^{2}+\lambda P^{v}(\hat{f})\le\frac{1}{2}\|y-g^{*}\|_{D}^{2}+\lambda(1+K_{0})P^{v}(g^{*})+\lambda K_{1}
+\]
+
+
+Notice that this inequality is very similar to the inequality from
+the original regression problem
+
+\[
+\frac{1}{2}\|y-\hat{f}\|_{D}^{2}+\lambda P^{v}(\hat{f})\le\frac{1}{2}\|y-g^{*}\|_{D}^{2}+\lambda P^{v}(g^{*})
+\]
+
+
+Therefore the arguments to bound the convergence rate of $\left\Vert \hat{g}-g^{*}\right\Vert _{D}$
+should give the same convergence rate for $\left\Vert \hat{f}-g^{*}\right\Vert _{D}$.
+(Example: refer to Thrm 10.2 in Vandegeer)
 \end{document}
