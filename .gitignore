@@ -1,7 +1,8 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-.aux
-.lyx
-.log
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.aux
+*.lyx
+*.log
+*.lyx~
