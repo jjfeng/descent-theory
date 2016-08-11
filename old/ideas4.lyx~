@@ -1,0 +1,2787 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3cm
+\topmargin 3cm
+\rightmargin 3cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Holdout
+\end_layout
+
+\begin_layout Subsection*
+The problem
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ be the true model parameters and suppose we observe
+\begin_inset Formula 
+\[
+y=g_{\theta^{*}}+\epsilon
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ are independent uniformly sub-gaussian random errors:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\max_{i=1:n}K^{2}\left(E\left[\exp(|W_{i}|^{2}/K^{2})\right]-1\right)\le\sigma^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $D$
+\end_inset
+
+ be the full dataset and suppose it is randomly partitioned into training
+ set 
+\begin_inset Formula $T$
+\end_inset
+
+ and validation set 
+\begin_inset Formula $V$
+\end_inset
+
+.
+ (We assume that the size of 
+\begin_inset Formula $T$
+\end_inset
+
+ and 
+\begin_inset Formula $V$
+\end_inset
+
+ are fixed proportions of the total dataset.
+ e.g.
+ 
+\begin_inset Formula $|T|=tn,|V|=vn$
+\end_inset
+
+) Let the total number of observations be 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let the loss function for our regression problem be least squares.
+ We denote it as 
+\begin_inset Formula $\|h\|_{T}^{2}=\frac{1}{|T|}\sum_{i=1}^{|T|}h(x_{i})$
+\end_inset
+
+ and similarly for 
+\begin_inset Formula $\|h\|_{V}^{2}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Consider the joint optimization problem on a training/validation split to
+ find the best regularization parameter 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ in 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\frac{1}{2}\|y-g_{\hat{\theta}(\lambda)}\|_{V}^{2}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta}\frac{1}{2}\|y-g_{\theta}\|_{T}^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here 
+\begin_inset Formula $w>0$
+\end_inset
+
+ is some fixed parameter.
+ (One should choose this to be on the order of 1e-15 or smaller.
+ In practice, we can probably just drop it entirely.)
+\end_layout
+
+\begin_layout Standard
+Let the range of 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ be from 
+\begin_inset Formula $[\lambda_{min},\lambda_{max}]$
+\end_inset
+
+.
+ Both limits can grow and shrink at any polynomial rate, e.g.
+ 
+\begin_inset Formula $\mbox{\lambda}_{max}=O_{P}(n^{\tau_{max}})$
+\end_inset
+
+ and 
+\begin_inset Formula $\mbox{\lambda}_{min}=O_{P}(n^{-\tau_{min}})$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Suppose there is an optimal 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $\|g_{\hat{\theta}(\lambda)}-g^{*}\|_{V}$
+\end_inset
+
+ attains some optimal rate.
+\end_layout
+
+\begin_layout Standard
+We show that 
+\begin_inset Formula $\hat{\lambda}$
+\end_inset
+
+ will converge to 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+ at an almost-parametric rate or just the optimal rate.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}=O_{P}(1)\left(C\left(\frac{1-\log w+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}\vee\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\kappa_{1},\kappa_{2}$
+\end_inset
+
+ are constants that depends on other known constants, such as 
+\begin_inset Formula $\tau_{max},\tau_{\min},k_{1},k_{2}$
+\end_inset
+
+.
+ The constant 
+\begin_inset Formula $C$
+\end_inset
+
+ depends on the sub-gaussian parameters.
+\end_layout
+
+\begin_layout Subsubsection*
+Other Assumptions
+\end_layout
+
+\begin_layout Itemize
+Suppose that penalty 
+\begin_inset Formula $P(\theta)$
+\end_inset
+
+ is smooth and convex wrt 
+\begin_inset Formula $\theta$
+\end_inset
+
+ -- its 1st and 2nd derivatives wrt 
+\begin_inset Formula $\theta$
+\end_inset
+
+ are defined.
+ Suppose 
+\begin_inset Formula $\|\nabla_{\theta}P(\theta)|_{\hat{\theta}(\lambda)}\|\le O_{p}(n^{k_{1}}p^{k_{2}})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $g_{\theta}$
+\end_inset
+
+ is a smooth convex functions wrt 
+\begin_inset Formula $\theta$
+\end_inset
+
+ -- its 1st and 2nd derivatives wrt 
+\begin_inset Formula $\theta$
+\end_inset
+
+ are defined.
+\end_layout
+
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $g_{\theta}$
+\end_inset
+
+ is Lipschitz with constant 
+\begin_inset Formula $O_{P}(n^{k_{3}}p^{k_{4}})$
+\end_inset
+
+ s.t.
+ for any subset 
+\begin_inset Formula $D_{0}\subseteq D$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\|g_{\theta_{1}}-g_{\theta_{2}}\|_{D_{0}}\le O_{P}(n^{k_{3}}p^{k_{4}})\left\Vert \theta_{1}-\theta_{2}\right\Vert _{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Proof
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 1: Find the entropy of the model class 
+\begin_inset Formula $\mathcal{G}_{\lambda}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Consider any subset 
+\begin_inset Formula $D_{0}\subseteq D$
+\end_inset
+
+.
+ We show that the entropy 
+\begin_inset Formula $H(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}})$
+\end_inset
+
+ of the class 
+\begin_inset Formula 
+\[
+\mathcal{G}_{\lambda}=\left\{ g_{\hat{\theta}(\lambda)}:\lambda\in\Lambda\right\} 
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+is bounded at a near-parametric rate:
+\begin_inset Formula 
+\[
+H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\log\left(\frac{1}{uw}\right)+\kappa_{1}\log n+\kappa_{2}\log p
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By the mean value theorem, for any 
+\begin_inset Formula $\delta>0$
+\end_inset
+
+, there is some 
+\begin_inset Formula $\alpha\in[0,1]$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula 
+\[
+\|\hat{\theta}(\ell)-\hat{\theta}(\ell+\delta)\|=\delta\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)|_{\lambda=\ell+\alpha\delta}\right\Vert 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since the problem is smooth, we can apply implicit differentiation to get
+ the derivative
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\lambda}\hat{\theta}(\lambda)=-H(\lambda)^{-1}\left(\nabla_{\theta}P(\theta)+w\theta\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the Hessian matrix is 
+\begin_inset Formula 
+\[
+H(\lambda)=\nabla_{\theta}^{2}\left(\|y-g_{\theta}\|_{T}^{2}+\lambda P(\theta)\right)+\lambda wI
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under the assumption that 
+\begin_inset Formula $g_{\theta}$
+\end_inset
+
+ and 
+\begin_inset Formula $P(\theta)$
+\end_inset
+
+ are both smooth and convex wrt 
+\begin_inset Formula $\theta$
+\end_inset
+
+ which means the minimum eigenvalue of 
+\begin_inset Formula $H(\lambda)$
+\end_inset
+
+ is at least 
+\begin_inset Formula $\lambda w=O_{p}(n^{-\tau_{min}})w$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+From the asumptions, we have that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)\right\Vert  & \le & \left\Vert H(\lambda)^{-1}\left(\nabla_{\theta}P(\theta)+w\hat{\theta}(\lambda)\right)\right\Vert \\
+ & \le & O_{p}(n^{\tau_{min}})w^{-1}\left(O_{p}(n^{k_{1}}p^{k_{2}})+w\|\hat{\theta}(\lambda)\|\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that 
+\begin_inset Formula $\|\hat{\theta}(\lambda)\|$
+\end_inset
+
+ is easily bounded by the solution to the ridge regression problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\theta}_{r}(\lambda)=\arg\min\frac{1}{2}\|y-g_{\theta}\|_{T}^{2}+\lambda w\|\theta\|_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The solution 
+\begin_inset Formula $\hat{\theta}_{r}(\lambda)$
+\end_inset
+
+ has norm at most 
+\begin_inset Formula $w^{-1}O_{P}(n^{\tau_{\min}})$
+\end_inset
+
+.
+ It is straightforward to show that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|\hat{\theta}(\lambda)\|\le\|\hat{\theta}_{r}(\lambda)\|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)\right\Vert =w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})}p^{k_{2}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can know bound the distance between 
+\begin_inset Formula $g_{\hat{\theta}(\ell)}$
+\end_inset
+
+ and 
+\begin_inset Formula $g_{\hat{\theta}(\ell+\delta)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g_{\hat{\theta}(\ell)}-g_{\hat{\theta}(\ell+\delta)}\|_{D_{0}} & \le & O_{P}(n^{k_{3}}p^{k_{4}})\left\Vert \hat{\theta}(\ell)-\hat{\theta}(\ell+\delta)\right\Vert _{2}\\
+ & = & \delta w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})+k_{3}}p^{k_{2}+k_{4}})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then the covering number is , for constants 
+\begin_inset Formula $\kappa_{1},\kappa_{2}$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+N\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\frac{1}{uw}O_{p}(n^{\kappa_{1}}p^{\kappa_{2}})\implies H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{D_{0}}\right)\le\log\left(\frac{1}{uw}\right)+\kappa_{1}\log n+\kappa_{2}\log p
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 2: Find the basic inequality
+\end_layout
+
+\begin_layout Standard
+By definition, 
+\begin_inset Formula 
+\[
+\|y-g_{\hat{\theta}(\hat{\lambda})}\|_{V}^{2}\le\|y-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Rearranging, we get the basic inequality
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}^{2}\le2\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}+\left|\left(g^{*}-g_{\hat{\theta}(\tilde{\lambda})},g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Clearly if the second term dominates, Cauchy Schwarz (and a symmetrization
+ argument) give us that 
+\begin_inset Formula $\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|$
+\end_inset
+
+ converges that the same rate as 
+\begin_inset Formula $\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In the next step we bound the empirical process term.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 3: Bound empirical process with a chaining argument
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\|\epsilon\|_{V}\le2\sigma$
+\end_inset
+
+, the basic inequality implies that 
+\begin_inset Formula $\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\le2\sigma$
+\end_inset
+
+.
+ Therefore we can bound the empirical process term by a standard chaining
+ argument (basically a copy of Thrm 9.1 in Vandegeer).
+\end_layout
+
+\begin_layout Standard
+First apply Lemma 1 to the entropy bound derived in Step 1.
+ We get that there exists some 
+\begin_inset Formula $C$
+\end_inset
+
+ s.t.
+ for all 
+\begin_inset Formula $\delta$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $R\ge\delta/\sigma$
+\end_inset
+
+ and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta\ge CR\left(\frac{1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Pr\left(\sup_{\lambda_{1},\lambda_{2}:\|g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\|_{2}\le R}\left|\left(\epsilon,g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\right)\right|_{n}\ge\delta\wedge\|\epsilon\|_{n}\le\sigma\right)\le C\exp\left(-n\frac{\delta^{2}}{C^{2}R^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next we chain.
+ Let 
+\begin_inset Formula $S=\min\{s\in\{0,1,...\}:2^{s}>2\sigma\}$
+\end_inset
+
+.
+ For 
+\begin_inset Formula 
+\[
+\delta\ge16C\left(\frac{1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+ &  & Pr\left(\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right)\\
+ & \le & \sum_{s=0}^{S}Pr\left(\sup_{\lambda_{1},\lambda_{2}:\|g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\|_{2}\le2^{s+1}\delta}\left|\left(\epsilon,g_{\hat{\theta}(\lambda_{1})}-g_{\hat{\theta}(\lambda_{2})}\right)\right|_{V}\ge2^{2s-1}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right)\\
+ & \le & \sum_{s=0}^{S}C\exp\left(-|V|\frac{2^{4s-2}\delta^{4}}{4C^{2}2^{2s+2}\delta^{2}}\right)\\
+ & \le & C\exp\left(-|V|\frac{\delta^{2}}{c^{2}}\right)
+\end{eqnarray*}
+
+\end_inset
+
+Note that Lemma 1 can be applied since for 
+\begin_inset Formula $s=0,...,S$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\sqrt{|V|}2^{2s+2}\delta^{2}\ge16C2^{s+1}\delta\left(1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 4: Win
+\end_layout
+
+\begin_layout Standard
+We can now bound 
+\begin_inset Formula $\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}$
+\end_inset
+
+ with high probability.
+ Let
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta\ge16C\left(\frac{1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+ &  & Pr\left(\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)\\
+ & \le & Pr\left(\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)+Pr\left(\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta^{2}\right)\\
+ & \le & Pr\left(\left|\left(\epsilon,g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\right)\right|_{V}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right)+Pr\left(\|\epsilon\|_{V}>2\sigma\right)+Pr\left(\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)\\
+ & \le & C\exp\left(-|V|\frac{\delta^{2}}{c^{2}}\right)+Pr\left(\|\epsilon\|_{V}>2\sigma\right)+Pr\left(\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\ge\delta\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ are sub-gaussian, Bernstein's inequality gives us 
+\begin_inset Formula 
+\[
+Pr\left(\|\epsilon\|_{V}\ge2\sigma\right)\le\exp\left(-\frac{|V|\sigma^{2}}{12K^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore we either recover a near-parametric rate or the optimal convergence
+ rate.
+ 
+\begin_inset Formula 
+\[
+\|g_{\hat{\theta}(\hat{\lambda})}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}=O_{P}(1)\left(C\left(\frac{1-\log(w)+\kappa_{1}\log n+\kappa_{2}\log p}{|V|}\right)^{1/2}\vee\|g^{*}-g_{\hat{\theta}(\tilde{\lambda})}\|_{V}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Lemmas
+\end_layout
+
+\begin_layout Subsubsection*
+Lemma 1
+\end_layout
+
+\begin_layout Standard
+Suppose function class 
+\begin_inset Formula $\mathcal{F}$
+\end_inset
+
+ has 
+\begin_inset Formula 
+\[
+H\left(u,\mathcal{F},\|\cdot\|_{n}\right)\le J\left(\log\left(\frac{1}{uw}\right)+\kappa_{1}\log n+\kappa_{2}\log p\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for positive constants 
+\begin_inset Formula $J,M,w,\kappa_{1},\kappa_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $\sup_{f\in\mathcal{F}}\|f\|_{n}\le R$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ are independent sub-gaussian RV with constants 
+\begin_inset Formula $K$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Then there exists some 
+\begin_inset Formula $C$
+\end_inset
+
+ s.t.
+ for all 
+\begin_inset Formula $\delta$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $R\ge\delta/\sigma$
+\end_inset
+
+ and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta\ge CRJ^{1/2}\left(\frac{1-\log w+\kappa_{1}\log n+\kappa_{2}\log p}{n}\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Pr\left(\sup_{f_{1},f_{2}\in\mathcal{F}}\left|\left(\epsilon,f_{1}-f_{2}\right)\right|_{n}\ge\delta\wedge\|\epsilon\|_{n}\le\sigma\right)\le C\exp\left(-|n|\frac{\delta^{2}}{C^{2}R^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+We apply Corollary 8.3 in Vandegeer to determine the value 
+\begin_inset Formula $\delta$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $\delta$
+\end_inset
+
+ bounds the empirical process term with high probability.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula 
+\[
+\bar{\mathcal{F}}=\left\{ f_{1}-f_{2}:f_{1},f_{2}\in\mathcal{F}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Consequently, for 
+\begin_inset Formula $R\ge\delta/\sqrt{2}\sigma$
+\end_inset
+
+ ,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\int_{0}^{R}H^{1/2}\left(u,\bar{\mathcal{F}},\|\cdot\|_{n}\right)du & = & \sqrt{2J}\int_{0}^{R}\left(\log\left(\frac{1}{u}\right)-\log w+\kappa_{1}\log n+\kappa_{2}\log p\right)^{1/2}du\\
+ & = & O_{P}(1)R\sqrt{J}\left(\int_{0}^{1}\log\left(\frac{1}{u}\right)-\log w+\kappa_{1}\log n+\kappa_{2}\log pdu\right)^{1/2}\\
+ & \le & O_{P}(1)R\sqrt{J}\left(1-\log w+\kappa_{1}\log n+\kappa_{2}\log p\right)^{1/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $C$
+\end_inset
+
+ depends on the sub-gaussian parameters for 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ (
+\begin_inset Formula $\sigma$
+\end_inset
+
+ and 
+\begin_inset Formula $K$
+\end_inset
+
+) and 
+\begin_inset Formula $c$
+\end_inset
+
+ depends on 
+\begin_inset Formula $M$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Then apply Corollary 8.3 for all 
+\begin_inset Formula 
+\[
+\delta\ge CR\sqrt{J}\left(\frac{1-\log w+\kappa_{1}\log n+\kappa_{2}\log p}{n}\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Corollaries
+\end_layout
+
+\begin_layout Subsection
+Convergence Rate Equivalence between the original regression problem and
+ the perturbed ridge problem
+\end_layout
+
+\begin_layout Standard
+Suppose the original regression problem is 
+\begin_inset Formula 
+\[
+\hat{\beta}(\lambda)=\arg\min_{\beta\in\Theta}\frac{1}{2}\|y-g_{\beta}\|_{T}^{2}+\lambda P(\beta)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and the new perturbed ridge problem is 
+\begin_inset Formula 
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta\in\Theta}\frac{1}{2}\|y-g_{\theta}\|_{T}^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ be the true model parameters.
+ Suppose there are constants 
+\begin_inset Formula $K_{0},K_{1}>0$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula 
+\[
+\frac{w}{2}\|\theta^{*}\|_{2}^{2}\le K_{0}P(\theta^{*})+K_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then the rate of convergence of 
+\begin_inset Formula $\left\Vert g_{\hat{\beta}(\lambda)}-g^{*}\right\Vert _{T}$
+\end_inset
+
+ is the same as 
+\begin_inset Formula $\left\Vert g_{\hat{\theta}(\lambda)}-g^{*}\right\Vert _{T}$
+\end_inset
+
+ modulo some constant.
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+For ease of notation, we will write 
+\begin_inset Formula $\hat{\theta}=\hat{\theta}(\lambda)$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\beta}=\hat{\beta}(\lambda)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+By definition, 
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{1}{2}\|y-g_{\hat{\theta}}\|_{T}^{2}+\tilde{\lambda}\left(P(\hat{\theta})+\frac{w}{2}\|\hat{\theta}\|^{2}\right) & \le & \frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\tilde{\lambda}\left(P(\theta^{*})+\frac{w}{2}\|\theta^{*}\|^{2}\right)\\
+ & \le & \frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\tilde{\lambda}(1+K_{0})P(\theta^{*})+\tilde{\lambda}K_{1}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore
+\begin_inset Formula 
+\[
+\frac{1}{2}\|y-g_{\hat{\theta}}\|_{T}^{2}+\tilde{\lambda}P(\hat{\theta})\le\frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\tilde{\lambda}(1+K_{0})P(\theta^{*})+\tilde{\lambda}K_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that this inequality is very similar to the inequality from the original
+ regression problem
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{2}\|y-g_{\hat{\beta}}\|_{T}^{2}+\tilde{\lambda}P(\hat{\beta})\le\frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\tilde{\lambda}P(\theta^{*})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore the same arguments to prove the convergence rate of 
+\begin_inset Formula $\left\Vert g_{\hat{\beta}(\lambda)}-g^{*}\right\Vert _{T}$
+\end_inset
+
+ give the same convergence rate for 
+\begin_inset Formula $\left\Vert g_{\hat{\theta}(\lambda)}-g^{*}\right\Vert _{T}$
+\end_inset
+
+.
+ (Example: refer to Thrm 10.2 in Vandegeer)
+\end_layout
+
+\begin_layout Subsection
+Regression problems with smooth-almost-everywhere penalty functions
+\end_layout
+
+\begin_layout Standard
+If the regularization functions contain smooth-almost-everywhere penalty
+ functions, we still have the same convergence rate.
+ This requires the additional assumption that the local optimality space
+ is the same as the differentiable space (refer to condition 1 in the hillclimbi
+ng paper).
+\end_layout
+
+\begin_layout Standard
+A small modification to Step 1 of the proof shows that the entropy of the
+ class 
+\series bold
+
+\begin_inset Formula $\mathcal{G}_{\lambda}$
+\end_inset
+
+ 
+\series default
+is still the same.
+ Hence the rest of the proof remains unchanged.
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Step 1 for Smooth-almost-everywhere functions: Find the entropy of the model
+ class 
+\begin_inset Formula $\mathcal{G}_{\lambda}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $S$
+\end_inset
+
+ be the set of knots at which 
+\begin_inset Formula $\nabla_{\lambda}\theta(\lambda)|_{\lambda=s}$
+\end_inset
+
+ does not exist.
+ Since the regression problem is smooth almost everywhere, 
+\begin_inset Formula $S$
+\end_inset
+
+ should have measure zero.
+\end_layout
+
+\begin_layout Standard
+First we apply the mean value theorem to two points 
+\begin_inset Formula $\ell$
+\end_inset
+
+ and 
+\begin_inset Formula $\ell+\delta$
+\end_inset
+
+ that have no knots in between.
+ That is, for any 
+\begin_inset Formula $\delta>0$
+\end_inset
+
+, there is some 
+\begin_inset Formula $\alpha\in[0,1]$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula 
+\[
+\|\hat{\theta}(\ell)-\hat{\theta}(\ell+\delta)\|=\delta\left\Vert \nabla_{\lambda}\hat{\theta}(\lambda)|_{\lambda=\ell+\alpha\delta}\right\Vert 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Apply the same assumptions from the hillclimbing paper regarding the differentia
+ble space and the local optimality space.
+ We can then reformulate the solutions in terms of the differentiable space.
+ Suppose 
+\begin_inset Formula $U$
+\end_inset
+
+ forms an orthonormal basis for the differentiable space.
+ Hence we can rewrite 
+\begin_inset Formula $\theta$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $\beta$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $\theta=U\beta$
+\end_inset
+
+.
+ The derivative of 
+\begin_inset Formula $\hat{\beta}(\lambda)$
+\end_inset
+
+ can be calculated since the locally equivalent regression problem is now
+ smooth:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\lambda}\hat{\beta}(\lambda)=H(\lambda)^{-1}\left(_{U}\nabla P(U\hat{\beta})+wU\hat{\beta}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the Hessian matrix is 
+\begin_inset Formula 
+\[
+H(\lambda)=_{U}\nabla^{2}\left(\|y-g_{U\hat{\beta}}\|_{T}^{2}+\lambda P(U\hat{\beta})\right)+\lambda wI
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under the assumption that 
+\begin_inset Formula $g_{\theta}$
+\end_inset
+
+ and 
+\begin_inset Formula $P(\theta)$
+\end_inset
+
+ are both smooth and convex wrt 
+\begin_inset Formula $\theta$
+\end_inset
+
+, the minimum eigenvalue of 
+\begin_inset Formula $H(\lambda)$
+\end_inset
+
+ is at least 
+\begin_inset Formula $\lambda w=O_{p}(n^{-\tau_{min}})w$
+\end_inset
+
+.
+ Hence
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \nabla_{\lambda}\hat{\beta}(\lambda)\right\Vert  & \le & O_{p}(n^{\tau_{min}})w^{-1}\left(O_{p}(n^{k_{1}})+w\|\hat{\beta}(\lambda)\|\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By the same argument as above, 
+\begin_inset Formula $\|\hat{\beta}(\lambda)\|$
+\end_inset
+
+ is easily bounded by the solution to the analogous ridge regression problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\beta}_{r}(\lambda)=\arg\min\frac{1}{2}\|y-g_{U\beta}\|_{T}^{2}+\lambda w\|U\beta\|_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \nabla_{\lambda}\hat{\beta}(\lambda)\right\Vert =w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can bound the distance between 
+\begin_inset Formula $g_{\hat{\theta}(\ell)}$
+\end_inset
+
+ and 
+\begin_inset Formula $g_{\hat{\theta}(\ell+\delta)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g_{\hat{\theta}(\ell)}-g_{\hat{\theta}(\ell+\delta)}\|_{V} & \le & M\left\Vert U\hat{\beta}(\ell)-U\hat{\beta}(\ell+\delta)\right\Vert _{2}\\
+ & = & M\delta w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next consider if there are knots between points 
+\begin_inset Formula $\ell$
+\end_inset
+
+ and 
+\begin_inset Formula $\ell+\delta$
+\end_inset
+
+.
+ We can recover the same upper bound by chaining.
+ That is, suppose there are some countable number of knots 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,...,s$
+\end_inset
+
+ (where 
+\begin_inset Formula $s$
+\end_inset
+
+ can equal 
+\begin_inset Formula $\infty$
+\end_inset
+
+) between 
+\begin_inset Formula $\ell$
+\end_inset
+
+ and 
+\begin_inset Formula $\ell+\delta$
+\end_inset
+
+, with distances 
+\begin_inset Formula 
+\[
+\delta_{0}=\lambda_{1}-\ell,\delta_{i}=\lambda_{i+1}-\lambda_{i},\delta_{s}=\ell+\delta-\lambda_{s}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g_{\hat{\theta}(\ell)}-g_{\hat{\theta}(\ell+\delta)}\|_{V} & \le & \|g_{\hat{\theta}(\ell)}-g_{\hat{\theta}(\lambda_{1})}\|_{V}+\|g_{\hat{\theta}(\lambda_{s})}-g_{\hat{\theta}(\ell+\delta)}\|_{V}+\sum_{i=1}^{s}\|g_{\hat{\theta}(\lambda_{i})}-g_{\hat{\theta}(\lambda_{i+1})}\|_{V}\\
+ & = & Mw^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})\sum_{i=0}^{s}\delta_{i}\\
+ & = & M\delta w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then the covering number is on the order of 
+\begin_inset Formula $n^{\kappa}$
+\end_inset
+
+ where 
+\begin_inset Formula $\kappa$
+\end_inset
+
+ grows linearly in 
+\begin_inset Formula $\tau_{min},\tau_{max}$
+\end_inset
+
+ and 
+\begin_inset Formula $k_{1}$
+\end_inset
+
+ and is independent of the number of knots.
+ 
+\begin_inset Formula 
+\[
+N\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le\frac{L}{uw}O_{p}(n^{\kappa})\implies H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le\log\left(\frac{M}{uw}\right)+\kappa\log n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+K-fold Cross-Validation
+\end_layout
+
+\begin_layout Standard
+The same convergence rate holds for 
+\begin_inset Formula $K$
+\end_inset
+
+-fold cross-validation.
+ For 
+\begin_inset Formula $k=1,...,K$
+\end_inset
+
+, let 
+\begin_inset Formula $D_{k}$
+\end_inset
+
+ represent the 
+\begin_inset Formula $k$
+\end_inset
+
+th fold and 
+\begin_inset Formula $D_{-k}$
+\end_inset
+
+ denote all the folds minus the 
+\begin_inset Formula $k$
+\end_inset
+
+th fold.
+ For a given 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, train over 
+\begin_inset Formula $D_{-k}$
+\end_inset
+
+ and then validate over 
+\begin_inset Formula $D_{k}$
+\end_inset
+
+.
+ For simplicity, we will suppose that all folds have the same number of
+ observations.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\|h\|_{D_{k}}^{2}=\frac{1}{|D_{k}|}\sum_{i\in D_{k}}h(x_{i})^{2}$
+\end_inset
+
+ and similarly for 
+\begin_inset Formula $\|h\|_{D_{-k}}^{2}$
+\end_inset
+
+ for the set 
+\begin_inset Formula $D_{-k}$
+\end_inset
+
+ and 
+\begin_inset Formula $\|h\|_{D}^{2}$
+\end_inset
+
+ for the set 
+\begin_inset Formula $D$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\left(h,g\right)_{k}=\frac{1}{|D_{k}|}\sum_{i\in D_{k}}h(x_{i})g(x_{i})$
+\end_inset
+
+ and 
+\begin_inset Formula $(h,g)_{-k}$
+\end_inset
+
+ for the set 
+\begin_inset Formula $D_{-k}$
+\end_inset
+
+ and 
+\begin_inset Formula $(h,g)_{D}$
+\end_inset
+
+ for the set 
+\begin_inset Formula $D$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The joint optimization problem for k-fold cross-validation is 
+\begin_inset Formula 
+\[
+\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\frac{1}{2}\sum_{k=1}^{K}\|y-g_{\hat{\theta}_{D_{-k}}(\lambda)}\|_{k}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\theta}_{D_{-k}}(\lambda)=\arg\min_{\theta\in\Theta}\frac{1}{2}\|y-g_{\theta}\|_{D_{-k}}^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and the final model produced is 
+\begin_inset Formula 
+\[
+\hat{\theta}_{D}(\hat{\lambda})=\arg\min_{\theta\in\Theta}\frac{1}{2}\|y-g_{\theta}\|_{D}^{2}+\lambda P(\theta)+\frac{w}{2}\|\theta\|^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First, we show that the convergence rate of 
+\begin_inset Formula $\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2}$
+\end_inset
+
+ is either nearly-parametric or is the same as the optimal convergence rate:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{D_{-k}}(\tilde{\lambda})}-g_{\hat{\theta}_{D_{-k}}(\hat{\lambda})}\|_{D_{k}}^{2}}=O_{P}(1)\left(\left(\frac{1-2\log w+\kappa\log n}{\min_{k\in1:K}|D_{k}|}\right)^{1/2}\vee\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{D_{-k}}(\tilde{\lambda})}-g_{\theta^{*}}\|_{D_{k}}^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then we show that the final model has a prediction error that is also at
+ the optimal rate:
+\begin_inset Formula 
+\[
+\|g_{\hat{\theta}_{D}(\tilde{\lambda})}-g_{\hat{\theta}_{D}(\hat{\lambda})}\|_{D}=O_{P}(1)\left(\left(\frac{1-2\log w+\kappa\log n}{\min_{k\in1:K}|D_{k}|}\right)^{1/2}\vee\|g_{\hat{\theta}_{D}(\tilde{\lambda})}-g_{\theta^{*}}\|_{D}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Step 1: Basic inequality crunching to bound the error for each model 
+\begin_inset Formula $g_{\hat{\theta}_{D_{-k}}(\hat{\lambda})}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For ease of notation, we will denote 
+\begin_inset Formula $g_{\hat{\theta}_{D_{-k}}(\hat{\lambda})}=g_{\hat{\theta}_{k}(\hat{\lambda})}$
+\end_inset
+
+.
+ By definition,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{k=1}^{K}\|y-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2}\le\sum_{k=1}^{K}\|y-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Rearranging as usual, we get 
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2} & \le & 2\sum_{k=1}^{K}\left(y-g_{\hat{\theta}_{k}(\tilde{\lambda})},g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\\
+ & \le & 2\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|+2\left|\sum_{k=1}^{K}\left(g^{*}-g_{\hat{\theta}_{k}(\tilde{\lambda})},g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 1:
+\series default
+ Suppose 
+\begin_inset Formula $\left|\sum_{k=1}^{K}\left(g^{*}-g_{\hat{\theta}_{k}(\tilde{\lambda})},g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|$
+\end_inset
+
+ is bigger
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2} & \le & 4\left|\sum_{k=1}^{K}\left(g^{*}-g_{\hat{\theta}_{k}(\tilde{\lambda})},g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\\
+ & \le & 4\sqrt{\left(\sum_{k=1}^{K}\left\Vert g^{*}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\right)\left(\sum_{k=1}^{K}\left\Vert g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\right)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the second inequality follows from Cauchy-Schwarz.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{k=1}^{K}\left\Vert g^{*}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\le O_{p}(1)\sum_{k=1}^{K}\left\Vert g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence in this case, we recover whatever the convergence rate is for the
+ optimal 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 2:
+\series default
+ Suppose 
+\begin_inset Formula $\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|$
+\end_inset
+
+ is bigger
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\tilde{\lambda})}-g_{\hat{\theta}_{k}(\hat{\lambda})}\|_{k}^{2} & \le & 4\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Like Step 3, suppose 
+\begin_inset Formula $\|\epsilon\|_{n}\le2\sigma$
+\end_inset
+
+.
+ Then the basic inequality allows us to bound 
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2} & \le & O_{p}(1)\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\\
+ & \le & O_{p}(1)\sqrt{\sum_{k=1}^{K}\|\epsilon\|_{k}^{2}}\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence we can suppose 
+\begin_inset Formula 
+\[
+\sqrt{\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2}}\le2\sigma
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can bound each of the 
+\begin_inset Formula $k$
+\end_inset
+
+ empirical process terms 
+\begin_inset Formula $\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}$
+\end_inset
+
+ by a chaining argument.
+ Following the same argument as Step 3 in the main proof above, we get for
+ 
+\begin_inset Formula $k=1:K$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+Pr\left(\left|\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\ge\delta^{2}\wedge\|\epsilon\|_{n}\le2\sigma\right)\le C\exp\left(-|D_{k}|\frac{\delta^{2}}{c^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Putting Case 1 and 2 together, we get for all 
+\begin_inset Formula $\delta$
+\end_inset
+
+ s.t.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta\ge O_{p}(1)\left(\frac{1-\log(M/w)+\kappa\log n}{\min_{k\in1:K}|D_{k}|}\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+ &  & Pr\left(\sum_{k=1}^{K}\|g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\|_{k}^{2}\ge\delta^{2}\right)\\
+ & \le & Pr\left(\left|\sum_{k=1}^{K}\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\ge\delta^{2}\wedge\|\epsilon\|_{n}\le2\sigma\right)+Pr\left(\|\epsilon\|_{n}\le2\sigma\right)+Pr\left(\sum_{k=1}^{K}\left\Vert g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\ge\delta^{2}\right)\\
+ & \le & \sum_{k=1}^{K}Pr\left(\left|\left(\epsilon,g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right)_{k}\right|\ge\delta^{2}/K\wedge\|\epsilon\|_{n}\le2\sigma\right)+Pr\left(\|\epsilon\|_{n}\le2\sigma\right)+Pr\left(\sum_{k=1}^{K}\left\Vert g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\ge\delta^{2}\right)\\
+ & \le & C\sum_{k=1}^{K}\exp\left(-|D_{k}|\frac{\delta^{2}}{c^{2}K}\right)+\exp\left(-\frac{n\sigma^{2}}{12K^{2}}\right)+Pr\left(\sum_{k=1}^{K}\left\Vert g_{\hat{\theta}_{k}(\hat{\lambda})}-g_{\hat{\theta}_{k}(\tilde{\lambda})}\right\Vert _{k}^{2}\ge\delta^{2}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 2: Bound the error of the final retrained model
+\end_layout
+
+\begin_layout Standard
+By definition of the norm,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g_{\hat{\theta}_{D}(\tilde{\lambda})}-g_{\hat{\theta}_{D}(\hat{\lambda})}\|_{D} & = & \sqrt{\sum_{k=1}^{K}\frac{|D_{k}|}{|D|}\|g_{\hat{\theta}_{D}(\tilde{\lambda})}-g_{\hat{\theta}_{D}(\hat{\lambda})}\|_{D_{k}}^{2}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using the triangle inequality, we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|g_{\hat{\theta}_{D}(\tilde{\lambda})}-g_{\hat{\theta}_{D}(\hat{\lambda})}\|_{D_{k}}\le\|g_{\hat{\theta}_{D}(\tilde{\lambda})}-g_{\hat{\theta}_{D_{-k}}(\tilde{\lambda})}\|_{D_{k}}+\|+\|g_{\hat{\theta}_{D_{-k}}(\tilde{\lambda})}-g_{\hat{\theta}_{D_{-k}}(\hat{\lambda})}\|_{D_{k}}+\|g_{\hat{\theta}_{D_{-k}}(\hat{\lambda})}-g_{\hat{\theta}_{D}(\hat{\lambda})}\|_{D_{k}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have already bounded 
+\begin_inset Formula $\|g_{\hat{\theta}_{D_{-k}}(\tilde{\lambda})}-g_{\hat{\theta}_{D_{-k}}(\hat{\lambda})}\|_{D_{k}}$
+\end_inset
+
+ in Step 1 of this proof.
+ We now bound the two other terms.
+ Consider any 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|y-g_{\hat{\theta}_{D}(\lambda)}\|_{D}^{2}+\lambda^{2}P(\hat{\theta}_{D}(\lambda))\le\|y-g_{\hat{\theta}_{D_{-k}}(\lambda)}\|_{D}^{2}+\lambda^{2}P(\hat{\theta}_{D_{-k}}(\lambda))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|y-g_{\hat{\theta}_{D_{-k}}(\lambda)}\|_{D_{-k}}^{2}+\lambda^{2}P(\hat{\theta}_{D_{-k}}(\lambda))\le\|y-g_{\hat{\theta}_{D}(\lambda)}\|_{D_{-k}}^{2}+\lambda^{2}P(\hat{\theta}_{D}(\lambda))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Adding the two inequalities, we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|y-g_{\hat{\theta}_{D}(\lambda)}\|_{D}^{2}+\|y-g_{\hat{\theta}_{D_{-k}}(\lambda)}\|_{D_{-k}}^{2}\le\|y-g_{\hat{\theta}_{D_{-k}}(\lambda)}\|_{D}^{2}+\|y-g_{\hat{\theta}_{D}(\lambda)}\|_{D_{-k}}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Canceling out the noise terms, we get
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g_{\hat{\theta}_{D_{-k}}(\lambda)}-g_{\hat{\theta}_{D}(\lambda)}\|_{D}^{2}+\|g_{\hat{\theta}_{D}(\lambda)}-g_{\hat{\theta}_{D_{-k}}(\lambda)}\|_{D_{-k}}^{2} & \le & O_{p}(1)\left|\left(\epsilon,g_{\hat{\theta}_{D}(\lambda)}-g_{\hat{\theta}_{D_{-k}}(\lambda)}\right)_{D}\right|+O_{P}(1)\left|\left(\epsilon,g_{\hat{\theta}_{D}(\lambda)}-g_{\hat{\theta}_{D_{-k}}(\lambda)}\right)_{D_{-k}}\right|\\
+ &  & +O_{P}(1)\left|\left(g^{*}-g_{\hat{\theta}_{D}(\lambda)},g_{\hat{\theta}_{D}(\lambda)}-g_{\hat{\theta}_{D_{-k}}(\lambda)}\right)_{D}\right|+O_{P}(1)\left|\left(g^{*}-g_{\hat{\theta}_{D_{-k}}(\lambda)},g_{\hat{\theta}_{D}(\lambda)}-g_{\hat{\theta}_{D_{-k}}(\lambda)}\right)_{D_{-k}}\right|
+\end{eqnarray*}
+
+\end_inset
+
+BROKEN!
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 1: The first term is bigger.
+\end_layout
+
+\begin_layout Standard
+We apply the entropy arguments again.
+ By Step 1 in the main proof
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H\left(u,\left\{ g_{\hat{\theta}_{D_{-k}}(\lambda)}:\lambda\in\Lambda\right\} ,\|\cdot\|_{D_{k}}\right)\le\log\left(\frac{M}{uw}\right)+\kappa\log n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula 
+\[
+H\left(u,\left\{ g_{\hat{\theta}_{D}(\lambda)}:\lambda\in\Lambda\right\} ,\|\cdot\|_{D_{k}}\right)\le\log\left(\frac{M}{uw}\right)+\kappa\log n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence by Step 3 of the main proof, we apply a chaining argument again to
+ get
+\begin_inset Formula 
+\[
+\left|\left(\epsilon,g_{\hat{\theta}_{D_{-k}}(\lambda)}-g_{\hat{\theta}_{D}(\lambda)}\right)\right|_{D_{k}}=O_{P}(1)\left(\frac{1-\log(M/w)+\kappa\log n}{|D_{k}|}\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore this first term in the basic inequality is a near-parametric rate.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 2: The second term is bigger
+\end_layout
+
+\begin_layout Standard
+In this case, we have that
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g_{\hat{\theta}_{D_{-k}}(\lambda)}-g_{\hat{\theta}_{D}(\lambda)}\|_{D_{k}} & \le & O_{p}(1)\|g^{*}-g_{\hat{\theta}_{D_{-k}}(\lambda)}\|_{D_{k}}\\
+ & \le & O_{p}(1)\left(\|g^{*}-g_{\hat{\theta}_{D_{-k}}(\tilde{\lambda})}\|_{D_{k}}+\|g_{\hat{\theta}_{D_{-k}}(\tilde{\lambda})}-g_{\hat{\theta}_{D_{-k}}(\lambda)}\|_{D_{k}}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore if 
+\begin_inset Formula $\lambda=\tilde{\lambda}$
+\end_inset
+
+, the second term is zero so retraining the model does not change the convergenc
+e rate.
+ If 
+\begin_inset Formula $\lambda=\hat{\lambda}$
+\end_inset
+
+, we recall that the second term was bounded in Step 1.
+ Therefore retraining the model with 
+\begin_inset Formula $\hat{\lambda}$
+\end_inset
+
+ over the whole dataset preserves the convergence rate.
+\end_layout
+
+\begin_layout Subsection
+Multiple Regularization Parameters
+\end_layout
+
+\begin_layout Standard
+Suppose we are fitting model parameters 
+\begin_inset Formula $\theta$
+\end_inset
+
+ but we'd like to apply a separate penalty to 
+\begin_inset Formula $J$
+\end_inset
+
+ partitions of the model parameters: 
+\begin_inset Formula $P_{j}(\theta_{j})$
+\end_inset
+
+ for 
+\begin_inset Formula $j=1,...,J$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\boldsymbol{\lambda}=(\lambda_{1},...,\lambda_{J})$
+\end_inset
+
+ be their corresponding penalty parameters.
+ We suppose that 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ is the box 
+\begin_inset Formula $[\lambda_{min},\lambda_{max}]^{J}$
+\end_inset
+
+ where 
+\begin_inset Formula $\lambda_{min}=O_{p}(n^{-\tau_{min}})$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda_{max}=O_{p}(n^{\tau_{max}})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For simplicity, suppose the problem is smooth and that we tune 
+\begin_inset Formula $\boldsymbol{\lambda}$
+\end_inset
+
+ over a training/validation split.
+ (One can probably use the same arguments as above to extend this to the
+ case when the problem is smooth almost everywhere and 
+\begin_inset Formula $K$
+\end_inset
+
+-fold cross validation.)
+\end_layout
+
+\begin_layout Standard
+Consider the joint optimization problem
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\boldsymbol{\lambda}}=\arg\min_{\boldsymbol{\lambda}\in\Lambda}\frac{1}{2}\|y-g_{\hat{\theta}(\boldsymbol{\lambda})}\|_{V}^{2}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\hat{\theta}(\boldsymbol{\lambda})=\arg\min_{\theta}\frac{1}{2}\|y-g_{\theta}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\theta_{j})+\frac{w}{2}\|\theta_{j}\|_{2}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The convergence rate of 
+\begin_inset Formula $\|g_{\hat{\theta}(\hat{\boldsymbol{\lambda}})}-g_{\hat{\theta}(\tilde{\boldsymbol{\lambda}})}\|_{V}$
+\end_inset
+
+ is either nearly-parametric or the optimal convergence rate 
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g_{\hat{\theta}(\hat{\boldsymbol{\lambda}})}-g_{\hat{\theta}(\tilde{\boldsymbol{\lambda}})}\|_{V} & = & O_{P}(1)\left(\left(\frac{J(1-\log w+\kappa\log n)}{|V|}\right)^{1/2}\vee\|g_{\theta^{*}}-g_{\hat{\theta}(\tilde{\boldsymbol{\lambda}})}\|_{V}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that we do indeed have to pay a price for tuning over 
+\begin_inset Formula $J$
+\end_inset
+
+ dimensions.
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 0: Find 
+\series default
+
+\begin_inset Formula $\nabla_{\lambda_{j}}\hat{\theta}(\boldsymbol{\lambda})$
+\end_inset
+
+ 
+\series bold
+via implicit differentiation
+\end_layout
+
+\begin_layout Standard
+We can again use implicit differentiation to get 
+\begin_inset Formula $\nabla_{\lambda_{j}}\hat{\theta}(\boldsymbol{\lambda})$
+\end_inset
+
+.
+ The equations get bulky, but the logic is straightforward.
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $\hat{\theta}(\boldsymbol{\lambda})$
+\end_inset
+
+ is a local minima, 
+\begin_inset Formula 
+\[
+\nabla_{\theta}\left(\|y-g_{\hat{\theta}}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P(\hat{\theta}_{j})+\frac{w}{2}\|\hat{\theta}_{j}\|_{2}^{2}\right)\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which simplifies to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\theta}\|y-g_{\hat{\theta}}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(\nabla_{\theta}P(\hat{\theta}_{j})+w\hat{\theta}_{j}\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Implicit differentiation wrt 
+\begin_inset Formula $\lambda_{\ell}$
+\end_inset
+
+ (for 
+\begin_inset Formula $\ell=1,...,J$
+\end_inset
+
+) gives us
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\lambda_{\ell}}\hat{\theta}(\boldsymbol{\lambda})=\left(\nabla_{\theta}^{2}\|y-g_{\hat{\theta}(\boldsymbol{\lambda})}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\nabla_{\theta}^{2}P(\theta_{j})+diag\left(\lambda_{j}wI_{j}\right)\right)^{-1}\left(\nabla_{\theta}P(\theta_{\ell})+w\left[\begin{array}{c}
+0\\
+\theta_{\ell}\\
+0
+\end{array}\right]\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $I_{j}$
+\end_inset
+
+ are appropriately-sized identity matrices.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 1: Find the entropy of the model class 
+\begin_inset Formula $\mathcal{G}_{\boldsymbol{\lambda}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First we show that the entropy 
+\begin_inset Formula $H(u,\mathcal{G}_{\boldsymbol{\lambda}},\|\cdot\|_{V})$
+\end_inset
+
+ of the class 
+\begin_inset Formula 
+\[
+\mathcal{G}_{\boldsymbol{\lambda}}=\left\{ \theta_{\boldsymbol{\lambda}}:\boldsymbol{\lambda}\in\Lambda\right\} 
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+is bounded at a near-parametric rate:
+\begin_inset Formula 
+\[
+H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le J\left(\log\left(\frac{M}{uw}\right)+\kappa\log n\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By the mean value theorem, for any vector 
+\begin_inset Formula $\boldsymbol{\delta}$
+\end_inset
+
+ there is some 
+\begin_inset Formula $\alpha\in[0,1]$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula 
+\[
+\|\hat{\theta}(\boldsymbol{\ell})-\hat{\theta}(\boldsymbol{\ell}+\boldsymbol{\delta})\|=\|\boldsymbol{\delta}\|\left\Vert \nabla_{\boldsymbol{\lambda}}\hat{\theta}(\boldsymbol{\lambda})|_{\boldsymbol{\lambda}=\boldsymbol{\ell}+\alpha\boldsymbol{\delta}}\right\Vert 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since the problem is smooth, we can apply implicit differentiation to get
+ the derivative
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\boldsymbol{\lambda}}\hat{\theta}(\boldsymbol{\lambda})=-H(\boldsymbol{\lambda})^{-1}\left(\nabla_{\theta}P(\theta)+w\theta\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the Hessian matrix was derived above 
+\begin_inset Formula 
+\[
+H(\boldsymbol{\lambda})=\nabla_{\theta}^{2}\|y-g_{\hat{\theta}(\boldsymbol{\lambda})}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\nabla_{\theta}^{2}P(\theta_{j})+diag\left(\lambda_{j}wI_{j}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The minimum eigenvalue of 
+\begin_inset Formula $H(\boldsymbol{\lambda})$
+\end_inset
+
+ is at least 
+\begin_inset Formula $wO_{p}(n^{-\tau_{min}})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+From the asumptions, we have that for every 
+\begin_inset Formula $\ell=1,...,J$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \nabla_{\lambda_{\ell}}\hat{\theta}(\boldsymbol{\lambda})\right\Vert  & \le & \left\Vert H(\boldsymbol{\lambda})^{-1}\left(\nabla_{\theta}P(\theta)+w\hat{\theta}(\boldsymbol{\lambda})\right)\right\Vert \\
+ & \le & O_{p}(n^{\tau_{min}})w^{-1}\left(O_{p}(n^{k_{1}})+w\|\hat{\theta}(\boldsymbol{\lambda})\|\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Again we can bound 
+\begin_inset Formula $\|\hat{\theta}(\boldsymbol{\lambda})\|$
+\end_inset
+
+ by the solution to the ridge regression problem to get that
+\begin_inset Formula 
+\[
+\|\hat{\theta}(\boldsymbol{\lambda})\|\le w^{-1}O_{P}(n^{\tau_{\min}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \nabla_{\lambda_{j}}\hat{\theta}(\boldsymbol{\lambda})\right\Vert =w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can bound the distance between 
+\begin_inset Formula $g_{\hat{\theta}(\boldsymbol{\ell})}$
+\end_inset
+
+ and 
+\begin_inset Formula $g_{\hat{\theta}(\boldsymbol{\ell}+\boldsymbol{\delta})}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g_{\hat{\theta}(\boldsymbol{\ell})}-g_{\hat{\theta}(\boldsymbol{\ell}+\boldsymbol{\delta})}\|_{V} & \le & M\left\Vert \hat{\theta}(\boldsymbol{\ell})-\hat{\theta}(\boldsymbol{\ell}+\boldsymbol{\delta})\right\Vert _{2}\\
+ & = & M\left\Vert \left.\sum_{j=1}^{J}\delta_{j}\nabla_{\lambda_{j}}\hat{\theta}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\boldsymbol{\ell}+\alpha\boldsymbol{\delta}}\right\Vert \\
+ & \le & M\sum_{j=1}^{J}|\delta_{j}|\left\Vert \left.\nabla_{\lambda_{j}}\hat{\theta}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\boldsymbol{\ell}+\alpha\boldsymbol{\delta}}\right\Vert \\
+ & \le & M\|\boldsymbol{\delta}\|w^{-1}O_{p}(n^{\max(2\tau_{min},\tau_{min}+k_{1})})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence we can form a 
+\begin_inset Formula $u$
+\end_inset
+
+-covering set for 
+\begin_inset Formula $\mathcal{G}_{\boldsymbol{\lambda}}=\left\{ g_{\hat{\theta}(\boldsymbol{\lambda})}:\boldsymbol{\lambda}\in\Lambda\right\} $
+\end_inset
+
+ by covering the box 
+\begin_inset Formula $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$
+\end_inset
+
+ with balls of radius 
+\begin_inset Formula $d=uwO_{p}(n^{-\max(2\tau_{min},\tau_{min}+k_{1})})/M$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+So the total number of balls needed is on the order of
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\frac{M}{uw}O_{p}(n^{\kappa})\right)^{J}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\kappa$
+\end_inset
+
+ grows linearly in 
+\begin_inset Formula $\tau_{min},\tau_{max}$
+\end_inset
+
+ and 
+\begin_inset Formula $k_{1}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+N\left(u,\mathcal{G}_{\boldsymbol{\lambda}},\|\cdot\|_{V}\right)\le\left(\frac{M}{uw}O_{p}(n^{\kappa})\right)^{J}\implies H\left(u,\mathcal{G}_{\boldsymbol{\lambda}},\|\cdot\|_{V}\right)\le J\left(\log\left(\frac{M}{uw}\right)+\kappa\log n\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 2: Exactly the same
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 3: Exactly the same with additional term 
+\begin_inset Formula $J^{1/2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Step 4: Same with an additional term 
+\begin_inset Formula $J^{1/2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Examples
+\end_layout
+
+\begin_layout Subsubsection*
+Ridge Regression
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta}\frac{1}{2}\|y-X\theta\|_{T}^{2}+\frac{\lambda}{2}\|\theta\|^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Hessian is 
+\begin_inset Formula 
+\[
+X^{T}X+\lambda I
+\]
+
+\end_inset
+
+so its minimum eigenvalue is 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The derivative of the penalty wrt 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\nabla_{\theta}P(\theta)=\theta
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $\theta=(X^{T}X+\lambda I)^{-1}X^{T}y$
+\end_inset
+
+, the derivative has bounded norm 
+\begin_inset Formula $\|\nabla_{\theta}P(\theta)\|=O_{P}(n^{\tau_{min}})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+All other assumptions are obviously satisfied.
+ Note that in this problem, we can drop the tiny additional ridge penalty
+ entirely.
+\end_layout
+
+\begin_layout Subsubsection*
+Smoothing Splines with a Sobolev Penalty
+\end_layout
+
+\begin_layout Standard
+The optimization problem can be formulated as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta}\frac{1}{2}\|y-\theta\|_{T}^{2}+\frac{\lambda}{2}\theta^{T}K\theta
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $K=N^{-T}\Omega N$
+\end_inset
+
+, 
+\begin_inset Formula $N$
+\end_inset
+
+ is the normalized B-splines evaluated at the input points, and 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ has entries 
+\begin_inset Formula $\Omega_{ij}=\int b_{i}"(x)b_{j}"(x)dx$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Assume the input points 
+\begin_inset Formula $i/n$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1:n$
+\end_inset
+
+ and we fit 
+\begin_inset Formula $y$
+\end_inset
+
+ with cubic B-splines.
+ Then 
+\begin_inset Formula $K=DC^{-1}Dn^{3}$
+\end_inset
+
+ where 
+\begin_inset Formula $D$
+\end_inset
+
+ is the (universal, non-data-dependent) second-order discrete diference
+ operator and 
+\begin_inset Formula $C$
+\end_inset
+
+ is a tridiagonal matrix with diagonal elements equal to 2/3 and off-diagonal
+ elements equal to 1/6.
+\end_layout
+
+\begin_layout Standard
+The Hessian is 
+\begin_inset Formula 
+\[
+I+\lambda K
+\]
+
+\end_inset
+
+so its minimum eigenvalue is 1.
+\end_layout
+
+\begin_layout Standard
+The derivative of the penalty wrt 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\nabla_{\theta}P(\theta)=K\theta
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The maximum eigenvalue of 
+\begin_inset Formula $K$
+\end_inset
+
+ is on the order of 
+\begin_inset Formula $O_{p}(n^{3})$
+\end_inset
+
+.
+ Clearly
+\begin_inset Formula $\|\theta\|$
+\end_inset
+
+ can be bounded by 
+\begin_inset Formula $\|y\|$
+\end_inset
+
+ modulo a constant.
+ So 
+\begin_inset Formula $\|\nabla_{\theta}P(\theta)\|=O_{P}(n^{3})$
+\end_inset
+
+.
+ Also, 
+\begin_inset Formula $\nabla_{\theta}^{2}P(\theta)=K$
+\end_inset
+
+ so its norm grows at a rate of 
+\begin_inset Formula $O_{P}(n^{3})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+All other assumptions are obviously satisfied.
+ Note that in this problem, we can drop the tiny additional ridge penalty
+ entirely.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Lasso (with a tiny ridge)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\theta}(\lambda)=\arg\min_{\theta}\frac{1}{2}\|y-X\theta\|_{T}^{2}+\lambda\left(\|\theta\|_{1}+\frac{w}{2}\|\theta\|_{2}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+With modifications to the proof above, we can probably show that the proof
+ carries through for penalties that are smooth almost everywhere.
+ The main tricky part is dealing with the fact that the Hessian with respect
+ to the differentiable space changes in size for different values of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Anyhow, by a hand-wavy argument, we have that the Hessian matrix with respect
+ to the differentiable space 
+\begin_inset Formula $S_{\lambda}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+X_{S_{\lambda}}^{T}X_{S_{\lambda}}+\lambda wI_{S_{\lambda}}
+\]
+
+\end_inset
+
+ so its minimum eigenvalue is 
+\begin_inset Formula $w\lambda$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The lasso penalty clearly satisfies our assumptions since its derivative
+ 
+\begin_inset Formula $\nabla_{\theta}\|\theta\|_{1}=sgn(\theta)$
+\end_inset
+
+ has bounded norm 
+\begin_inset Formula $\|\nabla_{\theta}\|\theta\|_{1}\|\le p$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+All other assumptions are satisfied.
+\end_layout
+
+\end_body
+\end_document

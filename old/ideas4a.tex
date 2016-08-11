@@ -1,0 +1,165 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amssymb}
+\usepackage{babel}
+\begin{document}
+Consider the joint optimization problem on a training/validation split
+to find the best regularization parameter $\lambda$ in $\Lambda$:
+
+\[
+\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\frac{1}{2}\|y-\hat{g}_{\lambda}\|_{V}^{2}
+\]
+\[
+\hat{g}(\lambda)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{T}^{2}+\lambda\left(P(g)+\frac{w}{2}\|g\|_{T}^{2}\right)
+\]
+
+
+Let the range of $\Lambda$ be from $[\lambda_{min},\lambda_{max}]$.
+Both limits can grow and shrink at any polynomial rate, e.g. $\mbox{\ensuremath{\lambda}}_{max}=O_{P}(n^{\tau_{max}})$
+and $\mbox{\ensuremath{\lambda}}_{min}=O_{P}(n^{-\tau_{min}})$. 
+
+
+\subsubsection*{Assumptions}
+\begin{itemize}
+\item Suppose that there is some constants $K,k$ s.t. $\|g\|_{V}\le Kn^{k}P(g)$.
+\item Suppose that $P(\cdot)$ is a semi/psuedo-norm (satisfies the triangle
+inequality) and a continuous function.
+\item Suppose that $\mathcal{G}$ is a cone (potentially bounded). Let $g$
+be some fixed function in $\mathcal{G}$. Suppose for any fixed function
+$g$, we can write $\mathcal{G}=\left\{ g+mh:m\in\mathbb{R},h\in\mathcal{G},P(h)=1\right\} $.
+\item Suppose that $\frac{\partial}{\partial m}P(g+mh)$ and $\frac{\partial^{2}}{\partial m^{2}}P(g+mh)$
+exist everywhere. Suppose that $\frac{\partial^{2}}{\partial m^{2}}P(g+mh)\ge0$
+(some functional version of convex).
+\end{itemize}
+
+\subsubsection*{Proof}
+
+
+\subsubsection*{Step 1: Find the entropy of the model class $\mathcal{G}_{\lambda}$}
+
+We show that the entropy $H(u,\mathcal{G}_{\lambda},\|\cdot\|_{V})$
+of the class 
+\[
+\mathcal{G}_{\lambda}=\left\{ g_{\hat{\theta}(\lambda)}:\lambda\in\Lambda\right\} 
+\]
+ 
+
+is bounded at a near-parametric rate:
+\[
+H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le\log\left(\frac{(1+w^{1/2}KR)M}{uwK}\right)+\left(\tau_{max}+\tau_{min}\right)\log n
+\]
+
+
+We are interested in bounding 
+\[
+\|\hat{g}_{\lambda}-\hat{g}_{\lambda+\delta}\|_{V}
+\]
+
+
+For a fixed $g$ and $h$, consider the problem 
+\[
+m_{\lambda}=\arg\min_{m}\frac{1}{2}\|y-(g+mh)\|_{T}^{2}+\lambda\left(P(g+mh)+\frac{w}{2}\|g+mh\|_{T}^{2}\right)
+\]
+
+
+Taking the derivative wrt $m$, we have
+
+\[
+-\langle h,y-(g+m_{\lambda}h)\rangle_{T}+\lambda\left(\frac{\partial}{\partial m}P(g+m_{\lambda}h)+w\langle h,g+m_{\lambda}h\rangle_{T}\right)=0
+\]
+
+
+Now take the implicit derivative wrt $\lambda$.
+
+\[
+\frac{\partial m_{\lambda}}{\partial\lambda}\|h\|_{T}^{2}+\frac{\partial}{\partial m}P(g+m_{\lambda}h)+w\langle h,g+m_{\lambda}h\rangle_{T}+\lambda\left(\frac{\partial^{2}}{\partial m^{2}}P(g+m_{\lambda}h)+w\|h\|_{T}^{2}\right)\frac{\partial m_{\lambda}}{\partial\lambda}=0
+\]
+
+
+Rearranging, we get
+\[
+\frac{\partial m_{\lambda}}{\partial\lambda}=-\left(\|h\|_{T}^{2}+\lambda\frac{\partial^{2}}{\partial m^{2}}P(g+m_{\lambda}h)+\lambda w\|h\|_{T}^{2}\right)^{-1}\left(\frac{\partial}{\partial m}P(g+m_{\lambda}h)+w\langle h,g+m_{\lambda}h\rangle_{T}\right)
+\]
+
+
+Hence
+\[
+\left\Vert \frac{\partial m_{\lambda}}{\partial\lambda}\right\Vert \le K^{-2}n^{-2k}(\lambda w)^{-1}\left(\left|\frac{\partial}{\partial m}P(g+m_{\lambda}h)\right|+wKn^{k}\|g+m_{\lambda}h\|_{T}\right)
+\]
+
+
+Let's bound the two terms on the RHS.
+
+To bound the derivative, note that by the triangle inequality
+
+\[
+\left|P(g+mh)-P(g)\right|\le mP(h)
+\]
+
+
+As $m\rightarrow0$, assuming the derivative exists, we have
+\[
+\left|\frac{\partial}{\partial m}P(g+mh)\right|\le P(h)
+\]
+
+
+To bound $\|g+m_{\lambda}h\|_{T}$ , note that by definition, 
+\[
+\frac{\lambda w}{2}\|g+m_{\lambda}h\|_{T}^{2}\le\frac{1}{2}\|y-g^{*}\|_{T}^{2}+\lambda P(g^{*})+\frac{\lambda w}{2}\|g^{*}\|^{2}
+\]
+
+
+so with high probability 
+\[
+\|g+m_{\lambda}h\|_{T}\le\sqrt{(\lambda w)^{-1}4\sigma^{2}+w^{-1}P(g^{*})+\|g^{*}\|^{2}}
+\]
+
+
+Hence
+
+\[
+\left\Vert \frac{\partial m_{\lambda}}{\partial\lambda}\right\Vert \le K^{-2}n^{-2k}(\lambda w)^{-1}\left(1+wKn^{k}\sqrt{(\lambda w)^{-1}4\sigma^{2}+w^{-1}P(g^{*})+\|g^{*}\|^{2}}\right)
+\]
+
+
+Let's now bound $\|\hat{g}_{\lambda}-\hat{g}_{\lambda+\delta}\|_{V}$.
+For some $h$ s.t. $P(h)=1$, we can write 
+\[
+\hat{g}_{\lambda+\delta}=\hat{g}_{\lambda}+m_{\lambda+\delta}h
+\]
+
+
+By the mean value theorem, there is some $\alpha\in[0,1]$ and constant
+$R$ that only depends on $g^{*},\sigma$ s.t.
+
+\begin{eqnarray*}
+\|\hat{g}_{\lambda}-\hat{g}_{\lambda+\delta}\|_{V} & = & m_{\lambda+\delta}\|h\|_{V}\\
+ & \le & O_{p}(K^{-2}n^{-2k})m_{\lambda+\delta}\\
+ & \le & O_{p}(K^{-2}n^{-2k})\delta\left|\left.\frac{\partial m_{\lambda}}{\partial\lambda}\right|_{\lambda=\lambda+\alpha\delta}\right|\\
+ & \le & O_{p}(K^{-2}n^{-2k})\delta(\lambda w)^{-1}\left(1+wKn^{k}\sqrt{(\lambda w)^{-1}4\sigma^{2}+w^{-1}P(g^{*})+\|g^{*}\|^{2}}\right)\\
+ & \le & O_{p}(K^{-1}n^{-k})\delta\lambda_{min}^{-2}w^{-1/2}R\\
+ & \le & \delta O_{p}(n^{2\tau_{min}-k})K^{-1}w^{-1/2}R
+\end{eqnarray*}
+
+
+Then the covering number is, for constants $\kappa$ that depend linearly
+on $\tau_{min},\tau_{max},k$, 
+\[
+N\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le\frac{R}{uK\sqrt{w}}O_{p}(n^{\kappa})
+\]
+
+
+so the entropy is 
+\[
+H\left(u,\mathcal{G}_{\lambda},\|\cdot\|_{V}\right)\le\log\left(\frac{R}{uK\sqrt{w}}\right)+\kappa\log n
+\]
+
+
+
+\subsubsection*{Step 2,3,4 should all carry through nicely}
+\end{document}

@@ -1,0 +1,3673 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3cm
+\topmargin 3cm
+\rightmargin 3cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Simple model
+\end_layout
+
+\begin_layout Subsection*
+Definitions
+\end_layout
+
+\begin_layout Standard
+We find the best model for 
+\begin_inset Formula $y$
+\end_inset
+
+ over function class 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+ Presume 
+\begin_inset Formula $g^{*}\in\mathcal{G}$
+\end_inset
+
+ is the true model and 
+\begin_inset Formula 
+\[
+y=g^{*}(X)+\epsilon
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ are sub-Gaussian errors for constants 
+\begin_inset Formula $K$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{0}^{2}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\max_{i=1:n}K^{2}\left(E\left[\exp(|\epsilon_{i}|^{2}K^{2})-1\right]\right)\le\sigma_{0}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given a training set 
+\begin_inset Formula $T$
+\end_inset
+
+ , We define the fitted models 
+\begin_inset Formula 
+\[
+\hat{g}_{\lambda}=\|y-g\|_{T}^{2}+\lambda^{2}I^{v}(g)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given a validation set 
+\begin_inset Formula $V$
+\end_inset
+
+ , let the CV-fitted model be 
+\begin_inset Formula 
+\[
+\hat{g}_{\hat{\lambda}}=\arg\min_{\lambda}\|y-\hat{g}_{\lambda}\|_{V}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We will suppose 
+\begin_inset Formula $I(g^{*})>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Assumptions
+\end_layout
+
+\begin_layout Standard
+Suppose the entropy of the class 
+\begin_inset Formula $\mathcal{G}'$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\begin{eqnarray}
+H\left(\delta,\mathcal{G}'=\left\{ \frac{g-g^{*}}{I(g)+I(g^{*})}:g\in\mathcal{G},I(g)+I(g^{*})>0\right\} ,P_{T}\right) & \le & \tilde{A}\delta^{-\alpha}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $v>2\alpha/(2+\alpha)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Suppose for all 
+\begin_inset Formula $\lambda\in\Lambda$
+\end_inset
+
+, 
+\begin_inset Formula $I^{v}(\hat{g}_{\lambda})$
+\end_inset
+
+ is upper bounded by 
+\begin_inset Formula $\|\hat{g}_{\lambda}\|_{n}^{2}=\frac{1}{n}\sum_{i=1}^{n}\hat{g}_{\lambda}(x_{i})$
+\end_inset
+
+.
+ See Lemma 1 below for the specific assumption.
+ This assumption includes Ridge, Lasso, Generalized Lasso, and the Group
+ Lasso.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Result 1: Single 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, Single Penalty, cross-validation over general 
+\begin_inset Formula $X_{T},X_{V}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose that the training and validation set are independently sampled,
+ so the values 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ are not necessarily the same.
+ Suppose the training and validation sets are both of size 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $X$
+\end_inset
+
+ is bounded s.t.
+ 
+\begin_inset Formula $|X|\le R_{X}$
+\end_inset
+
+ and the domain of 
+\begin_inset Formula $g\in\mathcal{G}$
+\end_inset
+
+ is over 
+\begin_inset Formula $(-R_{X},R_{X})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Suppose the same entropy bound (2) for both the training set 
+\begin_inset Formula $P_{T}$
+\end_inset
+
+ and validation set 
+\begin_inset Formula $P_{V}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Suppose for all 
+\begin_inset Formula $\lambda\in\Lambda$
+\end_inset
+
+, there exists a compatibility constant 
+\begin_inset Formula $M$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $I^{v}(\hat{g}_{\lambda})$
+\end_inset
+
+ is upper bounded by its 
+\begin_inset Formula $L_{2}$
+\end_inset
+
+-norm with some constant 
+\begin_inset Formula $M$
+\end_inset
+
+ (and 
+\begin_inset Formula $M_{0}$
+\end_inset
+
+) such that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I^{v}(\hat{g}_{\lambda})\le M\|\hat{g}_{\lambda}\|_{n}^{2}+M_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose the entropy bound for both training set 
+\begin_inset Formula $P_{T}$
+\end_inset
+
+ and validation set 
+\begin_inset Formula $P_{V}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Suppose that 
+\begin_inset Formula 
+\begin{eqnarray*}
+\sup_{g\in\mathcal{G}}\frac{\|g-g^{*}\|_{\infty}}{I(g)+I(g^{*})} & \le & K<\infty
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+ be the optimal 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ by Vandegeer.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}=O_{p}\left(n^{-1/(2+\alpha)}\right)\left(I^{\alpha/(2+\alpha)}(g^{*})+I(g^{*})\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula $\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{V}$
+\end_inset
+
+ is of the same order (differs by some constant).
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+By the triangle inequality, 
+\begin_inset Formula 
+\[
+\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{V}\le\|\hat{g}_{\hat{\lambda}}-\hat{g}_{\tilde{\lambda}}\|_{V}+\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We bound each component on the RHS separately.
+\end_layout
+
+\begin_layout Standard
+First bound 
+\begin_inset Formula $\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}$
+\end_inset
+
+.
+ By Vandegeer Thrm 10.2 and Lemma 2,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V} & \le & \|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{T}+\left|\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}-\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{T}\right|\\
+ & \le & O_{p}\left(n^{-1/(2+\alpha)}\right)I^{\alpha/(2+\alpha)}(g^{*})+O_{p}\left(n^{-1/(2+\alpha)}\right)\left(I(g^{*})+I(\hat{g}_{\tilde{\lambda}})\right)\\
+ & \le & O_{p}\left(n^{-1/(2+\alpha)}\right)\left(I^{\alpha/(2+\alpha)}(g^{*})+I(g^{*})\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next bound 
+\begin_inset Formula $\|\hat{g}_{\hat{\lambda}}-\hat{g}_{\tilde{\lambda}}\|_{V}$
+\end_inset
+
+.
+ The basic inequality gives us
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|+2\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case a:
+\series default
+ 
+\begin_inset Formula $\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{T}\right|$
+\end_inset
+
+ is the bigger term on the RHS
+\end_layout
+
+\begin_layout Standard
+By Vandegeer (10.6),
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2} & \le & O_{P}(n^{-1/2})\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|^{1-\alpha/2}\left(I(\hat{g}_{\tilde{\lambda}})+I(\hat{g}_{\hat{\lambda}})\right)^{\alpha/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $I(\hat{g}_{\tilde{\lambda}})>I(\hat{g}_{\hat{\lambda}})$
+\end_inset
+
+, then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V} & \le & O_{P}(n^{-1/(2+\alpha)})I(g^{*})^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Otherwise, suppose 
+\begin_inset Formula $I(\hat{g}_{\tilde{\lambda}})<I(\hat{g}_{\hat{\lambda}})$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $I$
+\end_inset
+
+ is a pseudo-norm,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V} & \le & O_{P}(n^{-1/(2+\alpha)})I(\hat{g}_{\hat{\lambda}})^{\alpha/(2+\alpha)}\\
+ & \le & O_{P}(n^{-1/(2+\alpha)})\left(I(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}})+I(\hat{g}_{\tilde{\lambda}})\right)^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $I(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}})\le I(\hat{g}_{\tilde{\lambda}})$
+\end_inset
+
+, then we're done.
+ Otherwise if 
+\begin_inset Formula $I(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}})\ge I(\hat{g}_{\tilde{\lambda}})$
+\end_inset
+
+, by the assumption that 
+\begin_inset Formula $I^{V}(\cdot)$
+\end_inset
+
+ is bounded by the L2 norm,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(n^{-1/(2+\alpha)})\left(M\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|_{V}^{2}+M_{0}\right)^{\alpha/v(2+\alpha)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $M_{0}$
+\end_inset
+
+ is bigger, we're done.
+ Otherwise,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(n^{-v/(2v-2\alpha+\alpha v)})<O_{P}(n^{-1/(2+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case b:
+\series default
+ 
+\begin_inset Formula $\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|$
+\end_inset
+
+ is the bigger term on the RHS
+\end_layout
+
+\begin_layout Standard
+By Cauchy Schwarz,
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(1)\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{V}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+General Additive Model
+\end_layout
+
+\begin_layout Subsection*
+Definitions
+\end_layout
+
+\begin_layout Standard
+We find the best model for 
+\begin_inset Formula $y$
+\end_inset
+
+ over function classes 
+\begin_inset Formula $\mathcal{G}=\left\{ \sum_{j=1}^{J}g_{j}:\mbox{ }g_{j}\in\mathcal{G}_{j}\right\} $
+\end_inset
+
+.
+ Suppose we observe:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y=\sum_{j=1}^{J}g_{j}^{*}+\epsilon
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $\sum_{j=1}^{J}g_{j}^{*}\in\mathcal{G}$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ are sub-Gaussian errors for constants 
+\begin_inset Formula $K$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{0}^{2}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\max_{i=1:n}K^{2}\left(E\left[\exp(|\epsilon_{i}|^{2}K^{2})-1\right]\right)\le\sigma_{0}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given a training set 
+\begin_inset Formula $T$
+\end_inset
+
+ , we fit models by least squares with multiple penalties 
+\begin_inset Formula 
+\[
+\{\hat{g}_{\lambda,j}\}_{j=1}^{J}=\arg\min_{\sum g_{j}\in\mathcal{G}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given a validation set 
+\begin_inset Formula $V$
+\end_inset
+
+ , let the CV-fitted model be 
+\begin_inset Formula 
+\[
+\{\hat{g}_{\hat{\lambda},j}\}_{j=1}^{J}=\arg\min_{\lambda}\|y-\sum_{j=1}^{J}\hat{g}_{\lambda,j}\|_{V}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Reasonable assumption:
+\end_layout
+
+\begin_layout Itemize
+The entropy bound (2) in result 2 comes from the assumptions in Lemma 3.
+ The 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ below is 
+\begin_inset Formula $\alpha=\max_{j=1:J}\{\alpha_{j}\}$
+\end_inset
+
+, so convergence is only as fast as fitting the highest-entropy function
+ class.
+ The constant 
+\begin_inset Formula $A$
+\end_inset
+
+ must be appropriately inflated such that the entropy bound holds for all
+ 
+\begin_inset Formula $\delta\in(0,R]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\begin_inset Quotes eld
+\end_inset
+
+Special
+\begin_inset Quotes erd
+\end_inset
+
+ assumptions:
+\end_layout
+
+\begin_layout Itemize
+We assume exponents 
+\begin_inset Formula $v_{j}=1$
+\end_inset
+
+, whereas Vandegeer Thrm 10.2 only assumes 
+\begin_inset Formula $v>2\alpha/(2+\alpha)$
+\end_inset
+
+.
+ Without this assumption, I wasn't able to form inequalities between 
+\begin_inset Formula $\sum_{j=1}^{J}I_{j}(g_{j})\le something+\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j})$
+\end_inset
+
+.
+ Indeed, Remark 1 in 
+\begin_inset Quotes eld
+\end_inset
+
+High-dimensional Additive Modeling
+\begin_inset Quotes erd
+\end_inset
+
+ (Vandegeer 2009) notes the importance of using the semi-norm instead of
+ the square of the semi-norm.
+\end_layout
+
+\begin_layout Itemize
+We suppose the following incoherence condition, in the spirit of Vandegeer
+ 2014 
+\begin_inset Quotes eld
+\end_inset
+
+The additive model with different smoothness for the components
+\begin_inset Quotes erd
+\end_inset
+
+: Let 
+\begin_inset Formula $p_{V}(\vec{x})$
+\end_inset
+
+ be the empirical density over the validation set.
+ Let 
+\begin_inset Formula $p_{Vj}$
+\end_inset
+
+ be the marginal density of 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+ for the empirical distribution of the validation set.
+ Let 
+\begin_inset Formula 
+\[
+r_{V}(\vec{x})=\frac{p_{V}(\vec{x})}{\Pi_{j=1}^{J}p_{Vj}(x_{j})},\mbox{ }\gamma_{V}^{2}=\int r_{V}(\vec{x})\Pi_{j=1}^{J}p_{Vj}(x_{j})d\mu
+\]
+
+\end_inset
+
+Suppose that 
+\begin_inset Formula $\gamma_{V}<1/(J-1)$
+\end_inset
+
+.
+ Furthermore, we will suppose that 
+\begin_inset Formula $\int g_{j}p_{Vj}d\mu=0$
+\end_inset
+
+ for 
+\begin_inset Formula $j=2,...,J$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Result 2: Additive Model with multiple penalties, Single oracle 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ over 
+\begin_inset Formula $X_{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose there is some 
+\begin_inset Formula $0<\alpha<2$
+\end_inset
+
+ s.t.
+ for all 
+\begin_inset Formula $\delta\in(0,R]$
+\end_inset
+
+, 
+\begin_inset Formula 
+\begin{equation}
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I_{j}(g_{j})+I_{j}(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},\sum_{j=1}^{J}I_{j}(g_{j})+I_{j}(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le A\delta^{-\alpha}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is chosen s.t.
+ 
+\begin_inset Formula 
+\[
+\tilde{\lambda}_{T}^{-1}=O_{p}\left(n^{1/(2+\alpha)}\right)\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{(2-\alpha)/2(2+\alpha)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then
+\begin_inset Formula 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}=O_{p}\left(\tilde{\lambda}_{T}\right)\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula 
+\[
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j})=O_{p}(1)\sum_{j=1}^{J}I_{j}(g_{j}^{*})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof:
+\end_layout
+
+\begin_layout Standard
+The basic inequality gives us:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le2\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|+\lambda^{2}\sum_{j=1}^{J}I_{j}(g_{j}^{*})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 1: 
+\begin_inset Formula $\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\le\lambda^{2}\sum_{j=1}^{J}I_{j}(g_{j}^{*})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}(\lambda)\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{1/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 2: 
+\begin_inset Formula $\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\ge\lambda^{2}\sum_{j=1}^{J}I_{j}(g_{j}^{*})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By Vandegeer (10.6), the basic inequality becomes 
+\begin_inset Formula 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}\right)\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha/2}\left(\sum_{j=1}^{J}I_{j}(\hat{g}_{j})+I_{j}(g_{j}^{*})\right)^{\alpha/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 2a:
+\series default
+ 
+\begin_inset Formula $\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le\sum_{j=1}^{J}I_{j}(g_{j}^{*})$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Then 
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(n^{-1/(2+\alpha)}\right)\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 2b:
+\series default
+ 
+\begin_inset Formula $\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\ge\sum_{j=1}^{J}I_{j}(g_{j}^{*})$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j}) & \le & O_{p}\left(n^{-1/(2-\alpha)}\right)\lambda^{-4/(2-\alpha)}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(n^{-1/(2-\alpha)}\right)\lambda^{-2\alpha/(2-\alpha)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Result 3: Additive Model with multiple penalties, Single cross-validation
+ 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ over general 
+\begin_inset Formula $X_{T},X_{V}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose that the training and validation set are independently sampled,
+ so the values 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ are not necessarily the same.
+ Suppose the training and validation sets are both of size 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $X$
+\end_inset
+
+ is bounded s.t.
+ 
+\begin_inset Formula $|X|\le R_{X}$
+\end_inset
+
+ and the domain of 
+\begin_inset Formula $g\in\mathcal{G}$
+\end_inset
+
+ is over 
+\begin_inset Formula $(-R_{X},R_{X})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Suppose the same entropy bound (2) for both the training set 
+\begin_inset Formula $P_{T}$
+\end_inset
+
+ and validation set 
+\begin_inset Formula $P_{V}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In addition to the assumptions in Result 4, suppose the infinity norm is
+ also bounded 
+\begin_inset Formula 
+\begin{eqnarray*}
+\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{\infty}}{\sum_{j=1}^{J}I_{j}(g_{j})+I_{j}(g_{j}^{*})} & \le & K<\infty
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose there exist constants 
+\begin_inset Formula $M$
+\end_inset
+
+,
+\begin_inset Formula $M_{0}$
+\end_inset
+
+ s.t.
+ for all 
+\begin_inset Formula $j$
+\end_inset
+
+ and all 
+\begin_inset Formula $\lambda\in\Lambda$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I_{j}\left(\hat{g}_{\lambda,j}\right)\le M\|\hat{g}_{\lambda,j}\|_{V}^{2}+M_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Special assumption:
+\series default
+ Suppose the incoherence condition 
+\begin_inset Formula $\gamma_{V}<1/(J-1)$
+\end_inset
+
+.
+ We will also suppose 
+\begin_inset Formula $\int g_{j}p_{Vj}d\mu=0$
+\end_inset
+
+ for 
+\begin_inset Formula $j=2,...,J$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+ be the optimal 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ as specified in Result 2.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\|_{V}=O_{p}\left(n^{-1/(2+\alpha)}\right)\left(1-\gamma(J-1)\right)^{\alpha/(2+\alpha)}\left(\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha/(2+\alpha)}+\sum_{j=1}^{J}I_{j}(g_{j}^{*})+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}^{\alpha/2(2+\alpha)}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula $\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}$
+\end_inset
+
+ is on the same order (differs by a constant).
+\end_layout
+
+\begin_layout Subsubsection*
+Proof:
+\end_layout
+
+\begin_layout Standard
+By the triangle inequality, 
+\begin_inset Formula 
+\[
+\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}\le\left\Vert \sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By Lemma 2 and Result 2, we can easily bound
+\begin_inset Formula $\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V} & \le & \left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{T}+\left|\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{T}-\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}\right|\\
+ & \le & O_{p}\left(n^{-1/(2+\alpha)}\right)\left(\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha/(2+\alpha)}+\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next bound 
+\begin_inset Formula $\left\Vert \sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}$
+\end_inset
+
+.
+ By definition of 
+\begin_inset Formula $\hat{\lambda}$
+\end_inset
+
+, we have the basic inequality
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|+2\left|\left(\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j},\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 1:
+\series default
+ 
+\begin_inset Formula $\left|\left(\epsilon,\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|$
+\end_inset
+
+ is bigger
+\end_layout
+
+\begin_layout Standard
+By Vandegeer (10.6),
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})+I_{j}(\hat{g}_{\hat{\lambda},j})\right)^{\alpha/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})\ge\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j})$
+\end_inset
+
+, we're done.
+\end_layout
+
+\begin_layout Standard
+Otherwise, suppose 
+\begin_inset Formula $\sum_{j=1}^{J}I_{j}(\hat{g}_{\tilde{\lambda},j})<\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j})$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Since all the penalties are bounded by the L2 norm, 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{j=1}^{J}I_{j}(\hat{g}_{\hat{\lambda},j}) & \le & M\sum_{j=1}^{J}\|\hat{g}_{\lambda j}\|_{V}^{2}+M_{0}J\\
+ & \le & M\left(1-\gamma(J-1)\right)\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}J
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the latter inequality is due to the incoherence assumption and Lemma
+ 4.
+\end_layout
+
+\begin_layout Standard
+Then
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(M\left(1-\gamma(J-1)\right)\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{2}+M_{0}J\right)^{\alpha/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $M_{0}J$
+\end_inset
+
+ is the biggest, we're done.
+ Otherwise,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(1-\gamma(J-1)\right)^{\alpha/2}\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}\|_{V}^{\alpha}\\
+ & \le & O_{p}(n^{-1/2})\left(1-\gamma(J-1)\right)^{\alpha/2}\left(\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-g_{j}^{*}\right\Vert _{V}+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}\right)^{\alpha}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}$
+\end_inset
+
+or 
+\begin_inset Formula $\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-g_{j}^{*}\right\Vert _{V}$
+\end_inset
+
+ is the biggest on the RHS, then the rate is faster than 
+\begin_inset Formula $O_{p}(n^{-1/(2+\alpha)})$
+\end_inset
+
+.
+
+\series bold
+ 
+\series default
+If
+\series bold
+
+\begin_inset Formula $\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}$
+\end_inset
+
+ 
+\series default
+is the biggest, then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V} & \le & O_{p}(n^{-1/(2+\alpha)})\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}^{\alpha/2(2+\alpha)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 2:
+\series default
+ 
+\begin_inset Formula $\left|\left(\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j},\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|$
+\end_inset
+
+ is bigger
+\end_layout
+
+\begin_layout Standard
+By Cauchy Schwarz, 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V} & \le & O_{p}(1)\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}
+\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+General Additive Model: Multiple Lambdas
+\end_layout
+
+\begin_layout Subsection*
+Definitions
+\end_layout
+
+\begin_layout Standard
+We find the best model for 
+\begin_inset Formula $y$
+\end_inset
+
+ over function classes 
+\begin_inset Formula $\mathcal{G}=\left\{ \sum_{j=1}^{J}g_{j}:\mbox{ }g_{j}\in\mathcal{G}_{j}\right\} $
+\end_inset
+
+.
+ Suppose we observe:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y=\sum_{j=1}^{J}g_{j}^{*}+\epsilon
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $\sum_{j=1}^{J}g_{j}^{*}\in\mathcal{G}$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ are sub-Gaussian errors for constants 
+\begin_inset Formula $K$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{0}^{2}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\max_{i=1:n}K^{2}\left(E\left[\exp(|\epsilon_{i}|^{2}K^{2})-1\right]\right)\le\sigma_{0}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given a training set 
+\begin_inset Formula $T$
+\end_inset
+
+ , we fit models by least squares with multiple penalties and tuning parameters
+ 
+\begin_inset Formula 
+\[
+\{\hat{g}_{\lambda,j}\}_{j=1}^{J}=\arg\min_{\sum g_{j}\in\mathcal{G}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{v_{j}}(g_{j})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $1\le v_{j}\le2$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Given a validation set 
+\begin_inset Formula $V$
+\end_inset
+
+ , let the CV-fitted model be 
+\begin_inset Formula 
+\[
+\{\hat{g}_{\hat{\lambda},j}\}_{j=1}^{J}=\arg\min_{\lambda}\|y-\sum_{j=1}^{J}\hat{g}_{\lambda,j}\|_{V}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Result 4: Additive Model, Oracle 
+\begin_inset Formula $\{\lambda_{i}\}$
+\end_inset
+
+ given 
+\begin_inset Formula $X_{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These results are implied by Vandegeer's paper 
+\begin_inset Quotes eld
+\end_inset
+
+The additive model with different smoothness for the components.
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Suppose for all 
+\begin_inset Formula $j=1:J$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\mathcal{H}\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}\right\} ,\|\cdot\|_{n}\right)\le A_{j}\delta^{-\alpha_{j}}\forall\delta>0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let
+\begin_inset Formula 
+\[
+\lambda_{j}=O_{p}(n^{-1/(2+\alpha_{j})})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\sum_{j=1}^{J}I_{j}^{q_{j}}(g_{j}^{*})\right)^{1/2}\lambda_{\max}=O_{P}(1)R
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There are some constants 
+\begin_inset Formula $c_{1},c_{2}$
+\end_inset
+
+ s.t.
+ for 
+\begin_inset Formula $\lambda_{j}=O_{p}(n^{-1/(2+\alpha_{j})})$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\|\sum g_{j}^{*}-\sum\hat{g}_{\tilde{\lambda},j}\|\le c_{2}\lambda_{(j)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $(j)=\arg\max\alpha_{j}$
+\end_inset
+
+.
+ That is, the convergence rate depends on the highest-entropy function class
+ (with respect to the penalty)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|\sum_{j=1}^{J}g_{j}^{*}-\sum_{j=1}^{J}\hat{g_{j}}\|_{T}=O_{p}(n^{-1/(2+\alpha_{(j)})})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Jean's version of the Proof for Vandegeer Thrm 3.1:
+\end_layout
+
+\begin_layout Standard
+Suppose for some constant 
+\begin_inset Formula $R$
+\end_inset
+
+ , we define the function class 
+\begin_inset Formula 
+\[
+\mathcal{M}(R)=\left\{ \{g_{j}\}:(\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(g_{j}-g_{j}^{*})\le R,\mbox{ }\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}\le R\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Recall that 
+\begin_inset Formula 
+\[
+\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\left|(\epsilon^{T},g_{j}-g_{j}^{*})\right|}{\left(I_{j}(g_{j})+I_{j}(g_{j}^{*})\right)^{\alpha_{j}/2}\|g_{j}-g_{j}^{*}\|^{1-\alpha_{j}/2}}=O_{p}(n^{-1/2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By our choice of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, we have that for function sets 
+\begin_inset Formula $\{g_{j}-g_{j}^{*}\}\in\mathcal{M}(R)$
+\end_inset
+
+, the empirical process term decreases with 
+\begin_inset Formula $n$
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left|(\epsilon^{T},g_{j}-g_{j}^{*})\right| & \le & O_{P}(n^{-1/2})\left(I_{j}(g_{j})+I_{j}(g_{j}^{*})\right)^{\alpha_{j}/2}\|g_{j}-g_{j}^{*}\|^{1-\alpha_{j}/2}\\
+ & \le & O_{P}(n^{-1/2})\left(\lambda_{j}^{-1/q_{j}}R^{1/q_{j}}\right)^{\alpha_{j}/2}R^{1-\alpha_{j}/2}\\
+ & \le & O_{P}(n^{-1/(2+\alpha_{j})})R^{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence for sufficiently large 
+\begin_inset Formula $n$
+\end_inset
+
+, Vandegeer Lemma's 5.4 (Jean's version below) states that the fitted functions
+ 
+\begin_inset Formula $\hat{g_{j}}$
+\end_inset
+
+ are also within 
+\begin_inset Formula $R$
+\end_inset
+
+ of the truth: 
+\begin_inset Formula 
+\[
+\{\hat{g_{j}}-g_{j}^{*}\}\in\mathcal{M}(R)\implies\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g_{j}}\|_{T}\le R
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we just need to determine the right value for 
+\begin_inset Formula $R$
+\end_inset
+
+.
+ Choose 
+\begin_inset Formula $n$
+\end_inset
+
+ sufficiently large s.t.
+ the penalty term for function 
+\begin_inset Formula $(j)$
+\end_inset
+
+ is the highest (for the truth) 
+\begin_inset Formula 
+\[
+\lambda_{j}^{2}I_{j}^{q_{j}}(g_{j}^{*})\le\lambda_{(j)}^{2}I_{(j)}^{q_{(j)}}(g_{(j)}^{*})\mbox{ }\forall j
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then choose 
+\begin_inset Formula $R$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula 
+\[
+\left(\lambda_{(j)}^{2}I_{(j)}^{q_{(j)}}(g_{(j)}^{*})\right)^{1/2}J^{1/2}=O_{P}(1)R
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|\sum_{j=1}^{J}g_{j}^{*}-\hat{g_{j}}\|_{T}\le n^{-1/(2+\alpha_{(j)})}J^{1/2}I_{(j)}^{q_{(j)}/2}(g_{(j)}^{*})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Result 5: Additive Model, Cross-validated 
+\begin_inset Formula $\{\lambda_{i}\}$
+\end_inset
+
+ over general 
+\begin_inset Formula $X_{T},X_{V}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Assume the same conditions as result 4, but also for the validation set.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Condition 2.4:
+\series default
+ Incoherence condition on the validation set.
+ Let 
+\begin_inset Formula $p_{V}(\vec{x})$
+\end_inset
+
+ be the empirical density over the validation set.
+ Let 
+\begin_inset Formula $p_{Vj}$
+\end_inset
+
+ be the marginal density of 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+ for the empirical distribution of the validation set.
+ Let 
+\begin_inset Formula 
+\[
+r_{V}(\vec{x})=\frac{p_{V}(\vec{x})}{\Pi_{j=1}^{J}p_{Vj}(x_{j})},\mbox{ }\gamma_{V}^{2}=\int r_{V}(\vec{x})\Pi_{j=1}^{J}p_{Vj}(x_{j})d\mu
+\]
+
+\end_inset
+
+Suppose that 
+\begin_inset Formula $\gamma_{V}<1/(J-1)$
+\end_inset
+
+.
+ Furthermore, we will suppose that 
+\begin_inset Formula $\int g_{j}p_{Vj}d\mu=0$
+\end_inset
+
+ for 
+\begin_inset Formula $j=2,...,J$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Additionally, suppose there exist constants 
+\begin_inset Formula $M$
+\end_inset
+
+,
+\begin_inset Formula $M_{0}$
+\end_inset
+
+ s.t.
+ for all 
+\begin_inset Formula $j$
+\end_inset
+
+ and all 
+\begin_inset Formula $\lambda\in\Lambda$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I_{j}\left(\hat{g}_{\lambda,j}\right)\le M\|\hat{g}_{\lambda,j}\|_{V}^{2}+M_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+ be the optimal 
+\begin_inset Formula $\{\lambda_{i}\}$
+\end_inset
+
+ as specified in Result 4.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{\hat{\lambda},j}-\hat{g}_{\tilde{\lambda},j}\|_{V}=O_{p}\left(n^{-1/(2+\alpha_{(j)})}\right)\left(1-\gamma(J-1)\right)^{\alpha_{(j)}/(2+\alpha_{(j)})}\left(\left(\sum_{j=1}^{J}I_{j}(g_{j}^{*})\right)^{\alpha_{(j)}/(2+\alpha_{(j)})}+\sum_{j=1}^{J}I_{j}(g_{j}^{*})+\left\Vert \sum_{j=1}^{J}g_{j}^{*}\right\Vert _{V}^{\alpha_{(j)}/2(2+\alpha_{(j)})}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula $\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}=O_{p}(1)\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{T}$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Subsubsection*
+Proof: 
+\end_layout
+
+\begin_layout Standard
+Exactly the same as Result 3
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Lemmas
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Lemma 1:
+\series default
+ 
+\end_layout
+
+\begin_layout Standard
+Suppose for all 
+\begin_inset Formula $\lambda\in\Lambda$
+\end_inset
+
+, the penalty function 
+\begin_inset Formula $I^{v}(g_{\lambda})$
+\end_inset
+
+ is upper-bounded by 
+\begin_inset Formula $\|g_{\lambda}\|_{n}^{2}=\frac{1}{n}\sum_{i=1}^{n}g_{\lambda}^{2}(x_{i})$
+\end_inset
+
+ with constants 
+\begin_inset Formula $M_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $M$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I^{v}(g_{\lambda})\le M\|g_{\lambda}\|_{n}^{2}+M_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose there is some function 
+\begin_inset Formula $g\in\mathcal{G}$
+\end_inset
+
+ such that
+\begin_inset Formula 
+\[
+\|g-g_{\lambda}\|_{n}^{1+\alpha/2}\le O_{p}(n^{-1/2})I^{\alpha/2}(g_{\lambda})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|g-g_{\lambda}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha v/(2+\alpha)}\|g\|_{n}^{2\alpha/v(2+\alpha)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+From the assumptions, we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})\left(M\|g_{\lambda}\|_{n}^{2}+M_{0}\right)^{\alpha/2v}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $M_{0}>\|g_{\lambda}\|_{n}^{2}$
+\end_inset
+
+, we're done.
+ Otherwise,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g-g_{\lambda}\|_{n}^{1+\alpha/2} & \le & O_{p}(n^{-1/2})M^{\alpha/2v}\|g_{\lambda}\|_{n}^{\alpha/v}\\
+ & \le & O_{p}(n^{-1/2})M^{\alpha/2v}\left(\|g_{\lambda}-g\|_{n}+\|g\|_{n}\right)^{\alpha/v}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 1:
+\series default
+ 
+\begin_inset Formula $\|g_{\lambda}-g\|_{n}\ge\|g\|_{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|g-g_{\lambda}\|_{n}\le O_{p}(n^{-v/(2v+\alpha v-2\alpha)})M^{\alpha v^{2}/(2v+\alpha v-2\alpha)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that 
+\begin_inset Formula $\sup_{v}-\frac{v}{2v+\alpha v-2\alpha}=-\frac{1}{2+\alpha}$
+\end_inset
+
+, so this rate is faster than 
+\begin_inset Formula $O_{p}(n^{-\frac{1}{2+\alpha}})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 2:
+\series default
+ 
+\begin_inset Formula $\|g_{\lambda}-g\|_{n}\le\|g\|_{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|g-g_{\lambda}\|_{n}\le O_{p}(n^{-1/(2+\alpha)})M^{\alpha v/(2+\alpha)}\|g\|_{n}^{2\alpha/v(2+\alpha)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+I believe we can often provide a good estimate of 
+\begin_inset Formula $M$
+\end_inset
+
+ for the entire class 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, which means that we can always estimate the sample size needed to ensure
+ this case never occurs.
+ That is, I believe we can often estimate 
+\begin_inset Formula $M$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula 
+\[
+I^{v}(g)\le M\|g\|_{n}^{2}+M_{0}\forall g\in\mathcal{G}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Lemma 2:
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $P_{n'}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{n''}$
+\end_inset
+
+ be empirical distributions over 
+\begin_inset Formula $\{X_{i}'\}_{i=1}^{n},\{X_{i}''\}_{i=1}^{n}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $P_{2n}=\frac{1}{2}\left(P_{n'}+P_{n''}\right)$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $X$
+\end_inset
+
+ is bounded s.t.
+ 
+\begin_inset Formula $|X|<R_{X}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\mathcal{G}'=\left\{ \frac{g-g^{*}}{I(g)+I(g^{*})}:g\in\mathcal{G},I(g)+I(g^{*})>0\right\} $
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $g$
+\end_inset
+
+ is defined over the domain over 
+\begin_inset Formula $X$
+\end_inset
+
+ (and zero otherwise).
+ Suppose 
+\begin_inset Formula 
+\[
+\sup_{f\in\mathcal{G}'}\|f\|_{P_{2n}}\le R<\infty,\mbox{ }\sup_{f\in\mathcal{G}'}\|f\|_{\infty}\le K<\infty
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula 
+\[
+H\left(\delta,\mathcal{G}',P_{n'}\right)\le\tilde{A}\delta^{-\alpha},\mbox{ }H\left(\delta,\mathcal{G}',P_{n''}\right)\le\tilde{A}\delta^{-\alpha}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n'}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}\ge6\delta\right)\le2\exp\left(2\tilde{A}\delta^{-\alpha}-\frac{4\delta^{2}n}{K^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Proof:
+\end_layout
+
+\begin_layout Standard
+The proof is very similar to that in Pollard 1984 (page 32), so some details
+ below are omitted.
+\end_layout
+
+\begin_layout Standard
+First note that for any function 
+\begin_inset Formula $f$
+\end_inset
+
+ and 
+\begin_inset Formula $h$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\|f\|_{P_{n'}}-\|h\|_{P_{n'}}\le\|f-h\|_{P_{n'}}\le\sqrt{2}\|f-h\|_{P_{2n}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similarly for 
+\begin_inset Formula $P_{n''}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\{h_{j}\}_{j=1}^{N}$
+\end_inset
+
+ be the 
+\begin_inset Formula $\sqrt{2}\delta$
+\end_inset
+
+-cover for 
+\begin_inset Formula $\mathcal{G}'$
+\end_inset
+
+ (where 
+\begin_inset Formula $N=N(\sqrt{2}\delta,\mathcal{G}',P_{2n})$
+\end_inset
+
+).
+ Let 
+\begin_inset Formula $h_{j}$
+\end_inset
+
+ be the closest function (in terms of 
+\begin_inset Formula $\|\cdot\|_{P_{2n}}$
+\end_inset
+
+) to some 
+\begin_inset Formula $f\in\mathcal{G}'$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\begin{eqnarray*}
+\|f\|_{P_{n'}}-\|f\|_{P_{n''}} & \le & \|f-h_{j}\|_{P_{n'}}+\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|+\|f-h_{j}\|_{P_{n''}}\\
+ & \le & 4\delta+\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore for 
+\begin_inset Formula $f=\frac{g^{*}-g}{I(g^{*})+I(g)}$
+\end_inset
+
+, we have
+\begin_inset Formula 
+\begin{eqnarray*}
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}\ge6\delta\right) & \le & Pr\left(\sup_{j\in1:N}\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|\ge2\delta\right)\\
+ & \le & N\max_{j\in1:N}Pr\left(\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|\ge2\delta\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now note that 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right| & = & \frac{\left|\|h_{j}\|_{P_{n'}}^{2}-\|h_{j}\|_{P_{n''}}^{2}\right|}{\|h_{j}\|_{P_{n'}}+\|h_{j}\|_{P_{n''}}}\\
+ & \le & \frac{\left|\|h_{j}\|_{P_{n'}}^{2}-\|h_{j}\|_{P_{n''}}^{2}\right|}{\sqrt{2}\|h_{j}\|_{P_{2n}}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By Hoeffding's inequality, 
+\begin_inset Formula 
+\begin{eqnarray*}
+Pr\left(\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|\ge2\delta\right) & \le & Pr\left(\left|\|h_{j}\|_{P_{n'}}^{2}-\|h_{j}\|_{P_{n''}}^{2}\right|\ge2\sqrt{2}\delta\|h_{j}\|_{P_{2n}}\right)\\
+ & = & Pr\left(\left|\sum_{i=1}^{n}W_{i}\left(h_{j}^{2}(x_{i}')-h_{j}^{2}(x_{i}'')\right)\right|\ge2\sqrt{2}n\delta\|h_{j}\|_{P_{2n}}\right)\\
+ & \le & 2\exp\left(-\frac{16\delta^{2}n^{2}\|h_{j}\|_{P_{2n}}^{2}}{4\sum_{i=1}^{n}\left(h_{j}^{2}(x_{i}')-h_{j}^{2}(x_{i}'')\right)^{2}}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $\|h_{j}\|_{\infty}<K$
+\end_inset
+
+, then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i=1}^{n}\left(h_{j}^{2}(x_{i}')-h_{j}^{2}(x_{i}'')\right)^{2} & \le & \sum_{i=1}^{n}h_{j}^{4}(x_{i}')+h_{j}^{4}(x_{i}'')\\
+ & \le & nK^{2}\|h_{j}\|_{P_{2n}}^{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence 
+\begin_inset Formula 
+\[
+Pr\left(\left|\|h_{j}\|_{P_{n'}}-\|h_{j}\|_{P_{n''}}\right|\ge2\delta\right)\le2\exp\left(-\frac{4\delta^{2}n}{K^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since (Pollard and Vandegeer say that) 
+\begin_inset Formula 
+\[
+N(\sqrt{2}\delta,\mathcal{G}',P_{2n})\le N(\delta,\mathcal{G}',P_{n''})+N(\delta,\mathcal{G}',P_{n''})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Pr\left(\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}\ge6\delta\right)\le2\exp\left(2\tilde{A}\delta^{-\alpha}-\frac{4\delta^{2}n}{K^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using shorthand, we can write 
+\begin_inset Formula 
+\[
+\sup_{g\in\mathcal{G}}\frac{\left|\|g^{*}-g\|_{P_{n}}-\|g^{*}-g\|_{P_{n''}}\right|}{I(g^{*})+I(g)}=O_{p}(n^{-1/(2+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Lemma 3:
+\end_layout
+
+\begin_layout Standard
+Suppose the function classes 
+\begin_inset Formula $\mathcal{F}_{j}$
+\end_inset
+
+ is a cone and 
+\begin_inset Formula $I_{j}:\mathcal{F}_{j}\mapsto[0,\infty)$
+\end_inset
+
+ is a psuedonorm.
+ Furthermore, suppose 
+\begin_inset Formula 
+\[
+H\left(\delta,\{f_{j}\in\mathcal{F}_{j}:I_{j}(f_{j})\le1\},\|\cdot\|_{n}\right)\le A_{j}\delta^{-\alpha_{j}}
+\]
+
+\end_inset
+
+Then if 
+\begin_inset Formula $f_{j}^{*}\in\mathcal{F}_{j}$
+\end_inset
+
+, then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}f_{j}-f_{j}^{*}}{\sum_{j=1}^{J}I_{j}(f_{j})+I_{j}(f_{j}^{*})}:f_{j}\in\mathcal{F}_{j},I_{j}(f_{j})+I_{j}(f_{j}^{*})>0\right\} ,\|\cdot\|_{n}\right) & \le & 2\sum_{j=1}^{J}A_{j}\left(\frac{\delta}{2J}\right)^{-\alpha_{j}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Proof:
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\tilde{f}_{j}=\frac{f_{j}}{\sum_{j=1}^{J}I_{j}(f_{j})+I_{j}(f_{j}^{*})}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\tilde{f}_{j}\in\mathcal{F}_{j}$
+\end_inset
+
+ and 
+\begin_inset Formula $I_{j}(\tilde{f}_{j})\le1$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $h_{(j)}$
+\end_inset
+
+ be the closest function to 
+\begin_inset Formula $\tilde{f}_{j}$
+\end_inset
+
+ in the 
+\begin_inset Formula $\delta$
+\end_inset
+
+ cover of 
+\begin_inset Formula $\mathcal{F}_{j}$
+\end_inset
+
+.
+ Similarly, let 
+\begin_inset Formula $h_{(j)}^{*}$
+\end_inset
+
+ be the closest function to 
+\begin_inset Formula $\tilde{f}_{j}^{*}$
+\end_inset
+
+ in the 
+\begin_inset Formula $\delta$
+\end_inset
+
+ cover of 
+\begin_inset Formula $\mathcal{F}_{j}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \frac{\sum_{j=1}^{J}f_{j}-f_{j}^{*}}{\sum_{j=1}^{J}I_{j}(f_{j})+I_{j}(f_{j}^{*})}-\left(\sum_{j=1}^{J}h_{(j)}-h_{(j)}^{*}\right)\right\Vert  & \le & \sum_{j=1}^{J}\left\Vert \frac{f_{j}-f_{j}^{*}}{\sum_{j=1}^{J}I_{j}(f_{j})+I_{j}(f_{j}^{*})}-\left(h_{(j)}-h_{(j)}^{*}\right)\right\Vert \\
+ & \le & \sum_{j=1}^{J}\left\Vert \frac{f_{j}}{\sum_{j=1}^{J}I_{j}(f_{j})+I_{j}(f_{j}^{*})}-h_{(j)}\right\Vert +\left\Vert \frac{f_{j}^{*}}{\sum_{j=1}^{J}I_{j}(f_{j})+I_{j}(f_{j}^{*})}-h_{(j)}^{*}\right\Vert \\
+ & \le & 2J\delta
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H\left(2J\delta,\left\{ \frac{\sum_{j=1}^{J}f_{j}-f_{j}^{*}}{\sum_{j=1}^{J}I_{j}(f_{j})+I_{j}(f_{j}^{*})}:f_{j}\in\mathcal{F}_{j},I_{j}(f_{j})+I_{j}(f_{j}^{*})>0\right\} ,\|\cdot\|_{n}\right)\le2\sum_{j=1}^{J}A_{j}\delta^{-\alpha_{j}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Lemma 4:
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $p_{n}(\vec{x})$
+\end_inset
+
+ be some empirical density and let 
+\begin_inset Formula $p_{nj}$
+\end_inset
+
+ be the corresponding empirical marginal density of 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula 
+\[
+r(\vec{x})=\frac{p_{n}(\vec{x})}{\Pi_{j=1}^{J}p_{nj}(x_{j})},\mbox{ }\gamma^{2}=\int(r(\vec{x})-1)^{2}\Pi_{j=1}^{J}p_{nj}(x_{j})d\mu
+\]
+
+\end_inset
+
+Suppose 
+\begin_inset Formula $\gamma<1/(J-1)$
+\end_inset
+
+.
+ Furthermore, suppose 
+\begin_inset Formula $\int g_{j}p_{nj}d\mu=0$
+\end_inset
+
+ for 
+\begin_inset Formula $j=2,...,J$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+\left\Vert \sum_{j=1}^{J}g_{j}\right\Vert _{n}^{2}\ge(1-\gamma(J-1))\left(\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+The proof is very similar to Lemma 5.1 in Vandegeer 2014 
+\begin_inset Quotes eld
+\end_inset
+
+The additive model with different smoothness for the components.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \sum_{j=1}^{J}g_{j}\right\Vert _{n}^{2}=\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}+\sum_{j\ne k}\int g_{j}g_{k}p_{n}(\vec{x})d\mu
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We bound the latter term:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left|\int g_{j}g_{k}p_{n}(\vec{x})d\mu\right| & = & \left|\int g_{j}g_{k}\left(r(\vec{x})-1\right)\Pi_{j=1}^{J}p_{nj}(x_{j})d\mu\right|\\
+ & \le & \gamma\left|\int g_{j}^{2}g_{k}^{2}\Pi_{j=1}^{J}p_{nj}(x_{j})d\mu\right|^{1/2}\\
+ & = & \gamma\|g_{j}\|_{n}\|g_{k}\|_{n}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}g_{j}\right\Vert _{n}^{2} & \ge & \sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}-\gamma\sum_{j\ne k}\|g_{j}\|_{n}\|g_{k}\|_{n}\\
+ & \ge & (1-\gamma(J-1))\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}+\gamma\sum_{j<k}\left(\|g_{j}\|_{n}-\|g_{k}\|_{n}\right)^{2}\\
+ & \ge & (1-\gamma(J-1))\sum_{j=1}^{J}\left\Vert g_{j}\right\Vert _{n}^{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Vandegeer's Lemma 5.4 (Jean's version)
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula 
+\[
+\tau_{R}(\{f_{j}\})=\|\sum f_{j}\|_{T}+\sum_{j=1}^{J}(\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(f_{j})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula 
+\[
+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(f_{j}^{*})\le\delta_{0}^{2}R^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and for all function sets 
+\begin_inset Formula $\{f_{j}\}$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $\tau_{R}(\{f_{j}\})\le R$
+\end_inset
+
+, suppose 
+\begin_inset Formula 
+\[
+\sup_{f_{j}}\left|\left(\epsilon_{T},f_{j}\right)\right|\le\delta_{0}^{2}R^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula 
+\[
+\hat{f}_{j}=\arg\min\|y-\sum_{j=1}^{J}f_{j}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(f_{j})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then 
+\begin_inset Formula $\tau_{R}\left(\left\{ \hat{f}_{\lambda,j}-f_{j}^{*}\right\} \right)\le R$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph*
+Proof
+\end_layout
+
+\begin_layout Standard
+We use the convexity of the penalties and the least squares function.
+ Consider 
+\begin_inset Formula $\tilde{f_{j}}=t\hat{f}_{j}+(1-t)f_{j}^{*}$
+\end_inset
+
+ where 
+\begin_inset Formula 
+\begin{eqnarray*}
+t & = & \frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First note that by convexity, 
+\begin_inset Formula 
+\begin{eqnarray*}
+\tau_{R}(\{\tilde{f_{j}}-f_{j}^{*}\}) & = & \frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})\le R
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence 
+\begin_inset Formula 
+\[
+\sup_{f_{j}}\left|\left(\epsilon_{T},f_{j}^{*}-\tilde{f_{j}}\right)\right|\le\delta_{0}^{2}R^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So by the basic inequality,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}f_{j}^{*}-\sum_{j=1}^{J}\tilde{f_{j}}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(\tilde{f_{j}}) & \le & \sum_{j=1}^{J}\left|\left(\epsilon_{T},f_{j}^{*}-\tilde{f_{j}}\right)\right|+\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{q_{j}}(f_{j}^{*})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and with gross algebra, we can show that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+(\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(\tilde{f_{j}}-f_{j}^{*})\le4\delta_{0}R
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{R}{R+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})}\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\}) & = & \tau_{R}(\{\tilde{f_{j}}-f_{j}^{*}\})\\
+ & = & \|\sum\tilde{f_{j}}-f_{j}^{*}\|_{T}+\sum_{j=1}^{J}(\lambda_{j}/R)^{(1-q_{j})/q_{j}}\lambda_{j}I_{j}(\tilde{f_{j}}-f_{j}^{*})\\
+ & \le & O_{P}(1)J\delta_{0}R
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So for small enough 
+\begin_inset Formula $\delta_{0}$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\tau_{R}(\{\hat{f}_{j}-f_{j}^{*}\})\le R
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+What if we can't bound the penalty?
+\end_layout
+
+\begin_layout Standard
+Now suppose the problem does not satisfy the assumption that 
+\begin_inset Formula 
+\[
+I(g_{\lambda})\le M\|g_{\lambda}\|^{2}+M_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then let's consider a modified way of choosing 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Select lambda s.t.
+ 
+\begin_inset Formula 
+\[
+\hat{\lambda}=\arg\min_{\lambda\in\Lambda}\|y-g_{\lambda}\|_{V}^{2}\mbox{ where }\Lambda=\left\{ \lambda:n^{-\tau}I(\hat{g}_{\lambda})\le\|y-\hat{g}_{\lambda}\|_{V}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To get the optimal convergence rate for 
+\begin_inset Formula $\|g^{*}-\hat{g}_{\lambda}\|_{V}$
+\end_inset
+
+ , choose 
+\begin_inset Formula $\tau=\frac{1}{2(1+\alpha)}$
+\end_inset
+
+.
+ Then we get the rate 
+\begin_inset Formula 
+\[
+\|g^{*}-\hat{g}_{\lambda}\|_{V}=O_{P}(n^{-1/2(1+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof:
+\end_layout
+
+\begin_layout Standard
+For sufficiently large 
+\begin_inset Formula $n$
+\end_inset
+
+, 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+ will be in the set 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ with high probability.
+ To see this, note that 
+\begin_inset Formula 
+\begin{eqnarray*}
+n^{-\tau}I(\hat{g}_{\tilde{\lambda}}) & = & O_{p}(n^{-\tau})I(g^{*})\\
+ & \le & \left|\|y-g^{*}\|_{V}-\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}\right|\\
+ & \le & \|y-\hat{g}_{\tilde{\lambda}}\|_{V}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the first inequality comes from the fact that 
+\begin_inset Formula $\|y-g^{*}\|_{V}=O_{P}(\sigma)$
+\end_inset
+
+ with high probability and 
+\begin_inset Formula $\|g^{*}-\hat{g}_{\tilde{\lambda}}\|_{V}=O_{P}(n^{-1/(2+\alpha)})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now proceed with the basic inequality.
+ We know that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|+2\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The problematic case is when
+\begin_inset Formula $\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{T}\right|$
+\end_inset
+
+ is the bigger term on the RHS.
+\end_layout
+
+\begin_layout Standard
+By Vandegeer (10.6),
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2} & \le & O_{P}(n^{-1/2})\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|^{1-\alpha/2}\left(I(\hat{g}_{\tilde{\lambda}})+I(\hat{g}_{\hat{\lambda}})\right)^{\alpha/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We're done if 
+\begin_inset Formula $I(\hat{g}_{\tilde{\lambda}})>I(\hat{g}_{\hat{\lambda}})$
+\end_inset
+
+.
+ Otherwise, suppose 
+\begin_inset Formula $I(\hat{g}_{\tilde{\lambda}})<I(\hat{g}_{\hat{\lambda}})$
+\end_inset
+
+.
+ By definition of 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ , we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{1+\alpha/2} & \le & O_{P}(n^{-1/2})I(\hat{g}_{\hat{\lambda}})^{\alpha/2}\\
+ & \le & O_{P}(n^{(-1+\tau\alpha)/2})\|y-\hat{g}_{\hat{\lambda}}\|_{V}^{\alpha/2}\\
+ & \le & O_{P}(n^{(-1+\tau\alpha)/2})\left(\|y-g^{*}\|_{V}+\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}+\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|_{V}\right)^{\alpha/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The slowest case is when 
+\begin_inset Formula $\|y-g^{*}\|_{V}$
+\end_inset
+
+ is the largest among the three terms.
+ We have the rate
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(n^{(-1+\tau\alpha)/(2+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The optimal convergence rate is attained if we choose 
+\begin_inset Formula 
+\[
+-\tau=\frac{-1+\tau\alpha}{2+\alpha}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+That is, we get 
+\begin_inset Formula 
+\[
+\tau=\frac{1}{2(1+\alpha)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Examples
+\end_layout
+
+\begin_layout Standard
+Our goal here is to show that the assumptions hold for various examples.
+\end_layout
+
+\begin_layout Subsection
+Penalties that are compatible with the L2 norm
+\end_layout
+
+\begin_layout Standard
+Lasso, Fused Lasso, Generalized Lasso, Ridge, Elastic Net
+\end_layout
+
+\begin_layout Standard
+To see this works for the Generalized lasso:
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $D$
+\end_inset
+
+ be the fixed penalty matrix.
+ Let 
+\begin_inset Formula $D_{max}$
+\end_inset
+
+ be its maximum eigenvalue.
+ Suppose the smallest eigenvalue of 
+\begin_inset Formula $X^{T}X$
+\end_inset
+
+ stays away from zero.
+ Then for some constants 
+\begin_inset Formula $M_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $M$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|D\beta\|_{1} & \le & D_{max}\|\beta\|_{1}\\
+ & \le & D_{max}M\|X^{T}\beta\|_{2}^{2}+M_{0}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\series bold
+Sobolev Norm
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ is the class of smooth functions 
+\begin_inset Formula $g:[0,1]\mapsto\mathbb{R}$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $I_{(k)}(g)=\sqrt{\int_{0}^{1}g(t)^{2}dt}+\sqrt{\int_{0}^{1}g^{(k)}(t)^{2}dt}<\infty$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\arg\min_{g\in\mathcal{G}}\|y-g(x_{1})\|_{T}^{2}+\lambda_{g}^{2}I_{(k)}^{2}(g)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If we reformulate this using the Reproducing Kernel Hilbert space 
+\begin_inset Formula $\mathcal{H}$
+\end_inset
+
+, the criterion becomes
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\arg\min_{g_{H}\in\mathcal{H},g_{\perp}\in\mathcal{H}^{\perp}}\|y-g_{H}(x_{1})+g_{\perp}(x_{1})\|_{T}^{2}+\lambda_{g}^{2}I_{(k)}^{2}(g_{H})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ is the kernel for 
+\begin_inset Formula $\mathcal{H}$
+\end_inset
+
+ (with respect to this dataset), then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+g_{H}=\Omega_{n}\alpha,\mbox{ }I_{(k)}^{2}(g_{H})=\alpha^{T}\Omega_{n}\alpha
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and for some other matrix 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+g_{\perp}=\Sigma\beta
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Assumption 1:
+\series default
+ Show for some constant 
+\begin_inset Formula $K$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\frac{\|g\|_{\infty}}{I_{(k)}(g)}\le K
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $c$
+\end_inset
+
+ be some value s.t.
+ 
+\begin_inset Formula $\|g\|_{2}=g(c)$
+\end_inset
+
+.
+ This must exist since 
+\begin_inset Formula $g$
+\end_inset
+
+ is continuous.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+g(x) & \le & g(c)+\int_{c}^{x}g'(u)du\\
+ & \le & \|g\|_{2}+\int_{0}^{1}g^{(m)}(u)du\\
+ & \le & \|g\|_{2}+\int_{0}^{1}\left|g^{(m)}(u)\right|du\\
+ & \le & \|g\|_{2}+C\sqrt{\int_{0}^{1}\left|g^{(m)}(u)\right|^{2}du}\\
+ & \le & CI_{(k)}(g)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Lemma: 
+\series default
+The entropy is bounded for the fitted model:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\arg\min_{g_{H}\in\mathcal{H},g_{\perp}\in\mathcal{H}^{\perp}}\|y-g_{H}(x_{1})+g_{\perp}(x_{1})\|_{T}^{2}+\lambda_{g}^{2}I_{(k)}^{2}(g_{H})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using the Hilbert Space reproducing kernel, we find that an equivalent optimizat
+ion problem is 
+\begin_inset Formula 
+\[
+\hat{\alpha}_{\lambda^{2}},\hat{\beta}=\arg\min_{\alpha,\beta}\|y-Y\beta-\Omega\alpha\|_{T}^{2}+\lambda^{2}\alpha^{T}\Omega\alpha
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $Y^{T}\Omega=0$
+\end_inset
+
+.
+ Suppose the 
+\begin_inset Formula $Y^{T}Y$
+\end_inset
+
+ has its minimum eigenvalue bounded away from zero and the minimum eigenvalue
+ of 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ is on the order of
+\begin_inset Formula $O_{p}(n^{-\tau})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Suppose the maximum 
+\begin_inset Formula $\lambda\in\Lambda$
+\end_inset
+
+ is 1.
+ Then the entropy is
+\begin_inset Formula 
+\[
+H\left(\delta,\{\Omega\hat{\alpha}_{\lambda}:\lambda\in\Lambda\},\|\cdot\|_{T}\right)\le\log\left(\frac{K}{\delta}\right)+(\tau+1)\log n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $K$
+\end_inset
+
+ is a constant s.t.
+ 
+\begin_inset Formula $\|y-Y\hat{\beta}\|\le K$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+First note that we know that 
+\begin_inset Formula 
+\begin{eqnarray*}
+\hat{\beta} & = & (Y^{T}Y)^{-1}Y^{T}y_{T}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given that 
+\begin_inset Formula $Y^{T}Y$
+\end_inset
+
+ has a minimum eigenvalue value bounded away from zero, there is some 
+\begin_inset Formula $K$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $\|y-Y\hat{\beta}\|\le K$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ , we have 
+\begin_inset Formula 
+\begin{eqnarray*}
+\hat{\alpha}_{\lambda^{2}} & = & \frac{1}{n}\left(\frac{1}{n}\Omega^{T}\Omega+\lambda^{2}\Omega\right)^{-1}\Omega^{T}(y-Y\hat{\beta})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We know that 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ is a PD matrix.
+ We express 
+\begin_inset Formula $\Omega=QDQ^{T}$
+\end_inset
+
+ where 
+\begin_inset Formula $Q$
+\end_inset
+
+ is orthogonal and 
+\begin_inset Formula $D$
+\end_inset
+
+ is a diagonal matrix with entries 
+\begin_inset Formula $\omega_{i}$
+\end_inset
+
+.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Omega\hat{\alpha}_{\lambda^{2}}=Q\left(D+n\lambda^{2}\right)^{-1}DQ^{T}(y-Y\hat{\beta})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence we can measure the difference between models fitted with different
+ 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ values:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\Omega\hat{\alpha}_{\lambda^{2}}-\Omega\hat{\alpha}_{\lambda^{2}+\delta}\| & = & \left\Vert Q\left(\left(D+n\lambda^{2}\right)^{-1}-\left(D+n\lambda^{2}+n\delta\right)^{-1}\right)DQ^{T}(y-Y\hat{\beta})\right\Vert \\
+ & \le & \max_{i=1:n}\left|\frac{n\delta\omega_{i}}{(\omega_{i}+n\lambda^{2})(\omega_{i}+n\lambda^{2}+n\delta)}\right|\|y-Y\hat{\beta}\|\\
+ & \le & \delta n\max_{i=1:n}\left|\frac{\omega_{i}}{(\omega_{i}+n\lambda^{2})^{2}}\right|\|y-Y\hat{\beta}\|\\
+ & \le & \delta n\max_{i=1:n}\left|\omega_{i}^{-1}\right|\|y-Y\hat{\beta}\|\\
+ & = & \delta nO_{P}(n^{\tau})\|y-Y\hat{\beta}\|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose we have 
+\begin_inset Formula $\lambda_{max}^{2}=1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Hence
+\begin_inset Formula 
+\[
+\|\Omega\hat{\alpha}_{\lambda^{2}}-\Omega\hat{\alpha}_{\lambda^{2}+\delta}\|\le\delta O_{P}(n^{\tau+1})K
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So we can define a 
+\begin_inset Formula $\tilde{\delta}$
+\end_inset
+
+-covering set for 
+\begin_inset Formula $\{\Omega\hat{\alpha}_{\lambda^{2}}\}$
+\end_inset
+
+ using 
+\begin_inset Formula $\{\Omega\hat{\alpha}_{i\delta}:i=0,1,...,\frac{1}{\delta}\}$
+\end_inset
+
+ where 
+\begin_inset Formula $\delta=\tilde{\delta}O_{P}(n^{-(\tau+1)})/K$
+\end_inset
+
+.
+ So the covering set contains a total of 
+\begin_inset Formula $\frac{K}{\tilde{\delta}}O_{P}(n^{\tau+1})$
+\end_inset
+
+ functions.
+ Hence the entropy is 
+\begin_inset Formula 
+\[
+\log\left(\frac{K}{\tilde{\delta}}\right)+(\tau+1)\log n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Corrollary:
+\end_layout
+
+\begin_layout Standard
+Now suppose we have a training and validation sets 
+\begin_inset Formula $(y_{T},X_{T})$
+\end_inset
+
+ and 
+\begin_inset Formula $(y_{V},X_{V})$
+\end_inset
+
+.
+ We rewrite the joint optimization problem with two kernel matrices 
+\begin_inset Formula $\Omega_{T}$
+\end_inset
+
+ and
+\begin_inset Formula $\Omega_{V}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\arg\min_{\lambda}\|y-Y\hat{\beta}-\Omega_{V}\hat{\alpha}_{\lambda^{2}}\|_{V}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\alpha}_{\lambda^{2}},\hat{\beta}=\arg\min_{\alpha,\beta}\|y-Y\beta-\Omega_{T}\alpha\|_{T}^{2}+\lambda^{2}\alpha^{T}\Omega_{T}\alpha
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $Y^{T}\Omega_{T}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $Y^{T}\Omega_{V}=0$
+\end_inset
+
+.
+ Suppose the 
+\begin_inset Formula $Y^{T}Y$
+\end_inset
+
+ has its minimum eigenvalue bounded away from zero.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\vec{\omega_{T}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{\omega_{V}}$
+\end_inset
+
+ be the eigenvalues of 
+\begin_inset Formula $\Omega_{V}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Omega_{T}$
+\end_inset
+
+.
+ Suppose that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\max_{i=1:n}\left|\omega_{Vi}\right|}{\min_{i=1:n}\left|\omega_{Ti}\right|^{2}}=O_{p}(n^{\tau})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose the maximum 
+\begin_inset Formula $\lambda\in\Lambda$
+\end_inset
+
+ is 1.
+ 
+\end_layout
+
+\begin_layout Standard
+Then the entropy is
+\begin_inset Formula 
+\[
+H\left(\delta,\{\Omega_{V}\hat{\alpha}_{\lambda}:\lambda\in\Lambda\},\|\cdot\|_{T}\right)\le\log\left(\frac{K}{\tilde{\delta}}\right)+(\tau+1)\log n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $K$
+\end_inset
+
+ is a constant s.t.
+ 
+\begin_inset Formula $\|y-Y\hat{\beta}\|\le K$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+Proof structure is similar to above.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\Omega_{V}\hat{\alpha}_{\lambda^{2}} & = & \Omega_{V}\Omega^{-1}\left(\Omega+n\lambda^{2}I\right)^{-1}\Omega^{T}(y-Y\hat{\beta})\\
+ & = & \Omega_{V}Q_{T}D_{T}^{-1}\left(D_{T}+n\lambda^{2}I\right)^{-1}D_{T}Q_{T}^{T}(y-Y\hat{\beta})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence we can measure the difference between models fitted with different
+ 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ values:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\Omega_{V}\hat{\alpha}_{\lambda^{2}}-\Omega_{V}\hat{\alpha}_{\lambda^{2}+\delta}\| & = & \left\Vert \Omega_{V}Q_{T}D_{T}^{-1}\left(\left(D_{T}+n\lambda^{2}I\right)^{-1}-\left(D_{T}+n(\lambda^{2}+\delta)I\right)^{-1}\right)D_{T}Q_{T}^{T}(y-Y\hat{\beta})\right\Vert \\
+ & \le & n\delta\max\left|\omega_{Vi}\right|\max_{i=1:n}\left|\frac{1}{(\omega_{Ti}+n\lambda^{2})(\omega_{Ti}+n\lambda^{2}+n\delta)}\right|\|y-Y\hat{\beta}\|\\
+ & \le & \delta n\frac{\max_{i=1:n}|\omega_{Vi}|}{\min_{i=1:n}|\omega_{Ti}^{2}|}K\\
+ & = & \delta O_{P}(n^{\tau+1})K
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So we can define a 
+\begin_inset Formula $\tilde{\delta}$
+\end_inset
+
+-covering set for 
+\begin_inset Formula $\{\Omega_{V}\hat{\alpha}_{\lambda^{2}}\}$
+\end_inset
+
+ using 
+\begin_inset Formula $\{\Omega_{V}\hat{\alpha}_{i\delta}:i=0,1,...,\frac{1}{\delta}\}$
+\end_inset
+
+ where 
+\begin_inset Formula $\delta=\tilde{\delta}O_{P}(n^{-(\tau+1)})/K$
+\end_inset
+
+.
+ So the covering set contains a total of 
+\begin_inset Formula $\frac{K}{\tilde{\delta}}O_{P}(n^{\tau+1})$
+\end_inset
+
+ functions.
+ Hence the entropy is 
+\begin_inset Formula 
+\[
+\log\left(\frac{K}{\tilde{\delta}}\right)+(\tau+1)\log n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

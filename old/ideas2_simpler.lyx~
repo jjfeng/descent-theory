@@ -1,0 +1,743 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3cm
+\topmargin 3cm
+\rightmargin 3cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Subsubsection*
+Lemma 4: Simple Model
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\hat{\lambda}$
+\end_inset
+
+ be the CV-fitted lambda.
+ Let 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+ that satisfies 
+\begin_inset Formula $I(\hat{g}_{\tilde{\lambda}})=O_{p}(1)I(g^{*})$
+\end_inset
+
+ and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{V}=O_{p}(1)\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{T}=O_{p}(n^{-1/(2+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H\left(\delta,\left\{ \frac{g_{1}-g_{2}}{I(g_{1})+I(g_{2})}:g_{1},g_{2}\in\mathcal{G}\right\} ,\|\cdot\|_{n}\right)\le A\delta^{-\alpha}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $v>2\alpha/(2+\alpha)$
+\end_inset
+
+ and 
+\begin_inset Formula 
+\[
+I^{v}(g)\le M\|g\|_{n}^{2}+M_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}=O_{p}(n^{-1/(2+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+The basic inequality gives us
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|+2\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case a:
+\series default
+ If 
+\begin_inset Formula $\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{T}\right|$
+\end_inset
+
+ is the bigger term, then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2}\le O_{P}(1)\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By Vandegeer (10.6),
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2} & \le & O_{P}(n^{-1/2})\|\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\|^{1-\alpha/2}\left(I(\hat{g}_{\tilde{\lambda}})+I(\hat{g}_{\hat{\lambda}})\right)^{\alpha/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $I(\hat{g}_{\tilde{\lambda}})>I(\hat{g}_{\hat{\lambda}})$
+\end_inset
+
+, then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V} & \le & O_{P}(n^{-1/(2+\alpha)})I(g^{*})^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Otherwise
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V} & \le & O_{P}(n^{-1/(2+\alpha)})I(\hat{g}_{\hat{\lambda}})^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By assumption,
+\begin_inset Formula 
+\[
+\left(\frac{1}{M}I^{v}\left(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)-\frac{M_{0}}{M}\right)^{1/2}\le\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{P}(n^{-1/(2+\alpha)})I(\hat{g}_{\hat{\lambda}})^{\alpha/(2+\alpha)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $I$
+\end_inset
+
+ is a psuedonorm, then 
+\begin_inset Formula $\left|I(\hat{g}_{\hat{\lambda}})-I(\hat{g}_{\tilde{\lambda}})\right|\le I\left(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)$
+\end_inset
+
+, so
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left|I(\hat{g}_{\hat{\lambda}})-I(\hat{g}_{\tilde{\lambda}})\right|^{v}\le I^{v}\left(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)\le O_{P}(n^{-2/(2+\alpha)})I(\hat{g}_{\hat{\lambda}})^{2\alpha/(2+\alpha)}+O_{p}(1)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then 
+\begin_inset Formula 
+\[
+I(\hat{g}_{\hat{\lambda}})\le\left(O_{P}(n^{-2/(2+\alpha)})I(\hat{g}_{\hat{\lambda}})^{2\alpha/(2+\alpha)}+O_{p}(1)\right)^{1/v}+I(\hat{g}_{\tilde{\lambda}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The only case we need to worry about is if 
+\begin_inset Formula $O_{P}(n^{-2/(2+\alpha)})I(\hat{g}_{\hat{\lambda}})^{2\alpha/(2+\alpha)}$
+\end_inset
+
+ is the largest, but in this case
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I(\hat{g}_{\hat{\lambda}})\le O_{P}(n^{-2/(2v+\alpha v-2\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence 
+\begin_inset Formula $I(\hat{g}_{\hat{\lambda}})=O_{p}(1)I(g^{*})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Since we have 
+\begin_inset Formula 
+\[
+H\left(\delta,\left\{ g:I(g)\le O_{p}(1)I(g^{*})\right\} ,\|\cdot\|_{n}\right)\le\tilde{A}\delta^{-\alpha}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By Thrm 9.1, then 
+\begin_inset Formula $\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}=O_{p}(n^{-1/(2+\alpha)})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case b:
+\series default
+ If 
+\begin_inset Formula $\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{T}\right|$
+\end_inset
+
+ is the bigger term, then by Cauchy Schwarz
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2} & \le & O_{p}(1)\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|\\
+ & \le & O_{p}(1)\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{V}\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\begin_inset Formula 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{p}(1)\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{T}=O_{P}(n^{-1/(2+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Lemma 4: Additive Model
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\hat{\lambda}$
+\end_inset
+
+ be the CV-fitted lambda.
+ Let 
+\begin_inset Formula $\tilde{\lambda}$
+\end_inset
+
+ that satisfies 
+\begin_inset Formula $\sum_{j=1}^{J}I(\hat{g}_{\tilde{\lambda},j})=O_{p}(1)\sum_{j=1}^{J}I(g_{j}^{*})$
+\end_inset
+
+ and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{V}=O_{p}(1)\left\Vert \sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\tilde{\lambda},j}\right\Vert _{T}=O_{p}(n^{-1/(2+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose for all 
+\begin_inset Formula $j$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\|g_{j}\|_{n}}{I(g_{j})}\le K
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{1j}-g_{2j}}{\max_{j\in1:J}I(g_{1j})+I(g_{2j})}:g_{1j},g_{2j}\in\mathcal{G}_{j}\right\} ,\|\cdot\|_{n}\right)\le A\delta^{-\alpha}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $v_{j}>2$
+\end_inset
+
+ and 
+\begin_inset Formula 
+\[
+I_{j}^{v_{j}}(g_{j})\le M\|g_{j}\|_{n}^{2}+M_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}=O_{p}(n^{-1/(2+\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+The basic inequality gives us
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|+2\left|\left(\sum_{j=1}^{J}g_{j}^{*}-\hat{g}_{\hat{\lambda},j},\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case a:
+\series default
+ If 
+\begin_inset Formula $\left|\left(\epsilon,\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)_{V}\right|$
+\end_inset
+
+ is the bigger term.
+ 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $(j)=\arg\max_{j\in1:J}I(\hat{g}_{\hat{\lambda}j})+I(\hat{g}_{\tilde{\lambda}j})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The goal here is to first show that 
+\begin_inset Formula $I(\hat{g}_{\hat{\lambda}(j)})$
+\end_inset
+
+ is bounded, which implies that 
+\begin_inset Formula $\sum_{j=1}^{J}I(\hat{g}_{\hat{\lambda}j})$
+\end_inset
+
+ is bounded.
+\end_layout
+
+\begin_layout Standard
+By Vandegeer (10.6),
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{2} & \le & O_{p}(1)\left|\left(\epsilon_{V},\sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)\right|\\
+ & \le & O_{P}(n^{-1/2})\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}^{1-\alpha/2}\left(I(\hat{g}_{\hat{\lambda}(j)})+I(\hat{g}_{\tilde{\lambda}(j)})\right)^{\alpha/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $I(\hat{g}_{\hat{\lambda}(j)})\le I(\hat{g}_{\tilde{\lambda}(j)})$
+\end_inset
+
+, then we'd be done.
+ 
+\end_layout
+
+\begin_layout Standard
+Otherwise, if 
+\begin_inset Formula $I(\hat{g}_{\hat{\lambda}(j)})\ge I(\hat{g}_{\tilde{\lambda}(j)})$
+\end_inset
+
+ , then
+\begin_inset Formula 
+\[
+\left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}\le O_{P}(n^{-1/(\alpha+2)})I(\hat{g}_{\hat{\lambda}(j)})^{\alpha/(\alpha+2)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By triangle inequality 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda},(j)}-\hat{g}_{\hat{\lambda},(j)}\right\Vert _{V} & \le & \left\Vert \sum_{j=1}^{J}\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}+\sum_{j\ne(j)}\left\Vert \hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furhtermore, note that since 
+\begin_inset Formula $I_{j}$
+\end_inset
+
+ is a pseudonorm, 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right\Vert _{V} & \le & KI_{j}\left(\hat{g}_{\tilde{\lambda},j}-\hat{g}_{\hat{\lambda},j}\right)\\
+ & \le & K\left(I_{j}(\hat{g}_{\tilde{\lambda},j})+I_{j}(\hat{g}_{\hat{\lambda},j})\right)\\
+ & \le & 2KI_{j}(\hat{g}_{\hat{\lambda},(j)})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Also, by the assumption that the penalty is bounded by the L2 norm,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\frac{I_{(j)}^{v_{(j)}}\left(\hat{g}_{\tilde{\lambda},(j)}-\hat{g}_{\hat{\lambda},(j)}\right)-M_{0}}{M}\right)^{1/2}\le\left\Vert \hat{g}_{\tilde{\lambda},(j)}-\hat{g}_{\hat{\lambda},(j)}\right\Vert _{V}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furthermore, we know that 
+\begin_inset Formula 
+\[
+\left|I_{(j)}\left(\hat{g}_{\tilde{\lambda},(j)}\right)-I_{(j)}\left(\hat{g}_{\hat{\lambda},(j)}\right)\right|\le I_{(j)}\left(\hat{g}_{\tilde{\lambda},(j)}-\hat{g}_{\hat{\lambda},(j)}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\begin_inset Formula 
+\[
+\left(\frac{\left|I_{(j)}\left(\hat{g}_{\tilde{\lambda},(j)}\right)-I_{(j)}\left(\hat{g}_{\hat{\lambda},(j)}\right)\right|^{v_{(j)}}-M_{0}}{M}\right)^{1/2}\le O_{P}(n^{-1/(\alpha+2)})I(\hat{g}_{\hat{\lambda}(j)})^{\alpha/(\alpha+2)}+2K(J-1)I_{(j)}(\hat{g}_{\hat{\lambda},(j)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We break up the RHS into three cases:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 1:
+\series default
+ 
+\begin_inset Formula $O_{P}(n^{-1/(\alpha+2)})I(\hat{g}_{\hat{\lambda}(j)})^{\alpha/(\alpha+2)}$
+\end_inset
+
+ is the largest
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left|I_{(j)}\left(\hat{g}_{\tilde{\lambda},(j)}\right)-I_{(j)}\left(\hat{g}_{\hat{\lambda},(j)}\right)\right|\le\left(O_{P}(n^{-2/(\alpha+2)})I_{(j)}(\hat{g}_{\hat{\lambda}(j)})^{2\alpha/(\alpha+2)}+M_{0}\right)^{1/v_{j}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $M_{0}$
+\end_inset
+
+ is the largest, then 
+\begin_inset Formula $I_{(j)}\left(\hat{g}_{\tilde{\lambda},(j)}\right)$
+\end_inset
+
+ is clearly bounded, which implies
+\end_layout
+
+\begin_layout Standard
+Otherwise, if 
+\begin_inset Formula $v_{(j)}\ge2\alpha/(2+\alpha)$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\[
+I_{(j)}\left(\hat{g}_{\hat{\lambda},(j)}\right)\le O_{P}(n^{-2/(v_{(j)}\alpha+2v_{(j)}-2\alpha)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Case 2: 
+\begin_inset Formula $2K(J-1)I_{(j)}(\hat{g}_{\hat{\lambda},(j)})$
+\end_inset
+
+ 
+\series default
+is bigger
+\end_layout
+
+\begin_layout Standard
+Then
+\begin_inset Formula 
+\[
+I_{(j)}\left(\hat{g}_{\hat{\lambda},(j)}\right)\le O_{p}(1)I_{(j)}(\hat{g}_{\hat{\lambda},(j)})^{2/v_{(j)}}+I_{(j)}\left(\hat{g}_{\tilde{\lambda},(j)}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $v_{(j)}\le2$
+\end_inset
+
+, then you get an explosion.
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $v_{(j)}>2$
+\end_inset
+
+, then you have happiness and rainbows.
+\begin_inset Formula 
+\[
+I_{(j)}(\hat{g}_{\hat{\lambda},(j)})^{1-2/v_{(j)}}=O_{p}(1)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,830 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+
+\subsection{Another cute lemma?}
+
+
+\subsubsection*{Lemma 1}
+
+Suppose $I:\mathcal{G}\mapsto[0,\infty)$ is a pseudonorm. So $I(g)+I(f)\ge I(g+f)$
+and $I(cg)=cI(g)\forall c>0$. Then 
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial t}I(g+th)\right| & \le & I(h)
+\end{eqnarray*}
+
+
+\textbf{Proof:}
+
+By the triangle inequality for $I$, we have 
+\[
+\left|I(g+th)-I(g)\right|\le I(th)
+\]
+
+
+then diving by $t$ and taking the limit, we have 
+
+\[
+\frac{\partial}{\partial t}I(g+th)=\lim_{t\rightarrow0}\frac{\left|I(g+th)-I(g)\right|}{t}\le\lim_{t\rightarrow0}\frac{I(th)}{t}=I(h)
+\]
+
+
+
+\subsubsection*{Lemma 2}
+
+Suppose the conditions in lemma 1, as well as 
+\[
+I^{v}(g)\le M\|g\|_{n}^{2}+M_{0}
+\]
+
+
+For any $\lambda<\tilde{\lambda}$, 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda}\right\Vert _{n}^{2}=O_{p}(1)v\tilde{\lambda}^{2}I^{v}(\hat{g}_{\lambda})
+\]
+
+
+\textbf{Proof:}
+
+Since $\hat{g}_{\lambda}$ is the minimizer of the penalized criterion,
+then for $h$ s.t. $\hat{g}_{\lambda}+th\in\mathcal{G}\forall t>0$
+
+\[
+\frac{\partial}{\partial t}\left.\left(\|y-(\hat{g}_{\lambda}+th)\|_{n}^{2}+\lambda^{2}I^{v}(\hat{g}_{\lambda}+th)\right)\right|_{t=0}=0
+\]
+
+
+But we also know that 
+
+\begin{eqnarray*}
+\frac{\partial}{\partial t}\left.\left(\|y-(\hat{g}_{\lambda}+th)\|_{n}^{2}+\lambda^{2}I(\hat{g}_{\lambda}+th)\right)\right|_{t=0} & = & -2\left(y-\hat{g}_{\lambda},h\right)_{T}+\lambda^{2}vI^{v-1}(\hat{g}_{\lambda})\frac{\partial}{\partial t}I(\hat{g}_{\lambda}+th)
+\end{eqnarray*}
+
+
+Then for $\lambda<\tilde{\lambda}$, we have
+\[
+-2\left(y-\hat{g}_{\lambda},h\right)+\lambda^{2}vI^{v-1}(\hat{g}_{\lambda})\frac{\partial}{\partial t}I(\hat{g}_{\lambda}+th)=-2\left(y-\hat{g}_{\tilde{\lambda}},h\right)_{T}+\tilde{\lambda}^{2}vI^{v-1}(\hat{g}_{\tilde{\lambda}})\frac{\partial}{\partial t}I(\hat{g}_{\tilde{\lambda}}+th)
+\]
+
+
+Rearranging, we get 
+\begin{eqnarray*}
+0 & = & 2\left(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda},h\right)_{T}+v\left(\tilde{\lambda}^{2}I^{v-1}(\hat{g}_{\tilde{\lambda}})\frac{\partial}{\partial t}I(\hat{g}_{\tilde{\lambda}}+th)-\lambda^{2}I^{v-1}(\hat{g}_{\lambda})\frac{\partial}{\partial t}I(\hat{g}_{\lambda}+th)\right)\\
+ & \le & 2\left(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda},h\right)_{T}+vI^{v-1}(\hat{g}_{\lambda})I(h)\tilde{\lambda}^{2}
+\end{eqnarray*}
+
+
+where the first inequality follows from Lemma 1. Setting $h=\hat{g}_{\lambda}-\hat{g}_{\tilde{\lambda}}$,
+we get
+
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda}\right\Vert _{n}^{2} & = & v\tilde{\lambda}^{2}I^{v-1}(\hat{g}_{\lambda})I\left(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda}\right)
+\end{eqnarray*}
+
+
+Since 
+\[
+I\left(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda}\right)\le I(\hat{g}_{\tilde{\lambda}})+I(\hat{g}_{\lambda})
+\]
+
+
+then 
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda}\right\Vert _{n}^{2}=O_{p}(1)v\tilde{\lambda}^{2}I^{v}(\hat{g}_{\lambda})
+\]
+
+
+(Note that if we assume $I^{v}\left(\hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda}\right)\le O_{P}(1)\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda}\right\Vert _{n}^{2}+C$,
+then $\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\lambda}\right\Vert _{n}^{2-2/v}=O_{p}(1)vI^{v-1}(\hat{g}_{\lambda})\tilde{\lambda}^{2}+C$.)
+
+
+\subsubsection*{Lemma 3}
+
+Suppose 
+\[
+H\left(\delta,\left\{ g:I(g)\le1\right\} ,\|\cdot\|_{n}\right)\le A\delta^{-\alpha}
+\]
+
+
+and 
+\[
+\frac{\|g\|_{n}}{I(g)}\le K<\infty
+\]
+
+
+Suppose for some $\hat{\lambda}\le\tilde{\lambda}$, $\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{n}$
+is bounded (doesn't grow with $n$).
+
+Suppose 
+\[
+I^{v}(\hat{g}_{\hat{\lambda}})\le M\|\hat{g}_{\hat{\lambda}}\|_{n}^{2}+M_{0}
+\]
+
+
+(Note: this is probably not necessary, but I'm sleepy)
+
+Then 
+\[
+H\left(\delta,\left\{ \hat{g}_{\lambda}:\lambda\ge\hat{\lambda}\right\} ,\|\cdot\|_{n}\right)\le A\delta^{-\alpha}
+\]
+
+
+\textbf{Proof:}
+
+Let $I(\hat{g}_{\hat{\lambda}})=R$. We'll suppose $R\ge1$. Otherwise,
+we'll be done.
+
+By the assumptions, $R$ is bounded since 
+\[
+I^{v}(\hat{g}_{\hat{\lambda}})\le M\|\hat{g}_{\hat{\lambda}}\|_{n}^{2}+M_{0}\le M\left(\|\hat{g}_{\hat{\lambda}}-\hat{g}_{\tilde{\lambda}}\|_{n}+\|\hat{g}_{\tilde{\lambda}}\|_{n}\right)^{2}+M_{0}
+\]
+
+
+Note that $\left\{ \hat{g}_{\lambda}:\lambda\ge\hat{\lambda}\right\} \subseteq\left\{ g:I(g)\le R\right\} =\left\{ Rg:I(g)\le1\right\} $.
+Note that if $h$ is the closest function in the $\delta$-cover for
+$\left\{ g:I(g)\le1\right\} $, then
+
+\[
+\|g-h\|_{n}\le\delta\implies\|Rg-\delta\lfloor\frac{R}{\delta}\rfloor h\|_{n}\le\|Rg-Rh\|_{n}+\delta\|h\|_{n}\le\delta(1+R+K)
+\]
+
+
+Then for some constant $\tilde{A}$ dependent on $A$, $R$, $K$,
+
+\[
+H\left(\delta,\left\{ \hat{g}_{\lambda}:\lambda\ge\hat{\lambda}\right\} ,\|\cdot\|_{n}\right)\le H\left(\delta,\left\{ Rg:I(g)\le1\right\} ,\|\cdot\|_{n}\right)\le\tilde{A}\delta^{-\alpha}
+\]
+
+
+
+\subsubsection*{Lemma 4}
+
+Suppose
+
+\[
+H\left(\delta,\left\{ \hat{g}_{\lambda}:\lambda\in\Lambda\right\} ,\|\cdot\|_{n}\right)\le A\delta^{-\alpha}
+\]
+Suppose $\hat{\lambda}$ is the CV-fitted lambda and $\tilde{\lambda}$
+is the oracle lambda given in Vandegeer. 
+
+Suppose
+
+\[
+\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{V}=O_{p}(1)\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{T}
+\]
+
+
+Then
+
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}=O_{p}(n^{-1/(2+\alpha)})
+\]
+
+
+\textbf{Proof:}
+
+The basic inequality gives us
+
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2}\le2\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|+2\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|
+\]
+
+
+If $\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{T}\right|$
+is the bigger term, then
+
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2}\le O_{P}(1)\left|\left(\epsilon,\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|
+\]
+
+
+Use the same arguments as Thrm 9.1 to show that $\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}=O_{p}(n^{-1/2})$.
+
+If $\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{T}\right|$
+is the bigger term, then by Cauchy Schwarz
+
+\begin{eqnarray*}
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}^{2} & \le & O_{p}(1)\left|\left(g^{*}-\hat{g}_{\tilde{\lambda}},\hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right)_{V}\right|\\
+ & \le & O_{p}(1)\left\Vert g^{*}-\hat{g}_{\tilde{\lambda}}\right\Vert _{V}\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}
+\end{eqnarray*}
+
+
+Hence
+\[
+\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{p}(n^{-1/(2+\alpha)})
+\]
+
+
+\textbf{Need to show:}
+
+If we show that $I(\hat{g}_{\hat{\lambda}})=O_{p}(n^{\frac{2}{(2+\alpha)v}})\le O_{p}(n^{1/\alpha})$,
+then by Lemma 2, 3, 4, we have that $\left\Vert \hat{g}_{\tilde{\lambda}}-\hat{g}_{\hat{\lambda}}\right\Vert _{V}\le O_{p}(n^{-1/(2+\alpha)})$.
+
+It might be easier to show that for many penalties, $I(\hat{g}_{\lambda=0})=O_{p}(n^{\frac{2}{(2+\alpha)v}})$???
+
+\pagebreak{}
+
+
+\section*{OLD}
+
+
+\subsubsection*{Lemma 3:}
+
+Suppose the function class $\mathcal{F}$ is bounded s.t. $\sup_{f\in\mathcal{F}}\|f\|_{n}\le R<\infty$.
+Let 
+\[
+\tilde{\mathcal{F}}=\left\{ \gamma f\mbox{ }:\mbox{ }f\in\mathcal{F},\gamma\in(0,1]\right\} 
+\]
+
+
+\[
+H\left(\delta(1+R+\delta),\tilde{\mathcal{F}},\|\cdot\|_{n}\right)\le\log(1+\lfloor\frac{1}{\delta}\rfloor)+H\left(\delta,\mathcal{F},\|\cdot\|_{n}\right)
+\]
+
+
+
+\paragraph*{Proof:}
+
+Let $\{h_{i}\}_{i=1}^{N}$ be the $\delta$-cover for $\mathcal{F}$.
+Consider any $f\in\mathcal{F}$ and let $h_{(f)}$ be the closest
+function in $\delta$-cover for $\mathcal{F}$. Choose $j\in\mathbb{Z}^{+}$
+such that $|\gamma-\delta j|<\delta$.
+
+\begin{eqnarray*}
+\|\gamma f-\delta jh_{(f)}\|_{n} & \le & \|\gamma f-\gamma h_{(f)}\|_{n}+\|\gamma h_{(f)}-\delta jh_{(f)}\|_{n}\\
+ & \le & \gamma\|f-h_{(f)}\|_{n}+|\gamma-\delta j|\|h_{(f)}\|_{n}\\
+ & \le & \gamma\delta+\delta\left(\|f-h_{(f)}\|_{n}+\|f\|_{n}\right)\\
+ & \le & \gamma\delta+\delta\left(\delta+R\right)\\
+ & \le & \delta\left(1+R+\delta\right)
+\end{eqnarray*}
+
+
+Hence we have found that the following $N(1+\lfloor\frac{1}{\delta}\rfloor)$
+functions form a $\delta(1+R+\delta)$-cover for $\tilde{\mathcal{F}}$:
+\[
+\{h_{i}\}_{i=1}^{N}\cup\left\{ j\delta h_{i}\mbox{ }:\mbox{ }j\in1:\lfloor\frac{1}{\delta}\rfloor,i\in1:N\right\} 
+\]
+
+
+
+\subsubsection*{Lemma 4:}
+
+Define function classes $\{\mathcal{F}_{j}\}_{j=1}^{J}$ and 
+\[
+\tilde{\mathcal{F}}=\left\{ \sum_{j=1}^{J}f_{j}\mbox{ }:\mbox{ }f_{j}\in\mathcal{F}_{j}\right\} 
+\]
+
+
+Then
+
+\[
+H\left(J\delta,\tilde{\mathcal{F}},\|\cdot\|_{n}\right)\le\sum_{j=1}^{J}H\left(\delta,\mathcal{F}_{j},\|\cdot\|_{n}\right)
+\]
+
+
+
+\paragraph*{Proof:}
+
+For every $j=1:J$, consider any $f_{j}\in\mathcal{F}_{j}$ and let
+$h_{(j)}$ be the closest function in the $\delta$-cover for $\mathcal{F}_{j}$.
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}f_{j}-\sum_{j=1}^{J}h_{(j)}\| & \le & \sum_{j=1}^{J}\|f_{j}-h_{(j)}\|\le J\delta
+\end{eqnarray*}
+
+
+Hence $\exp\left(\sum_{j=1}^{J}H\left(\delta,\mathcal{F}_{j},\|\cdot\|_{n}\right)\right)$
+functions form a $J\delta$-cover for $\tilde{\mathcal{F}}$.
+
+
+\subsubsection*{Lemma 5:}
+
+Suppose for all $j=1,...,J$, there is some $\alpha_{j}>0$ and $A_{j}>0$
+s.t. the following entropy bound holds for all $\delta>0$
+
+\[
+H\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le A\delta^{-\alpha_{j}}
+\]
+
+
+Then for sufficiently small$\delta>0$, we have
+
+\[
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le2JA\left(\frac{\delta}{2J\left(1+R\right)}\right)^{-\alpha_{max}}
+\]
+
+
+where $\alpha_{max}=\max_{j\in1:J}\alpha_{j}$.
+
+
+\paragraph*{Proof:}
+
+By Lemma 3,
+\[
+H\left(\delta(1+R+\delta),\left\{ \gamma\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}\mbox{ }:\mbox{ }g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0,\gamma\in(0,1]\right\} ,\|\cdot\|_{T}\right)\le\log(1+\lfloor\frac{1}{\delta}\rfloor)+A\delta^{-\alpha_{j}}
+\]
+
+
+Note that 
+\[
+\frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}=\sum_{j=1}^{J}\left(\frac{I(g_{j})+I(g_{j}^{*})}{\sup_{\ell\in1:J}I(g_{\ell})+I(g_{\ell}^{*})}\right)\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}
+\]
+
+
+By Lemma 4,
+
+\[
+H\left(J\delta(1+R+\delta),\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}\mbox{ }:\mbox{}g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le J\log(1+\lfloor\frac{1}{\delta}\rfloor)+JA\delta^{-\alpha_{j}}
+\]
+
+
+Hence for sufficiently small $\delta$, 
+\[
+H\left(J\delta(1+R+\delta),\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}\mbox{ }:\mbox{}g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le2JA\delta^{-\alpha_{max}}
+\]
+
+
+Rearranging, we get 
+\begin{eqnarray*}
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sup_{j\in1:J}\left(I(g_{j})+I(g_{j}^{*})\right)}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right) & \le & 2AJ\left(\sqrt{\left(\frac{1+R}{2}\right)^{2}+\frac{\delta}{J}}-\frac{1+R}{2}\right)^{-\alpha_{max}}\\
+ & \le & 2AJ\left(\frac{\delta}{2J\left(1+R\right)}\right)^{-\alpha_{max}}
+\end{eqnarray*}
+
+
+(Used the fact that for $b>0$ small enough, $\sqrt{a^{2}+b}-a\ge\sqrt{(a+\frac{b}{4a})^{2}}-a=\frac{b}{4a}$)
+
+
+\subsubsection*{Lemma 5b:}
+
+Suppose for all $j=1,...,J$, there is some $\alpha_{j}>0$ and $A_{j}>0$
+s.t. the following entropy bound holds for all $\delta>0$
+
+\[
+H\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|\right)\le A\delta^{-\alpha_{j}}
+\]
+
+
+Then for sufficiently small$\delta>0$, we have
+
+\[
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|\right)\le2JA\left(STUFF\right)^{-\alpha_{max}}
+\]
+
+
+where $\alpha_{max}=\max_{j\in1:J}\alpha_{j}$.
+
+
+\paragraph*{Proof:}
+
+Note that
+
+\[
+\frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I(g_{j})+I(g_{j}^{*})}=\sum_{j=1}^{J}\left(\frac{I(g_{j})+I(g_{j}^{*})}{\sum_{j=1}^{J}I(g_{\ell})+I(g_{\ell}^{*})}\right)\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}
+\]
+
+
+So we can express
+\[
+\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} \subseteq\left\{ \sum_{j=1}^{J}\gamma_{j}\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0,\sum_{j=1}^{J}\gamma_{j}=1\right\} 
+\]
+
+
+Let $\mathcal{H}_{j}$ be the set of functions that form a $\delta$-cover
+for $\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} $.
+Consider the set of functions 
+\[
+\left\{ \sum_{j=1}^{J}\delta k_{j}h_{j}\mbox{ }:\mbox{ }h_{j}\in\mathcal{H}_{j},1-\frac{1}{\delta}\le\delta\mbox{\ensuremath{\sum}}_{j=1}^{J}k_{j}\le1,k_{j}\in1:\lfloor\frac{1}{\delta}\rfloor\right\} 
+\]
+
+
+Let $|\delta k_{j}-\gamma_{i}|<\delta/2$. Then 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}\gamma_{j}\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}-\sum_{j=1}^{J}\delta k_{j}h_{j}\right\Vert  & \le & \sum_{j=1}^{J}\left\Vert \gamma_{j}\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}-\delta k_{j}h_{j}\right\Vert \\
+ & \le & \sum_{j=1}^{J}\left\Vert \gamma_{j}\frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}-\gamma_{i}h_{j}\right\Vert +|\delta k_{j}-\gamma_{i}|\|h_{j}\|\\
+ & \le & \sum_{j=1}^{J}\left(\gamma_{j}\delta+\frac{\delta}{2}\left(\left\Vert \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}-h_{j}\right\Vert +\left\Vert \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}\right\Vert \right)\right)\\
+ & \le & \delta(1+JR+J\delta)
+\end{eqnarray*}
+
+
+Hence these $\left(\Pi_{j=1}^{J}N_{j}\right){\lfloor\frac{1}{\delta}\rfloor+J-1 \choose J-1}$
+functions form a $\delta(1+JR+J\delta)$ cover. Hence the entropy
+is 
+
+\[
+H\left(\delta(1+JR+J\delta),\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I(g_{j})+I(g_{j}^{*})}\mbox{ }:\mbox{}g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|\right)\le(J-1)\log(1+J+\lfloor\frac{1}{\delta}\rfloor)+A\sum_{j=1}^{J}\delta^{-\alpha_{j}}
+\]
+
+
+Note: 
+\[
+{\lfloor\frac{1}{\delta}\rfloor+J-1 \choose J-1}\le\left(\lfloor\frac{1}{\delta}\rfloor+J-1\right)^{J-1}
+\]
+
+
+Hence for sufficiently small $\delta$, 
+\[
+H\left(\delta(1+JR+J\delta),\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I(g_{j})+I(g_{j}^{*})}\mbox{ }:\mbox{}g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|\right)\le2JA\delta^{-\alpha_{max}}
+\]
+
+
+Rearranging, we get 
+\begin{eqnarray*}
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|\right) & \le & 2AJ\left(\frac{-JR+1+\sqrt{(JR+1)^{2}+4\delta J}}{2J}\right)^{-\alpha_{max}}\\
+ & \le & 2AJ\left(\frac{\sqrt{2}\delta J^{3/2}}{1+JR}\right)^{-\alpha_{max}}
+\end{eqnarray*}
+
+
+(Used the fact that for $b>0$ small enough, $\sqrt{a^{2}+b}-a\ge\sqrt{(a+\frac{b}{4a})^{2}}-a=\frac{b}{4a}$)
+
+
+\subsubsection*{Lemma 6:}
+
+Suppose $\epsilon_{i}$ are sub-gaussian errors and for the function
+class $\mathcal{F}$, we have that for some $0<\alpha<2$, $A'>0$,
+and $J>0$
+
+\[
+H\left(\delta,\mathcal{F},\|\cdot\|_{T}\right)\le A'J^{\tau}\delta^{-\alpha}\mbox{ }\forall\delta>0
+\]
+
+
+Then for $T=2C_{1}CA'^{1/2}J^{\tau/2}2^{1-\alpha/2}$
+
+\[
+Pr\left(\sup_{f\in\mathcal{F}}\frac{\left|\frac{1}{\sqrt{n}}\sum_{i=1}^{n}\epsilon_{i}f(z_{i})\right|}{\|f\|_{n}^{1-\alpha/2}}\ge T\right)\le c\exp(-T^{2}/c^{2})
+\]
+
+
+
+\paragraph*{Proof:}
+
+Follow proof for Lemma 8.4 in Vandegeer, but with $A=A'J^{-\alpha}$.
+Note that we then have $A_{0}=A'^{1/2}J^{\tau/2}$. We then get 
+\[
+Pr\left(\sup_{f\in\mathcal{F}}\frac{\left|\frac{1}{\sqrt{n}}\sum_{i=1}^{n}\epsilon_{i}f(z_{i})\right|}{\|f\|_{n}^{1-\alpha/2}}\ge2C_{1}CA'^{1/2}J^{\tau/2}2^{1-\alpha/2}\right)\le c\exp(-T^{2}/c^{2})
+\]
+
+
+Note that we can write via shorthand that
+\[
+\sup_{f\in\mathcal{F}}\frac{\left|\frac{1}{n}\sum_{i=1}^{n}\epsilon_{i}f(z_{i})\right|}{\|f\|_{n}^{1-\alpha/2}}=O_{p}(J^{\tau/2}n^{-1/2})
+\]
+
+
+
+\subsection*{Result 3: Single $\lambda$, Multiple Penalties, Optimal $\tilde{\lambda}_{T}$
+over $X_{T}$}
+
+Consider function classes $\mathcal{G}_{j}$ that are cones. Also,
+suppose we have an additive model:
+
+\[
+y=\sum_{j=1}^{J}g_{j}^{*}+\epsilon
+\]
+
+
+where $g_{j}^{*}\in\mathcal{G}_{j}$.
+
+We fit the model by least squares with separate penalties for each
+function $g_{j}$:
+\[
+\{\hat{g}_{j}\}_{j=1}^{J}=\arg\min_{g_{j}\in\mathcal{G}_{j}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j})
+\]
+
+
+Suppose $v_{j}\ge1$ for all $j$. (This requirement on $v_{j}$ stricter
+than Vandegeer Thrm 10.2)
+
+Suppose for all $j$, there is some $0<\alpha<2$ s.t. for all $\delta>0$,
+\[
+H\left(\delta,\{g_{j}\in\mathcal{G}_{j}:I(g_{j})\le1\},\|\cdot\|_{T}\right)\le A\delta^{-\alpha}
+\]
+
+
+and that for all $j$
+
+\[
+\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\|g_{j}\|_{T}}{I(g_{j})}\le R<\infty
+\]
+
+
+If we choose $\lambda$ s.t. 
+\[
+\tilde{\lambda}_{T}^{-1}=O_{p}\left(n^{1/(2+\alpha)}\right)\left(J+\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})\right)^{(2-\alpha)/2(2+\alpha)}
+\]
+
+
+then
+\[
+\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}=O_{p}\left(\tilde{\lambda}_{T}\right)J\left(\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})\right)^{1/2}
+\]
+
+
+and 
+\[
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le O_{p}(J)\left(J+\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})\right)
+\]
+
+
+
+\subsubsection*{Proof:}
+
+The basic inequality gives us:
+
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le2\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)
+\]
+
+
+\textbf{Case 1: $\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\le\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)$}
+
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}(\lambda)\left(\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)\right)^{1/2}
+\]
+
+
+\textbf{Case 2: $\left|\left(\epsilon_{T},\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\right)\right|\ge\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}\left(g_{j}^{*}\right)$}
+
+By Lemma 3,
+
+\[
+H\left(\delta,\left\{ \frac{\sum_{j=1}^{J}g_{j}-g_{j}^{*}}{\sum_{j=1}^{J}I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le\tilde{A}J^{1-\alpha}\delta^{-\alpha}
+\]
+
+
+Hence by (10.6) in Vandegeer,
+
+\[
+\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\left|\left(\epsilon_{T},\sum_{j=1}^{J}g_{j}-g_{j}^{*}\right)\right|}{\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|^{1-\alpha/2}\left(\sum_{j=1}^{J}I(g_{j})+I(g_{j}^{*})\right)^{\alpha/2}}=O_{p}\left(n^{-1/2}\right)J^{1-\alpha}
+\]
+
+
+and the basic inequality becomes 
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{2}+\lambda^{2}\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\le O_{p}\left(n^{-1/2}\right)J^{1-\alpha}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha/2}\left(\sum_{j=1}^{J}I(\hat{g}_{j})+I(g_{j}^{*})\right)^{\alpha/2}
+\]
+
+
+\textbf{Case 2a:} Suppose $\sum_{j=1}^{J}I(\hat{g}_{j})\le\sum I(g_{j}^{*})$. 
+
+Then 
+\begin{eqnarray*}
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T} & \le & O_{p}\left(n^{-1/(2+\alpha)}\right)J^{\frac{2(1-\alpha)}{\alpha+2}}\left(\sum_{j=1}^{J}I(g_{j}^{*})\right)^{\alpha/(2+\alpha)}
+\end{eqnarray*}
+
+
+\textbf{Case 2b:} Suppose $\sum_{j=1}^{J}I(\hat{g}_{j})\ge\sum I(g_{j}^{*})$. 
+
+First note that by assuming $v_{j}\ge1$, we must have $I_{j}(\hat{g}_{j})\le I_{j}^{v_{j}}(\hat{g}_{j})+1$.
+So
+
+\begin{eqnarray*}
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j}) & \le & J+\sum_{j=1}^{J}I_{j}^{v_{j}}(\hat{g}_{j})\\
+ & \le & J+O_{p}\left(n^{-1/2}\right)J^{1-\alpha}\lambda^{-2}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}^{1-\alpha/2}\left(\sum_{j=1}^{J}I(\hat{g}_{j})\right)^{\alpha/2}
+\end{eqnarray*}
+
+
+\textbf{Case 2ba:} If the second term on the RHS in the inequality
+above is bigger, then
+
+\[
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le O_{p}\left(n^{-1/(2-\alpha)}\right)J^{2(1-\alpha)/(2-\alpha)}\lambda^{-4/(2-\alpha)}\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}
+\]
+
+
+which implies
+
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-1/(2-\alpha)}\right)J^{\alpha(1-\alpha)/(2-\alpha)}\lambda^{-2\alpha/(2-\alpha)}
+\]
+
+
+and 
+\[
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le J^{(\alpha+2)(1-\alpha)/(2-\alpha)}\left(J+\sum_{j=1}^{J}I_{j}^{v_{j}}(g_{j}^{*})\right)
+\]
+
+
+\textbf{Case 2bb:} If the first term on the RHS in the inequality
+above is bigger, then
+\[
+\sum_{j=1}^{J}I_{j}(\hat{g}_{j})\le J\implies\|\sum_{j=1}^{J}\hat{g}_{j}-g_{j}^{*}\|_{T}\le O_{p}\left(n^{-1/(2+\alpha)}\right)J^{(2-\alpha)/(2+\alpha)}
+\]
+
+
+
+\subsection*{Result 5: Multiple $\lambda$, Multiple Penalties, Optimal $\lambda$
+on $X_{T}$}
+
+Consider an additive model:
+
+\[
+y=\sum_{j=1}^{J}g_{j}^{*}+\epsilon
+\]
+
+
+We fit the model by least squares with separate penalties and separate
+$\lambda$ for each function $g_{j}$:
+\[
+\{\hat{g}_{j}\}_{j=1}^{J}=\arg\min_{g_{j}\in\mathcal{G}_{j}}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\frac{1}{J}\sum_{j=1}^{J}\lambda_{j}^{2}I_{j}^{v_{j}}(g_{j})
+\]
+
+
+Suppose $v_{j}>\frac{2\alpha_{j}}{2+\alpha_{j}}$ for all $j$.
+
+Suppose for all $j$, there is some $0<\alpha_{j}<2$ s.t. for all
+$\delta>0$, 
+\[
+H\left(\delta,\left\{ \frac{g_{j}-g_{j}^{*}}{I(g_{j})+I(g_{j}^{*})}:g_{j}\in\mathcal{G}_{j},I(g_{j})+I(g_{j}^{*})>0\right\} ,\|\cdot\|_{T}\right)\le\frac{A}{J}\delta^{-\alpha_{j}}
+\]
+
+
+and for all $j$, 
+\[
+\sup_{g_{j}\in\mathcal{G}_{j}}\frac{\|g_{j}-g_{j}^{*}\|_{T}}{I(g_{j})+I(g_{j}^{*})}\le R<\infty
+\]
+
+
+If we choose $\lambda$ s.t. 
+\[
+\tilde{\lambda}_{j}^{-1}=???
+\]
+
+
+then
+\[
+\|\sum_{j=1}^{J}g_{j}-g_{j}^{*}\|_{T}=???
+\]
+
+
+and 
+\[
+\sum_{j=1}^{J}I^{v_{j}}(\hat{g}_{\lambda,j})=???
+\]
+
+
+\pagebreak{}
+
+
+\subsubsection*{Example 1: Sobelov norm (NOT DONE)}
+
+Consider the functions 
+\[
+\mathcal{G}=\left\{ g:[0,1]\mapsto\mathbb{R}:\int_{0}^{1}g^{(m)}(z)^{2}dz<\infty\right\} 
+\]
+
+
+Suppose $x_{i}$ are all unique. Then the Sobelov norm for the class
+$\{\hat{g}_{\lambda}\in\mathcal{G}:\lambda\in\Lambda\}$ is bounded
+above by its $L_{2}(P_{n})$ norm. 
+
+\[
+I^{2}(\hat{g}_{\lambda})=\int_{0}^{1}\left(\hat{g}_{\lambda}^{(m)}(z)\right)^{2}dz\le2\|\hat{g}_{\lambda}\|_{n}^{2}+4I^{2}(\tilde{g})+4\|y\|_{n}^{2}\mbox{ }\forall\lambda\in\Lambda
+\]
+
+
+PROBLEM: as defined, it is possible that $I^{2}(\tilde{g})$ grows
+with $n$, which is not okay!
+
+\textbf{Proof:}
+
+Let $\tilde{g}$ satisfy $\tilde{g}(x_{i})=y_{i}$ and have the smallest
+value for $\int_{0}^{1}\left(\tilde{g}^{(m)}(z)\right)^{2}dz$. This
+function $\tilde{g}$ should always exist. 
+
+\textbf{Case 1:} $\lambda\le1/2$
+
+By definition of $\hat{g}_{\lambda}$
+
+\[
+\|y-\hat{g}_{\lambda}\|_{n}^{2}+\lambda^{2}I^{2}(\hat{g}_{\lambda})\le\|y-(\tilde{g}-\lambda\hat{g}_{\lambda})\|_{n}^{2}+\lambda^{2}I^{2}(\tilde{g}-\lambda\hat{g}_{\lambda})
+\]
+
+
+Note that 
+\begin{eqnarray*}
+I^{2}(\tilde{g}-\lambda\hat{g}_{\lambda}) & = & \int_{0}^{1}\left(\tilde{g}^{(m)}-\lambda\hat{g}_{\lambda}^{(m)}\right)^{2}dz\\
+ & = & 2\int_{0}^{1}\max\left(\left|\tilde{g}^{(m)}\right|^{2},\left|\lambda\hat{g}_{\lambda}^{(m)}\right|^{2}\right)dz\\
+ & = & 2\left(\int_{0}^{1}\left|\tilde{g}^{(m)}\right|^{2}dz+\int_{0}^{1}\left|\lambda\hat{g}_{\lambda}^{(m)}\right|^{2}dz\right)
+\end{eqnarray*}
+
+
+Hence
+
+\[
+\lambda^{2}I^{2}(\hat{g}_{\lambda})\le\lambda^{2}\|\hat{g}_{\lambda}\|_{n}^{2}+2\lambda^{2}I^{2}(\tilde{g})+2\lambda^{4}I^{2}(\hat{g}_{\lambda})
+\]
+
+
+The following ineq follows, where the RHS is maximized when $\lambda=1/2$
+
+\[
+I^{2}(\hat{g}_{\lambda})\le\frac{\lambda^{2}}{\lambda^{2}-2\lambda^{4}}\left(\|\hat{g}_{\lambda}\|_{n}^{2}+2I^{2}(\tilde{g})\right)\le2\|\hat{g}_{\lambda}\|_{n}^{2}+4I^{2}(\tilde{g})
+\]
+
+
+\textbf{Case 2:} $\lambda>1/2$
+
+By definition of $\hat{g}_{\lambda}$
+
+\[
+\|y-\hat{g}_{\lambda}\|_{n}^{2}+\lambda^{2}I^{2}(\hat{g}_{\lambda})\le\|y\|_{n}^{2}
+\]
+
+
+The RHS is maximized when $\lambda=1/2$, so
+
+\[
+I^{2}(\hat{g}_{\lambda})\le4\|y\|_{n}^{2}
+\]
+
+
+Hence we have an upper bound for the Sobelov norm
+
+\[
+I^{2}(\hat{g}_{\lambda})\le2\|\hat{g}_{\lambda}\|_{n}^{2}+4I^{2}(\tilde{g})+4\|y\|_{n}^{2}
+\]
+
+
+\pagebreak{}
+
+
+\subsubsection*{Appendix}
+
+
+\paragraph{A cute lemma I found but never used: }
+
+Supposing that $I^{v}(\hat{g}_{\lambda})$ is continuous in $\lambda$,
+then given training data $T$, 
+\begin{eqnarray*}
+\frac{\partial}{\partial\lambda}L_{T}(\hat{g}_{\lambda},\lambda) & = & 2\lambda I^{v}(\hat{g}_{\lambda})
+\end{eqnarray*}
+
+
+Also, $L_{T}$ is convex in $\lambda$.
+
+\textbf{Proof:}
+
+By definition, 
+\[
+L_{T}(\hat{g}_{\lambda},\lambda)=\|y-\hat{g}_{\lambda}\|_{T}^{2}+\lambda^{2}I^{v}(\hat{g}_{\lambda})\le\|y-\hat{g}_{\lambda'}\|_{T}^{2}+\lambda^{2}I^{v}(\hat{g}_{\lambda'})=L_{T}(\hat{g}_{\lambda'},\lambda)
+\]
+
+
+Then we can provide upper and lower bounds for $L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1})$:
+\begin{eqnarray*}
+L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1}) & \le & L_{T}(\hat{g}_{\lambda_{1}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1})\\
+ & = & \|y-\hat{g}_{\lambda_{1}}\|_{T}^{2}+\lambda_{2}^{2}I^{v}(\hat{g}_{\lambda_{1}})-\|y-\hat{g}_{\lambda_{1}}\|_{T}^{2}-\lambda_{1}^{2}I^{v}(\hat{g}_{\lambda_{1}})\\
+ & = & (\lambda_{2}^{2}-\lambda_{1}^{2})I^{v}(\hat{g}_{\lambda_{1}})
+\end{eqnarray*}
+
+
+\begin{eqnarray*}
+L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1}) & \ge & L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{2}},\lambda_{1})\\
+ & = & \|y-\hat{g}_{\lambda_{2}}\|_{T}^{2}+\lambda_{2}^{2}I^{v}(\hat{g}_{\lambda_{2}})-\|y-\hat{g}_{\lambda_{2}}\|_{T}^{2}-\lambda_{1}^{2}I^{v}(\hat{g}_{\lambda_{2}})\\
+ & = & (\lambda_{2}^{2}-\lambda_{1}^{2})I^{v}(\hat{g}_{\lambda_{2}})
+\end{eqnarray*}
+
+
+So suppose WLOG $\lambda_{2}>\lambda_{1}$:
+\[
+(\lambda_{2}+\lambda_{1})I^{v}(\hat{g}_{\lambda_{2}})\le\frac{L_{T}(\hat{g}_{\lambda_{2}},\lambda_{2})-L_{T}(\hat{g}_{\lambda_{1}},\lambda_{1})}{\lambda_{2}-\lambda_{1}}\le(\lambda_{2}+\lambda_{1})I^{v}(\hat{g}_{\lambda_{1}})
+\]
+
+
+So as $\lambda_{1}\rightarrow\lambda_{2}=\lambda$, we have by the
+sandwich theorem,
+
+\[
+\frac{\partial}{\partial\lambda}L_{T}(\hat{g}_{\lambda},\lambda)=2\lambda I^{v}(\hat{g}_{\lambda})
+\]
+
+
+Furthermore, given training data $T$ 
+\[
+\frac{\partial}{\partial\lambda}L_{T}(\hat{g}_{\lambda},\lambda)=\frac{\partial}{\partial\lambda}\|y-\hat{g}_{\lambda}\|_{T}^{2}+2\lambda I^{v}(\hat{g}_{\lambda})+\lambda^{2}\frac{\partial}{\partial\lambda}I^{v}(\hat{g}_{\lambda})
+\]
+
+
+then, combining this with the lemma, we have that 
+\[
+\frac{\partial}{\partial\lambda}\|y-\hat{g}_{\lambda}\|_{T}^{2}=-\lambda^{2}\frac{\partial}{\partial\lambda}I^{v}(\hat{g}_{\lambda})
+\]
+
+
+Finally, to see that $L_{T}$ is convex in $\lambda$, note that 
+\[
+\frac{\partial^{2}}{\partial\lambda^{2}}L_{T}(\hat{g}_{\lambda},\lambda)=2I^{v}(\hat{g}_{\lambda})+2\lambda vI^{v-1}(\hat{g}_{\lambda})\frac{\partial}{\partial\lambda}I(\hat{g}_{\lambda})>0
+\]
+
+
+since $\frac{\partial}{\partial\lambda}I(\hat{g}_{\lambda})>0$.
+\end{document}
