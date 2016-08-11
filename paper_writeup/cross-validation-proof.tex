@@ -113,7 +113,7 @@ In the usual regression setting, we have data $(x,y)$ where $x$ are the covariat
 
 A popular strategy to tune the penalty parameters is by cross-validation (CV), which is based on the simpler algorithm called holdout. In holdout, one randomly splits the data into two sets. Models are trained on one partition of the data and its generalization error is estimated on the other half. The algorithm then chooses the model with the minimum estimated risk. CV splits the data into multiple partitions, performs holdout over the partitions, and then selects the model with the minimum average loss. CV's popularity can be explained by two main traits: one, CV can be applied to almost any algorithm in almost any framework since it only assume that the data are independent, and two, it has been shown to be highly effective in practice. Hence, many authors have recommended using CV to tune parameters in penalized regression problems (e.g. lasso, elastic net, etc).
 
-However, there is little theoretical foundation for CV though a lot of attempts have been made. Van Der Laan (2003, 2004) provides finite sample oracle inequalities for CV-based procedures but not CV itself (I think). Mitchell uses entropy methods to prove oracle inequalities for CV using entropy methods, but when applied to the Lasso, it requires assumptions on the design matrix that are often unrealistic. Within the realm of regression, Gyorfi (2002) provides a finite sample inequality for holdout and leave-one-out CV for least squares assuming that cross-validation is performed over a finite number of hyper-parameters. Wegkamp (2003) proved an oracle inequality for a penalized least squares holdout procedure. 
+However, there is little theoretical foundation for CV though a lot of attempts have been made. Van Der Laan (2003, 2004) provides finite sample oracle inequalities for CV-based procedures but not CV itself. Mitchell uses entropy methods to prove oracle inequalities for CV using entropy methods, but when applied to the Lasso, it requires assumptions on the design matrix that are often unrealistic. Within the realm of regression, Gyorfi (2002) provides a finite sample inequality for holdout and leave-one-out CV for least squares assuming that cross-validation is performed over a finite number of hyper-parameters. Wegkamp (2003) proved an oracle inequality for a penalized least squares holdout procedure. 
 
 For penalized ridge regression, Golub, Heath and Wahba proved CV (read) and Chaterjee and Chetverikov address the lasso. (Are there drawbacks to their methods?) In classification, Kearns (1997) proved an oracle inequality when using piecewise constant classifiers. In density estimation, van der laan shows the asymptotic optimality of CV. For a more complete review of CV methods, refer to Arlot.
 
@@ -125,9 +125,68 @@ This inequality bound also provides insight into how to improve model estimation
 
 Section 1 provides the theorem. Section 2 applies our technique to various problems. Section 3 provides simulation studies. Section 4 is a discussion and bids you farewell. Section 5 gives the hairy proof details.
 
+\section{Main Results}
+
+\subsubsection{Problem Setup}
+Per the usual regression framework, we observe response $y_i$ and $p$ predictors $x_i$. Suppose $y_i$ is generated from the true model $g^*$ from model class $\mathcal{G}$
+\begin{equation}
+y_i = g^*(x_i) + \epsilon_i
+\end{equation}
+where $\epsilon_i$ are independent sub-Gaussian random variables. Given $n$ observations, we estimate the model by $K$-fold cross-validation.
+
+\textbf{Explain cross-validation.}
+Tuning the penalty parameter values by $K$-fold cross-validation is essentially an optimization problem over the penalty parameter space. The procedure begins by randomly splitting the dataset into $K$ partitions denoted $D_{-k}$ for $k=1,...,K$. Then for a given penalty parameter value, one fits $k$ models that minimize the penalized training criterion. The ``goodness" of the penalty parameter values is then evaluated by the average validation loss. We can formulate this as a joint optimization problem, where the training step is the inner optimization problem and the tuning step is the outer optimization problem.
+\begin{eqnarray}
+\hat{\lambda} &=& \arg\min_{\lambda\in\Lambda} \frac{1}{2} \sum_{k=1}^K  \| y-\hat{g}_{\lambda}(\cdot| D_{-k}) \|_{k}^{2} \\
+\hat{g}(\lambda | D_{-k})&=&\arg\min_{g\in\mathcal{G}} \frac{1}{2} \| y-g \|_{-k}^{2} + \sum_{j=1}^J \lambda_j P_j^{v_j}(g)
+\end{eqnarray}
+
+The final model produced by $K$-fold cross-validation is one that is trained over the entire dataset
+\begin{equation}
+\hat{g}(\hat{\lambda} | D) = \arg\min_{g\in\mathcal{G}} \frac{1}{2} \| y-g \|_{D}^{2} + \sum_{j=1}^J \hat{\lambda}_j P_j^{v_j}(g)
+\end{equation}
+
+\textbf{Present the Cross-validation Theorem (and assumptions)}
+We have the following finite-sample size result.
+
+\textbf{Present the most interesting consequences of these results}
+\begin{itemize}
+\item{The proofs shows that retraining the model over all the data is similar to just taking an average of the $k$ trained models. The rates of convergence are the same for both models.}
+\item{It doesn't cost much to add penalty parameters. Most people believed that adding more parameters increased the model complexity drastically, but it doesn't. One does not overfit even when tuning over an infinite number of possible penalty parameter values.}
+\item{Intuitively, this makes sense since we are technically tuning over a finite-dimensional parameter space. One would hope that when tuning the penalty parameters, we would be attaining a parametric rate. This is not quite a parametric rate since there is a $\log n$ term, but it is very close.}
+\end{itemize}
+
+\textbf{Comparisons to other Cross-validation bounds}
+\begin{itemize}
+\item{Are our rates the same? Better?}
+\item{Are we letting lambda go to zero faster than other approaches?}
+\item{We assume fewer things?}
+\end{itemize}
+
+
+\textbf{Explain the main proof ideas}
+
+The proof is pretty general. It utilizes empirical process theory and we generalize some standard results. One could probably use this as a standard recipe to proving other cross-validation results.
+
+The proof relies on a couple of key ideas. First, instead of addressing the original problem, we consider a slightly perturbed version by adding a small ridge penalty. For this perturbed problem, we find that the functions $\hat{g}_{\hat \lambda}(\cdot|D_{-k})$ are actually ``Lipschitz" in $\lambda$. Next, it shows that the rate of convergence the model from cross-validation is bounded by the rate of convergence of models $\hat{g}_{\hat \lambda}(\cdot|D_{-k})$. 
+
+\textbf{Explain and prove the Lipschitz property (maybe not even the entropy result}
+For smooth and many nonsmooth penalties, one can show that $\hat{g}_{\hat \lambda}(\cdot|D_{-k})$ is ``Lipschitz" in $\lambda$.  The most important implication is that this gives us the covering number/entropy for the model class, which in turn allows us to bound the empirical process. We prove the Lipschitz property below. For nonsmooth penalties, one needs more assumptions - refer to the appendix.
+
+\textbf{Corollary: Entropy Result for $g_\lambda$}
+Perhaps people might be interested. Not sure.
+
+\textbf{Empirical Process theory tools, generalized?}
+I'm not sure if this is worth putting here at all. Should we just hide it in the appendix?
+
+\section{Examples}
+If the reader is not convinced by the applicability of our results, we could show them a list of examples. Lasso. Sobolev penalty.
+
+\section{Simulations}
 
 \section{Discussion}
 
+\section{The actual proof + Lemmas}
 
 \bigskip
 
