@@ -1,0 +1,212 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{babel}
+\begin{document}
+
+\subsubsection{Lemma 0}
+
+Consider any empirical distributions $T$ and $D$.
+
+Consider the function class 
+\[
+\hat{\mathcal{G}}(T,\epsilon_{T})=\left\{ \hat{g}_{\lambda}(\cdot|T,\epsilon_{T})=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{T}^{2}+\lambda\left(P^{v}(g)+\frac{w}{2}\|g\|_{D}^{2}\right):\lambda\in\Lambda\right\} 
+\]
+
+
+Suppose the penalty function $P$ is a semi-norm, smooth, and convex.
+Suppose for all $h$, $\|h\|_{D}\le O_{p}(n^{p})P(h)$. 
+
+Suppose $v\ge1$.
+
+Suppose $\lambda_{min}=O_{P}(n^{-\tau_{min}})$ and $\lambda_{max}=O_{P}(n^{\tau_{max}})$.
+
+Then the entropy bound is 
+\[
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{D}\right)\le2\log\left(\frac{1}{d}\right)+\kappa\log n+\log\left[2v\left(\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}+G\right)/(Cw)\right]
+\]
+
+
+where $\kappa,C$ only depend on $\tau_{min},\tau_{max},v,u,p$.
+
+(Notation: $\kappa,C,c$ are constants that only depend on $\tau_{min},\tau_{max},u,p,v$.)
+
+
+\subsubsection*{Proof}
+
+Let 
+\[
+\delta(d)=n^{-c}d^{2}wv^{-1}\left(\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}+G\right)^{-1}C/2
+\]
+($c,C$ are defined below).
+
+We will show that the following set $\Omega_{\delta(d)}$ forms a
+$d$-cover set for $\hat{\mathcal{G}}(T,\epsilon_{T})$: 
+\[
+\Omega_{\delta(d)}=\left\{ \hat{g}_{\delta_{i}}(\cdot|T):\delta_{i}=i\delta(d)+\lambda_{min}\mbox{ for }i=0,...,\left\lceil \frac{\lambda_{max}-\lambda_{min}}{\delta(d)}\right\rceil \right\} 
+\]
+
+
+Consider any $\lambda\in[\lambda_{min},\lambda_{max}]$ and suppose
+$\delta_{i}<\lambda<\delta_{i+1}$. Let $h=\hat{g}_{\delta_{i}}(\cdot|T)-\hat{g}_{\lambda}(\cdot|T)$.
+Suppose $\|h\|_{D}>d$ for contradiction.
+
+Consider the one-dimensional problem with any $\lambda_{0}$
+
+\[
+\hat{m}_{h}(\lambda_{0})=\arg\min_{m}\frac{1}{2}\|y-(\hat{g}_{\delta_{i}}+mh)\|_{T}^{2}+\lambda_{0}\left(P^{v}(\hat{g}_{\delta_{i}}+mh)+\frac{w}{2}\|\hat{g}_{\delta_{i}}+mh\|_{D}^{2}\right)
+\]
+
+
+Clearly $\hat{m}_{h}(\delta_{i})=0$ and $\hat{m}_{h}(\lambda)=1$.
+Also, by the mean-value theorem, there is some $\alpha\in(\delta_{i},\lambda)$
+s.t 
+\[
+\hat{m}_{h}(\lambda)=(\lambda-\delta_{i})\left|\frac{\partial}{\partial\lambda_{0}}\hat{m}_{h}(\lambda_{0})\right|_{\lambda_{0}=\alpha}\le\delta\left|\frac{\partial}{\partial\lambda_{0}}\hat{m}_{h}(\lambda_{0})\right|_{\lambda_{0}=\alpha}
+\]
+
+
+To get $\frac{\partial}{\partial\lambda_{0}}\hat{m}_{h}(\lambda_{0})$,
+we take lots of derivatives.
+
+Taking the derivative of the criterion wrt $m$, we get
+
+\[
+\left.-\langle h,y-(\hat{g}_{\delta_{i}}+mh)\rangle_{T}+\lambda_{0}\left(\frac{\partial}{\partial m}P^{v}(\hat{g}_{\delta_{i}}+mh)+w\langle h,\hat{g}_{\delta_{i}}+mh\rangle_{D}\right)\right|_{m=\hat{m}_{h}(\lambda_{0})}=0
+\]
+
+
+By implicit differentiation wrt $\lambda_{0}$, we have 
+\begin{eqnarray*}
+\frac{\partial}{\partial\lambda_{0}}\hat{m}_{h}(\lambda_{0}) & = & \left.-\left(\|h\|_{T}^{2}+\lambda_{0}\frac{\partial^{2}}{\partial m^{2}}P^{v}\left(\hat{g}_{\delta_{i}}+mh\right)+\lambda_{0}w\|h\|_{D}^{2}\right)^{-1}\left(\frac{\partial}{\partial m}P^{v}(\hat{g}_{\delta_{i}}+mh)+w\langle h,\hat{g}_{\delta_{i}}+mh\rangle_{D}\right)\right|_{m=\hat{m}_{\lambda}(\lambda_{0})}
+\end{eqnarray*}
+
+
+To bound $\left|\frac{\partial}{\partial\lambda_{0}}\hat{m}_{h}(\lambda_{0})\right|$,
+we bound each multiplicand. 
+
+\textbf{1st multiplicand}: Since penalty $P$ is convex (regardless
+of the direction of $h$),
+
+\begin{eqnarray*}
+\left|\|h\|_{T}^{2}+\lambda_{0}\frac{\partial^{2}}{\partial m^{2}}P^{v}\left(\hat{g}_{\delta_{i}}+mh\right)+\lambda_{0}w\|h\|_{D}^{2}\right|^{-1} & \le & \lambda_{0}^{-1}w^{-1}\|h\|_{D}^{-2}\\
+ & \le & n^{\tau_{min}}w^{-1}d^{-2}
+\end{eqnarray*}
+
+
+\textbf{2nd multiplicand}: 
+
+We first bound 
+\[
+\left|\frac{\partial}{\partial m}P^{v}(\hat{g}_{\delta_{i}}+mh)\right|=\left|vP^{v-1}(\hat{g}_{\delta_{i}}+mh)\frac{\partial}{\partial m}P(\hat{g}_{\delta_{i}}+mh)\right|
+\]
+
+
+By definition of $\hat{g}_{\delta_{i}}+\hat{m}_{h}(\lambda_{0})h$
+and $\hat{g}_{\delta_{i}}$,
+
+\begin{eqnarray*}
+\lambda_{0}P^{v}(\hat{g}_{\delta_{i}}+\hat{m}_{h}(\lambda_{0})h) & \le & \frac{1}{2}\|y-\hat{g}_{\delta_{i}}\|_{T}^{2}+\lambda_{0}\left(P^{v}(\hat{g}_{\delta_{i}})+\frac{w}{2}\|\hat{g}_{\delta_{i}}\|_{D}^{2}\right)\\
+ & \le & \frac{1}{2}\|y-g^{*}\|_{T}^{2}+\delta_{i}\left(P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)+(\lambda_{0}-\delta_{i})\left(P^{v}(\hat{g}_{\delta_{i}})+\frac{w}{2}\|\hat{g}_{\delta_{i}}\|_{D}^{2}\right)
+\end{eqnarray*}
+
+
+We know that 
+\[
+P^{v}(\hat{g}_{\delta_{i}})+\frac{w}{2}\|\hat{g}_{\delta_{i}}\|_{D}^{2}\le\frac{1}{2\delta_{i}}\|y-g^{*}\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}
+\]
+
+
+Hence
+
+\begin{eqnarray*}
+P^{v-1}(\hat{g}_{\delta_{i}}+\hat{m}_{h}(\lambda_{0})h) & \le & \left(\frac{1}{2\delta_{i}}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)^{(v-1)/v}\\
+ & \le & \left(\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)^{(v-1)/v}
+\end{eqnarray*}
+
+
+Note that since $P$ is a semi-norm, then
+
+\[
+\left|P(\hat{g}_{\delta_{i}}+mh)-P(\hat{g}_{\delta_{i}})\right|\le|m|P(h)
+\]
+
+
+Therefore as we take $m\rightarrow0$, we have 
+\[
+\left|\frac{\partial}{\partial m}P(\hat{g}_{\delta_{i}}+mh)\right|\le P(h)
+\]
+
+
+Since $P$ is a semi-norm, 
+\[
+P(h)=P(\hat{g}_{\delta_{i}}-\hat{g}_{\lambda_{0}})\le P(\hat{g}_{\delta_{i}})+P(\hat{g}_{\lambda_{0}})
+\]
+
+
+We bound the penalties $P(\hat{g}_{\delta_{i}})$ and $P(\hat{g}_{\lambda_{0}})$
+by the same logic as above. Hence we know that 
+\[
+P(h)\le2\left(\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)^{1/v}
+\]
+
+
+Now we bound $\left|w\langle h,\hat{g}_{\delta_{i}}+mh\rangle_{D}\right|$.
+
+By Cauchy Schwarz and the assumption that $\sup_{g\in\mathcal{G}}\|g\|\le G$,
+we have 
+\begin{eqnarray*}
+\left|w\langle h,\hat{g}_{\delta_{i}}+mh\rangle\right| & \le & w\|h\|\|\hat{g}_{\delta_{i}}+mh\|\\
+ & \le & wn^{p}P(h)G
+\end{eqnarray*}
+
+
+Combining the above bounds, we have 
+\begin{eqnarray*}
+ &  & \left|\frac{\partial}{\partial\lambda_{0}}\hat{m}_{h}(\lambda_{0})\right|\\
+ & \le & n^{\tau_{min}}w^{-1}d^{-2}\left(2v\left(\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)^{(v-1)/v}+wn^{p}G\right)\left(\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)^{1/v}\\
+ & \le & Cd^{-2}n^{c}w^{-1}v\left(\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}+G\right)
+\end{eqnarray*}
+
+
+Hence by the MVT, we have found that
+
+\[
+\hat{m}_{h}(\lambda)\le1/2
+\]
+
+
+which is a contradiction.
+
+Therefore $\Omega_{\delta(d)}$ forms a $d$-cover set. The $d$-covering
+number is
+
+\begin{eqnarray*}
+N\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{D}\right) & \le & \left\lceil \frac{\lambda_{max}-\lambda_{min}}{\delta(d)}\right\rceil \\
+ & = & 2n^{\kappa}v\left(\frac{\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}+G}{wCd^{2}}\right)
+\end{eqnarray*}
+
+
+and the entropy is 
+\[
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{D}\right)\le2\log\left(\frac{1}{d}\right)+\kappa\log n+\log\left[2v\left(\|\epsilon\|_{T}^{2}+P^{v}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}+G\right)/(Cw)\right]
+\]
+
+
+Note that this also bounds the entropy for any metric norm calculated
+using a subset $D_{0}\subseteq D$. Since 
+\[
+\|f\|_{D}\ge\sqrt{\frac{n_{D_{0}}}{n}}\|f\|_{D_{0}}
+\]
+
+
+we have
+\[
+H\left(d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{D_{0}}\right)\le H\left(\sqrt{\frac{n_{D_{0}}}{n}}d,\hat{\mathcal{G}}(T,\epsilon_{T}),\|\cdot\|_{D_{0}}\right)
+\]
+
+\end{document}
