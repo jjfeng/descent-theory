@@ -6,3 +6,6 @@
 *.lyx
 *.log
 *.lyx~
+*.synctex.gz
+*.out
+.Rproj.user

@@ -37,12 +37,13 @@ Get_bspline_oracle_loss <- function(dataset, lam) {
 }
 
 # currently truth is the sin function
+# sqrt n_train knots
 Make_data <- function(n_train, n_validate, n_test, ord=4, snr=2, xmin=0, xmax=6) {
     ## Generate X data
     x <- runif(n_train + n_validate + n_test, min=xmin, max=xmax)
     epsilon <- rnorm(n=length(x), sd=1)
     true_y <- sin(x)
-    y <- true_y + epsilon * sqrt(sum(sin(x)^2)) / sqrt(sum(epsilon^2)) / snr
+    y <- true_y + epsilon * sqrt(sum(true_y^2)) / sqrt(sum(epsilon^2)) / snr
     
     ## Split train and validation
     shuffled_idx <- sample(seq(1, length(x)), length(x), replace=F)
@@ -150,7 +151,7 @@ lambdas <- 10^seq(from=-7, to=-2, by=0.1)
 n_sizes <- seq(from=10, to=100, by=10)
 n_reps <- 50
 
-cv_to_oracle_compare <- lapply(n_sizes, function(n) {
+cv_to_oracle_compare_1dim <- lapply(n_sizes, function(n) {
     print(n)
     cv_oracle <- Do_bspline_cv_oracle_repl(
         reps=n_reps, 
@@ -168,13 +169,13 @@ cv_to_oracle_compare <- lapply(n_sizes, function(n) {
         cv_lambda=mean(cv_oracle$cv_lam)
     )
 })
-cv_to_oracle_compare <- do.call("rbind", cv_to_oracle_compare)
+cv_to_oracle_compare_1dim <- do.call("rbind", cv_to_oracle_compare_1dim)
 
 plot(
-    cv_to_oracle_compare$n, cv_to_oracle_compare$true_cv_loss, type = "l", col="red",
-    ylim = c(min(cv_to_oracle_compare$true_cv_loss, cv_to_oracle_compare$true_oracle_loss), max(cv_to_oracle_compare$true_cv_loss, cv_to_oracle_compare$true_oracle_loss))
+    cv_to_oracle_compare_1dim$n, cv_to_oracle_compare_1dim$true_cv_loss, type = "l", col="red",
+    ylim = c(min(cv_to_oracle_compare_1dim$true_cv_loss, cv_to_oracle_compare_1dim$true_oracle_loss), max(cv_to_oracle_compare_1dim$true_cv_loss, cv_to_oracle_compare_1dim$true_oracle_loss))
 )
-lines(cv_to_oracle_compare$n, cv_to_oracle_compare$true_oracle_loss, col="green")
+lines(cv_to_oracle_compare_1dim$n, cv_to_oracle_compare_1dim$true_oracle_loss, col="green")
 
-plot(cv_to_oracle_compare$n, 1/(cv_to_oracle_compare$n), ylim=c(0, 0.1), type = "l")
-lines(cv_to_oracle_compare$n, cv_to_oracle_compare$mean_diff)
+plot(cv_to_oracle_compare_1dim$n, 1/(cv_to_oracle_compare_1dim$n), ylim=c(0, 0.1), type = "l")
+lines(cv_to_oracle_compare_1dim$n, cv_to_oracle_compare_1dim$mean_diff)
