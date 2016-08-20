@@ -134,9 +134,13 @@ Despite the wealth of literature on cross-validation, there is very little work 
 
 Our paper provides a finite sample upper bound on the prediction error when tuning multiple penalty parameters via a training/validation split. The upper bound is composed of the error of the oracle and an empirical process term that converges at a near-parametric rate. In semi- and non-parametric problems, the error of the oracle term dominates, so the prediction error could be minimized by cross-validation over more penalty parameters. The proof takes a general approach of bounding the empirical process term using entropy methods (sara's book).
 
-Section 1 provides the theorem. Section 2 provides simulation studies. Section 3 is a discussion. Section 4 provides the proof.
+Section \ref{sec:main_results} provides bounds on the prediction error for a training/validation framework and cross-validation.
+Section \ref{sec:entropy} proves that for many penalized regression problems, the fitted models are smoothly parameterized by the penalty parameters.
+Section \ref{sec:simulations} provides simulation studies to support the theory.
+Section \ref{sec:discussion} discusses the results in the paper.
+Section \ref{sec:proofs} contains the full proofs for the main results and additional lemmas.
 
-\section{Main Result} \label{main_results}
+\section{Main Result} \label{sec:main_results}
 
 \subsection{Training/Validation Split}
 
@@ -339,7 +343,7 @@ Of course, there is a limit to the number of penalty parameters one can add. For
 
 Theorem \ref{train_val_thrm} also provides guidance on choosing the optimal ratio between the training and validation sets. As the sample size increases, the ratio between the training and validation sets should change. For example, consider the nonparametric setting with the oracle convergence $n^-1/4$. With 100 training samples, one would want about 70 samples in the training set. With 1000 training samples, one would want about 850 samples in the training set. \_Insert plot\_
 
-\section{Covering number/Entropy of the fitted models}
+\section{Covering number/Entropy of the fitted models}\label{sec:entropy}
 
 The results in Section \ref{sec:main_results} hinge on bounding the metric entropy of the function class $\mathcal{G}(T)$. We approach this by showing that $\hat{g}_\lambda$ is smoothly parametrized by $\lambda$. 
 Corollary \ref{train_val_corr} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{kfold_thrm} requires this to hold over the entire domain. The former can be shown for a general set of penalized regression problems; we will consider problems with smooth penalties and then those with nonsmooth penalties. The latter is harder to show and so we will consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
@@ -575,7 +579,7 @@ An analogous lemma holds for nonsmooth penalties $P_j$ that satisfy the assumpti
 
 Finally, we consider the classic nonparametric problem of fitting a smoothing spline using a Sobolev penalty. The function class of interest here is
 \[
-\hat{\mathcal{G}}(T)=\left\{ \hat{g}_{\lambda}(\cdot|T)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{T}^{2}+\lambda \int (g^{(m)}(x))^2 dx :\lambda\in\Lambda\right\} 
+\hat{\mathcal{G}}(T)=\left\{\hat{g}_\lambda \equiv \sum_{j=1}^J \hat{g}_{\lambda}(\cdot|T) :  \hat{g}_{\lambda}(\cdot|T)=\arg\min_{g_j\in\mathcal{G}}\frac{1}{2}\|y- \sum_{j=1}^J g_j\|_{T}^{2}+ \sum_{j=1}^J \lambda_j \int (g_j^{(m)}(x))^2 dx , \lambda\in\Lambda\right\} 
 \]
 
 \begin{lemma}
@@ -583,7 +587,7 @@ Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le R$.
 Suppose $\Lambda = [n^{- \tau_{\min}} , n^{\tau_{\max}}]^J$. 
 Then the entropy is bounded above by
 \begin{equation}
-H \left ( u, \mathcal{G}(T), \| \cdot \|_D \right ) \le J \left ( 2 \log \frac{1}{u} + \kappa \log n + r \log p + stuff \right )
+H \left ( u, \mathcal{G}(T), \| \cdot \|_D \right ) \le J \left ( 2 \log \frac{1}{u} + \kappa \log n + stuff \right )
 \end{equation}
 \end{lemma}
 
@@ -624,7 +628,7 @@ N\left(u,\hat{\mathcal{G}}(T),\|\cdot\|_{\infty}\right)\le R n^{\tau_{\max} - \t
 \]
 \end{proof}
 
-\section{Simulations}
+\section{Simulations}\label{sec:simulations}
 
 In this section, we provide empirical evidence that supports the oracle inequalities we have found.
 
@@ -652,7 +656,7 @@ Figure \ref{fig:emp_v_theory} plots the validation loss $\| \hat{g}_{\lambda} - 
 
 Maybe a simulation on using lots of penalty parameters.
 
-\section{Discussion}
+\section{Discussion}\label{sec:discussion}
 
 In this paper, we have shown that the difference in prediction error of the model chosen by cross-validation and the oracle model decreases at a near-parametric rate. Contrary to popular opinion, adding penalty parameters does not drastically increase the model complexity. This finding supports recent efforts to combine regularization methods and ``un-pool" regularization parameters. Since the fitted models are smoothly parameterized in terms of the penalty parameters, cross-validation over a continuum of penalty parameters does not increase the model complexity either.
 
@@ -740,10 +744,6 @@ one page, including the implicit function theorem.
 %
 %\textbf{Empirical process bound proof - peeling}
 %Let's understand the peeling proof used here 
-
-\section{Other things}
-
-
 
 \bigskip
 
