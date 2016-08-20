@@ -1,0 +1,181 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+\textbf{Consider the Sobolev norm.}
+
+\[
+P(h)=\int(h^{"}(x))^{2}dx
+\]
+
+
+For any function $h$, we have
+\[
+\frac{\partial}{\partial m}P(g+mh)=2\int(g"(x)+mh^{"}(x))h"(x)dx
+\]
+
+
+and 
+\[
+\frac{\partial^{2}}{\partial m^{2}}P(g+mh)=2\int(h^{"}(x))^{2}dx=2P(h)
+\]
+
+
+Suppose we have the function class (so no additional ridge penalty)
+\[
+\hat{\mathcal{G}}(T)=\left\{ \hat{g}_{\lambda}(\cdot|T)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{T}^{2}+\lambda P(g):\lambda\in\Lambda\right\} 
+\]
+
+
+Let's bound the covering number of $\hat{\mathcal{G}}(T)$.
+
+Let $h$ be any function with $\|h\|_{\infty}\le1$. Consider the
+optimization problem
+
+\[
+\hat{m}_{h}(\lambda)=\arg\min_{m}\frac{1}{2}\|y-(\hat{g}_{\delta}+mh)\|_{T}^{2}+\lambda P(\hat{g}_{\delta}+mh)
+\]
+
+
+By implicit differentiation of the KKT conditions, we get
+\begin{eqnarray*}
+\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda) & = & \left.-\left(\|h\|_{T}^{2}+\lambda\frac{\partial^{2}}{\partial m^{2}}P\left(\hat{g}_{\delta_{i}}+mh\right)\right)^{-1}\left(\frac{\partial}{\partial m}P(\hat{g}_{\delta_{i}}+mh)\right)\right|_{m=\hat{m}_{\lambda}(\lambda_{0})}
+\end{eqnarray*}
+
+
+Then the first multiplicand is bounded by 
+\begin{eqnarray*}
+\left|\|h\|_{T}^{2}+\lambda\frac{\partial^{2}}{\partial m^{2}}P\left(\hat{g}_{\delta_{i}}+mh\right)\right|^{-1} & \le & \lambda^{-1}\frac{\partial^{2}}{\partial m^{2}}P\left(\hat{g}_{\delta_{i}}+mh\right)^{-1}\\
+ & \le & \frac{n^{\tau_{min}}P^{-1}(h)}{2}
+\end{eqnarray*}
+
+
+Therefore
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right| & \le & n^{\tau_{min}}P^{-1}(h)\left|\int(g"(x)+mh^{"}(x))h"(x)dx\right|\\
+ & \le & n^{\tau_{min}}P^{-1}(h)P(g+mh)P(h)\\
+ & \le & n^{\tau_{min}}P(g+mh)\\
+ & \le & n^{\kappa}\left(\|\epsilon\|_{T}^{2}+P(g^{*})\right)
+\end{eqnarray*}
+
+
+Now consider $h=c(g_{\lambda}-g_{\delta})$ where $c$ is some constant
+s.t. $\|h\|_{\infty}\le1$. Then by the MVT, we have 
+\begin{eqnarray*}
+\|g_{\lambda}-g_{\delta}\|_{\infty} & = & \|m_{h}(\lambda)h\|_{\infty}\\
+ & \le & |\lambda-\delta|\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|\\
+ & \le & |\lambda-\delta|n^{\kappa}\left(P(g^{*})+\|\epsilon\|_{T}^{2}\right)
+\end{eqnarray*}
+
+
+Hence
+\[
+N\left(u,\hat{\mathcal{G}}(T),\|\cdot\|_{\infty}\right)\le n^{\kappa}\left(P(g^{*})+\|\epsilon\|_{T}^{2}\right)
+\]
+
+
+
+\subsubsection*{Now consider a parametric regression problem}
+
+Suppose 
+\[
+\|\sup_{\theta\in\Theta}\theta\|_{2}\le R
+\]
+
+
+and 
+\[
+P(\beta)\le c\forall\|\beta\|_{2}\le1
+\]
+
+
+Suppose $g_{\theta}(x)$ is $Lp^{r}$-lipschitz in $\theta$
+\[
+\left|g_{\theta_{1}}(x)-g_{\theta_{2}}(x)\right|\le Lp^{r}\|\theta_{1}-\theta_{2}\|_{2}
+\]
+
+
+Suppose we have the function class 
+\[
+\hat{\mathcal{G}}(T)=\left\{ \hat{\theta}_{\lambda}(\cdot|T)=\arg\min_{\theta}\frac{1}{2}\|y-g_{\theta}\|_{T}^{2}+\lambda\left(P^{v}(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
+\]
+
+
+Let's bound the covering number of $\hat{\mathcal{G}}(T)$.
+
+Consider any $\beta=c_{0}\left(\hat{\theta}_{\lambda_{0}}-\hat{\theta}_{\lambda}\right)$
+where $c$ is s.t. $\|\beta\|_{2}\le1$. Consider the optimization
+problem
+
+\[
+\hat{m}_{\beta}(\lambda)=\arg\min_{m}\frac{1}{2}\|y-g_{\hat{\theta}_{\lambda}+m\beta}\|_{T}^{2}+\lambda_{0}\left(P^{v}(\hat{\theta}_{\lambda}+m\beta)+\frac{w}{2}\|\hat{\theta}_{\lambda}+m\beta\|_{2}^{2}\right)
+\]
+
+
+By implicit differentiation of the KKT conditions, we get
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda)\right| & \le & \left.\left|\lambda_{0}w\|\beta\|_{2}^{2}\right|^{-1}\left(\frac{\partial}{\partial m}P^{v}(\hat{\theta}_{\lambda}+m\beta)+w\langle\hat{\theta}_{\lambda}+m\beta,\beta\rangle\right)\right|_{m=\hat{m}_{\lambda}(\lambda)}\\
+ & \le & \frac{n^{\tau_{min}}}{w}\left|\frac{\partial}{\partial m}P^{v}(\hat{\theta}_{\lambda}+m\beta)+w\langle\hat{\theta}_{\lambda}+m\beta,\beta\rangle\right|_{m=\hat{m}_{\lambda}(\lambda)}
+\end{eqnarray*}
+
+
+Also, 
+\[
+P(\hat{\theta}_{\lambda})+\frac{w}{2}\|\hat{\theta}_{\lambda}\|_{2}^{2}\le n^{\tau_{min}}\frac{1}{2}\|\epsilon\|_{T}^{2}+P(\theta^{*})+\frac{w}{2}\|\theta^{*}\|_{2}^{2}
+\]
+
+
+and 
+\begin{eqnarray*}
+P(\theta+m\beta) & \le & n^{\tau_{min}}\left(\frac{1}{2}\|y-g_{\hat{\theta}_{\lambda}}\|_{T}^{2}+\lambda_{0}P(\hat{\theta}_{\lambda})+\lambda_{0}\frac{w}{2}\|\hat{\theta}_{\lambda}\|_{2}^{2}\right)\\
+ & \le & n^{\tau_{min}}\left(\frac{1}{2}\|y-g_{\theta^{*}}\|_{T}^{2}+\lambda P(\theta^{*})+\lambda\frac{w}{2}\|\theta^{*}\|_{2}^{2}+(\lambda_{0}-\lambda)\left(P(\hat{\theta}_{\lambda})+\frac{w}{2}\|\hat{\theta}_{\lambda}\|_{2}^{2}\right)\right)\\
+ & \le & n^{\tau_{min}}C
+\end{eqnarray*}
+
+
+and 
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial m}P(\theta+m\beta)\right| & \le & P(\beta)
+\end{eqnarray*}
+
+
+Therefore
+\[
+\left|\frac{\partial}{\partial m}P^{v}(\hat{\theta}_{\lambda}+m\beta)\right|\le v\left(n^{\tau_{min}}C\right)^{v-1}c
+\]
+
+
+Also, 
+\[
+w\langle\hat{\theta}_{\lambda}+m\beta,\beta\rangle\le w\|\hat{\theta}_{\lambda}+m\beta\|\|\beta\|\le wR
+\]
+
+
+Finally we get 
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda)\right| & \le & \frac{n^{\tau_{min}}}{w}\left(v\left(n^{\tau_{min}}C\right)^{v-1}c+wR\right)
+\end{eqnarray*}
+
+
+By the assumption that $g_{\theta}$ is L-lipschitz in $\theta$,
+we have 
+\begin{eqnarray*}
+\|g_{\theta_{\lambda}}-g_{\theta_{\lambda_{0}}}\|_{\infty} & \le & Lp^{r}\|\theta_{\lambda_{0}}-\theta_{\lambda}\|_{2}\\
+ & = & Lp^{r}\hat{m}_{\beta}(\lambda)\|\beta\|_{2}\\
+ & \le & Lp^{r}|\lambda_{0}-\lambda|\left|\frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda)\right|\\
+ & \le & |\lambda-\delta|\frac{n^{\tau_{min}}L}{w}p^{r}\left(v\left(n^{\tau_{min}}C\right)^{v-1}c+wR\right)
+\end{eqnarray*}
+
+
+Hence
+\[
+N\left(u,\hat{\mathcal{G}}(T),\|\cdot\|_{\infty}\right)\le n^{\kappa}p^{r}\frac{L}{w}\left(v\left(n^{\tau_{min}}C\right)^{v-1}c+wR\right)
+\]
+
+\end{document}
