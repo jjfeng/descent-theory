@@ -99,15 +99,14 @@
 \bigskip
 \begin{abstract}
 
-In high-dimensional or non-parametric problems, regularization is used to control model complexity. Each penalty function is scaled by a penalty parameter that must be tuned. The oracle penalty parameters guarantee fast convergence rates but they depend on unknown constants. Therefore one usually tunes the penalty parameters by evaluating the fitted models on a validation set. In this paper, we provide finite sample oracle inequalities on the prediction error for models in which multiple penalty parameters are tuned over a continuum of values. We find that the fitted functions are smoothly parameterized by the penalty parameters. Hence the difference in prediction error between the chosen model and the oracle model decreases at a near-parametric rate. This result justifies recent work on having multiple penalties with separate penalty parameters and tuning penalty parameters using continuous optimization methods instead of relying on a pre-defined finite-sized grid of values.
-% We show that increasing the penalty parameters can substantially decrease model bias if one uses optimization algorithms that effectively minimize the validation loss.
+In penalized least squares problems, penalty parameters determine the tradeoff between minimizing the residual sum of squares and the model complexity. The oracle set of penalty parameter values that minimize the generalization error are usually estimated by evaluating the models on a separate validation set or by cross-validation. We show that in many problems, the difference between the generalization error of the selected model and the oracle converges at a near-parametric rate. The key idea to show that the fitted models are smoothly parameterized by the penalty parameters. This finding justifies recent work on combining penalty functions using separate penalty parameters.
 
 % In the setting of penalized regression, cross-validation is a widely used technique for tuning penalty parameters. It is unknown whether having multip one can guarantee a particular rate of convergence of the prediction error, but it is unknown if cross-validation is able to recover the same rate. We prove that the model chosen from cross-validation will converge to the true model at the optimal rate since it converges the oracle at a near-parametric rate $(J (c + \kappa \log n)/n)^{1/2}$ where $n$ is the number of samples and $J$ is the number of penalty parameters. The results are counter to the common belief that increasing the number of penalty parameters drastically increase the model complexity. In fact, for nonparametric models, our error bounds allow the number of penalty parameters to increase with the number of samples while retaining the optimal rate. The proof allows cross-validation over an infinite set of penalty parameters and the lower limit of the range can decrease at any polynomial rate. For smooth regression problems, the proof only requires convexity of the loss and penalty functions; additional assumptions are required if the penalty functions are non-smooth. The proof uses techniques from entropy and an implicit differentiation trick. The simplicity of the proof may extend itself to other problems in cross-validation. Our simulation studies show that increasing the penalty parameters can substantially decrease model bias if one uses optimization algorithms that effectively minimize the validation loss.
 
 \end{abstract}
 
 \noindent%
-{\it Keywords:}  ...?
+{\it Keywords:}  Regression, Cross-validation, Regularization
 \vfill
 
 \newpage
@@ -118,13 +117,14 @@ Per the usual regression framework, we observe response $y_i$ and $p$ predictors
 \begin{equation}
 y_i = g^*(x_i) + \epsilon_i
 \end{equation}
-where $\epsilon_i$ are random errors. Penalized regression methods are important in high-dimensional ($p >> n$) or ill-posed problems as they control model complexity and induce desired structure. Here we will consider least squares regression, in which the model is estimated by minimizing a criterion of the form:
+where $\epsilon_i$ are random errors. In high-dimensional ($p >> n$) or ill-posed problems, the ordinary least squares estimate performs poorly since they often have large variance and overfit to the training data. A common solution is to use regularization, or penalization, to control model complexity and induce desired structure. The penalized least squares estimator generally minimize a criterion of the form
 \begin{equation}
 \label{orig_train_criterion}
-\hat{g}(\lambda) = \argmin_{g\in \mathcal{G}} \| y -  g(X) \|^2_n + \sum_{j=1}^J \lambda_j P^{v_j}_j(g)
+\hat{g}(\lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{n} \sum_{i=1}^n \left (y_i -  g(x_i) \right )^2 + \sum_{j=1}^J \lambda_j P^{v_j}_j(g)
 \end{equation}
+where $P_j$ are the penalty functions and $\lambda_j$ are the penalty parameters.
 
-The penalty parameters $\lambda_j$ ultimately determine the fitted model, so it is important to select them properly. In many cases, one can work out their oracle values to ensure fast convergence rates with high probability (Van de geer-book, Wahba-smoothing spline paper, and others?). For example, in the case of an additive model $f = \sum f_i$, the oracle set of penalty parameters are inversely proportional to the penalties of the true model (taken to some power). If the model is fit using the oracle penalty parameters, the convergence rates of each $f_i$ is as fast as in the case where the other components are known (Vandegeer additive models). However, these oracle values commonly depend on unknown values.
+It is important to select the penalty parameters appropriately since they ultimately determine the fitted model. In many cases, one can work out their oracle values to ensure fast convergence rates with high probability (Van de geer-book, Wahba-smoothing spline paper, and others?). For example, in the case of an additive model $f = \sum f_i$, the oracle set of penalty parameters are inversely proportional to the penalties of the true model (taken to some power). If the model is fit using the oracle penalty parameters, the convergence rates of each $f_i$ is as fast as in the case where the other components are known (Vandegeer additive models). However, these oracle values commonly depend on unknown values.
 
 Given the oracle penalty parameter values are unknown, one usually tunes the penalty parameters via a training/validation split or cross-validation. The basic idea is to train a model on a random partition of the data and evaluate its error on the remaining data. One then chooses the penalty parameters with the lowest validation error. When $J \le 2$, a simple grid search over the penalty parameters is used; when $J$ is much larger, one must use continuous optimization methods. The machine learning literature addresses this ``hyperparameter selection" problem using continuous optimization methods such as Bayesian optimization and gradient descent (Bengio, Foo, Feng, MacLaurin, Snoek).
 
@@ -180,10 +180,10 @@ The following theorem gives a finite-sample upper bound on the error of the fitt
 \begin{theorem}
 \label{train_val_thrm}
 Let $\epsilon$ be independent sub-Gaussian random variables. 
-Suppose that $\sup_{g \in \mathcal{G(\cdot | T)}} \| g \|_\infty \le \infty$.
+Suppose that $\sup_{g \in \mathcal{G}} \| g \|_\infty \le G < \infty$.
 Suppose for any training dataset $T \subseteq D$ with $\| \epsilon \|_T \le 2 \sigma$, we have
 \begin{equation}
-\int_0^R H^{1/2} \left ( u, \mathcal{G(\cdot | T)} \| \cdot \|_V \right ) du \le \psi(u, n, J)
+\int_0^R H^{1/2} \left ( u, \mathcal{G(\cdot | T)} \| \cdot \|_V \right ) du \le \psi(n, J, \sigma)
 \end{equation}
 
 Then with high probability, we have
@@ -192,7 +192,7 @@ Then with high probability, we have
 \left \|\hat{g}_{\hat{\lambda} }(\cdot | T) - g^* \right \|_V
 \le 
 \min_{\lambda \in \Lambda}\| \hat{g}_{\lambda}(\cdot | T) - g^*\|_V
-+ G \frac{\psi(u, n, J)}{\sqrt{n_V}}
++ G \frac{\psi(n, J, \sigma)}{\sqrt{n_V}}
 \end{equation}
 \end{theorem}
 
