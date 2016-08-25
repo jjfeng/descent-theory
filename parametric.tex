@@ -1,0 +1,189 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{babel}
+\begin{document}
+
+\subsubsection*{Lemma: parametric proof, smooth penalties}
+
+Let $\bar{\lambda}=\frac{1}{J}\sum_{j=1}^{J}\lambda_{j}$
+
+The function class is 
+\[
+\mathcal{G}(T)=\left\{ \hat{\theta}_{\lambda}=\arg\min\|y-g(\cdot|\theta)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\theta)+J\bar{\lambda}\frac{w}{2}\|\theta\|_{2}^{2}\right\} 
+\]
+
+
+Suppose 
+\[
+\sup_{\theta\in\Theta}\|\theta\|\le G
+\]
+
+
+Suppose one can show that for some constant $K$, we have
+
+\[
+\frac{\partial}{\partial m}P(\theta+m\beta)\le K\|\beta\|_{2}
+\]
+
+
+Suppose we have
+\[
+\|g(\cdot|\theta_{1})-g(\cdot|\theta_{2})\|_{\infty}\le Lp^{r}\|\theta_{1}-\theta_{2}\|_{2}
+\]
+
+
+Then we can show that 
+\[
+\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty}\le Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\lambda^{(2)}-\lambda^{(1)}\|_{2}
+\]
+
+
+
+\subsubsection*{Proof}
+
+Let $\beta=\theta_{\lambda^{(1)}}-\theta_{\lambda^{(2)}}$. Then 
+\[
+\hat{m}_{\beta}(\lambda)=\arg\min_{m}\|y-g(\cdot|\theta_{\lambda^{(1)}}+m\beta)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\theta_{\lambda^{(1)}}+m\beta)+J\bar{\lambda}\frac{w}{2}\|\theta_{\lambda^{(1)}}+m\beta\|_{2}^{2}
+\]
+
+
+We have
+\[
+\nabla_{m}\|y-g(\cdot|\theta_{\lambda^{(1)}}+m\beta)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\nabla_{m}P_{j}(\theta_{\lambda^{(1)}}+m\beta)+\frac{w}{2}J\bar{\lambda}\nabla_{m}\|\theta_{\lambda^{(1)}}+m\beta\|_{2}^{2}=0
+\]
+
+
+and implicit differentiation wrt $\lambda_{\ell}$ (assuming everything
+is smooth) 
+\[
+\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\beta}(\lambda)=-\left[\nabla_{m}^{2}\|y-g(\cdot|\theta_{\lambda^{(1)}}+m\beta)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\nabla_{m}^{2}P_{j}(\theta_{\lambda_{1}}+m\beta)+wJ\bar{\lambda}\|\beta\|_{2}^{2}\right]^{-1}\left[\nabla_{m}P_{\ell}(\theta_{\lambda_{1}}+m\beta)+w\langle\beta,\theta_{\lambda_{1}}+m\beta\rangle\right]
+\]
+
+
+That is, 
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\beta}(\lambda)\right| & \le & \left(wJ\bar{\lambda}\|\beta\|_{2}^{2}\right)^{-1}\left(K\|\beta\|_{2}+wG\|\beta\|_{2}\right)\\
+ & = & \frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}
+\end{eqnarray*}
+
+
+Therefore by MVT, there is some $\alpha\in(0,1)$ such that 
+\begin{eqnarray*}
+\|\theta_{\lambda^{(1)}}-\theta_{\lambda^{(2)}}\|_{2} & = & \|\hat{m}_{\beta}(\lambda^{(2)})\beta\|_{2}\\
+ & = & \left.\left\langle \lambda^{(2)}-\lambda^{(1)},\nabla_{\lambda}\hat{m}_{\beta}(\lambda)\right\rangle \right|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\|\beta\|_{2}\\
+ & \le & \|\lambda^{(2)}-\lambda^{(1)}\|_{2}\|\nabla_{\lambda}\hat{m}_{\beta}(\lambda)\|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\|\beta\|_{2}\\
+ & \le & \|\lambda^{(2)}-\lambda^{(1)}\|_{2}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}
+\end{eqnarray*}
+
+
+
+\subsubsection*{Lemma: Parametric Regression witih Nonsmooth Penalties}
+
+Suppose the differentiable space and local optimality space assumptions
+
+Suppose the same conditions as Lemma Parametric with smooth penalties.
+
+Again, we have 
+\[
+\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty}\le Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\lambda^{(2)}-\lambda^{(1)}\|_{2}
+\]
+
+
+
+\subsubsection*{Proof}
+
+Under the given assumptions, for almost every pair $\lambda^{(1)},\lambda^{(2)}$,
+there is a line 
+\[
+\mathcal{L}=\left\{ \alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}:\alpha\in[0,1]\right\} 
+\]
+
+
+such that there is a finite set of points $\{\ell_{i}\}_{i=1}^{N}\subset\mathcal{L}$
+such that union of their differentiable space $\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\hat{\theta}_{\ell_{i}}))$
+satisfies 
+\[
+\mathcal{L}\subset\cup_{i=0}^{N+1}\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\hat{\theta}_{\ell_{i}}))
+\]
+
+
+where $\ell_{0}=\lambda^{(1)}$ and $\ell_{N+1}=\lambda^{(2)}$ and
+each of the differentiable spaces above satisfy conditions 1 and 2.
+
+Let $\{\ell_{(i)}\}_{i=0}^{N}\subset\mathcal{L}$ be the points such
+that $\ell_{(i)}$ is in the differentiable space $\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\hat{\theta}_{\ell_{i}}))$
+and $\Omega^{L_{T}(\cdot,\ell_{i+1})}(\hat{g}(\cdot|\hat{\theta}_{\ell_{i+1}}))$.
+That is, we choose
+\[
+\ell_{(i)}\in\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\hat{\theta}_{\ell_{i}}))\cap\Omega^{L_{T}(\cdot,\ell_{i+1})}(\hat{g}(\cdot|\hat{\theta}_{\ell_{i+1}}))
+\]
+
+
+Then consider applying the smooth lemma to the following pairs of
+points:
+\[
+\left(\ell_{0},\ell_{(0)}\right),\left(\ell_{(0)},\ell_{1}\right),...,\left(\ell_{N},\ell_{(N)}\right),\left(\ell_{(N)},\ell_{N+1}\right)
+\]
+
+
+By the lemma for parametric regression with smooth penalties, we get
+that 
+\[
+\|g(\cdot|\hat{\theta}_{\ell_{i}})-g(\cdot|\hat{\theta}_{\ell_{(i)}})\|_{\infty}\le Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\ell_{i}-\ell_{(i)}\|_{2}
+\]
+
+
+and similarly 
+\[
+\|g(\cdot|\hat{\theta}_{\ell_{i+1}})-g(\cdot|\hat{\theta}_{\ell_{(i)}})\|_{\infty}\le Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\ell_{i+1}-\ell_{(i)}\|_{2}
+\]
+
+
+Hence
+\begin{eqnarray*}
+\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty} & \le & \sum_{i=0}^{N}\|g(\cdot|\hat{\theta}_{\ell_{i}})-g(\cdot|\hat{\theta}_{\ell_{(i)}})\|_{\infty}+\|g(\cdot|\hat{\theta}_{\ell_{i+1}})-g(\cdot|\hat{\theta}_{\ell_{(i)}})\|_{\infty}\\
+ & \le & Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\left(\sum_{i=0}^{N}\|\ell_{i}-\ell_{(i)}\|_{2}+\|\ell_{i+1}-\ell_{(i)}\|_{2}\right)\\
+ & = & Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\lambda^{(1)}-\lambda^{(2)}\|_{2}
+\end{eqnarray*}
+
+
+
+\subsubsection*{Example parametric penalties}
+
+Ridge, assuming $\sup_{\theta\in\Theta}\|\theta\|\le G$:
+\begin{eqnarray*}
+\frac{\partial}{\partial m}\|\theta+m\beta\|_{2}^{2} & = & \langle\theta+m\beta,\beta\rangle\\
+ & \le & G\|\beta\|_{2}
+\end{eqnarray*}
+
+
+Lasso:
+
+\begin{eqnarray*}
+\frac{\partial}{\partial m}\|\theta+m\beta\|_{1} & = & \langle sgn(\theta+m\beta),\beta\rangle\\
+ & \le & \|sgn(\theta+m\beta)\|_{2}\|\beta\|_{2}\\
+ & \le & p\|\beta\|_{2}
+\end{eqnarray*}
+
+
+Generalized Lasso: let $G$ be the maximum eigenvalue of $D$.
+\begin{eqnarray*}
+\frac{\partial}{\partial m}\|D(\theta+m\beta)\|_{1} & = & \langle sgn(D(\theta+m\beta)),D\beta\rangle\\
+ & \le & \|sgn(D(\theta+m\beta))\|_{2}\|D\beta\|_{2}\\
+ & \le & pG\|\beta\|_{2}
+\end{eqnarray*}
+
+
+Group Lasso:
+
+\begin{eqnarray*}
+\frac{\partial}{\partial m}\|\theta+m\beta\|_{2} & = & \langle\frac{\theta+m\beta}{\|\theta+m\beta\|_{2}},\beta\rangle\\
+ & \le & \|\beta\|_{2}
+\end{eqnarray*}
+
+\end{document}

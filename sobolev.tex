@@ -10,15 +10,18 @@
 \begin{document}
 \textbf{Consider the Sobolev norm.}
 
+The Sobolev penalty is
+
 \[
 P(h)=\int(h^{"}(x))^{2}dx
 \]
 
 
 For any function $h$, we have
-\[
-\frac{\partial}{\partial m}P(g+mh)=2\int(g"(x)+mh^{"}(x))h"(x)dx
-\]
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial m}P(g+mh)\right| & = & \left|2\int(g"(x)+mh^{"}(x))h"(x)dx\right|\\
+ & \le & 2\sqrt{P(g+mh)P(h)}
+\end{eqnarray*}
 
 
 and 
@@ -26,6 +29,8 @@ and
 \frac{\partial^{2}}{\partial m^{2}}P(g+mh)=2\int(h^{"}(x))^{2}dx=2P(h)
 \]
 
+
+Suppose $\sup_{g}\|g\|_{\infty}\le G$
 
 Suppose we have the function class (so no additional ridge penalty)
 \[
@@ -35,8 +40,19 @@ Suppose we have the function class (so no additional ridge penalty)
 
 Let's bound the covering number of $\hat{\mathcal{G}}(T)$.
 
-Let $h$ be any function with $\|h\|_{\infty}\le1$. Consider the
-optimization problem
+Now consider $h=c(g_{\lambda}-g_{\delta})$ where $c$ is some constant
+s.t. $P(h)=1$.
+
+First note that $P(h)=0$ iff $g_{\lambda}\equiv g_{\delta}$. To
+see this, note that $P(h)=0$ implies that $P(g_{\lambda})=P(g_{\delta})=a$.
+Therefor $g_{\delta}$ and $g_{\lambda}$ are minimizers of the constrained
+criterion 
+\[
+\|y-g\|_{T}^{2}\mbox{ s.t. }P(g)=a
+\]
+Since the minimizer of the least squares is unique, then $g_{\lambda}\equiv g_{\delta}$.
+
+Consider the optimization problem
 
 \[
 \hat{m}_{h}(\lambda)=\arg\min_{m}\frac{1}{2}\|y-(\hat{g}_{\delta}+mh)\|_{T}^{2}+\lambda P(\hat{g}_{\delta}+mh)
@@ -59,29 +75,29 @@ Then the first multiplicand is bounded by
 Therefore
 \begin{eqnarray*}
 \left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right| & \le & n^{\tau_{min}}P^{-1}(h)\left|\int(g"(x)+mh^{"}(x))h"(x)dx\right|\\
- & \le & n^{\tau_{min}}P^{-1}(h)P(g+mh)P(h)\\
- & \le & n^{\tau_{min}}P(g+mh)\\
- & \le & n^{\kappa}\left(\|\epsilon\|_{T}^{2}+P(g^{*})\right)
+ & \le & n^{\tau_{min}}\sqrt{P(g+mh)/P(h)}\\
+ & = & n^{\tau_{min}}\sqrt{P(g+mh)}
 \end{eqnarray*}
 
 
-Now consider $h=c(g_{\lambda}-g_{\delta})$ where $c$ is some constant
-s.t. $\|h\|_{\infty}\le1$. Then by the MVT, we have 
+We know that $P(g+mh)\le n^{\tau_{min}}\left(\|\epsilon\|_{T}^{2}+P(g^{*})\right)=n^{\kappa}C$.
+
+Then by the MVT, we have 
 \begin{eqnarray*}
 \|g_{\lambda}-g_{\delta}\|_{\infty} & = & \|m_{h}(\lambda)h\|_{\infty}\\
- & \le & |\lambda-\delta|\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|\\
- & \le & |\lambda-\delta|n^{\kappa}\left(P(g^{*})+\|\epsilon\|_{T}^{2}\right)
+ & \le & |\lambda-\delta|\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|G\\
+ & \le & |\lambda-\delta|n^{\kappa}CG
 \end{eqnarray*}
 
 
 Hence
 \[
-N\left(u,\hat{\mathcal{G}}(T),\|\cdot\|_{\infty}\right)\le n^{\kappa}\left(P(g^{*})+\|\epsilon\|_{T}^{2}\right)
+N\left(u,\hat{\mathcal{G}}(T),\|\cdot\|_{\infty}\right)\le n^{\kappa}CG
 \]
 
 
 
-\subsubsection*{Now consider a parametric regression problem}
+\subsubsection*{Now consider a parametric regression problem------------WRONG---------------}
 
 Suppose 
 \[
@@ -141,7 +157,7 @@ P(\theta+m\beta) & \le & n^{\tau_{min}}\left(\frac{1}{2}\|y-g_{\hat{\theta}_{\la
 
 and 
 \begin{eqnarray*}
-\left|\frac{\partial}{\partial m}P(\theta+m\beta)\right| & \le & P(\beta)
+\left|\frac{\partial}{\partial m}P(\theta+m\beta)\right| & \le & P(\beta)\le???
 \end{eqnarray*}
 
 
