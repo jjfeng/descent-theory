@@ -37,16 +37,33 @@ Suppose we have
 \]
 
 
-Then we can show that 
+For any $d>0$, for any $\lambda^{(1)}$ and $\lambda^{(2)}$ chosen
+such that 
 \[
-\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty}\le Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\lambda^{(2)}-\lambda^{(1)}\|_{2}
+\|\lambda^{(2)}-\lambda^{(1)}\|_{2}\le d\frac{wJ}{2n^{t_{min}}\left(K+wG\right)}
+\]
+
+
+we have
+\[
+\|\theta_{\lambda^{(1)}}-\theta_{\lambda^{(2)}}\|_{2}\le d
+\]
+
+
+so it follows that
+\[
+\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty}\le Lp^{r}d
 \]
 
 
 
 \subsubsection*{Proof}
 
-Let $\beta=\theta_{\lambda^{(1)}}-\theta_{\lambda^{(2)}}$. Then 
+Consider any $\lambda^{(1)},\lambda^{(2)}$ that satisfy the above
+conditions. Let $\beta=\theta_{\lambda^{(1)}}-\theta_{\lambda^{(2)}}$.
+For contradiction, suppose $\|\beta\|_{2}\ge d$.
+
+Define 
 \[
 \hat{m}_{\beta}(\lambda)=\arg\min_{m}\|y-g(\cdot|\theta_{\lambda^{(1)}}+m\beta)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\theta_{\lambda^{(1)}}+m\beta)+J\bar{\lambda}\frac{w}{2}\|\theta_{\lambda^{(1)}}+m\beta\|_{2}^{2}
 \]
@@ -68,18 +85,20 @@ is smooth)
 That is, 
 \begin{eqnarray*}
 \left|\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\beta}(\lambda)\right| & \le & \left(wJ\bar{\lambda}\|\beta\|_{2}^{2}\right)^{-1}\left(K\|\beta\|_{2}+wG\|\beta\|_{2}\right)\\
- & = & \frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}
+ & = & \frac{n^{t_{min}}\left(K+wG\right)}{wJd}
 \end{eqnarray*}
 
 
 Therefore by MVT, there is some $\alpha\in(0,1)$ such that 
 \begin{eqnarray*}
-\|\theta_{\lambda^{(1)}}-\theta_{\lambda^{(2)}}\|_{2} & = & \|\hat{m}_{\beta}(\lambda^{(2)})\beta\|_{2}\\
- & = & \left.\left\langle \lambda^{(2)}-\lambda^{(1)},\nabla_{\lambda}\hat{m}_{\beta}(\lambda)\right\rangle \right|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\|\beta\|_{2}\\
- & \le & \|\lambda^{(2)}-\lambda^{(1)}\|_{2}\|\nabla_{\lambda}\hat{m}_{\beta}(\lambda)\|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\|\beta\|_{2}\\
- & \le & \|\lambda^{(2)}-\lambda^{(1)}\|_{2}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}
+\hat{m}_{\beta}(\lambda^{(2)}) & = & \left.\left\langle \lambda^{(2)}-\lambda^{(1)},\nabla_{\lambda}\hat{m}_{\beta}(\lambda)\right\rangle \right|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
+ & \le & \|\lambda^{(2)}-\lambda^{(1)}\|_{2}\|\nabla_{\lambda}\hat{m}_{\beta}(\lambda)\|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
+ & \le & \|\lambda^{(2)}-\lambda^{(1)}\|_{2}\frac{n^{t_{min}}\left(K+wG\right)}{wJd}\\
+ & \le & 1/2
 \end{eqnarray*}
 
+
+But this is a contradiction since we knew that $\hat{m}_{\beta}(\lambda^{(2)})=1$.
 
 
 \subsubsection*{Lemma: Parametric Regression witih Nonsmooth Penalties}
@@ -88,9 +107,22 @@ Suppose the differentiable space and local optimality space assumptions
 
 Suppose the same conditions as Lemma Parametric with smooth penalties.
 
-Again, we have 
+For any $d>0$, for any $\lambda^{(1)}$ and $\lambda^{(2)}$ chosen
+such that 
 \[
-\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty}\le Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\lambda^{(2)}-\lambda^{(1)}\|_{2}
+\|\lambda^{(2)}-\lambda^{(1)}\|_{2}\le d\frac{wJ}{2n^{t_{min}}\left(K+wG\right)}
+\]
+
+
+we have
+\[
+\|\theta_{\lambda^{(1)}}-\theta_{\lambda^{(2)}}\|_{2}\le d
+\]
+
+
+so it follows that
+\[
+\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty}\le Lp^{r}d
 \]
 
 

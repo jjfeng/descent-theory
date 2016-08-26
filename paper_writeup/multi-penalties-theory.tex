@@ -75,7 +75,7 @@
 {
   \title{\bf Oracle Inequalities for multiple penalty parameters}
   \author{Jean Feng\thanks{
-    Jean Feng was supported by NIH grants DP5OD019820 and T32CA206089.
+    Jean Feng was supported by NIH grants ???. % DP5OD019820 and T32CA206089.
     Noah Simon was supported by NIH grant DP5OD019820.
     The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health.}\\
     Department of Biostatistics, University of Washington\\
@@ -348,7 +348,8 @@ Theorem \ref{train_val_thrm} also provides guidance on choosing the optimal rati
 
 \section{Smoothness of $\hat{g}_\lambda$ in $\lambda$}\label{sec:entropy}
 
-We now show that $\hat{g}_\lambda$ is smoothly parametrized by $\lambda$. Corollary \ref{train_val_corr} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{kfold_thrm} requires this to hold over the entire domain. The former can be shown for a general set of penalized regression problems, namely those with smooth penalties and certain nonsmooth penalties. The latter is harder to show so we will consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
+We now show that $\hat{g}_\lambda$ is smoothly parametrized by $\lambda$. Corollary \ref{train_val_corr} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{kfold_thrm} requires this to hold over the entire domain. Under varying assumptions, we are able to satisfy these conditions. Below, we will begin with the general case of a nonparametric regression problem with smooth penalties. Then we will consider the more specific case of a parametric regression problem. Finally, we consider the example of smoothing splines fitted with the Sobolev penalty. 
+%a general set of penalized regression problems, namely those with smooth penalties and certain nonsmooth penalties. The latter is harder to show so we will consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
 
 Throughout, we will presume that $\mathcal{G}$ is a convex function class. 
 
@@ -380,10 +381,10 @@ Implicit differentiation of \eqref{kkt} with respect to $\lambda_\ell$ for $\ell
 
 A key step in all the proofs is to bound the absolute value of \eqref{imp_derivative}.
 
-\subsection{Bounding smoothness over the validation set}
+\subsection{Regression problems with Smooth Penalties}
 \label{sec:entropy_1}
 
-We will first consider regression problems with smooth penalties and then those with nonsmooth penalties.
+We will first consider regression problems with smooth penalties.
 
 Instead of considering models fitted as in \eqref{orig_train_criterion}, we perturb the training criterion with an additional ridge penalty
 \begin{equation}
@@ -391,9 +392,6 @@ Instead of considering models fitted as in \eqref{orig_train_criterion}, we pert
 \hat{g}(\lambda) = \argmin_{g\in \mathcal{G}} \| y -  g(X) \|^2_n + \sum_{j=1}^J \lambda_j \left ( P^{v_j}_j(g) + \frac{w}{2} \| g \|^2_V \right )
 \end{equation}
 where $w$ is some constant. Clearly this is unnecessary if there is already some penalty $P^{v_j}_j(g) = C \| g \|_V^2$ for some constant $C$ (such as in the elastic net). Otherwise, one can choose $w$ to be small enough to maintain the oracle convergence rate of the original problem, as shown in Lemma \ref{oracle_maintained} (and in practice, $w$ can be chosen to be so small that the fitted models are indistinguishable). The additional ridge penalty is useful in our proof as it ensures the model space is``well-conditioned".
-
-\subsection{Smooth Norms}
-Suppose the penalties $P_j$ are semi-norms that are differentiable everywhere. The entropy is bounded using an implicit differentiation trick.
 
 \begin{lemma}
 \label{smooth_entropy_lemma}
