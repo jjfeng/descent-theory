@@ -9,7 +9,7 @@ library(fda)
 # cluster <- makeCluster(n_cores)
 # registerDoParallel(cluster)
 
-w <- 0.0001
+w <- 0
 
 Get_norm2 <- function(h) { sqrt(mean(h^2)) }
 # Fits a single B-spline
@@ -75,7 +75,6 @@ Make_bspline_pen <- function(bspline_objs, ord) {
 }
 
 
-# f1 = sin function, f2 = sin(4x + 1) function
 # sqrt n_train knots
 Make_data <- function(n_train, n_validate, n_test, ord=4, snr=2, xmin=0, xmax=6) {
     ## Generate X data
@@ -205,22 +204,22 @@ Do_bspline_cv_oracle_repl <- function(reps, n_train, n_validate, n_test, lambdas
 set.seed(10)
 
 # very good settings!
-n_train <- 30
-n_test <- 400
-lambdas1 <- 10^seq(from=-5, to=-0.5, by=0.2)
-lambdas2 <- 10^seq(from=-9, to=-3, by=0.2)
-n_sizes <- seq(from=5, to=30, by=5)
-n_reps <- 25
-snr <- 2
-
-# only x1
-n_train <- 80
-n_test <- 800
-lambdas1 <- 10^seq(from=-4, to=-1, by=1)
-lambdas2 <- 10
-n_sizes <- seq(from=10, to=50, by=20)
-n_reps <- 30
-snr <- 2
+# n_train <- 30
+# n_test <- 400
+# lambdas1 <- 10^seq(from=-5, to=-0.5, by=0.2)
+# lambdas2 <- 10^seq(from=-9, to=-3, by=0.2)
+# n_sizes <- seq(from=5, to=30, by=5)
+# n_reps <- 25
+# snr <- 2
+# 
+# # only x1
+# n_train <- 80
+# n_test <- 800
+# lambdas1 <- 10^seq(from=-4, to=-1, by=1)
+# lambdas2 <- 10
+# n_sizes <- seq(from=10, to=50, by=20)
+# n_reps <- 30
+# snr <- 2
 
 
 # new settings!
