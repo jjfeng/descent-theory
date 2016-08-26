@@ -1,0 +1,149 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+
+\subsubsection*{CV Proof: Mitchell's Thrm}
+
+Consider the CV problem with 
+\[
+\hat{\lambda}=\arg\min_{\lambda}\sum_{k=1}^{K}\|y-\hat{g}_{\lambda}(\cdot|D_{-k})\|_{k}^{2}
+\]
+
+
+We consider the behavior of 
+\[
+\hat{g}_{MCV}=\sum_{k=1}^{K}\hat{g}_{\lambda}(\cdot|D_{-k})
+\]
+
+
+and its generalization error 
+\[
+E_{D}\|\hat{g}_{MCV}(\cdot|D)-g^{*}\|^{2}=E_{D}\left[\int\left(\hat{g}_{MCV}(x|D)-g^{*}(x)\right)^{2}d\mu(x)\right]
+\]
+
+
+We will assume that $\sup_{g\in\mathcal{G}}\|g\|_{\infty}\le G$,
+so Assumption A.1 and A.2 are satisfied.
+
+Suppose the errors are bounded ($\|\epsilon\|_{\infty}<\infty$ ).
+
+Suppose we can show 
+\[
+\|g_{\lambda_{1}}-g_{\lambda_{2}}\|_{\infty}\le\left|\lambda_{1}-\lambda_{2}\right|n^{\kappa}C
+\]
+
+
+So we get that
+\[
+E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right]\le(1+a)E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\tilde{\lambda}}(\cdot|D_{-k})\|^{2}\right]+c_{a}J^{2}\max_{k=1:K}\frac{\left(\log n\right)^{2}}{n_{k}}
+\]
+
+
+
+\subsubsection*{Proof}
+
+First note that the assumption A.2 is satisfied: 
+\begin{eqnarray*}
+\int\left(g^{*}(x)-g_{\lambda}(x|D_{0})\right)^{4}d\mu(x) & \le & \|\left(g^{*}-g_{\lambda}\right)^{2}\|_{1}\|\left(g^{*}-g_{\lambda}\right)^{2}\|_{\infty}\\
+ & \le & 4G^{2}\|g^{*}-g_{\lambda}\|_{2}^{2}
+\end{eqnarray*}
+
+
+Let 
+\[
+\mathcal{Q}(T)=\left\{ q_{\lambda}(x,y)=(g^{*}-\hat{g}_{\lambda})^{2}:\lambda\in\Lambda\right\} 
+\]
+
+
+To compute the upper bound, we need the $\|\cdot\|_{\psi_{1}}$ and
+$\|\cdot\|_{L_{2}}$ entropy of the function class 
+
+\[
+\mathcal{Q}_{d}^{L_{2}}(T)=\left\{ q\in\mathcal{Q}(T):\|Q(Z)\|_{2}\le\sqrt{d}\right\} 
+\]
+
+
+From our assumptions, we note that 
+\begin{eqnarray*}
+\|q_{\lambda_{1}}-q_{\lambda_{2}}\|_{\psi_{1}} & = & \|(g^{*}-g_{\lambda_{1}})^{2}-(g^{*}-g_{\lambda_{2}})^{2}\|_{\psi_{1}}\\
+ & = & \|(g_{\lambda_{1}}-g_{\lambda_{2}})(2g^{*}-g_{\lambda_{1}}-g_{\lambda_{2}})\|_{\psi_{1}}\\
+ & \le & \|g_{\lambda_{1}}-g_{\lambda_{2}}\|_{\infty}\|2g^{*}-g_{\lambda_{1}}-g_{\lambda_{2}}\|_{\infty}\\
+ & \le & \left|\lambda_{1}-\lambda_{2}\right|4Cn^{\kappa}G
+\end{eqnarray*}
+
+
+and similarly for $\|\cdot\|_{L_{2}}$ (we're using a loose bound
+for $\|\cdot\|_{L_{2}}$ since calculating its inverse/convex conjugate
+is difficult).
+
+Hence (for a different constant $\kappa$)
+
+\[
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)
+\]
+
+
+and
+
+\[
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)
+\]
+
+
+We calculate each component of the complexity term $J(d)$: 
+\begin{eqnarray*}
+\gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}}) & = & \int_{0}^{G}H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})du\\
+ & = & JG\left(1+\log(4Cn^{\kappa}G)\right)
+\end{eqnarray*}
+
+
+and
+
+\begin{eqnarray*}
+\gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}}) & = & \int_{0}^{\sqrt{d}}\left[H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\right]^{1/2}du\\
+ & = & \sqrt{d}\int_{0}^{1}\left[J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)\right]^{1/2}du\\
+ & \le & \sqrt{d}\left[\int_{0}^{1}J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)du\right]^{1/2}\\
+ & = & \sqrt{d}\left[J\left(1+\log(4Cn^{\kappa}G)\right)\right]^{1/2}
+\end{eqnarray*}
+
+
+So we can define 
+\begin{eqnarray*}
+J(d) & \equiv & J\left(1+\log(4Cn^{\kappa}G)\right)\left[\sqrt{d}+\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\right]\\
+ & \ge & \sqrt{d}\left[J\left(1+\log(4Cn^{\kappa}G)\right)\right]^{1/2}+\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)JG\left(1+\log(4Cn^{\kappa}G)\right)
+\end{eqnarray*}
+ 
+
+Then$J^{-1}(b)$ is
+\[
+J^{-1}(b)=\left(\frac{b}{J\left(1+\log(4Cn^{\kappa}G)\right)}-\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\right)^{2}
+\]
+
+
+The convex conjugate of $J^{-1}(b)$ is
+\[
+\psi(v)=\frac{1}{2}\left(vJ\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}+J\left(1+\log(4Cn^{\kappa}G)\right)\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)v
+\]
+
+
+Therefore
+\begin{eqnarray*}
+\epsilon_{q}(1/q) & = & \psi\left(\max_{k=1:K}\frac{2q(1+a)}{a\sqrt{n_{k}}}\right)\\
+ & = & \frac{1}{2}\left(\frac{2q(1+a)}{a\sqrt{n_{k}}}J\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}+J\left(1+\log(4Cn^{\kappa}G)\right)\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\frac{2q(1+a)}{a\sqrt{n_{k}}}\\
+ & \le & \max_{k=1:K}\left(\frac{2q(1+a)}{a\sqrt{n_{k}}}J\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}
+\end{eqnarray*}
+
+
+Finally, we get
+\[
+E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right]\le(1+a)E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\tilde{\lambda}}(\cdot|D_{-k})\|^{2}\right]+\frac{c(1+a)^{2}}{a}\frac{J^{2}\left(1+\log(4Cn^{\kappa}G)\right)^{2}}{\min_{k=1:K}n_{k}}
+\]
+
+\end{document}

@@ -114,11 +114,11 @@ Let $\Lambda=[n^{-t_{min}},n^{t_{max}}]^{J}$.
 Suppose that if $\|\epsilon\|_{T}\le2\sigma$, there are constants
 $C,\kappa$ such that for any $u>0$, we have for all $\lambda\in\Lambda$
 \[
-\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|\le Cn^{\kappa}u^{2}\implies\|\hat{g}_{\boldsymbol{\lambda}_{1}}-\hat{g}_{\boldsymbol{\lambda}_{2}}\|_{V}\le u
+\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|\le Cn^{\kappa}u\implies\|\hat{g}_{\boldsymbol{\lambda}_{1}}-\hat{g}_{\boldsymbol{\lambda}_{2}}\|_{V}\le u
 \]
 
 
-Then there are constants $c_{1},c_{2}$ s.t. with high probability,
+Then there are constants $c,c_{1},c_{2}$ s.t. with high probability,
 \[
 \left\Vert \hat{g}_{\hat{\lambda}}-g^{*}\right\Vert _{V}\le\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}+\frac{c_{1}\left(J(\log n_{V}+c_{2})\right)^{1/2}}{\sqrt{n_{V}}}+\sqrt{c\left(J(\log n_{V}+c_{2})\right)^{1/2}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}n_{V}^{-1/2}}
 \]
@@ -129,7 +129,7 @@ Then there are constants $c_{1},c_{2}$ s.t. with high probability,
 
 By Lemma param\_covering\_cube, we have
 \[
-H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu^{2}}{Cu^{2}}\right)
+H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu}{Cu}\right)
 \]
 
 
@@ -137,12 +137,12 @@ Let $R_{1}=R\wedge\sqrt{n^{t_{max}-\kappa}/C}$.
 
 Then
 \begin{eqnarray*}
-\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du & \le & \int_{0}^{R}\left[\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu^{2}}{Cu^{2}}\right)\right]^{1/2}du\\
- & < & \int_{0}^{R}\left[\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{4n^{t_{max}-\kappa}}{Cu^{2}}\right)\right]^{1/2}du\\
- & = & R\int_{0}^{1}\left[\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{4n^{t_{max}-\kappa}}{CR^{2}v^{2}}\right)\right]^{1/2}dv\\
- & \le & R\left[\int_{0}^{1}\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{4n^{t_{max}-\kappa}}{CR^{2}v^{2}}\right)dv\right]^{1/2}\\
- & = & R\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)+2J\log\frac{1}{R}\right]^{1/2}\\
- & \le & R\left(\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{2J\log\frac{1}{R}\vee0}\right)
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du & \le & \int_{0}^{R}\left[\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu}{Cu}\right)\right]^{1/2}du\\
+ & < & \int_{0}^{R}\left[\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{4n^{t_{max}-\kappa}}{Cu}\right)\right]^{1/2}du\\
+ & = & R\int_{0}^{1}\left[\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{4n^{t_{max}-\kappa}}{CRv}\right)\right]^{1/2}dv\\
+ & \le & R\left[\int_{0}^{1}\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{4n^{t_{max}-\kappa}}{CRv}\right)dv\right]^{1/2}\\
+ & = & R\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)+J\log\frac{1}{R}\right]^{1/2}\\
+ & \le & R\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log\frac{1}{R}\vee0}\right)
 \end{eqnarray*}
 
 
@@ -150,22 +150,22 @@ The second bound is crazy loose (but is okay I think). The third inequality
 follows from concavity of the square root.
 
 The term $\log\frac{1}{R}$ is nasty. When choosing $\delta$, we
-will replace it with $\sqrt{\log n_{V}}$ since for all $R\in[\frac{1}{n_{V}},1]$,
+will replace it with $\log n_{V}$ since for all $R\ge\frac{1}{n_{V}}$,
 we have 
 \[
-\sqrt{\log\frac{1}{R}}\le\sqrt{\log n_{V}}
+\log\frac{1}{R}\vee0\le\log n_{V}
 \]
 
 
 Hence it suffices to choose $\delta$ s.t. 
 \[
-\sqrt{n_{V}}\delta^{2}\ge c\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{2J\log n_{V}}\right)
+\sqrt{n_{V}}\delta^{2}\ge c\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
 \]
 
 
 Let 
 \[
-K=c\left(\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{2J\log n_{V}}\right)
+K=c\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
 \]
 
 
