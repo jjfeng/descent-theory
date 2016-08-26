@@ -8,7 +8,7 @@
 \usepackage{babel}
 \begin{document}
 
-\subsubsection*{Additive Models and Additive Penalties}
+\subsection*{Lemma: Additive Models and Additive Penalties}
 
 Consider the problem 
 \[
@@ -16,14 +16,14 @@ Consider the problem
 \]
 
 
-We suppose the penalty functions $P_{j}$ are convex. (We do not need
-the semi-norm assumption.)
+We suppose the penalty functions $P_{j}$ are convex and twice-differentiable.
+(We do not need the semi-norm assumption.)
 
 Suppose that $\sup_{g\in\mathcal{G}}\|g\|_{D}\le G$.
 
 For all $d>0$, any $\lambda^{(1)},\lambda^{(2)}$ that satisfy 
 \[
-\|\lambda^{(1)}-\lambda^{(2)}\|\le\frac{d}{2J}\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}n^{-\tau_{\min}}
+\|\lambda^{(1)}-\lambda^{(2)}\|\le\frac{dw}{2J}\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}n^{-\tau_{\min}}
 \]
 
 
@@ -82,7 +82,7 @@ D_{1}=diag\left(\lambda_{\ell}\frac{\partial^{2}}{\partial m_{\ell}^{2}}P_{\ell}
 
 
 \[
-D_{2}=diag\left(\lambda_{\ell}\|h_{\ell}\|_{D}^{2}\right)
+D_{2}=diag\left(\lambda_{\ell}w\|h_{\ell}\|_{D}^{2}\right)
 \]
 
 
@@ -123,7 +123,7 @@ M=D_{3}\left(D_{12}^{-1}-D_{12}^{-1}U\left(\Sigma^{-1}+D_{12}\right)^{-1}U^{T}D_
 
 Now consider the $\tilde{k}$th column of $M$: 
 \begin{eqnarray*}
-\nabla_{\lambda}\hat{m}_{\tilde{k}}(\lambda) & = & D_{3}\left(D_{12}^{-1}-D_{12}^{-1}U\left(\Sigma^{-1}+D_{12}\right)^{-1}U^{T}D_{12}^{-1}\right)e_{k}
+\nabla_{\lambda}\hat{m}_{\tilde{k}}(\lambda) & = & D_{3}\left(D_{12}^{-1}-D_{12}^{-1}U\left(\Sigma^{-1}+D_{12}\right)^{-1}U^{T}D_{12}^{-1}\right)e_{\tilde{k}}
 \end{eqnarray*}
 
 
@@ -132,38 +132,147 @@ orthogonality is preserved by the orthonormal matrices $U$ . Also
 note that $D_{12}^{-1}U\left(\Sigma^{-1}+D_{12}\right)^{-1}U^{T}D_{12}^{-1}$
 is a positive definite matrix. Hence we have 
 \begin{eqnarray*}
-\left|\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right| & \le & \left|\frac{\partial}{\partial m_{\tilde{k}}}P_{\tilde{k}}(g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}})+w\langle h_{\tilde{k}},g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\rangle_{D}\right|\lambda_{\tilde{k}}\|h_{\tilde{k}}\|_{D}^{2}
+\left|\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right| & \le & \left|\frac{\partial}{\partial m_{\tilde{k}}}P_{\tilde{k}}(g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}})+w\langle h_{\tilde{k}},g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\rangle_{D}\right|\lambda_{\tilde{k}}^{-1}w^{-1}\|h_{\tilde{k}}\|_{D}^{-2}
 \end{eqnarray*}
 
 
 Note that from the KKT conditions, we have that
 \begin{eqnarray*}
-\left|\frac{\partial}{\partial m_{\tilde{k}}}P_{\tilde{k}}(g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}})\right| & \le & \left|\frac{1}{\lambda_{\tilde{k}}}\langle y-\sum_{j=1}^{J}\left(g_{j}+m_{j}h_{j}\right),h_{\ell}\rangle_{T}+w\langle h_{\ell},g_{\ell}+m_{\ell}h_{\ell}\rangle_{D}\right|\\
- & \le & n^{\tau_{min}}\|y-\sum_{j=1}^{J}\left(g_{j}+m_{j}h_{j}\right)\|_{T}\|h_{\ell}\|_{T}+w\|h_{\ell}\|_{D}\|g_{\ell}+m_{\ell}h_{\ell}\|_{D}\\
- & \le & \left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG\right)\|h_{\ell}\|_{D}
+\left|\frac{\partial}{\partial m_{\tilde{k}}}P_{\tilde{k}}(g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}})\right| & \le & \left|\frac{1}{\lambda_{\tilde{k}}}\langle y-\sum_{j=1}^{J}\left(g_{j}+m_{j}h_{j}\right),h_{\tilde{k}}\rangle_{T}+w\langle h_{\tilde{k}},g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\rangle_{D}\right|\\
+ & \le & n^{\tau_{min}}\|y-\sum_{j=1}^{J}\left(g_{j}+m_{j}h_{j}\right)\|_{T}\|h_{\tilde{k}}\|_{T}+w\|h_{\tilde{k}}\|_{D}\|g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\|_{D}\\
+ & \le & \left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG\right)\|h_{\tilde{k}}\|_{D}
 \end{eqnarray*}
 
 
 Also 
 \[
-w\langle h_{\tilde{k}},g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\rangle_{D}\le w\|h_{\ell}\|_{D}G
+w\langle h_{\tilde{k}},g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\rangle_{D}\le w\|h_{\tilde{k}}\|_{D}G
 \]
 
 
 Hence
 \[
-\left|\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right|\le\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)n^{\tau_{\min}}\|h_{\tilde{k}}\|_{D}^{-1}
+\left|\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right|\le\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)n^{\tau_{\min}}w^{-1}\|h_{\tilde{k}}\|_{D}^{-1}
 \]
 
 
-By the MVT, 
+By the MVT, there is some $\alpha\in[0,1]$ such that 
 \begin{eqnarray*}
-\hat{m}_{\tilde{k}}(\lambda^{(2)})-\hat{m}_{\tilde{k}}(\lambda^{(1)}) & = & \left\langle \lambda^{(2)}-\lambda^{(1)},\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right\rangle _{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
- & \le & \|\lambda^{(2)}-\lambda^{(1)}\|\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)n^{\tau_{\min}}\frac{J}{d}\\
+\left|\hat{m}_{\tilde{k}}(\lambda^{(2)})-\hat{m}_{\tilde{k}}(\lambda^{(1)})\right| & = & \left|\left\langle \lambda^{(2)}-\lambda^{(1)},\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right\rangle _{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\right|\\
+ & \le & \|\lambda^{(2)}-\lambda^{(1)}\|\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)n^{\tau_{\min}}\frac{J}{dw}\\
  & = & 1/2
 \end{eqnarray*}
 
 
 But this is a contradiction since we know that $\hat{m}_{\tilde{k}}(\lambda^{(2)})=1$
 and $\hat{m}_{\tilde{k}}(\lambda^{(1)})=0$.
+
+
+\subsection*{Lemma: Additive Models and Additive Penalties, Nonsmooth}
+
+Same assumptions as above, but we allow the penalties to be nonsmooth. 
+
+Suppose for almost every $\lambda$, the differentiable space $\Omega^{L_{T}(\cdot,\lambda)}(\hat{g}(\cdot|\lambda))$
+is a local optimality space.
+
+Suppose for almost every $\lambda$, the penalty function is twice
+differentaible in the differentiable space.
+
+The conclusions are the same as before.
+
+For all $d>0$, any $\lambda^{(1)},\lambda^{(2)}$ that satisfy 
+\[
+\|\lambda^{(1)}-\lambda^{(2)}\|\le\frac{dw}{2J}\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}n^{-\tau_{\min}}
+\]
+
+
+we have 
+\[
+\|\hat{g}_{j}(\cdot|\lambda^{(1)})-\hat{g}_{j}(\cdot|\lambda^{(2)})\|_{D}\le d/J
+\]
+
+
+Hence
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}(\cdot|\lambda^{(1)})-\hat{g}_{j}(\cdot|\lambda^{(2)})\|_{D}\le d
+\]
+
+
+
+\subsubsection*{Proof}
+
+Let $\lambda^{(1)},\lambda^{(2)}$ be the penalty parameters satisfying
+the distance constraint above. Let $C$ be the constant defined in
+the assumption 
+\[
+\|\lambda^{(1)}-\lambda^{(2)}\|\le dC
+\]
+
+
+Under the assumptions about the differentiable space and the local
+optimality space, we know that for almost every pair $\lambda^{(1)},\lambda^{(2)}$,
+there is a line 
+\[
+\mathcal{L}=\left\{ \alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}:\alpha\in[0,1]\right\} 
+\]
+
+
+containing a finite set of points $\{\ell_{i}\}_{i=0}^{N+1}\subset\mathcal{L}$
+where $\ell_{0}=\lambda^{(1)}$ and $\ell_{N+1}=\lambda^{(2)}$ such
+that:
+
+1. The differentiable spaces $\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\ell_{i}))$
+satisfy the condition that the differentiable space is a local optimality
+differentiable space conditions and 
+
+2. The union of the differentiable spaces contains the entire line
+$\mathcal{L}$:
+\[
+\mathcal{L}\subset\cup_{i=0}^{N+1}\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\ell_{i}))
+\]
+
+
+Now we partition $\mathcal{L}$ according to the differentiable spaces.
+We will partition with the centers of each differentiable space and
+points in the intersection of all the differentiable spaces. Let $\{\ell_{(i)}\}_{i=0}^{N}\subset\mathcal{L}$
+be the points such that $\ell_{(i)}$ is in the differentiable space
+$\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\ell_{i}))$ and $\Omega^{L_{T}(\cdot,\ell_{i+1})}(\hat{g}(\cdot|\ell_{i+1}))$.
+That is, we choose
+\[
+\ell_{(i)}\in\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\ell_{i}))\cap\Omega^{L_{T}(\cdot,\ell_{i+1})}(\hat{g}(\cdot|\ell_{i+1}))
+\]
+
+
+Hence the following points form a partition of $\mathcal{L}$
+\[
+\left(\ell_{0},\ell_{(0)}\right),\left(\ell_{(0)},\ell_{1}\right),...,\left(\ell_{N},\ell_{(N)}\right),\left(\ell_{(N)},\ell_{N+1}\right)
+\]
+
+
+Note that
+\[
+\|\ell_{i}-\ell_{(i)}\|\le\frac{\|\ell_{i}-\ell_{(i)}\|}{\|\lambda^{(1)}-\lambda^{(2)}\|}dC
+\]
+
+
+Applying the smooth lemma to the pairs of points above, we have that
+
+\[
+\|g(\cdot|\ell_{i})-g(\cdot|\ell_{(i)})\|_{D}\le\frac{\|\ell_{i}-\ell_{(i)}\|}{\|\lambda^{(1)}-\lambda^{(2)}\|}d
+\]
+
+
+Similarly,
+\[
+\|g(\cdot|\ell_{i+1})-g(\cdot|\ell_{(i)})\|_{D}\le\frac{\|\ell_{i+1}-\ell_{(i)}\|}{\|\lambda^{(1)}-\lambda^{(2)}\|}d
+\]
+
+
+Hence
+\begin{eqnarray*}
+\|g(\cdot|\lambda^{(1)})-g(\cdot|\lambda^{(2)})\|_{D} & \le & \sum_{i=0}^{N}\|g(\cdot|\ell_{i})-g(\cdot|\ell_{(i)})\|_{D}+\|g(\cdot|\ell_{i+1})-g(\cdot|\ell_{i()})\|_{D}\\
+ & \le & d\left(\sum_{i=0}^{N}\frac{\|\ell_{i+1}-\ell_{(i)}\|}{\|\lambda^{(1)}-\lambda^{(2)}\|}+\frac{\|\ell_{i}-\ell_{(i)}\|}{\|\lambda^{(1)}-\lambda^{(2)}\|}\right)\\
+ & = & d
+\end{eqnarray*}
+
 \end{document}
