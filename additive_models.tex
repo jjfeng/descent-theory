@@ -1,0 +1,166 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{babel}
+\begin{document}
+
+\subsubsection*{Additive Models and Additive Penalties}
+
+Consider the problem 
+\[
+\frac{1}{2}\|y-\sum_{j=1}^{J}g_{j}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(g_{j})+\frac{w}{2}\|g_{j}\|_{D}^{2}
+\]
+
+
+Suppose that $\sup_{g\in\mathcal{G}}\|g\|_{D}\le G$.
+
+For all $d>0$, any $\lambda^{(1)},\lambda^{(2)}$ that satisfy 
+\[
+\|\lambda^{(1)}-\lambda^{(2)}\|\le\frac{d}{2J}\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}n^{-\tau_{\min}}
+\]
+
+
+we have 
+\[
+\|\hat{g}_{j}(\cdot|\lambda^{(1)})-\hat{g}_{j}(\cdot|\lambda^{(2)})\|_{D}\le d/J
+\]
+
+
+Hence
+\[
+\|\sum_{j=1}^{J}\hat{g}_{j}(\cdot|\lambda^{(1)})-\hat{g}_{j}(\cdot|\lambda^{(2)})\|_{D}\le d
+\]
+
+
+
+\subsubsection*{Proof}
+
+Let $h_{j}=\hat{g}_{j}(\cdot|\lambda^{(1)})-\hat{g}_{j}(\cdot|\lambda^{(2)})$.
+Suppose for contradiction that for $\tilde{k}$, we have $\|h_{\tilde{k}}\|_{D}>d/J$. 
+
+Let 
+\[
+Z=\left\{ j:\|h_{j}\|>0\right\} 
+\]
+Consider the optimization problem
+
+\[
+\left\{ \hat{m}_{j}(\lambda)\right\} _{j\in Z}=\arg\min_{m}\frac{1}{2}\|y-\sum_{j=1}^{J}\left(g_{j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(g_{j}+m_{j}h_{j})+\frac{w}{2}\|g_{j}+m_{j}h_{j}\|_{D}^{2}
+\]
+
+
+Note that if $\|h_{j}\|=0$, then we just set $m_{j}=0$ as a constant.
+
+Now by the KKT conditions, for all $\ell\in Z$, we have
+
+\[
+\langle y-\sum_{j=1}^{J}\left(g_{j}+m_{j}h_{j}\right),h_{\ell}\rangle_{T}+\lambda_{\ell}\frac{\partial}{\partial m_{\ell}}P_{\ell}(g_{\ell}+m_{\ell}h_{\ell})+\lambda_{\ell}w\langle h_{\ell},g_{\ell}+m_{\ell}h_{\ell}\rangle_{D}=0
+\]
+
+
+It's implicit derivative with respect to $\lambda_{k}$ is
+\begin{eqnarray*}
+\langle\sum_{j=1}^{J}\frac{\partial\hat{m}_{j}(\lambda)}{\partial\lambda_{k}}h_{j},h_{\ell}\rangle_{T}+\lambda_{\ell}\frac{\partial^{2}}{\partial m_{\ell}^{2}}P_{\ell}(g_{\ell}+m_{\ell}h_{\ell})\frac{\partial\hat{m}_{\ell}(\lambda)}{\partial\lambda_{k}}+\lambda_{\ell}w\|h_{\ell}\|_{D}^{2}\frac{\partial\hat{m}_{\ell}(\lambda)}{\partial\lambda_{k}}\\
++1\left[\ell=k\right]\left(\frac{\partial}{\partial m_{\ell}}P_{\ell}(g_{\ell}+m_{\ell}h_{\ell})+w\langle h_{\ell},g_{\ell}+m_{\ell}h_{\ell}\rangle_{D}\right) & = & 0
+\end{eqnarray*}
+
+
+Define the following matrices 
+\[
+S:S_{ij}=\langle h_{j},h_{\ell}\rangle_{T}
+\]
+\[
+D_{1}=diag\left(\lambda_{\ell}\frac{\partial^{2}}{\partial m_{\ell}^{2}}P_{\ell}(g_{\ell}+m_{\ell}h_{\ell})\right)
+\]
+
+
+\[
+D_{2}=diag\left(\lambda_{\ell}\|h_{\ell}\|_{D}^{2}\right)
+\]
+
+
+\[
+D_{3}=diag\left(\frac{\partial}{\partial m_{\ell}}P_{\ell}(g_{\ell}+m_{\ell}h_{\ell})+w\langle h_{\ell},g_{\ell}+m_{\ell}h_{\ell}\rangle_{D}\right)
+\]
+
+
+\[
+M=\left(\begin{array}{cccc}
+\frac{\partial\hat{m}_{1}(\lambda)}{\partial\lambda} & \frac{\partial\hat{m}_{2}(\lambda)}{\partial\lambda} & ... & \frac{\partial\hat{m}_{J}(\lambda)}{\partial\lambda}\end{array}\right)
+\]
+
+
+(You will have to omit certain columns/rows of the matrices if $m_{j}=0$
+is constant.)
+
+From the implicit differentiation equations, we have the following
+system of equations:
+\[
+M=D_{3}\left(S+D_{1}+D_{2}\right)^{-1}
+\]
+
+
+We know that $S$ is a PSD matrix (since it can be written as $S=HH^{T}$
+where $H_{j}=h_{j}|_{T}$). Hence we can express $S=UD_{4}U^{T}$
+(where $U$ are orthonormal)
+\[
+M=D_{3}\left(UD_{4}U^{T}+D_{1}+D_{2}\right)^{-1}
+\]
+
+
+Let $D_{12}=D_{1}+D_{2}$. By Woodbury's matrix identity, 
+\[
+M=D_{3}\left(D_{12}^{-1}-D_{12}^{-1}U\left(\Sigma^{-1}+D_{12}\right)^{-1}U^{T}D_{12}^{-1}\right)
+\]
+
+
+Now consider the $\tilde{k}$th column of $M$: 
+\begin{eqnarray*}
+\nabla_{\lambda}\hat{m}_{\tilde{k}}(\lambda) & = & D_{3}\left(D_{12}^{-1}-D_{12}^{-1}U\left(\Sigma^{-1}+D_{12}\right)^{-1}U^{T}D_{12}^{-1}\right)e_{k}
+\end{eqnarray*}
+
+
+Note that the $j$th elements for $j\ne\tilde{k}$ must be zero since
+orthogonality is preserved by the orthonormal matrices $U$ . Also
+note that $D_{12}^{-1}U\left(\Sigma^{-1}+D_{12}\right)^{-1}U^{T}D_{12}^{-1}$
+is a positive definite matrix. Hence we have 
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right| & \le & \left|\frac{\partial}{\partial m_{\tilde{k}}}P_{\tilde{k}}(g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}})+w\langle h_{\tilde{k}},g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\rangle_{D}\right|\lambda_{\tilde{k}}\|h_{\tilde{k}}\|_{D}^{2}
+\end{eqnarray*}
+
+
+Note that from the KKT conditions, we have that
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial m_{\tilde{k}}}P_{\tilde{k}}(g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}})\right| & \le & \left|\frac{1}{\lambda_{\tilde{k}}}\langle y-\sum_{j=1}^{J}\left(g_{j}+m_{j}h_{j}\right),h_{\ell}\rangle_{T}+w\langle h_{\ell},g_{\ell}+m_{\ell}h_{\ell}\rangle_{D}\right|\\
+ & \le & n^{\tau_{min}}\|y-\sum_{j=1}^{J}\left(g_{j}+m_{j}h_{j}\right)\|_{T}\|h_{\ell}\|_{T}+w\|h_{\ell}\|_{D}\|g_{\ell}+m_{\ell}h_{\ell}\|_{D}\\
+ & \le & \left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG\right)\|h_{\ell}\|_{D}
+\end{eqnarray*}
+
+
+Also 
+\[
+w\langle h_{\tilde{k}},g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\rangle_{D}\le w\|h_{\ell}\|_{D}G
+\]
+
+
+Hence
+\[
+\left|\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right|\le\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)n^{\tau_{\min}}\|h_{\tilde{k}}\|_{D}^{-1}
+\]
+
+
+By the MVT, 
+\begin{eqnarray*}
+\hat{m}_{\tilde{k}}(\lambda^{(2)})-\hat{m}_{\tilde{k}}(\lambda^{(1)}) & = & \left\langle \lambda^{(2)}-\lambda^{(1)},\frac{\partial}{\partial\lambda_{\tilde{k}}}\hat{m}_{\tilde{k}}(\lambda)\right\rangle _{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
+ & \le & \|\lambda^{(2)}-\lambda^{(1)}\|\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)n^{\tau_{\min}}\frac{J}{d}\\
+ & = & 1/2
+\end{eqnarray*}
+
+
+But this is a contradiction since we know that $\hat{m}_{\tilde{k}}(\lambda^{(2)})=1$
+and $\hat{m}_{\tilde{k}}(\lambda^{(1)})=0$.
+\end{document}
