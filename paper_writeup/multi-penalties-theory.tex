@@ -101,8 +101,6 @@
 
 In penalized least squares problems, penalty parameters determine the tradeoff between minimizing the residual sum of squares and the model complexity. The oracle set of penalty parameter values that minimize the generalization error are usually estimated by evaluating the models on a separate validation set or by cross-validation. We find that in many problems, the fitted models are smoothly parameterized by the penalty parameters. Thus we can show that the difference between the prediction error of the selected model and the oracle converges at a near-parametric rate. This finding justifies recent work on combining penalty functions using separate penalty parameters.
 
-% In the setting of penalized regression, cross-validation is a widely used technique for tuning penalty parameters. It is unknown whether having multip one can guarantee a particular rate of convergence of the prediction error, but it is unknown if cross-validation is able to recover the same rate. We prove that the model chosen from cross-validation will converge to the true model at the optimal rate since it converges the oracle at a near-parametric rate $(J (c + \kappa \log n)/n)^{1/2}$ where $n$ is the number of samples and $J$ is the number of penalty parameters. The results are counter to the common belief that increasing the number of penalty parameters drastically increase the model complexity. In fact, for nonparametric models, our error bounds allow the number of penalty parameters to increase with the number of samples while retaining the optimal rate. The proof allows cross-validation over an infinite set of penalty parameters and the lower limit of the range can decrease at any polynomial rate. For smooth regression problems, the proof only requires convexity of the loss and penalty functions; additional assumptions are required if the penalty functions are non-smooth. The proof uses techniques from entropy and an implicit differentiation trick. The simplicity of the proof may extend itself to other problems in cross-validation. Our simulation studies show that increasing the penalty parameters can substantially decrease model bias if one uses optimization algorithms that effectively minimize the validation loss.
-
 \end{abstract}
 
 \noindent%
@@ -121,8 +119,8 @@ where $\epsilon_i$ are random errors. Our goal is to find the best model in $\ma
 
 In high-dimensional ($p \gg n$) or ill-posed problems, the ordinary least squares estimate performs poorly as it overfits to the training data. A common solution is to add regularization, or penalization, to control model complexity and induce desired structure. The penalized least squares estimate minimizes a criterion of the form
 \begin{equation}
-\label{orig_train_criterion}
-\hat{g}(\lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{n} \sum_{i=1}^n \left (y_i -  g(x_i) \right )^2 + \sum_{j=1}^J \lambda_j P_j(g)
+\label{intro_train_criterion}
+\hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{n} \sum_{i=1}^n \left (y_i -  g(x_i) \right )^2 + \sum_{j=1}^J \lambda_j P_j(g)
 \end{equation}
 where $P_j$ are the penalty functions and $\lambda_j$ are the penalty parameters.
 
@@ -134,7 +132,7 @@ The performance of cross-validation-like procedures is characterized by bounding
 
 Despite the wealth of literature on cross-validation, there is very little work on characterizing the prediction error when the regularization method has multiple penalty parameters. A potential reason is that tuning multiple penalty parameters is computationally difficult so most regularization methods only have one or two tuning parameters (e.g. Elastic Net, Sparse Group Lasso, etc.). However, recent efforts have used continuous optimization methods to make this ``hyperparameter selection" problem computationally tractable. For penalized regression problems, the gradient of the validation loss with respect to the penalty parameters can often be calculated by implicit differentiation (Bengio, Foo). Thus a gradient descent procedure can be used to tune the penalty parameters. For more general machine learning problems, one can use a gradient-free approach such as Bayesian optimization (Snoek). 
 
-Our paper provides a finite sample upper bound on the prediction error when tuning multiple penalty parameters via a training/validation split or cross-validation. We show that if the fitted functions vary smoothly in the penalty parameters, then the error of the model from the selected penalty parameters converges to the error of the model for the oracle penalty parameters at a near-parametric rate. We find that this smoothness assumption is satisfied by many penalized regression problems. The proofs use results from empirical process theory and an implicit differentiation trick.
+Our paper provides a finite-sample upper bound on the prediction error when tuning multiple penalty parameters via a training/validation split or cross-validation. We show that if the fitted functions vary smoothly in the penalty parameters, then the error of the model from the selected penalty parameters converges to the error of the model for the oracle penalty parameters at a near-parametric rate. We find that this smoothness assumption is satisfied by many penalized regression problems. Our inequality provides a guide for the rate to increase the number of penalty parameters with the number of samples to achieve an optimal convergence rate. The proofs use results from empirical process theory and an implicit differentiation trick.
 
 Section \ref{sec:main_results} provides bounds on the prediction error for a training/validation framework and cross-validation.
 Section \ref{sec:entropy} proves that for many penalized regression problems, the fitted models are smoothly parameterized by the penalty parameters.
@@ -146,79 +144,49 @@ Section \ref{sec:proofs} contains the full proofs for the main results and addit
 
 \subsection{Training/Validation Split}
 
-Consider the training/validation split framework. Given the total observed dataset $D$ of size $n$, suppose it is split into a training set $T$ of size $n_T$ and validation set $V$ of size $n_V$. Define $\| h \|_V^2 = \frac{1}{n_V}\sum_{i\in A} h^2(x_i)$ and similarly for $T$. Let the fitted models over the range of penalty parameter values $\Lambda$ be denoted
+Given the total observed dataset $D$ of size $n$, suppose it is randomly split into a training set $T$ of size $n_T$ and validation set $V$ of size $n_V$. For a function $h$, define $\| h \|_V^2 = \frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ and similarly for $T$. Using this notation, the fitted model defined in  \eqref{intro_train_criterion} can be reformulated as
+\begin{equation}
+\hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{2} \left \|y -  g \right \|_T^2 + \sum_{j=1}^J \lambda_j P_j(g)
+\end{equation}
+In the training/validation framework, the selected penalty parameters minimize the validation error as follows
+\begin{equation}
+\label{cv_lambda}
+\hat{\boldsymbol \lambda} = \arg\min_{\lambda\in\Lambda} \frac{1}{2} \left \| y-\hat{g}(\cdot | \boldsymbol \lambda) \right \|_{V}^{2}
+\end{equation}  
+where $\Lambda$ is the range of penalty parameter values. We are interested in bounding the difference between the fitted model and the true model at the observed covariates in the validation set, which can be expressed as $\left \|\hat{g}(\cdot | \hat{\boldsymbol \lambda}) - g^* \right \|_V$. 
+
+Our bound is based on the basic inequality (cite?). Let the oracle penalty parameters $\tilde{\boldsymbol \lambda}$ be defined as
+\begin{equation}
+\tilde{\boldsymbol \lambda} = \argmin_{\lambda \in \Lambda} \frac{1}{2} \left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|^2
+\end{equation}
+where $\| h \| = \int h^2(x) d\mu(x)$. Let the set of fitted models be denoted
 \begin{equation}
 \label{function_class_GT}
 \mathcal{G}(T) = \left \{ \hat{g}(\cdot | \boldsymbol \lambda) : \lambda \in \Lambda  \right \}
 \end{equation}
-The final penalty parameter chosen by the training/validation split is
-\begin{equation}
-\label{cv_lambda}
-\hat{\boldsymbol \lambda} = \arg\min_{\lambda\in\Lambda} \frac{1}{2}  \| y-\hat{g}(\cdot | \boldsymbol \lambda) \|_{V}^{2}
-\end{equation} 
-We are interested in bounding $\left \|\hat{g}(\cdot | \hat{\boldsymbol \lambda}) - g^* \right \|_V$, the error between the fitted model and the true model at the observed covariates in the validation set. 
-
-The bound is based on the basic inequality (cite?). Let the oracle penalty parameters $\tilde{\boldsymbol \lambda}$ be defined as
-\begin{equation}
-\tilde{\boldsymbol \lambda} = \argmin_{\lambda \in \Lambda} \frac{1}{2} \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^*\|^2
-\end{equation}
-where $\| h \| = \int h^2(x) d\mu(x)$. From the definition of $\hat{\boldsymbol \lambda}$, we have
-\begin{equation}
+From the definition of $\hat{\boldsymbol \lambda}$, we have
+\begin{eqnarray}
 \label{basic_ineq}
 \left \|\hat{g}(\cdot | \hat{\boldsymbol \lambda}) - g^* \right \|_V^2
-\le
-\| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^*\|_V^2 + 
-2 \left | \langle \epsilon, \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - \hat{g}(\cdot | \hat{\boldsymbol \lambda}) \rangle_V \right |
-\end{equation}
-where $\langle h, \ell \rangle_A = \frac{1}{size(A)}\sum_{i\in A} h(x_i) \ell(x_i)$. The second term on the right hand is the empirical process term. Bounding this will rely on results from empirical process theory.
+& \le &
+\left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|_V^2 + 
+2 \left \langle \epsilon, \hat{g}(\cdot | \hat{\boldsymbol \lambda}) - \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) \right \rangle_V \\
+& \le &
+\left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|_V^2 + 
+\sup_{g \in \mathcal{G}(T)} 2 \left \langle \epsilon, g - \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) \right \rangle_V
+\end{eqnarray}
+where $\langle h, \ell \rangle_A = \frac{1}{size(A)}\sum_{i\in A} h(x_i) \ell(x_i)$. This upper bound can be understood as a bias-variance tradeoff. The first term is the difference between the oracle model and the truth, so this is just the bias of $\mathcal{G}(T)$. The second term is an empirical process term and can be bounded by its variance, so this can be thought of as the ``variance" of $\mathcal{G}(T)$.
 
-Empirical process results state that when the complexity of the class $\mathcal{G}(T)$ is small, the empirical process term will be small with high probability. In this paper, we will measure the the complexity of $\mathcal{G}(T)$ by its metric entropy. Let us recall its definition here:
-
-\begin{definition}
-Let the covering number $N(u, \mathcal{G}, \| \cdot \|)$ be the smallest set of $u$-covers of $\mathcal{G}$ with respect to the norm $\| \cdot \|$. The metric entropy of $\mathcal{G}$ is defined as the log of the covering number:
+Empirical process theory provides a more formal framework for characterizing the behavior of the empirical process term. ``Variance" is usually referred to as complexity and can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. Here we only highlight the fact that functions that are smooth parameterized by $\boldsymbol \theta$ as folllows
 \begin{equation}
-H (u, \mathcal{G}, \| \cdot \| ) = \log N(u, \mathcal{G}, \| \cdot \|)
+\| \boldsymbol \theta - \boldsymbol \theta' \|_2 \le d \implies \left \| f(\cdot | \boldsymbol \theta) - f(\cdot | \boldsymbol \theta') \right \|_\infty \le O_p(d)
 \end{equation}
-\end{definition}
+have low metric entropy. Hence their empirical process terms are small with high probability.
 
-The following theorem gives a finite-sample upper bound on the error of the fitted model $\hat{g}_{\hat \lambda}(\cdot | T)$ over the observed points in the validation set. The proof given in Section \ref{sec:proofs} leverages standard chaining and peeling arguments.
+In the penalized regression setting, the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are parameterized by $\boldsymbol \lambda$. Moreover, we show in Section \ref{sec:entropy} that $\hat{g}(\cdot | \boldsymbol \lambda)$ is smoothly parameterized by $\boldsymbol \lambda$ for many penalized regression problems. This fact combined with \eqref{basic_ineq} provides a finite-sample upper bound on the error of the fitted model $\hat{g}_{\hat \lambda}(\cdot | T)$ over the validation points.
 
 \begin{theorem}
 \label{train_val_thrm}
-Let $\epsilon$ be independent sub-Gaussian random variables. 
-Suppose that $\sup_{g \in \mathcal{G}} \| g \|_\infty \le G < \infty$.
-Suppose for any training dataset $T \subseteq D$ with $\| \epsilon \|_T \le 2 \sigma$, we have
-\begin{equation}
-\int_0^R H^{1/2} \left ( u, \mathcal{G(\cdot | T)} \| \cdot \|_V \right ) du \le \psi(n, J, \sigma)
-\end{equation}
-
-Then for all $\delta  > 0$ such that
-\begin{equation}
-\sqrt{n_{V}}\delta^{2}
-\ge 
-c \left[
-\psi_{T}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V} + 2\delta\right)
-\vee
-\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)
-\right]
-\end{equation}
-
-Then with high probability, we have
-\begin{equation}
-\label{error_bound}
-\left \|\hat{g}_{\hat{\lambda} }(\cdot | T) - g^* \right \|_V
-\le 
-\min_{\lambda \in \Lambda}\| \hat{g}_{\lambda}(\cdot | T) - g^*\|_V
-+ \delta
-\end{equation}
-\end{theorem}
-
-In the penalized regression setting, each function $\hat{g}(\cdot |\boldsymbol \lambda)$ in $\mathcal{G}(T)$ directly maps to a set of penalty parameters, so one would expect that the covering number of $\mathcal{G}(T)$ and $\Lambda$ to be related. In Section \ref{sec:entropy}, we show that $\hat{g}(\cdot | \boldsymbol \lambda)$ is smoothly parameterized by $\boldsymbol \lambda$ in many penalized regression problems. Using this result, we apply Theorem \ref{train_val_thrm} to the specific case of penalized regression to get Corollary \ref{train_val_corr}. 
-
-Note that the complexity term in the upper bound contains a $\log n_V$ term. This is the result of allowing the range of $\Lambda$ to increase at a polynomial rate in the validation set size $n_V$. (Perhaps we should be more explicit and just have $\lambda_{\min} $ and $\lambda_{\max}$)
-
-\begin{corollary}
-\label{train_val_corr}
 Suppose that $\sup_{g \in \mathcal{G(\cdot | T)}} \| g \|_\infty \le G < \infty$.
 Suppose that $\Lambda = [ n_V^{-t_{\min}}, n_V^{t_{\max}} ]^J $.
 
@@ -235,43 +203,11 @@ Then with high probability, we have for constants $c_1, c_2$
 +\frac{c_{1}\left(J(\log n_{V}+c_{2})\right)^{1/2}}{\sqrt{n_{V}}}
 +\sqrt{c_1 \left(J(\log n_{V}+c_{2})\right)^{1/2}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}n_{V}^{-1/2}}
 \end{equation}
-\end{corollary}
+\end{theorem}
+Theorem \ref{train_val_thrm} is a special case of Theorem \ref{train_val_thrm_complicated} and their proofs are given in Section \ref{sec:proofs}.
 
-\begin{proof}
-By Lemma param\_covering\_cube, we have
-\[
-H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu}{Cu}\right)
-\]
+The $\log n_V$ terms are the result of increasing the range of $\Lambda$ at a polynomial rate. Increasing the range of $\Lambda$ in important to ensure fast convergence rates.
 
-
-Let $R_{1}=R\wedge\sqrt{n^{t_{max}-\kappa}/C}$.
-
-Then after immense algebraic massaging, we get
-\begin{equation}
-\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
-\le
-R\left(\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{2J\log\frac{1}{R}\vee0}\right)
-\end{equation}
-
-We note since $\delta > \frac{1}{n_{V}}$ (modulo a constant), it suffices to choose $\delta$ such that
-\[
-\sqrt{n_{V}}\delta^{2}\ge c\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
-\]
-
-Let 
-\[
-K=c\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
-\]
-and 
-\[
-\omega=\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}
-\]
-
-The quadratic formula gives us that
-\[
-\delta\ge\frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}
-\]
-\end{proof}
 
 
 \subsection{Cross-Validation}
@@ -314,17 +250,17 @@ E_{D} \left \| \hat{g}_{ACV} - g^* \right \|^2 \le
 \end{equation}
 \end{theorem}
 
-Theorem \ref{kfold_thrm} is a stronger result than Corollary \ref{train_val_corr}, but one is required to show that $\hat{g}_\lambda$ is smoothly parameterized by $\lambda$ over the entire domain, not just the validation points.
+Theorem \ref{kfold_thrm} is a stronger result than Theorem \ref{train_val_thrm}, but one is required to show that $\hat{g}_\lambda$ is smoothly parameterized by $\lambda$ over the entire domain, not just the validation points.
 
 \subsubsection{Implications}
 
-Theorem \ref{kfold_thrm} and Corollary \ref{train_val_corr} imply that $\hat{g}_{\hat{\lambda}}$ has a semi-parametric convergence rate: the nonparametric (or potentially parametric) convergence rate of the oracle and the parametric convergence rate of the cross-validated model to the oracle. As long as the number of penalty parameters is finite, it does not affect the convergence rate of the model asymptotically.
+Theorem \ref{train_val_thrm} and \ref{kfold_thrm} imply that $\hat{g}_{\hat{\lambda}}$ has a semi-parametric convergence rate: the nonparametric (or potentially parametric) convergence rate of the oracle and the parametric convergence rate of the cross-validated model to the oracle. As long as the number of penalty parameters is finite, it does not affect the convergence rate of the model asymptotically.
 
 We can minimize the prediction error by balancing the two terms in the upper bound. The inequalities suggest that there are many approaches. One could change the ratio between the training and validation sets as the number of samples increases. Alternatively, one could increase the number of penalties and penalty parameters with the number of samples. Of course, finding the true minimizer of the upper bound will require knowing properties about the true model, so this would have to be done in some heuristic manner.
 
 \section{Smoothness of $\hat{g}_\lambda$ in $\lambda$}\label{sec:entropy}
 
-We now show that $\hat{g}_\lambda$ is smoothly parametrized by $\lambda$. Corollary \ref{train_val_corr} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{kfold_thrm} requires this to hold over the entire domain. Smoothness over the validation set is generally easier to show. We will prove it for nonparametric additive models with smooth penalties and certain nonsmooth penalties. Smoothness over the entire domain is harder to show, so we consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
+We now show that $\hat{g}_\lambda$ is smoothly parametrized by $\lambda$. Theorem \ref{train_val_thrm} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{kfold_thrm} requires this to hold over the entire domain. Smoothness over the validation set is generally easier to show. We will prove it for nonparametric additive models with smooth penalties and certain nonsmooth penalties. Smoothness over the entire domain is harder to show, so we consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
 
 Throughout, we will presume that $\mathcal{G}$ is a convex function class.
 
@@ -550,7 +486,7 @@ Then
 
 \section{Simulations}\label{sec:simulations}
 
-We now provide a simulation study for the prediction error bound given in Theorem \ref{train_val_thrm}. The penalty parameters are chosen by a training/validation split. We show that the error of the select model converges to that of the oracle model at the expected $(\log(n_V)/n_V)^{1/2}$ rate. 
+We now provide a simulation study for the prediction error bound given in Theorem \ref{train_val_thrm_complicated}. The penalty parameters are chosen by a training/validation split. We show that the error of the select model converges to that of the oracle model at the expected $(\log(n_V)/n_V)^{1/2}$ rate. 
 
 Observations were generated from the model
 \begin{equation}
@@ -582,7 +518,92 @@ The main caveat is that our theorems bound the prediction error of the global mi
 
 \section{The Proof} \label{sec:proofs}
 
+In this paper, we will measure the the complexity of $\mathcal{G}(T)$ by its metric entropy. Let us recall its definition here:
+
+\begin{definition}
+Let the covering number $N(u, \mathcal{G}, \| \cdot \|)$ be the smallest set of $u$-covers of $\mathcal{G}$ with respect to the norm $\| \cdot \|$. The metric entropy of $\mathcal{G}$ is defined as the log of the covering number:
+\begin{equation}
+H (u, \mathcal{G}, \| \cdot \| ) = \log N(u, \mathcal{G}, \| \cdot \|)
+\end{equation}
+\end{definition}
+
+\begin{theorem}
+\label{train_val_thrm_complicated}
+Let $\epsilon$ be independent sub-Gaussian random variables. 
+Suppose that $\sup_{g \in \mathcal{G}} \| g \|_\infty \le G < \infty$.
+Suppose for any training dataset $T \subseteq D$ with $\| \epsilon \|_T \le 2 \sigma$, we have
+\begin{equation}
+\int_0^R H^{1/2} \left ( u, \mathcal{G(\cdot | T)} \| \cdot \|_V \right ) du \le \psi(n, J, \sigma)
+\end{equation}
+
+Then for all $\delta  > 0$ such that
+\begin{equation}
+\sqrt{n_{V}}\delta^{2}
+\ge 
+c \left[
+\psi_{T}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V} + 2\delta\right)
+\vee
+\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)
+\right]
+\end{equation}
+
+Then with high probability, we have
+\begin{equation}
+\label{error_bound}
+\left \|\hat{g}_{\hat{\lambda} }(\cdot | T) - g^* \right \|_V
+\le 
+\min_{\lambda \in \Lambda}\| \hat{g}_{\lambda}(\cdot | T) - g^*\|_V
++ \delta
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Chaining and peeling.
+\end{proof}
+
+%In the penalized regression setting, each function $\hat{g}(\cdot |\boldsymbol \lambda)$ in $\mathcal{G}(T)$ directly maps to a set of penalty parameters, so one would expect that the covering number of $\mathcal{G}(T)$ and $\Lambda$ to be related. In Section \ref{sec:entropy}, we show that $\hat{g}(\cdot | \boldsymbol \lambda)$ is smoothly parameterized by $\boldsymbol \lambda$ in many penalized regression problems. Using this result, we apply Theorem \ref{train_val_thrm_complicated} to the specific case of penalized regression to get Theorem \ref{train_val_thrm}. 
+%
+%Note that the complexity term in the upper bound contains a $\log n_V$ term. This is the result of allowing the range of $\Lambda$ to increase at a polynomial rate in the validation set size $n_V$. (Perhaps we should be more explicit and just have $\lambda_{\min} $ and $\lambda_{\max}$)
+
 \paragraph{Proof of Theorem \ref{train_val_thrm}}
+
+\begin{proof}
+By Lemma param\_covering\_cube, we have
+\[
+H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu}{Cu}\right)
+\]
+
+
+Let $R_{1}=R\wedge\sqrt{n^{t_{max}-\kappa}/C}$.
+
+Then after immense algebraic massaging, we get
+\begin{equation}
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
+\le
+R\left(\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{2J\log\frac{1}{R}\vee0}\right)
+\end{equation}
+
+We note since $\delta > \frac{1}{n_{V}}$ (modulo a constant), it suffices to choose $\delta$ such that
+\[
+\sqrt{n_{V}}\delta^{2}\ge c\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
+\]
+
+Let 
+\[
+K=c\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
+\]
+and 
+\[
+\omega=\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}
+\]
+
+The quadratic formula gives us that
+\[
+\delta\ge\frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}
+\]
+\end{proof}
+
+
 
 \paragraph{Proof of Theorem \ref{kfold_thrm}}
 
