@@ -175,9 +175,9 @@ From the definition of $\hat{\boldsymbol \lambda}$, we have
 \left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|_V^2 + 
 \sup_{g \in \mathcal{G}(T)} 2 \left \langle \epsilon, g - \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) \right \rangle_V
 \end{eqnarray}
-where $\langle h, \ell \rangle_A = \frac{1}{size(A)}\sum_{i\in A} h(x_i) \ell(x_i)$. This upper bound can be understood as a bias-variance tradeoff. The first term is the difference between the oracle model and the truth, so this is just the bias of $\mathcal{G}(T)$. The second term is an empirical process term and can be bounded by its variance, so this can be thought of as the ``variance" of $\mathcal{G}(T)$.
+where $\langle h, \ell \rangle_A = \frac{1}{size(A)}\sum_{i\in A} h(x_i) \ell(x_i)$. This upper bound can be understood as a bias-variance tradeoff. The first term is the difference between the oracle model and the truth, so this is just the bias from using the model class $\mathcal{G}(T)$. The second term is an empirical process term that can be bounded by its variance, so this can be thought of as the ``variance" of $\mathcal{G}(T)$.
 
-Empirical process theory provides a more formal framework for characterizing the behavior of the empirical process term. ``Variance" is usually referred to as complexity and can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. Here we only highlight the fact that functions that are smooth parameterized by $\boldsymbol \theta$ as folllows
+Empirical process theory provides a more formal framework for characterizing the behavior of the empirical process term. ``Variance" is usually referred to as complexity and can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. Here we only highlight the fact that functions smoothly parameterized by $\boldsymbol \theta$ as follows
 \begin{equation}
 \| \boldsymbol \theta - \boldsymbol \theta' \|_2 \le d \implies \left \| f(\cdot | \boldsymbol \theta) - f(\cdot | \boldsymbol \theta') \right \|_\infty \le O_p(d)
 \end{equation}
@@ -200,8 +200,8 @@ Then with high probability, we have for constants $c_1, c_2$
 \label{error_bound}
 \left\Vert \hat{g}_{\hat{\lambda}}-g^{*}\right\Vert _{V} \le
 \|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}
-+\frac{c_{1}\left(J(\log n_{V}+c_{2})\right)^{1/2}}{\sqrt{n_{V}}}
-+\sqrt{c_1 \left(J(\log n_{V}+c_{2})\right)^{1/2}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}n_{V}^{-1/2}}
++c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2}
++\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}
 \end{equation}
 \end{theorem}
 Theorem \ref{train_val_thrm} is a special case of Theorem \ref{train_val_thrm_complicated} and their proofs are given in Section \ref{sec:proofs}.
@@ -248,12 +248,39 @@ E_{D} \left \| \hat{g}_{ACV} - g^* \right \|^2 \le
 (1+a) \min_{k\in 1:K, \lambda \in \Lambda}  E_{D} \left \| \hat{g}(\cdot |\lambda, D_{-k}) - g^* \right \|^2
 + c_a \max_{k=1:K} \frac{\log^2(n)}{n_k}
 \end{equation}
+where $c_a$ is given in Mitchell.
 \end{theorem}
+
 
 Theorem \ref{kfold_thrm} is a stronger result than Theorem \ref{train_val_thrm}, but one is required to show that $\hat{g}_\lambda$ is smoothly parameterized by $\lambda$ over the entire domain, not just the validation points.
 
-\subsubsection{Implications}
+\subsubsection{Example}
 
+We present a nonparametric additive model as an example.
+
+Consider the problem
+\begin{equation}
+\| y - (f + g) \|^2 + \lambda_1 \int |f^{(s)}(x)|_n^2 dx + \lambda_2 \int |g^{(t)}(x)|^2 dx
+\end{equation}
+According to Vandegeer (CITE), the oracle rate is bounded above by
+\begin{equation}
+\| \hat{f}_{\tilde \lambda} - f^* \| = O_p(n^{-\frac{s}{2s+1}}), \| \hat{g}_{\tilde \lambda} - g^* \| = O_p(n^{-\frac{t}{2t+1}})
+\end{equation}
+In the training/validation framework, Theorem \ref{train_val_thrm} gives us
+\begin{eqnarray*}
+\| \hat{f}_{\hat \lambda} + \hat{g}_{\hat \lambda} - (f^* + g^*) \|_V &=& 
+O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}}) 
++c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \\
+&& +\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2}  \left (O_p(n_T^{-\frac{k}{2k+1}}) + O_p(n_T^{-\frac{m}{2m+1}}) \right) }
+\end{eqnarray*}
+In the cross-validation framework, Theorem \ref{kfold_thrm} gives us
+\begin{eqnarray*}
+E_D \| \hat{f}_{ACV} + \hat{g}_{ACV} - (f^* + g^*) \|^2 &=& 
+(1+a) E_D  \left (O_p(n_k^{-\frac{s}{2s+1}}) + O_p(n_k^{-\frac{t}{2t+1}})  \right )
++ c_a \max_{k=1:K} \frac{\log^2(n)}{n_k}
+\end{eqnarray*}
+
+\subsubsection{Implications}
 Theorem \ref{train_val_thrm} and \ref{kfold_thrm} imply that $\hat{g}_{\hat{\lambda}}$ has a semi-parametric convergence rate: the nonparametric (or potentially parametric) convergence rate of the oracle and the parametric convergence rate of the cross-validated model to the oracle. As long as the number of penalty parameters is finite, it does not affect the convergence rate of the model asymptotically.
 
 We can minimize the prediction error by balancing the two terms in the upper bound. The inequalities suggest that there are many approaches. One could change the ratio between the training and validation sets as the number of samples increases. Alternatively, one could increase the number of penalties and penalty parameters with the number of samples. Of course, finding the true minimizer of the upper bound will require knowing properties about the true model, so this would have to be done in some heuristic manner.
