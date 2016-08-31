@@ -63,8 +63,6 @@
 
 \begin{document}
 
-%\bibliographystyle{natbib}
-
 \def\spacingset#1{\renewcommand{\baselinestretch}%
 {#1}\small\normalsize} \spacingset{1}
 
@@ -124,15 +122,15 @@ In high-dimensional ($p \gg n$) or ill-posed problems, the ordinary least square
 \end{equation}
 where $P_j$ are the penalty functions and $\lambda_j$ are the penalty parameters.
 
-Selecting the penalty parameters is an important task since they ultimately determine the fitted model. Their oracle values balance the residual least squares and the penalty terms to ensure fast convergence rates (Van de geer-book, Wahba-smoothing spline paper, and others?). For example, when fitting an additive model $f(\boldsymbol x) = \sum_{j=1}^J f_j(x_j)$ with a roughness penalty for each component, the penalty parameters should be inversely proportional to the penalties of the true model (cite Vandegeer additive models). When fitting a linear model using the lasso, the penalty parameter should be on the order $\sigma (\log p /n )^{1/2}$ where $\sigma^2$ is the variance of the error terms.
+Selecting the penalty parameters is an important task since they ultimately determine the fitted model. Their oracle values balance the residual least squares and the penalty terms to ensure fast convergence rates \citep{van2000empirical}. For example, when fitting an additive model $f(\boldsymbol x) = \sum_{j=1}^J f_j(x_j)$ with a roughness penalty for each component, the penalty parameters should be inversely proportional to the penalties of the true model \citep{van2014additive}. When fitting a linear model using the lasso, the penalty parameter should be on the order $\sigma (\log p /n )^{1/2}$ where $\sigma^2$ is the variance of the error terms.
 
-The obvious problem is that the oracle penalty parameters depend on unknown values. Instead the penalty parameters are usually tuned via a training/validation split or cross-validation. The basic idea is to train a model on a random partition of the data and evaluate its error on the remaining data. One then searches for the penalty parameters that yield the lowest validation error. For a more complete review of cross-validation, refer to Arlot (CITE).
+The obvious problem is that the oracle penalty parameters depend on unknown values. Instead the penalty parameters are usually tuned via a training/validation split or cross-validation. The basic idea is to train a model on a random partition of the data and evaluate its error on the remaining data. One then searches for the penalty parameters that yield the lowest validation error. For a more complete review of cross-validation, refer to Arlot \citep{arlot2010survey}.
 
-The performance of cross-validation-like procedures is characterized by bounding the prediction error. Typically the upper bound is composed of two terms: the error of the oracle plus a complexity term. In a general CV framework, Van Der Laan (2003, 2004) provides finite sample oracle inequalities assuming that CV is performed over a finite model class and Mitchell () uses an entropy approach to bound CV for potentially infinite model classes. In the regression setting, Gyorfi (2002) provides a finite sample inequality for training/validation split for least squares and Wegkamp (2003) proves an oracle inequality for a penalized least squares holdout procedure. There are also bounds for cross-validated models from ridge regression and lasso (Golub, Heath and Wahba, Chetverikov, and Chaterjee), though the proofs usually rely on the linearity of the model class and are therefore hard to generalize.
+The performance of cross-validation-like procedures is characterized by bounding the prediction error. Typically the upper bound is composed of two terms: the error of the oracle plus a complexity term. In a general CV framework, \citet{van2003unified, van2004asymptotic} provides finite sample oracle inequalities assuming that CV is performed over a finite model class and \citet{lecue2012oracle} uses an entropy approach to bound CV for potentially infinite model classes. In the regression setting, \citet{gyorfi2006distribution} provides a finite sample inequality for training/validation split for least squares and \citet{wegkamp2003model} proves an oracle inequality for a penalized least squares holdout procedure. There are also bounds for cross-validated models from ridge regression and lasso \citep{golub1979generalized, chetverikov2016cross, chatterjee2015prediction}, though the proofs usually rely on the linearity of the model class and are therefore hard to generalize.
 
-Despite the wealth of literature on cross-validation, there is very little work on characterizing the prediction error when the regularization method has multiple penalty parameters. A potential reason is that tuning multiple penalty parameters is computationally difficult so most regularization methods only have one or two tuning parameters (e.g. Elastic Net, Sparse Group Lasso, etc.). However, recent efforts have used continuous optimization methods to make this ``hyperparameter selection" problem computationally tractable. For penalized regression problems, the gradient of the validation loss with respect to the penalty parameters can often be calculated by implicit differentiation (Bengio, Foo). Thus a gradient descent procedure can be used to tune the penalty parameters. For more general machine learning problems, one can use a gradient-free approach such as Bayesian optimization (Snoek).
+Despite the wealth of literature on cross-validation, there is very little work on characterizing the prediction error when the regularization method has multiple penalty parameters. A potential reason is that tuning multiple penalty parameters is computationally difficult so most regularization methods only have one or two tuning parameters (e.g. Elastic Net \citep{zou2003regression}, Sparse Group Lasso \citep{simon2013sparse}, etc.). However, recent efforts have used continuous optimization methods to make this ``hyperparameter selection" problem computationally tractable. For penalized regression problems, the gradient of the validation loss with respect to the penalty parameters can often be calculated by implicit differentiation \citep{bengio2000gradient, foo2008efficient}. Thus a gradient descent procedure can be used to tune the penalty parameters. For more general machine learning problems, one can use a gradient-free approach such as Bayesian optimization \citet{snoek2012practical}.
 
-Our paper provides a finite-sample upper bound on the prediction error when tuning multiple penalty parameters via a training/validation split or cross-validation. We show that if the fitted functions vary smoothly in the penalty parameters, then the error of the model from the selected penalty parameters converges to the error of the model for the oracle penalty parameters at a near-parametric rate. We find that this smoothness assumption is satisfied by many penalized regression problems. Our inequality provides a guide for the rate to increase the number of penalty parameters with the number of samples to achieve an optimal convergence rate. The proofs use results from empirical process theory and an implicit differentiation trick.
+Our paper provides a finite-sample upper bound on the prediction error when tuning multiple penalty parameters via a training/validation split or cross-validation. We show that if the fitted functions vary smoothly in the penalty parameters, then the error of the model from the selected penalty parameters converges to the error of the model for the oracle penalty parameters at a near-parametric rate. We find that this smoothness assumption is satisfied by many penalized regression problems. Our inequality provides a guide for the rate to increase the number of penalty parameters with the sample size to achieve an optimal convergence rate. The proofs use results from empirical process theory and an implicit differentiation trick.
 
 Section \ref{sec:main_results} provides bounds on the prediction error for a training/validation framework and cross-validation.
 Section \ref{sec:entropy} proves that for many penalized regression problems, the fitted models are smoothly parameterized by the penalty parameters.
@@ -155,7 +153,7 @@ In the training/validation framework, the selected penalty parameters minimize t
 \end{equation}
 where $\Lambda$ is the range of penalty parameter values. We are interested in bounding the difference between the fitted model and the true model at the observed covariates in the validation set, which can be expressed as $\left \|\hat{g}(\cdot | \hat{\boldsymbol \lambda}) - g^* \right \|_V$.
 
-Our bound is based on the basic inequality (cite?). Let the oracle penalty parameters $\tilde{\boldsymbol \lambda}$ be defined as
+Our bound is based on the basic inequality \citep{van2000empirical}. Let the oracle penalty parameters $\tilde{\boldsymbol \lambda}$ be defined as
 \begin{equation}
 \tilde{\boldsymbol \lambda} = \argmin_{\lambda \in \Lambda} \frac{1}{2} \left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|^2
 \end{equation}
@@ -212,7 +210,7 @@ The $\log n_V$ terms are the result of increasing the range of $\Lambda$ at a po
 
 \subsection{Cross-Validation}
 
-In practice, $K$-fold cross-validation is a far more common procedure than a training/validation split. In addition, we will now bound the generalization error rather than the prediction error over the validation observations. Toward this end, we will apply the oracle inequality in Mitchell (CITE) to the problem of penalized regression.
+In practice, $K$-fold cross-validation is a far more common procedure than a training/validation split. In addition, we will now bound the generalization error rather than the prediction error over the validation observations. Toward this end, we will apply the oracle inequality in \citet{lecue2012oracle} to the problem of penalized regression.
 
 The problem setup for $K$-fold CV is as follows. Let the $K$ partitions for $k=1,...,K$ be denoted $D_k$ (with size $n_k$) and the entire set minus the $D_k$ will be denoted $D_{-k}$. Consider the joint optimization problem for $K$-fold CV:
 \begin{eqnarray}
@@ -221,7 +219,7 @@ The problem setup for $K$-fold CV is as follows. Let the $K$ partitions for $k=1
 \hat{g}(\cdot | \lambda, D_{-k})&=&\arg\min_{g\in\mathcal{G}} \frac{1}{2} \| y-g \|_{D_{-k}}^{2} + \sum_{j=1}^J \lambda_j P_j(g)
 \end{eqnarray}
 
-In traditional cross-validation, the final model is retrained on all the data with $\hat{\lambda}$. However, bounding its generalization error requires additional regularity assumptions (CITE mitchell). We consider the following ``averaged version of cross-validation" instead
+In traditional cross-validation, the final model is retrained on all the data with $\hat{\lambda}$. However, bounding its generalization error requires additional regularity assumptions \citep{lecue2012oracle}. We consider the following ``averaged version of cross-validation" instead
 \begin{equation}
 \hat{g}_{ACV}(\cdot) = \frac{1}{K} \sum_{k=1}^K \hat{g}(\cdot | \hat{\boldsymbol \lambda}, D_{-k})
 \end{equation}
@@ -267,11 +265,11 @@ Consider the training criterion with Sobolev penalties on each of the components
 \lambda_2 \int_0^1 |g^{(t)}(x)|^2 dx
 \end{equation}
 where $\mathcal{G}$ are functions defined over the domain [0,1].
-It can be shown that the estimate is a spline. According to Vandegeer (CITE), the oracle convergence rate is
+It can be shown that the estimate is a spline. According to \citet{van2014additive}, the oracle convergence rate is
 \begin{equation}
 \| \hat{f}_{\tilde \lambda} - f^* \| = O_p(n^{-\frac{s}{2s+1}}), \| \hat{g}_{\tilde \lambda} - g^* \| = O_p(n^{-\frac{t}{2t+1}})
 \end{equation}
-However, one would need to know the values of the Sobolev penalties of $f^*$ and $g^*$ in order
+However, one would need to know the Sobolev penalties of $f^*$ and $g^*$ in order
 to determine the oracle penalty parameters.
 If the penalty parameters are chosen using the training/validation framework, Theorem \ref{train_val_thrm} gives us
 \begin{eqnarray*}
@@ -394,7 +392,7 @@ and $\hat{m}_{\tilde{k}}(\lambda^{(1)})=0$.
 
 \subsubsection{Nonsmooth penalties}\label{sec:nonsmooth}
 
-If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless, we find that for many popular non-smooth penalty functions, the functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (CITE). We begin with the following definitions:
+If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless, we find that for many popular non-smooth penalty functions, the functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
 
 \begin{definition}
 The differentiable space of a real-valued function $L$ at $g \in \mathcal{G}$ is the set of functions
@@ -497,7 +495,7 @@ we have
 
 \subsubsection{Smoothing Splines with a Sobolev Penalty}
 
-Finally, we consider the additive regression model of fitting a smoothing spline using the Sobolev penalty (CITE: de Boor (1978), Wahba (1990), Green \& Silverman (1994)). For a given set of penalty parameters, the smoothing spline estimate is
+Finally, we consider the additive regression model of fitting a smoothing spline using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. For a given set of penalty parameters, the smoothing spline estimate is
 \begin{equation}
 \left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =\arg\min_{g_j\in\mathcal{G}}\frac{1}{2}\|y- \sum_{j=1}^J g_j\|_{T}^{2}+ \sum_{j=1}^J \lambda_j \int (g_j^{(r_j)}(x))^2 dx
 \end{equation}
@@ -668,5 +666,7 @@ Sobolev penalty has nice properties
 
 \bigskip
 
+\bibliographystyle{agsm}
+\bibliography{multi-penalties-theory}
 
 \end{document}
