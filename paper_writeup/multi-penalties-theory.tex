@@ -454,7 +454,7 @@ To show that the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ vary sm
 Instead we will just consider specific regression problems. In the parametric regression setting, smoothness over the entire domain is easy to control as long as the derivative of the penalty is controlled by the 2-norm of the model parameters. In the smoothing spline problem, we rely on special properties of the roughness penalty.
 
 \subsubsection{Parametric Regression}
-Consider the parametric regression setting where the model parameters have dimension $p$, where $p$ can potentially grow with the number of samples $n$. Again, we consider the perturbed regression problem:
+Consider the parametric regression setting where the model parameters have dimension $p$. We allow $p$ to grow with the number of samples $n$, as is common in sieve estimation. Again, we consider the perturbed regression problem:
 \begin{equation}
 \hat{\theta}(\lambda) = \argmin_{\theta \in \Theta} \| y -  g(X| \theta) \|^2_T + \sum_{j=1}^J \lambda_j \left ( P^{v_j}_j(\theta) + \frac{w}{2} \| \theta \|^2_2 \right )
 \end{equation}
@@ -474,7 +474,7 @@ There exist constants $L, r$ such that the functions are $Lp^r$-Lipschitz in the
 \end{equation}
 \end{condition}
 
-It is easy to show that Condition \ref{condn:param1} is satisfied by many popular parametric penalties, such as the ridge penalty $\| \cdot \|_2^2$, lasso $\| \cdot \|_1$, and group lasso $\| \cdot \|_2$. (Proofs are given in Section \ref{sec:proofs}, if you insist.) Condition \ref{condn:param2} is also quite reasonable (I think). For example, it is satisfied in linear regression when the covariates are bounded. Given these conditions, we can show that the fitted values are smooth with respect to the penalty parameters over the entire domain.
+It is easy to show that Condition \ref{condn:param1} is satisfied by many popular parametric penalties, such as the ridge penalty $\| \cdot \|_2^2$, lasso $\| \cdot \|_1$, and group lasso $\| \cdot \|_2$. (Proofs are given in Section \ref{sec:proofs}, if you insist.) Condition \ref{condn:param2} requires that the Lipschitz constant grows at a polynomial rate in the number of features. Many models satisfy this condition, assuming they are parameterized appropriately. For example, Condition \ref{condn:param2} is satisfied by linear regression when the covariates are bounded. With these assumptions, we can show that the fitted values are smooth with respect to the penalty parameters over the entire domain.
 
 \begin{lemma}
 \label{lemma:parametric}
