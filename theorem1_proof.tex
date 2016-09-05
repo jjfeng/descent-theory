@@ -10,7 +10,7 @@
 \usepackage{babel}
 \begin{document}
 
-\subsection*{Theorem 1 }
+\subsection*{Theorem 3}
 
 Suppose we have sub-gauss errors.
 
@@ -29,20 +29,21 @@ Suppose
 
 are nonincreasing wrt to $u$ for all $u>0,a>0$.
 
-Then for all $\delta>0$ s.t. 
+Then there is some constant $C$ (only dependent on the characteristics
+of the sub-gassian errors) such that for all $\delta$ that satisfy
 \[
-\sqrt{n_{V}}\delta^{2}\ge c\left[\psi_{T}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)\vee\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)\right]
+\sqrt{n_{V}}\delta^{2}\ge2C\left[\psi_{T}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)\vee\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)\right]
 \]
 
 
-With high probability
+we have with high probability that
 \[
 \left\Vert \hat{g}_{\hat{\lambda}}-g^{*}\right\Vert _{V}\le\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}+\delta
 \]
 
 
 
-\subsubsection*{Proof for Theorem 1}
+\subsubsection*{Proof for Theorem 3}
 
 The basic inequality gives us 
 
@@ -70,16 +71,25 @@ By a peeling argument, we have
 
 
 To apply the lemma based on vandegeer corollary 8.3 (see below), we
-must check that $\delta$ satisfies all the conditions. By our choice
-of $\delta$ and the fact that $\psi(a+u)/u$ is nonincreasing, we
-have that for for all $s$
+must check all the conditions are satisfied. 
+
+We have chosen that $\delta$ such that 
+\begin{eqnarray*}
+\frac{\sqrt{n_{V}}}{8} & \ge & \frac{C}{4\delta^{2}}\left[\psi_{T}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)\vee\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)\right]\\
+ & \ge & \frac{C}{2^{2s+2}\delta^{2}}\left[\psi_{T}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\vee\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2\delta\right)\right]
+\end{eqnarray*}
+
+
+where the second line follows from the assumption that $\psi_{T}(a+u)/u^{2}$
+is nonincreasing wrt $u$. Hence we have satisfied the condition in
+corollary 8.3 that 
 
 \[
-\sqrt{n_{V}}2^{2s-1}\delta^{2}\ge c\left[\psi_{T}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\vee\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\right]
+\sqrt{n_{V}}2^{2s-1}\delta^{2}\ge C\left[\psi_{T}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\vee\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\right]
 \]
 
 
-So by the lemma below, we have
+Hence we have
 \begin{eqnarray*}
  &  & Pr\left(\left\Vert \hat{g}_{\hat{\lambda}}-g^{*}\right\Vert _{V}-\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
  & \le & C\sum_{s=0}^{\infty}\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4C^{2}\left(2\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)^{2}}\right)\\
@@ -107,7 +117,7 @@ Hence we have found for the given $\delta$ choice, we have
 
 
 
-\subsection*{Corollary to Theorem 1}
+\subsection*{Theorem 1 (Corollary to Theorem 3)}
 
 Let $\Lambda=[n^{-t_{min}},n^{t_{max}}]^{J}$.
 
@@ -128,12 +138,16 @@ Then there are constants $c,c_{1},c_{2}$ s.t. with high probability,
 \subsubsection*{Proof}
 
 By Lemma param\_covering\_cube, we have
+\begin{eqnarray*}
+N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right) & \le & N\left(Cn^{\kappa}u,\Lambda,\|\cdot\|_{2}\right)\\
+ & \le & \frac{1}{C_{J}}\left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2Cn^{\kappa}u}{Cn^{\kappa}u}\right)^{J}\\
+ & \le & \frac{1}{C_{J}}\left(\frac{4n^{t_{\max}-\kappa}+2Cu}{Cu}\right)^{J}
+\end{eqnarray*}
+Hence
 \[
-H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu}{Cu}\right)
+H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\left[\frac{1}{C_{J}}\left(\frac{4n^{t_{max}}+2Cu}{Cu}\right)^{J}\right]
 \]
 
-
-Let $R_{1}=R\wedge\sqrt{n^{t_{max}-\kappa}/C}$.
 
 Then
 \begin{eqnarray*}
@@ -157,13 +171,20 @@ we have
 \]
 
 
-Hence it suffices to choose $\delta$ s.t. 
-\[
-\sqrt{n_{V}}\delta^{2}\ge c\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
-\]
+Now apply Theorem 3. If $\delta$ is chosen such that 
+\begin{equation}
+\sqrt{n_{V}}\delta^{2}\ge2C\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
+\end{equation}
 
 
-Let 
+then with high probability, we have
+
+\begin{equation}
+\left\Vert \hat{g}_{\hat{\lambda}}-g^{*}\right\Vert _{V}\le\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}+\delta
+\end{equation}
+
+
+We can combine the two inequalities. If we let
 \[
 K=c\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
 \]
@@ -175,25 +196,24 @@ and
 \]
 
 
-So we are interested in $\delta$ s.t.
+Then (1) can be expressed as
 
 \[
 \sqrt{n_{V}}\delta^{2}-K\delta-K\omega\ge0
 \]
 
 
-The quadratic formula tells us that this is satisfied when
+We notice that (1) is precisely the quadratic inequality and is satisfied
+for $\delta$ such that
 
-\[
-\delta\ge\frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}
-\]
+\begin{eqnarray*}
+\delta & \ge & \frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}\\
+ & \ge & \frac{K}{\sqrt{n_{V}}}+\sqrt{K\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}n_{V}^{-1/2}}
+\end{eqnarray*}
 
 
-A more simple lower bound for $\delta$ is
-\[
-\delta\ge\frac{K}{\sqrt{n_{V}}}+\sqrt{K\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}n_{V}^{-1/2}}
-\]
-
+where the second inequality is provided for a more intuitive understanding.
+Plug this inequality back into (2) to get the final result.
 
 
 \subsection*{Lemma (Based on Vandegeer Corollary 8.3)}
@@ -227,7 +247,7 @@ Pr\left(\sup_{f\in\mathcal{F}_{n}(T)}\left|\frac{1}{m}\sum_{i=1}^{m}\epsilon_{i}
 
 Suppose we have $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$, we have
 \[
-N(\delta,\Lambda,\|\cdot\|_{2})\le\frac{1}{C_{J}}\left(\frac{2(\lambda_{max}-\lambda_{min})+2\delta}{\delta}\right)^{J}
+N(\delta,\Lambda,\|\cdot\|_{2})\le\frac{1}{C_{J}}\left(\frac{4(\lambda_{max}-\lambda_{min})+2\delta}{\delta}\right)^{J}
 \]
 
 
@@ -239,12 +259,20 @@ N(\delta,\Lambda,\|\cdot\|_{2})\le\frac{1}{C_{J}}\left(\frac{2(\lambda_{max}-\la
 Let $C=\{c_{j}\}_{j=1}^{N}\subset\Lambda$ be the largest set s.t.
 two distinct points $c_{j_{1}},c_{j_{2}}$ are at least $\delta$
 apart. Then balls with radius $\delta$ centered at $C$ cover $\Lambda$.
+Hence 
+\[
+N(\delta,\Lambda,\|\cdot\|_{2})\le N
+\]
 
-If the balls have radius $\delta/4$ and are centered at $C$, then
-the balls must be disjoint and are completely contained in the box
-$[\lambda_{min}-\delta/4,\lambda_{max}+\delta/4]^{J}$.
 
-The volume of a ball with radius $\rho$ is $C_{J}\rho^{J}$. Therefore
+If we instead consider the balls centered at $C$ but with radius
+$\delta/4$, then the balls must be disjoint and are completely contained
+in the box $[\lambda_{min}-\delta/4,\lambda_{max}+\delta/4]^{J}$.
+So we know the aggregate volume of these smaller balls is less than
+the volume of the box.
+
+Recall the volume of a ball with radius $\rho$ is $C_{J}\rho^{J}$
+(where $C_{J}$ is a constant dependent on dimension $J$). Hence
 \[
 NC_{J}(\delta/4)^{J}\le(\lambda_{max}-\lambda_{min}+\delta/2)^{J}
 \]
