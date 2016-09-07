@@ -5,7 +5,7 @@
 \usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
-\usepackage{amsmath}
+\usepackage{amsbsy}
 \usepackage{esint}
 \usepackage{babel}
 \begin{document}
@@ -124,7 +124,7 @@ Let $\Lambda=[n^{-t_{min}},n^{t_{max}}]^{J}$.
 Suppose that if $\|\epsilon\|_{T}\le2\sigma$, there are constants
 $C,\kappa$ such that for any $u>0$, we have for all $\lambda\in\Lambda$
 \[
-\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|\le Cn^{\kappa}u\implies\|\hat{g}_{\boldsymbol{\lambda}_{1}}-\hat{g}_{\boldsymbol{\lambda}_{2}}\|_{V}\le u
+\|\hat{g}_{\boldsymbol{\lambda}_{1}}-\hat{g}_{\boldsymbol{\lambda}_{2}}\|_{V}\le\frac{1}{C}n^{-\kappa}\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
 \]
 
 
@@ -275,6 +275,47 @@ Recall the volume of a ball with radius $\rho$ is $C_{J}\rho^{J}$
 (where $C_{J}$ is a constant dependent on dimension $J$). Hence
 \[
 NC_{J}(\delta/4)^{J}\le(\lambda_{max}-\lambda_{min}+\delta/2)^{J}
+\]
+
+
+
+\subsection*{Lemma: Lipschitz Definition Equivalence}
+
+The following two conditions are equivalent:
+\begin{enumerate}
+\item For all $u>0$ and any $\lambda^{(1)},\lambda^{(2)}$ that satisfy
+\[
+\|\lambda^{(1)}-\lambda^{(2)}\|\le Cu
+\]
+
+\end{enumerate}
+then 
+\[
+\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{D}\le u
+\]
+
+\begin{enumerate}
+\item $\hat{g}(\cdot|\lambda)$ is $1/C$-Lipschitz in $\lambda$: 
+\[
+\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{D}\le\frac{1}{C}\|\lambda^{(1)}-\lambda^{(2)}\|
+\]
+
+\end{enumerate}
+
+\subsubsection*{Proof}
+
+It is clear that Condition 2 implies Condition 1. 
+
+To show Condition 1 implies Condition 2, suppose for any $\lambda^{(1)},\lambda^{(2)}$,
+we have 
+\[
+\|\lambda^{(1)}-\lambda^{(2)}\|=d=C\frac{d}{C}
+\]
+
+
+Then 
+\[
+\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{D}\le\frac{d}{C}=\frac{1}{C}\|\lambda^{(1)}-\lambda^{(2)}\|
 \]
 
 \end{document}
