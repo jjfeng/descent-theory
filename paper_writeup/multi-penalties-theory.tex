@@ -177,7 +177,9 @@ where $\langle h, \ell \rangle_A = \frac{1}{size(A)}\sum_{i\in A} h(x_i) \ell(x_
 
 Empirical process theory provides a more formal framework for characterizing the behavior of the empirical process term. ``Variance" is usually referred to as complexity and can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. Here we only highlight the fact that functions smoothly parameterized by $\boldsymbol \theta$ as follows
 \begin{equation}
-\| \boldsymbol \theta - \boldsymbol \theta' \|_2 \le d \implies \left \| f(\cdot | \boldsymbol \theta) - f(\cdot | \boldsymbol \theta') \right \|_\infty \le O_p(d)
+\left \| f(\cdot | \boldsymbol \theta) - f(\cdot | \boldsymbol \theta') \right \|
+\le
+O_p \left (\| \boldsymbol \theta - \boldsymbol \theta' \|_2 \right ) 
 \end{equation}
 have low metric entropy. Hence their empirical process terms are small with high probability.
 
@@ -190,16 +192,19 @@ Suppose that $\Lambda = [ n_V^{-t_{\min}}, n_V^{t_{\max}} ]^J $.
 
 Suppose that if $\| \epsilon \|_T \le 2 \sigma $, there is some constant $C, \kappa$ such that for any $u> 0$, we have
 \begin{equation}
-\| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \| \le C n^\kappa u \implies \| \hat{g}_{\boldsymbol \lambda_1} - \hat{g}_{\boldsymbol \lambda_2} \|_V \le u
+\left \| \hat{g}(\cdot | \boldsymbol \lambda_1) - \hat{g}(\cdot | \boldsymbol \lambda_2) \right \|_V 
+\le 
+\frac{1}{C} n^{-\kappa} \left \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \right \|
 \end{equation}
 
 Then with high probability, we have for constants $c_1, c_2$
 \begin{equation}
 \label{error_bound}
-\left\Vert \hat{g}_{\hat{\lambda}}-g^{*}\right\Vert _{V} \le
-\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}
+\left\Vert \hat{g}(\cdot | \hat{\lambda}) -g^{*}\right\Vert _{V} 
+\le
+\|\hat{g}(\cdot | \tilde{\lambda} ) -g^{*}\|_{V}
 +c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2}
-+\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}
++\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \|\hat{g}(\cdot | \tilde{\lambda} ) -g^{*}\|_{V}}
 \end{equation}
 \end{theorem}
 Theorem \ref{train_val_thrm} is a special case of Theorem \ref{train_val_thrm_complicated} and their proofs are given in Section \ref{sec:proofs}.
@@ -215,13 +220,14 @@ In practice, $K$-fold cross-validation is a far more common procedure than a tra
 The problem setup for $K$-fold CV is as follows. Let the $K$ partitions for $k=1,...,K$ be denoted $D_k$ (with size $n_k$) and the entire set minus the $D_k$ will be denoted $D_{-k}$. Consider the joint optimization problem for $K$-fold CV:
 \begin{eqnarray}
 \label{kfold_opt}
-\hat{\lambda} &=& \arg\min_{\lambda\in\Lambda} \frac{1}{2K} \sum_{k=1}^K  \| y-\hat{g}_{\lambda}(\cdot| D_{-k}) \|_{D_k}^{2} \\
-\hat{g}(\cdot | \lambda, D_{-k})&=&\arg\min_{g\in\mathcal{G}} \frac{1}{2} \| y-g \|_{D_{-k}}^{2} + \sum_{j=1}^J \lambda_j P_j(g)
+\hat{\boldsymbol \lambda} &=& \arg\min_{\lambda\in\Lambda} \frac{1}{2K} \sum_{k=1}^K  \| y-\hat{g}_{k}(\cdot | \boldsymbol \lambda) \|_{D_k}^{2} \\
+\hat{g}_{k}(\cdot | \boldsymbol \lambda) &=&\arg\min_{g\in\mathcal{G}} \frac{1}{2} \| y-g \|_{D_{-k}}^{2} + \sum_{j=1}^J \lambda_j P_j(g)
 \end{eqnarray}
 
 In traditional cross-validation, the final model is retrained on all the data with $\hat{\lambda}$. However, bounding its generalization error requires additional regularity assumptions \citep{lecue2012oracle}. We consider the following ``averaged version of cross-validation" instead
 \begin{equation}
-\hat{g}_{ACV}(\cdot) = \frac{1}{K} \sum_{k=1}^K \hat{g}(\cdot | \hat{\boldsymbol \lambda}, D_{-k})
+\hat{g}_{ACV}(\cdot) = \frac{1}{K} \sum_{k=1}^K \hat{g}_{k}
+(\cdot | \hat{\boldsymbol \lambda})
 \end{equation}
 The following theorem bounds the generalization error of $\hat{g}_{ACV}$.
 
@@ -232,9 +238,9 @@ Suppose the errors have expectation zero and $\| \epsilon \|_\infty < \infty $.
 
 Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
 
-Suppose there is a constant $C$ such that
+Suppose there are constants $C, \kappa$ such that
 \begin{equation}
-\| \hat{g}_{\lambda_1} - \hat{g}_{\lambda_2} \|_\infty \le \| \lambda_1 - \lambda_2 \| C n^\kappa
+\| \hat{g}(\cdot | \boldsymbol \lambda_1) - \hat g (\cdot | \boldsymbol \lambda_2) \|_\infty \le \frac{1}{C} n^{-\kappa} \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \| 
 \end{equation}
 Suppose that $\Lambda = [ n^{-t_{\min}}, n^{t_{\max}} ]^J $.
 
@@ -243,7 +249,7 @@ With high probability, we have for any $a > 0$,
 \begin{equation}
 \label{smooth_error_bound}
 E_{D} \left \| \hat{g}_{ACV} - g^* \right \|^2 \le
-(1+a) \min_{k\in 1:K, \lambda \in \Lambda}  E_{D} \left \| \hat{g}(\cdot |\lambda, D_{-k}) - g^* \right \|^2
+(1+a) \min_{k\in 1:K, \lambda \in \Lambda}  E_{D} \left \| \hat{g}_k(\cdot |\boldsymbol \lambda) - g^* \right \|^2
 + c_a \max_{k=1:K} \frac{\log^2(n)}{n_k}
 \end{equation}
 where $c_a$ is given in Mitchell.
@@ -267,13 +273,14 @@ Consider the training criterion with Sobolev penalties on each of the components
 where $\mathcal{G}$ are functions defined over the domain [0,1].
 It can be shown that the estimate is a spline. According to \citet{van2014additive}, the oracle convergence rate is
 \begin{equation}
-\| \hat{f}_{\tilde \lambda} - f^* \| = O_p(n^{-\frac{s}{2s+1}}), \| \hat{g}_{\tilde \lambda} - g^* \| = O_p(n^{-\frac{t}{2t+1}})
+\| \hat{f}(\cdot | \tilde{\boldsymbol{\lambda}}) - f^* \| = O_p(n^{-\frac{s}{2s+1}}),
+\| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \| = O_p(n^{-\frac{t}{2t+1}})
 \end{equation}
 However, one would need to know the Sobolev penalties of $f^*$ and $g^*$ in order
 to determine the oracle penalty parameters.
 If the penalty parameters are chosen using the training/validation framework, Theorem \ref{train_val_thrm} gives us
 \begin{eqnarray*}
-\| \hat{f}_{\hat \lambda} + \hat{g}_{\hat \lambda} - (f^* + g^*) \|_V &=&
+\| \hat{f}(\cdot | \hat{\boldsymbol{\lambda}}) + \hat{g}(\cdot | \hat{\boldsymbol{\lambda}}) - (f^* + g^*) \|_V &=&
 O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}})
 +c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \\
 && +\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2}  \left (O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}}) \right) }
@@ -287,20 +294,20 @@ E_D \| \hat{f}_{ACV} + \hat{g}_{ACV} - (f^* + g^*) \|^2 &=&
 \end{eqnarray*}
 
 \subsubsection{Implications}
-Theorem \ref{train_val_thrm} and \ref{kfold_thrm} imply that $\hat{g}_{\hat{\lambda}}$ has a semi-parametric convergence rate: the nonparametric (or potentially parametric) convergence rate of the oracle and the parametric convergence rate of the cross-validated model to the oracle. As long as the number of penalty parameters is finite, it does not affect the convergence rate of the model asymptotically.
+Theorem \ref{train_val_thrm} and \ref{kfold_thrm} imply that $\hat{g}(\cdot | \hat{\boldsymbol{\lambda}})$ has a semi-parametric convergence rate: the nonparametric (or potentially parametric) convergence rate of the oracle and the parametric convergence rate of the cross-validated model to the oracle. As long as the number of penalty parameters is finite, it does not affect the convergence rate of the model asymptotically.
 
 We can minimize the prediction error by balancing the two terms in the upper bound. The inequalities suggest that there are many approaches. One could change increase the training to validation ratio as the sample size grows. Alternatively, one could increase the number of penalties and penalty parameters with the number of samples. Of course, finding the true minimizer of the upper bound will require knowing properties about the true model, so this would have to be done in some heuristic manner.
 
-\section{Smoothness of $\hat{g}_\lambda$ in $\lambda$}
+\section{Smoothness of $\hat{g}(\cdot | \boldsymbol{\lambda})$ in $\boldsymbol \lambda$}
 \label{sec:entropy}
 
-We now show that $\hat{g}_\lambda$ is smoothly parametrized by $\lambda$. Theorem \ref{train_val_thrm} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{kfold_thrm} requires this to hold over the entire domain. Smoothness over the validation set is generally easier to show. We will prove it for nonparametric additive models with smooth penalties and certain nonsmooth penalties. Smoothness over the entire domain is harder to show, so we consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
+We now show that $\hat{g}(\cdot | \boldsymbol{\lambda})$ is smoothly parametrized by $\lambda$. Theorem \ref{train_val_thrm} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{kfold_thrm} requires this to hold over the entire domain. Smoothness over the validation set is generally easier to show. We will prove it for nonparametric additive models with smooth penalties and certain nonsmooth penalties. Smoothness over the entire domain is harder to show, so we consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
 
 Throughout, we will presume that $\mathcal{G}$ is a convex function class.
 
 \subsection{Smoothness over the Validation Set}
 \label{sec:smoothness_validation}
-We will show that $\hat{g}(\cdot | \lambda)$ varies smoothly with respect to $\lambda$ over the observed covariates, which will directly imply smoothness over the validation set. Suppose we are in the additive model setting. The fitted models minimize the training criterion
+We will show that $\hat{g}(\cdot | \boldsymbol{\lambda})$ varies smoothly with respect to $\lambda$ over the observed covariates, which will directly imply smoothness over the validation set. Suppose we are in the additive model setting. The fitted models minimize the training criterion
 \begin{equation}
 \label{orig_train_criterion}
 \left\{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J = \argmin_{g\in \mathcal{G}} \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \|^2_T + \sum_{j=1}^J \lambda_j P_j(g_j)
@@ -324,14 +331,21 @@ We suppose the penalty functions $P_{j}$ are convex and twice-differentiable.
 Suppose that $\sup_{g\in\mathcal{G}}\|g\|_{D}\le G$.
 Suppose $\lambda_j \ge \lambda_{\min}$ for all $j$.
 
-For all $d>0$, any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)}$ that satisfy
-\[
-\|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}\|\le\frac{dw}{2J}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}\lambda_{\min}
-\]
+%For all $d>0$, any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)}$ that satisfy
+%\[
+%\|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}\|\le\frac{dw}{2J}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}\lambda_{\min}
+%\]
 
-we have
+For all $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)} \in \Lambda$, we have
 \[
-\|\sum_{j=1}^{J}\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(1)})-\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(2)})\|_{D}\le d
+\left \|
+\sum_{j=1}^{J}\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(1)})-\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(2)})
+\right \|_{D}
+\le
+\frac{2J}{w\lambda_{\min}}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right) 
+\left \|
+\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}
+\right \|
 \]
 \end{lemma}
 
@@ -339,7 +353,7 @@ All of the proofs on the smoothness of $\hat{g}(\cdot | \boldsymbol \lambda)$ fo
 \begin{equation}
 \left \{ \hat{g}(\cdot |\boldsymbol \lambda^{(1)}) + m \left (\hat{g}(\cdot |\boldsymbol \lambda^{(2)})  - \hat{g}(\cdot |\boldsymbol \lambda^{(1)}) \right ) : m \in [0,1] \right \}
 \end{equation}
-By implicit differentiation of the KKT conditions, we can then determine how the fitted models change with respect to the penalty parameters. Finally, the difference $\| \hat{g}_{\boldsymbol \lambda^{(1)}} -  \hat{g}_{\boldsymbol \lambda^{(2)}} \|$ is bounded using the mean value theorem. Depending on the situation, the result can be proven directly or by contradiction.
+By implicit differentiation of the KKT conditions, we can then determine how the fitted models change with respect to the penalty parameters. Finally, the difference $\| \hat{g}(\cdot | \boldsymbol \lambda^{(1)}) -  \hat{g}(\cdot | \boldsymbol \lambda^{(2)}) \|$ is bounded using the mean value theorem. Depending on the situation, the result can be proven directly or by contradiction.
 
 For illustration, we present the proof for Lemma \ref{lemma:smooth} in the case where there is only one penalty parameter. The case with multiple penalty parameters is given in Section \ref{sec:proofs}.
 
@@ -411,7 +425,9 @@ $S$ is a local optimality space for a convex function $L(\cdot, \boldsymbol \lam
 
 Let the training criterion be denoted
 \begin{eqnarray*}
-L_T(g, \lambda) &=& \argmin_{g\in \mathcal{G}} \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \|^2_T + \sum_{j=1}^J \lambda_j \left ( P_j(g_j) + \frac{w}{2} \| g_j \|^2_D \right )
+L_T(g, \lambda) &=& \argmin_{g\in \mathcal{G}} 
+\left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T 
++ \sum_{j=1}^J \lambda_j \left ( P_j(g_j) + \frac{w}{2} \| g_j \|^2_D \right )
 \end{eqnarray*}
 
 We will need following conditions to hold for almost every $\boldsymbol{\lambda}$:
@@ -435,14 +451,19 @@ Suppose $\lambda_j \ge \lambda_{\min}$ for all $j$.
 Suppose the penalty functions are convex.
 Suppose Conditions 1 and 2 hold for almost every $\boldsymbol{\lambda}$.
 
-For all $d>0$, any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)}$ that satisfy
-\[
-\|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}\|\le\frac{dw}{2J}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}\lambda_{\min}
-\]
+%For all $d>0$, any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)}$ that satisfy
+%\[
+%\|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}\|\le
+%\frac{dw}{2J}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}\lambda_{\min}
+%\]
 
-we have
+For any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)} \in \Lambda$, we have
 \[
-\|\sum_{j=1}^{J}\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(1)})-\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(2)})\|_{D}\le d
+\left \|\sum_{j=1}^{J}\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(1)})-\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(2)}) \right \|_{D}
+\le
+\frac{2J}{w\lambda_{\min}}
+\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)
+\left \|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)} \right \|
 \]
 \end{lemma}
 
@@ -456,7 +477,9 @@ Instead we will just consider specific regression problems. In the parametric re
 \subsubsection{Parametric Regression}
 Consider the parametric regression setting where the model parameters have dimension $p$. We allow $p$ to grow with the number of samples $n$, as is common in sieve estimation. Again, we consider the perturbed regression problem:
 \begin{equation}
-\hat{\theta}(\lambda) = \argmin_{\theta \in \Theta} \| y -  g(X| \theta) \|^2_T + \sum_{j=1}^J \lambda_j \left ( P^{v_j}_j(\theta) + \frac{w}{2} \| \theta \|^2_2 \right )
+\hat{\theta}(\lambda) = \argmin_{\theta \in \Theta} 
+\left  \| y -  g(X| \theta) \right \|^2_T 
++ \sum_{j=1}^J \lambda_j \left ( P^{v_j}_j(\theta) + \frac{w}{2} \| \theta \|^2_2 \right )
 \end{equation}
 where the additional ridge penalty is now over the model parameters rather than the fitted values.
 
@@ -483,13 +506,17 @@ Suppose
 \sup_{\theta\in\Theta}\|\theta\|\le G
 \]
 Suppose Condition \ref{condn:param1} and \ref{condn:param2} are satisfied.
-Then for any $d>0$ and $\lambda^{(1)}, \lambda^{(2)} \in \Lambda$ that satisfy
+%Then for any $d>0$ and $\lambda^{(1)}, \lambda^{(2)} \in \Lambda$ that satisfy
+%\[
+%\|\lambda^{(2)}-\lambda^{(1)}\|_{2}\le d\frac{wJ\lambda_{\min}}{2Lp^{r}\left(K+wG\right)}
+%\]
+%we have
+For any $\lambda^{(1)}, \lambda^{(2)} \in \Lambda$, we have
 \[
-\|\lambda^{(2)}-\lambda^{(1)}\|_{2}\le d\frac{wJ\lambda_{\min}}{2Lp^{r}\left(K+wG\right)}
-\]
-we have
-\[
-\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty}\le d
+\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty}
+\le
+\frac{2Lp^{r}\left(K+wG\right)}{wJ\lambda_{\min}} 
+\left \|\lambda^{(2)}-\lambda^{(1)} \right \|_{2}
 \]
 \end{lemma}
 
@@ -497,7 +524,10 @@ we have
 
 Finally, we consider the additive regression model of fitting a smoothing spline using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. For a given set of penalty parameters, the smoothing spline estimate is
 \begin{equation}
-\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =\arg\min_{g_j\in\mathcal{G}}\frac{1}{2}\|y- \sum_{j=1}^J g_j\|_{T}^{2}+ \sum_{j=1}^J \lambda_j \int (g_j^{(r_j)}(x))^2 dx
+\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
+\arg\min_{g_j\in\mathcal{G}}
+\frac{1}{2} \left \|y- \sum_{j=1}^J g_j \right \|_{T}^{2}
++ \sum_{j=1}^J \lambda_j \int (g_j^{(r_j)}(x))^2 dx
 \end{equation}
 where $g^{(r)}$ is the derivative of $g$ of order $r \ge 2$. Unlike the previous sections, we will not need an additional ridge penalty to control the model class.
 
@@ -612,39 +642,39 @@ Chaining and peeling.
 \paragraph{Proof of Theorem \ref{train_val_thrm}}
 
 \begin{proof}
-By Lemma param\_covering\_cube, we have
-\[
-H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu}{Cu}\right)
-\]
-
-
-Let $R_{1}=R\wedge\sqrt{n^{t_{max}-\kappa}/C}$.
-
-Then after immense algebraic massaging, we get
-\begin{equation}
-\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
-\le
-R\left(\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{2J\log\frac{1}{R}\vee0}\right)
-\end{equation}
-
-We note since $\delta > \frac{1}{n_{V}}$ (modulo a constant), it suffices to choose $\delta$ such that
-\[
-\sqrt{n_{V}}\delta^{2}\ge c\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
-\]
-
-Let
-\[
-K=c\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
-\]
-and
-\[
-\omega=\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}
-\]
-
-The quadratic formula gives us that
-\[
-\delta\ge\frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}
-\]
+%By Lemma param\_covering\_cube, we have
+%\[
+%H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu}{Cu}\right)
+%\]
+%
+%
+%Let $R_{1}=R\wedge\sqrt{n^{t_{max}-\kappa}/C}$.
+%
+%Then after immense algebraic massaging, we get
+%\begin{equation}
+%\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
+%\le
+%R\left(\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{2J\log\frac{1}{R}\vee0}\right)
+%\end{equation}
+%
+%We note since $\delta > \frac{1}{n_{V}}$ (modulo a constant), it suffices to choose $\delta$ such that
+%\[
+%\sqrt{n_{V}}\delta^{2}\ge c\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
+%\]
+%
+%Let
+%\[
+%K=c\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
+%\]
+%and
+%\[
+%\omega=\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}
+%\]
+%
+%The quadratic formula gives us that
+%\[
+%\delta\ge\frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}
+%\]
 \end{proof}
 
 
