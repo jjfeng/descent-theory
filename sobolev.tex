@@ -173,7 +173,7 @@ The function class of interest
 We can show that
 
 \begin{eqnarray*}
-\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \frac{n^{\tau_{max}/2+2\tau_{min}}}{2}\sqrt{\frac{n^{\tau_{min}}+J}{2}\|\epsilon\|_{T}^{2}+\sum_{j=1}^{J}P\left(f_{j}^{*}\right)}
+\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \frac{n^{\tau_{min}}}{2}\sqrt{\frac{n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}+2\tau_{min}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)}
 \end{eqnarray*}
 
 
@@ -304,14 +304,13 @@ we have
 \begin{eqnarray*}
 \lambda_{\ell}P\left(\hat{f}_{\ell}(\cdot|\lambda^{(1)})+\hat{m}_{\ell}(\lambda)h_{\ell}\right) & \le & \frac{1}{2}\|y-(\hat{g}+\hat{f}(\cdot|\lambda^{(1)}))\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P\left(\hat{f}_{j}(\cdot|\lambda^{(1)})\right)\\
  & = & \frac{1}{2}\|y-(g^{*}+f^{*})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}P\left(f_{j}^{*}\right)+\sum_{j=1}^{J}\left(\lambda_{j}-\lambda_{j}^{(1)}\right)P\left(\hat{f}_{j}(\cdot|\lambda^{(1)})\right)\\
- & \le & \frac{1}{2}\|\epsilon\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}P\left(f_{j}^{*}\right)+J\lambda_{max}\left[\max_{j=1:J}P\left(\hat{f}_{j}(\cdot|\lambda^{(1)})\right)\right]
+ & \le & \frac{1}{2}\|\epsilon\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)+J\lambda_{max}\left[\max_{j=1:J}P\left(\hat{f}_{j}(\cdot|\lambda^{(1)})\right)\right]
 \end{eqnarray*}
 
 
-Furthermore, we know by definition of $\hat{f}_{j}(\cdot|\lambda^{(1)})$
-that 
+By definition of $\hat{f}_{j}(\cdot|\lambda^{(1)})$ , we know 
 \[
-P\left(\hat{f}_{j}(\cdot|\lambda^{(1)})\right)\le\frac{1}{2\lambda_{min}}\|\epsilon\|_{T}^{2}+\frac{1}{\lambda_{min}}\sum_{j=1}^{J}\lambda_{j}^{(1)}P\left(f_{j}^{*}\right)
+\max_{j=1:J}P\left(\hat{f}_{j}(\cdot|\lambda^{(1)})\right)\le\frac{1}{\lambda_{min}}\left(\frac{1}{2}\|\epsilon\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}P\left(f_{j}^{*}\right)\right)
 \]
 
 
@@ -324,6 +323,7 @@ P\left(\hat{f}_{\ell}(\cdot|\lambda^{(1)})+m_{\ell}h_{\ell}\right)\le\frac{n^{\t
 Then by the MVT, we have 
 \begin{eqnarray*}
 \|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\hat{m}_{\ell}(\lambda,h)h_{\ell}\|_{\infty}\\
+ & = & \|h_{\ell}\|_{\infty}\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\lambda}\\
  & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \left\Vert \nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\right\Vert \\
  & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \frac{n^{\tau_{min}}}{2}\sqrt{\frac{n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}+2\tau_{min}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)}
 \end{eqnarray*}
@@ -348,6 +348,7 @@ Hence
 Then by the MVT, we have 
 \begin{eqnarray*}
 \|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\hat{m}_{\ell}(\lambda,h)h_{\ell}\|_{\infty}\\
+ & = & \|h_{\ell}\|_{\infty}\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\lambda}\\
  & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \left\Vert \nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\right\Vert \\
  & \le & \left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert G^{2}(2G+\|\epsilon\|_{T})n^{3\tau_{min}}\frac{1}{4}
 \end{eqnarray*}

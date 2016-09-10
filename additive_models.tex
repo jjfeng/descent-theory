@@ -127,10 +127,8 @@ By Lemma PSD\_Matrix\_Inverse, we know that
  & \le & \|D_{3}\left(D_{1}+D_{2}\right)^{-1}e_{\tilde{k}}\|\\
  & \le & \left|\frac{\partial}{\partial m_{\tilde{k}}}P_{\tilde{k}}(g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}})+w\langle h_{\tilde{k}},g_{\tilde{k}}+m_{\tilde{k}}h_{\tilde{k}}\rangle_{D}\right|\lambda_{\tilde{k}}^{-1}w^{-1}\|h_{\tilde{k}}\|_{D}^{-2}
 \end{eqnarray*}
-
-
 where the last inequality is derived by plugging in the $\tilde{k}$th
-entry in the diagonal matrices. Therefore
+entry in the diagonal matrices. 
 
 Note that from the KKT conditions, we have that
 
@@ -267,7 +265,7 @@ Similarly,
 
 Hence 
 \begin{eqnarray*}
-\|g(\cdot|\lambda^{(1)})-g(\cdot|\lambda^{(2)})\|_{D} & \le & \sum_{i=0}^{N}\|g(\cdot|\ell_{i})-g(\cdot|\ell_{(i)})\|_{D}+\|g(\cdot|\ell_{i+1})-g(\cdot|\ell_{i()})\|_{D}\\
+\|g(\cdot|\lambda^{(1)})-g(\cdot|\lambda^{(2)})\|_{D} & \le & \sum_{i=0}^{N}\|g(\cdot|\ell_{i})-g(\cdot|\ell_{(i)})\|_{D}+\|g(\cdot|\ell_{i+1})-g(\cdot|\ell_{(i)})\|_{D}\\
  & \le & d\left(\sum_{i=0}^{N}\frac{\|\ell_{i+1}-\ell_{(i)}\|}{\|\lambda^{(1)}-\lambda^{(2)}\|}+\frac{\|\ell_{i}-\ell_{(i)}\|}{\|\lambda^{(1)}-\lambda^{(2)}\|}\right)\\
  & = & d
 \end{eqnarray*}
@@ -281,7 +279,14 @@ entries. Then for any vector $x$, we have
 \[
 \|D^{-1}x\|\ge\|(A+D)^{-1}x\|
 \]
- 
+
+
+Moreover, for any diagonal matrix $D_{1}$ with positive entries,
+we have 
+\[
+\|D_{1}D^{-1}x\|\ge\|D_{1}(A+D)^{-1}x\|
+\]
+
 
 
 \subsubsection*{Proof}
@@ -301,4 +306,14 @@ PSD. This can be shown by noting that
 (A+D)^{2}\succeq D^{2}\implies D^{-2}\succeq(A+D)^{-2}
 \]
 
+
+To show the ``moreover'' part, note that it suffices to show that
+$D_{1}^{2}\left(D^{-2}-(A+D)^{-2}\right)$ is PSD. Since $D^{-2}-(A+D)^{-2}$
+is PSD, we have
+\[
+\|D_{1}D^{-1}x\|^{2}\ge\|D_{1}(A+D)^{-1}x\|^{2}
+\]
+
+
+(Note that if $D_{1}$ were a PSD matrix, this would also hold.)
 \end{document}
