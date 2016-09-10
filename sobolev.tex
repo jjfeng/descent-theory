@@ -47,13 +47,13 @@ where $\epsilon$ are independent sub-gaussian random variables.
 Now we have the function class
 
 \[
-\hat{\mathcal{G}}(T)=\left\{ \hat{g}(\cdot|\lambda),\hat{f}(\cdot|\lambda)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-(f+g)\|_{T}^{2}+\lambda P(f):\lambda\in\Lambda,g=\sum_{k=1}^{r}\alpha_{k}\psi_{k},f=\int_{0}^{1}\beta_{u}\tilde{\phi}_{u}\right\} 
+\hat{\mathcal{G}}(T)=\left\{ \hat{g}(\cdot|\lambda),\hat{f}(\cdot|\lambda)=\arg\min_{f,g}\frac{1}{2}\|y-(f+g)\|_{T}^{2}+\lambda P(f):\lambda\in\Lambda,g=\sum_{k=1}^{r}\alpha_{k}\psi_{k},f=\int_{0}^{1}\beta_{u}\tilde{\phi}_{u}\right\} 
 \]
 
 
 We will show that
 \begin{eqnarray*}
-\left\Vert \left(\hat{g}(\cdot|\lambda^{(1)})+\hat{f}(\cdot|\lambda^{(1)})\right)-\left(\hat{g}(\cdot|\lambda^{(2)})+\hat{f}(\cdot|\lambda^{(2)})\right)\right\Vert _{\infty} & \le & |\lambda^{(1)}-\lambda^{(2)}|n^{\tau_{min}}\sqrt{\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P(f^{*})}G
+\left\Vert \left(\hat{g}(\cdot|\lambda^{(1)})+\hat{f}(\cdot|\lambda^{(1)})\right)-\left(\hat{g}(\cdot|\lambda^{(2)})+\hat{f}(\cdot|\lambda^{(2)})\right)\right\Vert _{\infty} & \le & |\lambda^{(1)}-\lambda^{(2)}|Gn^{\tau_{min}}\sqrt{\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P(f^{*})}
 \end{eqnarray*}
 
 
@@ -71,13 +71,12 @@ First by Vandegeer Example 9.3.2, we know that
 \]
 
 
-So $\hat{g}(\cdot|\lambda)$ is actually independent of $\lambda$
-and is therefore constant. We will just denote it $\hat{g}$ from
-now on.
+So $\hat{g}(\cdot|\lambda)$ is actually independent of $\lambda$.
+We will denote it $\hat{g}(\cdot)$ from now on.
 
 Now consider 
 \[
-h=c\left(\hat{f}(\cdot|\lambda^{(1)})-\hat{f}(\cdot|\lambda^{(2)})\right)
+h(\cdot)=c\left(\hat{f}(\cdot|\lambda^{(1)})-\hat{f}(\cdot|\lambda^{(2)})\right)
 \]
  where $c$ is some constant s.t. $P(h)=1$.
 
@@ -110,16 +109,24 @@ By implicit differentiation of the KKT conditions, we get
 Then the first multiplicand is bounded by 
 \begin{eqnarray*}
 \left|\|h\|_{T}^{2}+\lambda\frac{\partial^{2}}{\partial m^{2}}P\left(\hat{f}(\cdot|\lambda^{(1)})+mh\right)\right|^{-1} & \le & n^{\tau_{min}}\frac{\partial^{2}}{\partial m^{2}}P\left(\hat{f}(\cdot|\lambda^{(1)})+mh\right)^{-1}\\
- & = & \frac{n^{\tau_{min}}}{2P(h)}
+ & = & \frac{n^{\tau_{min}}}{2P(h)}\\
+ & = & \frac{n^{\tau_{min}}}{2}
 \end{eqnarray*}
 
 
-The equality follows from the Lemma Sobolev Facts (see below).
+The equality follows from the Lemma Sobolev Facts (see below) and
+the fact that $P(h)=1$.
 
-From the Lemma Sobolev Facts and by the fact that $P(h)=1$, we have
+We also know that from the Lemma Sobolev Facts that 
 \begin{eqnarray*}
-\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|_{\lambda=\lambda} & \le & \frac{n^{\tau_{min}}}{P(h)}\sqrt{P\left(\hat{f}(\cdot|\lambda^{(1)})+\hat{m}_{h}(\lambda)h\right)P(h)}\\
- & = & n^{\tau_{min}}\sqrt{P\left(\hat{f}(\cdot|\lambda^{(1)})+\hat{m}_{h}(\lambda)h\right)}
+\left|\frac{\partial}{\partial m}P\left(\hat{f}(\cdot|\lambda^{(1)})+mh\right)\right| & \le & 2\sqrt{P\left(\hat{f}(\cdot|\lambda^{(1)})+\hat{m}_{h}(\lambda)h\right)P(h)}\\
+ & = & 2\sqrt{P\left(\hat{f}(\cdot|\lambda^{(1)})+\hat{m}_{h}(\lambda)h\right)}
+\end{eqnarray*}
+
+
+Combining the two bounds from above, the gradient is bounded by
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|_{\lambda=\lambda} & \le & n^{\tau_{min}}\sqrt{P\left(\hat{f}(\cdot|\lambda^{(1)})+\hat{m}_{h}(\lambda)h\right)}
 \end{eqnarray*}
 
 
@@ -142,7 +149,7 @@ P\left(\hat{f}(\cdot|\lambda^{(1)})\right)\le\frac{1}{2\lambda^{(1)}}\|y-(g^{*}+
 Combining the two inequalities above, we have
 \begin{eqnarray*}
 \lambda P\left(\hat{f}(\cdot|\lambda^{(1)})+\hat{m}_{h}(\lambda)h\right) & \le & \frac{1}{2}\|\epsilon\|_{T}^{2}+\lambda^{(1)}P\left(f^{*}\right)+\left(\lambda-\lambda^{(1)}\right)\left(\frac{1}{2\lambda^{(1)}}\|\epsilon\|_{T}^{2}+P\left(f^{*}\right)\right)\\
- & \le & \frac{\lambda}{2\lambda^{(1)}}\|\epsilon\|_{T}^{2}+\lambda P\left(f^{*}\right)
+ & = & \frac{\lambda}{2\lambda^{(1)}}\|\epsilon\|_{T}^{2}+\lambda P\left(f^{*}\right)
 \end{eqnarray*}
 
 
@@ -152,10 +159,11 @@ P\left(\hat{f}(\cdot|\lambda^{(1)})+\hat{m}_{h}(\lambda)h\right)\le\frac{n^{\tau
 \]
 
 
-Then by the MVT, we have 
+Then by the MVT, there is some $\alpha\in[\lambda^{(1)},\lambda^{(2)}]$
+such that 
 \begin{eqnarray*}
 \|\hat{f}(\cdot|\lambda^{(1)})-\hat{f}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\left(m_{h}(\lambda^{(2)})-m_{h}(\lambda^{(1)})\right)h\|_{\infty}\\
- & = & \|h\|_{\infty}\left|\lambda^{(2)}-\lambda^{(1)}\right|\left.\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|_{\lambda\in[\lambda^{(1)},\lambda^{(2)}]}\\
+ & = & \|h\|_{\infty}\left|\lambda^{(2)}-\lambda^{(1)}\right|\left.\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|_{\lambda=\alpha}\\
  & \le & G\left|\lambda^{(1)}-\lambda^{(2)}\right|\left(\sup_{\lambda\in[\lambda^{(1)},\lambda^{(2)}]}\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|_{\lambda=\lambda}\right)\\
  & \le & \left|\lambda^{(1)}-\lambda^{(2)}\right|Gn^{\tau_{min}}\sqrt{\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P(f^{*})}
 \end{eqnarray*}
@@ -174,14 +182,14 @@ The function class of interest
 We can show that
 
 \begin{eqnarray*}
-\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \frac{n^{\tau_{min}}}{2}\sqrt{\frac{n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}+2\tau_{min}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)}
+\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert n^{\tau_{min}}\sqrt{\left(n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}\right)\left(\frac{1}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)\right)}
 \end{eqnarray*}
 
 
 A second approach gives a different bound:
 
 \begin{eqnarray*}
-\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & \le & \left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \frac{G^{2}(2G+\|\epsilon\|_{T})n^{3\tau_{min}}}{4}
+\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & \le & \left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \frac{G^{2}(2G+\|\epsilon\|_{T})n^{2\tau_{min}}}{2}
 \end{eqnarray*}
 
 
@@ -200,12 +208,12 @@ First by Vandegeer Example 9.3.2, we know that
 
 
 For every $j=1:J$, we again notice that $\hat{g}_{j}(\cdot|\lambda)$
-is independent of $\lambda$. We will just denote it $\hat{g}_{j}$
-from now on.
+is independent of $\lambda$. We will denote it $\hat{g}_{j}$ from
+now on.
 
 For every $j=1:J$, define functions 
 \[
-h_{j}=c\left(\hat{f}_{j}(\cdot|\lambda^{(1)})-\hat{f}_{j}(\cdot|\lambda^{(2)})\right)
+h_{j}(\cdot)=c\left(\hat{f}_{j}(\cdot|\lambda^{(1)})-\hat{f}_{j}(\cdot|\lambda^{(2)})\right)
 \]
  where $c$ is some constant s.t. $P(h_{j})=1$.
 
@@ -234,7 +242,7 @@ we will assume $h_{j}\ne0$.
 
 The KKT conditions give us for all $\ell=1:J$
 \[
-\left.\left\langle h_{\ell},y-\left(\sum_{j=1}^{J}\hat{g}_{j}(\cdot|\lambda^{(1)})+\hat{f}_{j}(\cdot|\lambda^{(1)})+\hat{m}_{j}(\lambda,h)h_{j}\right)\right\rangle _{T}+\lambda_{\ell}\frac{\partial}{\partial m_{\ell}}P\left(\hat{f}_{\ell}(\cdot|\lambda^{(1)})+m_{\ell}h\right)\right|_{m_{\ell}=\hat{m}_{\ell}(\lambda,h)}=0
+-\left.\left\langle h_{\ell},y-\left(\sum_{j=1}^{J}\hat{g}_{j}(\cdot|\lambda^{(1)})+\hat{f}_{j}(\cdot|\lambda^{(1)})+\hat{m}_{j}(\lambda,h)h_{j}\right)\right\rangle _{T}+\lambda_{\ell}\frac{\partial}{\partial m_{\ell}}P\left(\hat{f}_{\ell}(\cdot|\lambda^{(1)})+m_{\ell}h\right)\right|_{m_{\ell}=\hat{m}_{\ell}(\lambda,h)}=0
 \]
 
 
@@ -277,7 +285,7 @@ We know that $S$ is a PSD matrix (since it can be written as $S=HH^{T}$
 where $H_{j}=h_{j}$ evaluated at covariates $T$).
 
 We are interested in bounding $\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)$,
-which is the $\ell$-th column of $M$ has norm. By Lemma PSD\_Matrix\_Inverse
+which is the $\ell$-th column of $M$. By Lemma PSD\_Matrix\_Inverse
 (see additive\_models.pdf), we know that 
 \begin{eqnarray*}
 \|\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\| & = & \|Me_{\ell}\|\\
@@ -310,23 +318,24 @@ we have
 
 
 By definition of $\hat{f}_{j}(\cdot|\lambda^{(1)})$ , we know 
-\[
-\max_{j=1:J}P\left(\hat{f}_{j}(\cdot|\lambda^{(1)})\right)\le\frac{1}{\lambda_{min}}\left(\frac{1}{2}\|\epsilon\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}P\left(f_{j}^{*}\right)\right)
-\]
+\begin{eqnarray*}
+\max_{j=1:J}P\left(\hat{f}_{j}(\cdot|\lambda^{(1)})\right) & \le & \frac{1}{\lambda_{min}}\left(\frac{1}{2}\|\epsilon\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}P\left(f_{j}^{*}\right)\right)\\
+ & \le & \frac{1}{\lambda_{min}}\left(\frac{1}{2}\|\epsilon\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)\right)
+\end{eqnarray*}
 
 
 So 
 \[
-P\left(\hat{f}_{\ell}(\cdot|\lambda^{(1)})+m_{\ell}h_{\ell}\right)\le\frac{n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}+2\tau_{min}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)
+P\left(\hat{f}_{\ell}(\cdot|\lambda^{(1)})+m_{\ell}h_{\ell}\right)\le\left(n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}\right)\left(\frac{1}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)\right)
 \]
 
 
 Then by the MVT, we have for some $\alpha\in(0,1)$ 
 \begin{eqnarray*}
 \|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\left(\hat{m}_{\ell}(\lambda^{(2)},h)-\hat{m}_{\ell}(\lambda^{(1)},h)\right)h_{\ell}\|_{\infty}\\
- & = & \|h_{\ell}\|_{\infty}\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
- & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \left\Vert \nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\right\Vert \\
- & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \frac{n^{\tau_{min}}}{2}\sqrt{\frac{n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}+2\tau_{min}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)}
+ & = & \|h_{\ell}\|_{\infty}\left|\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\right|\\
+ & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \left\Vert \nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\right\Vert _{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
+ & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert n^{\tau_{min}}\sqrt{\left(n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}\right)\left(\frac{1}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)\right)}
 \end{eqnarray*}
 
 
@@ -351,7 +360,7 @@ Then by the MVT, we have for some $\alpha\in(0,1)$
 \|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\left(\hat{m}_{\ell}(\lambda^{(2)},h)-\hat{m}_{\ell}(\lambda^{(1)},h)\right)h_{\ell}\|_{\infty}\\
  & = & \|h_{\ell}\|_{\infty}\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
  & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \left\Vert \nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\right\Vert _{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
- & \le & \left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert G^{2}(2G+\|\epsilon\|_{T})n^{3\tau_{min}}\frac{1}{4}
+ & \le & \left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert G^{2}(2G+\|\epsilon\|_{T})n^{2\tau_{min}}\frac{1}{2}
 \end{eqnarray*}
 
 
