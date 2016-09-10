@@ -154,8 +154,9 @@ P\left(\hat{f}(\cdot|\lambda^{(1)})+\hat{m}_{h}(\lambda)h\right)\le\frac{n^{\tau
 
 Then by the MVT, we have 
 \begin{eqnarray*}
-\|\hat{f}(\cdot|\lambda^{(1)})-\hat{f}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|m_{h}(\lambda^{(2)})h\|_{\infty}\\
- & \le & \left|\lambda^{(1)}-\lambda^{(2)}\right|\left(\sup_{\lambda\in[\lambda^{(1)},\lambda^{(2)}]}\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|_{\lambda=\lambda}\right)G\\
+\|\hat{f}(\cdot|\lambda^{(1)})-\hat{f}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\left(m_{h}(\lambda^{(2)})-m_{h}(\lambda^{(1)})\right)h\|_{\infty}\\
+ & = & \|h\|_{\infty}\left|\lambda^{(2)}-\lambda^{(1)}\right|\left.\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|_{\lambda\in[\lambda^{(1)},\lambda^{(2)}]}\\
+ & \le & G\left|\lambda^{(1)}-\lambda^{(2)}\right|\left(\sup_{\lambda\in[\lambda^{(1)},\lambda^{(2)}]}\left|\frac{\partial}{\partial\lambda}\hat{m}_{h}(\lambda)\right|_{\lambda=\lambda}\right)\\
  & \le & \left|\lambda^{(1)}-\lambda^{(2)}\right|Gn^{\tau_{min}}\sqrt{\frac{n^{\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+P(f^{*})}
 \end{eqnarray*}
 
@@ -276,8 +277,8 @@ We know that $S$ is a PSD matrix (since it can be written as $S=HH^{T}$
 where $H_{j}=h_{j}$ evaluated at covariates $T$).
 
 We are interested in bounding $\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)$,
-which is the $\ell$-th column of $M$ has norm. By Lemma PSD\_Matrix\_Inverse,
-we know that 
+which is the $\ell$-th column of $M$ has norm. By Lemma PSD\_Matrix\_Inverse
+(see additive\_models.pdf), we know that 
 \begin{eqnarray*}
 \|\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\| & = & \|Me_{\ell}\|\\
  & = & \|D_{3}\left(S+D_{1}\right)^{-1}e_{\ell}\|\\
@@ -320,10 +321,10 @@ P\left(\hat{f}_{\ell}(\cdot|\lambda^{(1)})+m_{\ell}h_{\ell}\right)\le\frac{n^{\t
 \]
 
 
-Then by the MVT, we have 
+Then by the MVT, we have for some $\alpha\in(0,1)$ 
 \begin{eqnarray*}
-\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\hat{m}_{\ell}(\lambda,h)h_{\ell}\|_{\infty}\\
- & = & \|h_{\ell}\|_{\infty}\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\lambda}\\
+\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\left(\hat{m}_{\ell}(\lambda^{(2)},h)-\hat{m}_{\ell}(\lambda^{(1)},h)\right)h_{\ell}\|_{\infty}\\
+ & = & \|h_{\ell}\|_{\infty}\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
  & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \left\Vert \nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\right\Vert \\
  & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \frac{n^{\tau_{min}}}{2}\sqrt{\frac{n^{\tau_{min}}+Jn^{\tau_{max}+2\tau_{min}}}{2}\|\epsilon\|_{T}^{2}+n^{\tau_{max}+2\tau_{min}}\sum_{j=1}^{J}P\left(f_{j}^{*}\right)}
 \end{eqnarray*}
@@ -345,10 +346,10 @@ Hence
 \]
 
 
-Then by the MVT, we have 
+Then by the MVT, we have for some $\alpha\in(0,1)$ 
 \begin{eqnarray*}
-\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\hat{m}_{\ell}(\lambda,h)h_{\ell}\|_{\infty}\\
- & = & \|h_{\ell}\|_{\infty}\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\lambda}\\
+\|\hat{f}_{\ell}(\cdot|\lambda^{(1)})-\hat{f}_{\ell}(\cdot|\lambda^{(2)})\|_{\infty} & = & \|\left(\hat{m}_{\ell}(\lambda^{(2)},h)-\hat{m}_{\ell}(\lambda^{(1)},h)\right)h_{\ell}\|_{\infty}\\
+ & = & \|h_{\ell}\|_{\infty}\langle\lambda^{(1)}-\lambda^{(2)},\nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\rangle_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\\
  & \le & G\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert \left\Vert \nabla_{\lambda}\hat{m}_{\ell}(\lambda,h)\right\Vert \\
  & \le & \left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert G^{2}(2G+\|\epsilon\|_{T})n^{3\tau_{min}}\frac{1}{4}
 \end{eqnarray*}
