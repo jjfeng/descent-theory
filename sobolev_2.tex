@@ -1,0 +1,182 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+
+\subsubsection*{Sobolev Take 2}
+
+Given a function $h$, the Sobolev penalty for $h$ is
+
+\[
+P(h)=\int(h^{(r)}(x))^{2}dx
+\]
+
+
+Consider the class of smoothing splines 
+\[
+\left\{ \hat{g}(\cdot|\lambda)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{T}^{2}+\lambda P(g):\lambda\in\Lambda\right\} 
+\]
+
+
+Ever function $\hat{g}(\cdot|\lambda)$ is a spline that can be expressed
+as the weighted sum of normalized B-splines of degree $r+1$ for a
+given set of $k$ knots:
+\[
+\hat{g}(x|\lambda)=\sum_{i=1}^{k}\theta_{i}N_{i,r+1}(x)
+\]
+
+
+Note that the normalized B-splines have the property that they sum
+up to one at all points within the boundary of the knots. (I might
+be wrong regarding the relationship between the number of knots and
+the number of basis functions, but the number of basis functions should
+be linear in the number of knots)
+
+Therefore we can re-express the class of smoothing splines as a set
+of function parameters
+\[
+\left\{ \hat{\theta}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\theta\|^{2}+\lambda P(\theta):\lambda\in\Lambda\right\} 
+\]
+where $N_{T}$ is the normalized B-spline basis for the given set
+of knots evaluated at the points in the training set. $P(\theta)$
+is the Sobolev penalty and can be written as $\theta^{T}\Omega\theta$
+for an appropriate penalty matrix $\Omega$. We will not need to express
+anything in terms of $\Omega$ so the penalty will be just written
+as $P(\theta)$.
+
+Instead of considering the original smoothing spline problem with
+the roughness penalty, we will add a ridge penalty on the function
+parameters
+\[
+\left\{ \hat{\theta}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\theta\|^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
+\]
+
+
+
+\subsubsection*{Univariate ``Sobolev'' norm}
+
+Suppose we have the set of function parameters 
+\[
+\left\{ \hat{\theta}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\theta\|^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
+\]
+
+
+Let $k$ be the number of normalized B-spline basis functions.
+
+Suppose that we restrict the function parameters such that$\sup_{\theta\in\Theta}\|\theta\|_{2}\le G$.
+(\textbf{Is this a reasonable assumption?})
+
+For any $\lambda^{(1)},\lambda^{(2)}\in\Lambda$ such that 
+\[
+\|\lambda^{(1)}-\lambda^{(2)}\|\le\frac{d}{2}\lambda_{min}w\left(\left(\frac{1}{\lambda_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG\right)+wG\right)^{-1}
+\]
+we can show that 
+\[
+\|\hat{\theta}_{\lambda^{(1)}}-\hat{\theta}_{\lambda^{(2)}}\|_{2}\le d
+\]
+
+
+Hence 
+\[
+\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{\infty}=\sup_{x}\sum_{i=1}^{k}\left(\hat{\theta}_{i,\lambda^{(1)}}-\hat{\theta}_{i,\lambda^{(2)}}\right)N_{i}(x)\le kd
+\]
+
+
+
+\subsubsection*{Proof}
+
+Let $\beta=\hat{\theta}_{\lambda^{(1)}}-\hat{\theta}_{\lambda^{(2)}}$.
+Suppose $\|\beta\|_{2}>d$ for contradiction.
+
+Consider the optimization problem
+
+\[
+\hat{m}_{\beta}(\lambda)=\arg\min_{m}\frac{1}{2}\|y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+m\beta)\|^{2}+\lambda\left[P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)+\frac{w}{2}\|\hat{\theta}_{\lambda^{(1)}}+m\beta\|_{2}^{2}\right]
+\]
+
+
+The KKT conditions give us
+\[
+-\langle N_{T}\beta,y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\rangle+\lambda\left[\left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\langle\beta,\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\rangle\right]=0
+\]
+
+
+Implicit differentiation wrt $\lambda$ gives us
+
+\begin{eqnarray*}
+\frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda) & = & -\left(\|N_{T}\beta\|^{2}+\lambda\left[\left.\nabla_{m}^{2}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\|\beta\|_{2}^{2}\right]\right)^{-1}\\
+ &  & \left(\left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\langle\beta,\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\rangle\right)
+\end{eqnarray*}
+
+
+To bound the first multiplicand, we use the convexity of the Sobolev
+penalty to get 
+\[
+\left(\|N_{T}\beta\|^{2}+\lambda\left[\left.\nabla_{m}^{2}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\|\beta\|_{2}^{2}\right]\right)^{-1}\le\left(\lambda w\|\beta\|_{2}^{2}\right)^{-1}
+\]
+
+
+To bound the second multiplicand, the KKT conditions give us
+\begin{eqnarray*}
+\left\Vert \left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}\right\Vert  & = & \left\Vert \frac{1}{\lambda}\langle N_{T}\beta,y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\rangle-w\langle\beta,\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\rangle\right\Vert \\
+ & \le & \|\beta\|\left(\frac{1}{\lambda}\left\Vert N_{T}^{T}\left(y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\right)\right\Vert +w\left\Vert \hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\right\Vert \right)
+\end{eqnarray*}
+
+
+The maximum eigenvalue of $N_{T}^{T}$ is bounded by the maximum row
+sum. Since each row of $N_{T}^{T}$ is the value of each of the normalized
+B-spline basis functions at a given point, each row of $N_{T}^{T}$
+sums to one. Therefore by the Gershgorin circle theorem ({*}), the
+maximum eigenvalue of $N_{T}^{T}$ is bounded by 1. Hence
+
+\begin{eqnarray*}
+\left\Vert \left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}\right\Vert  & \le & \|\beta\|\left(\frac{1}{\lambda}\left\Vert y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\right\Vert +w\left\Vert \hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\right\Vert \right)\\
+ & \le & \|\beta\|\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)
+\end{eqnarray*}
+
+
+The second inequality follows from the fact that for any function
+parameters $\theta$ , we have that 
+\[
+\|N_{T}\theta\|\le k\|\theta\|\le kG
+\]
+
+
+since the maximum eigenvalue of $N_{T}$ is bounded by the maximum
+row sum of $N_{T}$, which is at most $k$.
+
+Then
+\begin{eqnarray*}
+\left\Vert \frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda)\right\Vert  & \le & \left(\lambda w\|\beta\|_{2}^{2}\right)^{-1}\left(\|\beta\|\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+w\|\beta\|\|\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\|\right)\\
+ & \le & \left(\lambda_{min}w\|\beta\|_{2}\right)^{-1}\left(\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+wG\right)
+\end{eqnarray*}
+
+
+By the MVT, there is some $\alpha\in(0,1)$ such that
+\begin{eqnarray*}
+\left|\hat{m}_{\beta}(\lambda^{(2)})-\hat{m}_{\beta}(\lambda^{(1)})\right| & = & \left|\lambda^{(2)}-\lambda^{(1)}\right|\left(\left.\frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda)\right|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\right)\\
+ & \le & \left|\lambda^{(2)}-\lambda^{(1)}\right|\left(\lambda_{min}w\|\beta\|_{2}\right)^{-1}\left(\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+wG\right)\\
+ & \le & \left|\lambda^{(2)}-\lambda^{(1)}\right|\left(\lambda_{min}wd\right)^{-1}\left(\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+wG\right)
+\end{eqnarray*}
+
+
+By our choice of $\lambda^{(2)},\lambda^{(1)}$ , we have that
+\[
+\left|\hat{m}_{\beta}(\lambda^{(2)})-\hat{m}_{\beta}(\lambda^{(1)})\right|\le1/2
+\]
+
+
+However this is a contradiction since we know that $\hat{m}_{\beta}(\lambda^{(2)})=1$
+and $\hat{m}_{\beta}(\lambda^{(1)})=0$.
+
+
+\subsubsection*{Footnotes}
+
+({*}) https://en.wikipedia.org/wiki/Perron\%E2\%80\%93Frobenius\_theorem\#Inequalities\_for\_Perron.E2.80.93Frobenius\_eigenvalue
+\end{document}
