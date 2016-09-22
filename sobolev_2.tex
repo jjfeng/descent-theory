@@ -33,10 +33,10 @@ given set of $k$ knots:
 
 
 Note that the normalized B-splines have the property that they sum
-up to one at all points within the boundary of the knots. (I might
-be wrong regarding the relationship between the number of knots and
-the number of basis functions, but the number of basis functions should
-be linear in the number of knots)
+up to one at all points within the boundary of the knots. Also recall
+that B-splines are non-negative. (I might be wrong regarding the relationship
+between the number of knots and the number of basis functions, but
+the number of basis functions should be linear in the number of knots)
 
 Therefore we can re-express the class of smoothing splines as a set
 of function parameters
@@ -129,11 +129,12 @@ To bound the second multiplicand, the KKT conditions give us
 \end{eqnarray*}
 
 
-The maximum eigenvalue of $N_{T}^{T}$ is bounded by the maximum row
-sum. Since each row of $N_{T}^{T}$ is the value of each of the normalized
-B-spline basis functions at a given point, each row of $N_{T}^{T}$
-sums to one. Therefore by the Gershgorin circle theorem ({*}), the
-maximum eigenvalue of $N_{T}^{T}$ is bounded by 1. Hence
+We can bound the maximum eigenvalue of $N_{T}^{T}$ using the matrix
+entries. Since each row of $N_{T}^{T}$ is the value of each of the
+normalized B-spline basis functions at a given point, each row of
+$N_{T}^{T}$ sums to one. By the Gershgorin circle theorem ({*}),
+the maximum eigenvalue of a non-negative matrix is bounded by its
+maximum row sum, which in the case of $N_{T}^{T}$ is 1. Hence
 
 \begin{eqnarray*}
 \left\Vert \left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}\right\Vert  & \le & \|\beta\|\left(\frac{1}{\lambda}\left\Vert y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\right\Vert +w\left\Vert \hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\right\Vert \right)\\
