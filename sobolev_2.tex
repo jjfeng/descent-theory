@@ -5,6 +5,7 @@
 \usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsbsy}
 \usepackage{esint}
 \usepackage{babel}
 \begin{document}
@@ -41,7 +42,7 @@ the number of basis functions should be linear in the number of knots)
 Therefore we can re-express the class of smoothing splines as a set
 of function parameters
 \[
-\left\{ \hat{\theta}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\theta\|^{2}+\lambda P(\theta):\lambda\in\Lambda\right\} 
+\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\boldsymbol{\theta}\|^{2}+\lambda P(\boldsymbol{\theta}):\lambda\in\Lambda\right\} 
 \]
 where $N_{T}$ is the normalized B-spline basis for the given set
 of knots evaluated at the points in the training set. $P(\theta)$
@@ -54,7 +55,7 @@ Instead of considering the original smoothing spline problem with
 the roughness penalty, we will add a ridge penalty on the function
 parameters
 \[
-\left\{ \hat{\theta}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\theta\|^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
+\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\boldsymbol{\theta}\|^{2}+\lambda\left(P(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
 \]
 
 
@@ -63,69 +64,69 @@ parameters
 
 Suppose we have the set of function parameters 
 \[
-\left\{ \hat{\theta}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\theta\|^{2}+\lambda\left(P(\theta)+\frac{w}{2}\|\theta\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
+\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-N_{T}\boldsymbol{\theta}\|^{2}+\lambda\left(P(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
 \]
 
 
 Let $k$ be the number of normalized B-spline basis functions.
 
-Suppose that we restrict the function parameters such that$\sup_{\theta\in\Theta}\|\theta\|_{2}\le G$.
+Suppose that we restrict the function parameters such that$\sup_{\theta\in\Theta}\|\boldsymbol{\theta}\|_{2}\le G$.
 (\textbf{Is this a reasonable assumption?})
 
 For any $\lambda^{(1)},\lambda^{(2)}\in\Lambda$ such that 
 \[
-\|\lambda^{(1)}-\lambda^{(2)}\|\le\frac{d}{2}\lambda_{min}w\left(\left(\frac{1}{\lambda_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG\right)+wG\right)^{-1}
+\left|\lambda^{(1)}-\lambda^{(2)}\right|\le\frac{d}{2}\lambda_{min}w\left(\left(\frac{1}{\lambda_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG\right)+wG\right)^{-1}
 \]
 we can show that 
 \[
-\|\hat{\theta}_{\lambda^{(1)}}-\hat{\theta}_{\lambda^{(2)}}\|_{2}\le d
+\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}-\hat{\boldsymbol{\theta}}_{\lambda^{(2)}}\|_{2}\le d
 \]
 
 
 Hence 
 \[
-\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{\infty}=\sup_{x}\sum_{i=1}^{k}\left(\hat{\theta}_{i,\lambda^{(1)}}-\hat{\theta}_{i,\lambda^{(2)}}\right)N_{i}(x)\le kd
+\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{\infty}=\sup_{x}\sum_{i=1}^{k}\left(\hat{\boldsymbol{\theta}}_{i,\lambda^{(1)}}-\hat{\boldsymbol{\theta}}_{i,\lambda^{(2)}}\right)N_{i}(x)\le kd
 \]
 
 
 
 \subsubsection*{Proof}
 
-Let $\beta=\hat{\theta}_{\lambda^{(1)}}-\hat{\theta}_{\lambda^{(2)}}$.
-Suppose $\|\beta\|_{2}>d$ for contradiction.
+Let $\boldsymbol{\beta}=\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}-\hat{\boldsymbol{\theta}}_{\lambda^{(2)}}$.
+Suppose $\|\boldsymbol{\beta}\|_{2}>d$ for contradiction.
 
 Consider the optimization problem
 
 \[
-\hat{m}_{\beta}(\lambda)=\arg\min_{m}\frac{1}{2}\|y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+m\beta)\|^{2}+\lambda\left[P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)+\frac{w}{2}\|\hat{\theta}_{\lambda^{(1)}}+m\beta\|_{2}^{2}\right]
+\hat{m}_{\beta}(\lambda)=\arg\min_{m}\frac{1}{2}\|y-N_{T}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta})\|^{2}+\lambda\left[P\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta}\right)+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta}\|_{2}^{2}\right]
 \]
 
 
 The KKT conditions give us
 \[
--\langle N_{T}\beta,y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\rangle+\lambda\left[\left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\langle\beta,\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\rangle\right]=0
+-\langle N_{T}\boldsymbol{\beta},y-N_{T}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta})\rangle+\lambda\left[\left.\nabla_{m}P\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta}\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\langle\boldsymbol{\beta},\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta}\rangle\right]=0
 \]
 
 
 Implicit differentiation wrt $\lambda$ gives us
 
 \begin{eqnarray*}
-\frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda) & = & -\left(\|N_{T}\beta\|^{2}+\lambda\left[\left.\nabla_{m}^{2}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\|\beta\|_{2}^{2}\right]\right)^{-1}\\
- &  & \left(\left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\langle\beta,\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\rangle\right)
+\frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda) & = & -\left(\|N_{T}\boldsymbol{\beta}\|^{2}+\lambda\left[\left.\nabla_{m}^{2}P\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta}\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\|\boldsymbol{\beta}\|_{2}^{2}\right]\right)^{-1}\\
+ &  & \left(\left.\nabla_{m}P\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta}\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\langle\boldsymbol{\beta},\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta}\rangle\right)
 \end{eqnarray*}
 
 
 To bound the first multiplicand, we use the convexity of the Sobolev
 penalty to get 
 \[
-\left(\|N_{T}\beta\|^{2}+\lambda\left[\left.\nabla_{m}^{2}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\|\beta\|_{2}^{2}\right]\right)^{-1}\le\left(\lambda w\|\beta\|_{2}^{2}\right)^{-1}
+\left(\|N_{T}\boldsymbol{\beta}\|^{2}+\lambda\left[\left.\nabla_{m}^{2}P\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta}\right)\right|_{m=\hat{m}_{\beta}(\lambda)}+w\|\boldsymbol{\beta}\|_{2}^{2}\right]\right)^{-1}\le\left(\lambda w\|\boldsymbol{\beta}\|_{2}^{2}\right)^{-1}
 \]
 
 
 To bound the second multiplicand, the KKT conditions give us
 \begin{eqnarray*}
-\left\Vert \left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}\right\Vert  & = & \left\Vert \frac{1}{\lambda}\langle N_{T}\beta,y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\rangle-w\langle\beta,\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\rangle\right\Vert \\
- & \le & \|\beta\|\left(\frac{1}{\lambda}\left\Vert N_{T}^{T}\left(y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\right)\right\Vert +w\left\Vert \hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\right\Vert \right)
+\left\Vert \left.\nabla_{m}P\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta}\right)\right|_{m=\hat{m}_{\beta}(\lambda)}\right\Vert  & = & \left\Vert \frac{1}{\lambda}\langle N_{T}\boldsymbol{\beta},y-N_{T}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta})\rangle-w\langle\boldsymbol{\beta},\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta}\rangle\right\Vert \\
+ & \le & \|\beta\|\left(\frac{1}{\lambda}\left\Vert N_{T}^{T}\left(y-N_{T}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta})\right)\right\Vert +w\left\Vert \hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta}\right\Vert \right)
 \end{eqnarray*}
 
 
@@ -137,15 +138,15 @@ the maximum eigenvalue of a non-negative matrix is bounded by its
 maximum row sum, which in the case of $N_{T}^{T}$ is 1. Hence
 
 \begin{eqnarray*}
-\left\Vert \left.\nabla_{m}P\left(\hat{\theta}_{\lambda^{(1)}}+m\beta\right)\right|_{m=\hat{m}_{\beta}(\lambda)}\right\Vert  & \le & \|\beta\|\left(\frac{1}{\lambda}\left\Vert y-N_{T}(\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta)\right\Vert +w\left\Vert \hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\right\Vert \right)\\
- & \le & \|\beta\|\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)
+\left\Vert \left.\nabla_{m}P\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+m\boldsymbol{\beta}\right)\right|_{m=\hat{m}_{\beta}(\lambda)}\right\Vert  & \le & \|\boldsymbol{\beta}\|\left(\frac{1}{\lambda}\left\Vert y-N_{T}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta})\right\Vert +w\left\Vert \hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta}\right\Vert \right)\\
+ & \le & \|\boldsymbol{\beta}\|\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)
 \end{eqnarray*}
 
 
 The second inequality follows from the fact that for any function
 parameters $\theta$ , we have that 
 \[
-\|N_{T}\theta\|\le k\|\theta\|\le kG
+\|N_{T}\boldsymbol{\theta}\|\le k\|\boldsymbol{\theta}\|\le kG
 \]
 
 
@@ -154,15 +155,15 @@ row sum of $N_{T}$, which is at most $k$.
 
 Then
 \begin{eqnarray*}
-\left\Vert \frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda)\right\Vert  & \le & \left(\lambda w\|\beta\|_{2}^{2}\right)^{-1}\left(\|\beta\|\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+w\|\beta\|\|\hat{\theta}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\beta\|\right)\\
- & \le & \left(\lambda_{min}w\|\beta\|_{2}\right)^{-1}\left(\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+wG\right)
+\left\Vert \frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda)\right\Vert  & \le & \left(\lambda w\|\boldsymbol{\beta}\|_{2}^{2}\right)^{-1}\left(\|\boldsymbol{\beta}\|\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+w\|\boldsymbol{\beta}\|\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}+\hat{m}_{\beta}(\lambda)\boldsymbol{\beta}\|\right)\\
+ & \le & \left(\lambda_{min}w\|\boldsymbol{\beta}\|_{2}\right)^{-1}\left(\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+wG\right)
 \end{eqnarray*}
 
 
 By the MVT, there is some $\alpha\in(0,1)$ such that
 \begin{eqnarray*}
 \left|\hat{m}_{\beta}(\lambda^{(2)})-\hat{m}_{\beta}(\lambda^{(1)})\right| & = & \left|\lambda^{(2)}-\lambda^{(1)}\right|\left(\left.\frac{\partial}{\partial\lambda}\hat{m}_{\beta}(\lambda)\right|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}}\right)\\
- & \le & \left|\lambda^{(2)}-\lambda^{(1)}\right|\left(\lambda_{min}w\|\beta\|_{2}\right)^{-1}\left(\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+wG\right)\\
+ & \le & \left|\lambda^{(2)}-\lambda^{(1)}\right|\left(\lambda_{min}w\|\boldsymbol{\beta}\|_{2}\right)^{-1}\left(\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+wG\right)\\
  & \le & \left|\lambda^{(2)}-\lambda^{(1)}\right|\left(\lambda_{min}wd\right)^{-1}\left(\left(\frac{1}{\lambda_{min}}\left(2kG+\|\epsilon\|_{T}\right)+wG\right)+wG\right)
 \end{eqnarray*}
 
