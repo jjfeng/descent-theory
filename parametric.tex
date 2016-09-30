@@ -3,7 +3,7 @@
 \documentclass[english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
-\usepackage{geometry}
+\usepackage[landscape]{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \usepackage{amsbsy}
 \usepackage{amssymb}
@@ -30,6 +30,11 @@ least squares criterion:
 
 where $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$.
 
+Suppose that the penalties and the function $g(x|\boldsymbol{\theta})$
+is convex wrt $\boldsymbol{\theta}$: $\nabla_{\theta}P_{j}(\boldsymbol{\theta})$
+for all $j=1,...,J$ and $\nabla_{\theta}g(x|\boldsymbol{\theta}+m\boldsymbol{\beta})$
+are PSD matrices.
+
 Suppose there is some constant $K>0$ such that for all $j=1,...,J$
 and all $\boldsymbol{\beta},\boldsymbol{\theta}$,
 
@@ -37,6 +42,8 @@ and all $\boldsymbol{\beta},\boldsymbol{\theta}$,
 \left|\frac{\partial}{\partial m}P_{j}(\boldsymbol{\theta}+m\boldsymbol{\beta})\right|\le K\|\boldsymbol{\beta}\|_{2}
 \]
 
+
+(This is essentially bounding the spectrum of the penalty function)
 
 Let 
 \[
@@ -47,7 +54,7 @@ C=\frac{1}{2}\|\boldsymbol{\epsilon}\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have
 \[
-\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(wJ\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
 \]
 
 
@@ -60,7 +67,7 @@ that for all $\boldsymbol{\theta_{1},\theta_{2}}$
 
 Then
 \[
-\|g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(2)}}})\|_{\infty}\le Lp^{r}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(wJ\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+\|g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(2)}}})\|_{\infty}\le Lp^{r}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
 \]
 
 
@@ -81,7 +88,7 @@ and $\hat{m}_{\beta}(\boldsymbol{\lambda^{(1)}})=0$.
 
 By the KKT conditions, we have 
 \[
-\left.\frac{\partial}{\partial m}\left(\frac{1}{2}\|y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right)+\sum_{j=1}^{J}\lambda_{j}w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta}\rangle\right|_{m=\hat{m}_{\beta}(\boldsymbol{\lambda})}
+\left.\frac{\partial}{\partial m}\left(\frac{1}{2}\|y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right)+\sum_{j=1}^{J}\lambda_{j}w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta}\rangle\right|_{m=\hat{m}_{\beta}(\boldsymbol{\lambda})}=0
 \]
 
 
@@ -158,7 +165,7 @@ we have
 
 Plugging in the inequality above, we get 
 \begin{eqnarray*}
-\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}^{2} & \le & \left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C
+J\lambda_{min}\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}^{2}\le\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}^{2} & \le & \left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C
 \end{eqnarray*}
 
 
@@ -181,17 +188,20 @@ That is,
 \end{eqnarray*}
 
 
+From the KKT conditions, note that $\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})$
+is continuous and differentiable over the line $\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} $.
 Therefore by MVT, there is some $\alpha\in(0,1)$ such that 
 \begin{eqnarray*}
 \left|\hat{m}_{\beta}(\boldsymbol{\lambda^{(2)}})-\hat{m}_{\beta}(\boldsymbol{\lambda^{(1)}})\right| & = & \left|\left.\left\langle \boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}},\nabla_{\lambda}\hat{m}_{\beta}(\boldsymbol{\lambda})\right\rangle \right|_{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}}\right|\\
- & \le & \|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\|\nabla_{\lambda}\hat{m}_{\beta}(\boldsymbol{\lambda})\|_{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}}\\
- & \le & \|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(wJ\lambda_{min}\|\boldsymbol{\beta}\|_{2}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+ & \le & \|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left\Vert \left.\nabla_{\lambda}\hat{m}_{\beta}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}}\right\Vert \\
+ & = & \|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\sqrt{\sum_{\ell=1}^{J}\left(\left.\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\beta}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}}\right)^{2}}\\
+ & \le & \|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\|\boldsymbol{\beta}\|_{2}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
 \end{eqnarray*}
 
 
 Rearranging, we get
 \[
-\|\boldsymbol{\beta}\|_{2}=\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(wJ\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+\|\boldsymbol{\beta}\|_{2}=\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
 \]
 
 
@@ -202,8 +212,12 @@ Suppose that training criterion satisfies Conditions 1, 2, and 3 from
 the Hillclimbing paper. Summarizing the conditions, we are supposing
 that for almost every $\lambda$, 
 
-Cond 1: The differentiable space at $\lambda$ is a local optimality
-space.
+Cond 1: The differentiable space of the training criterion at $\boldsymbol{\lambda}$,
+denoted 
+\[
+\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\right)
+\]
+ is a local optimality space.
 
 Cond 2: The training criterion is twice-differentiable along directions
 spanned by the differentiable space.
@@ -211,18 +225,14 @@ spanned by the differentiable space.
 Cond 3: There is an orthonormal basis of the differentiable space
 directions such that the Hessian of the training criterion is invertible.
 
-Again suppose that there is some constant $K>0$, such that for all
-$j=1,...,J$ and all $\boldsymbol{\beta},\boldsymbol{\theta}$,
-
-\[
-\left|\frac{\partial}{\partial m}P_{j}(\boldsymbol{\theta}+m\boldsymbol{\beta})\right|\le K\|\boldsymbol{\beta}\|_{2}
-\]
-
+As in the lemma above, we have the same assumptions regarding the
+convexity of the penalties and the function and the spectrum bound
+on the derivative of the penalties.
 
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have
 \[
-\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(wJ\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
 \]
 
 
@@ -235,84 +245,122 @@ that for all $\boldsymbol{\theta_{1},\theta_{2}}$
 
 Then
 \[
-\|g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(2)}}})\|_{\infty}\le Lp^{r}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(wJ\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+\|g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(2)}}})\|_{\infty}\le Lp^{r}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
 \]
 
 
 
 \subsubsection*{Proof}
 
-Under the given assumptions, for almost every pair $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}$,
-there is a line 
+Let $K$ be the set of knots
 \[
-\mathcal{L}=\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} 
+K=\left\{ \boldsymbol{\lambda}:\left.\nabla_{\theta}P_{j}(\theta)\right|_{\theta=\hat{\theta}(\boldsymbol{\lambda})}\mbox{ does not exist for some }j\in1:J\right\} 
 \]
 
 
-such that there is a finite set of points $\{\boldsymbol{\ell_{i}}\}_{i=1}^{N}\subset\mathcal{L}$
-such that 
+By assumption, $\mu(K)=0$. Let $K^{ext}$ be the smallest set of
+($J-1$)-dimensional planes that contain $K$. $K^{ext}$ must satisfy
+$\mu(K^{ext})=0$. (Otherwise if $\mu(K^{ext})>0$, then $K$ should
+also have $\mu(K)>0$. A more rigorous argument might be needed here.)
 
-(1) The union of their differentiable space $\Omega^{L_{T}(\cdot,\ell_{i})}(g(\cdot|\hat{\theta}_{\ell_{i}}))$
-satisfies 
+Now denote the line segment between $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}$
+as 
 \[
-\mu\left(\mathcal{L}\cap\left(\cup_{i=0}^{N+1}\Omega^{L_{T}(\cdot,\ell_{i})}(g(\cdot|\boldsymbol{\hat{\theta}_{\ell_{i}}}))\right)\right)=0
+\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})=\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} 
 \]
 
 
-where $\boldsymbol{\ell_{0}}=\boldsymbol{\lambda^{(1)}}$ and $\boldsymbol{\ell_{N+1}}=\boldsymbol{\lambda^{(2)}}$.
-
-(2) The differentiable space $\Omega^{L_{T}(\cdot,\ell_{i})}(g(\cdot|\hat{\theta}_{\ell_{i}}))$
-is also a local optimality space for the training criterion.
-
-(3) The training criterion is twice-differentiable along the directions
-spanned by $\Omega^{L_{T}(\cdot,\ell_{i})}(g(\cdot|\hat{\theta}_{\ell_{i}}))$.
-
-(4) The Hessian of the training criterion along some orthogonal basis
-of $\Omega^{L_{T}(\cdot,\ell_{i})}(g(\cdot|\hat{\theta}_{\ell_{i}}))$
-is invertible.
-
-To prove (1), consider any set of points along $\mathcal{L}$. Suppose
-that the union of their differentiable spaces do not cover $\mathcal{L}$.
-Then consider the shortest line segment $\mathcal{L}'$ that remains
-uncovered by the differentiable spaces. Consider the points at the
-two ends of $\mathcal{L}'$, which we denote as $\ell_{s}$ amd $\ell_{e}$.
-The differentiable space of $\ell_{s}$ and $\ell_{e}$ must exist 
-
-Let $\{\boldsymbol{\ell_{(i)}}\}_{i=0}^{N}\subset\mathcal{L}$ be
-the points such that $\boldsymbol{\ell_{(i)}}$ is in the differentiable
-space $\Omega^{L_{T}(\cdot,\ell_{i})}(g(\cdot|\boldsymbol{\hat{\theta}_{\ell_{i}}}))$
-and $\Omega^{L_{T}(\cdot,\ell_{i+1})}(g(\cdot|\boldsymbol{\hat{\theta}_{\ell_{i+1}}}))$.
-That is, we choose
+\textbf{Claim 1:} The set
 \[
-\ell_{(i)}\in\Omega^{L_{T}(\cdot,\ell_{i})}(\hat{g}(\cdot|\hat{\theta}_{\ell_{i}}))\cap\Omega^{L_{T}(\cdot,\ell_{i+1})}(\hat{g}(\cdot|\hat{\theta}_{\ell_{i+1}}))
+H=\left\{ (\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}):\left\Vert \mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap K\right\Vert >0\right\} 
+\]
+ has measure $\mu(H)=0$. 
+
+\textbf{Proof of Claim 1:} To see this, note that for every $(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\in H$,
+we must have that $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in K^{ext}$.
+Therefore $H\subseteq K^{ext}\times K^{ext}$. Since $\mu(K^{ext}\times K^{ext})=0$,
+then $\mu(H)=0$.
+
+\textbf{Claim 2:} For a given set of points $\{\ell^{(i)}\}\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$,
+let $d(\{\ell^{(i)}\})$ denote the uncovered distance of $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+by the union of their differentiable spaces:
+\[
+d(\{\ell^{(i)}\})=\left\Vert \left[\cup_{i}\Omega^{L_{T}(\cdot,\ell^{(i)})}\left(\hat{\theta}(\ell^{(i)})\right)\right]\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right\Vert -\|\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\|
 \]
 
 
-Then consider applying the smooth lemma to the following pairs of
-points:
+Define points $\left\{ \ell_{min}^{(i)}\right\} $ as the minimizer
+of the uncovered distance: 
 \[
-\left(\ell_{0},\ell_{(0)}\right),\left(\ell_{(0)},\ell_{1}\right),...,\left(\ell_{N},\ell_{(N)}\right),\left(\ell_{(N)},\ell_{N+1}\right)
+\left\{ \ell_{min}^{(i)}\right\} =\arg\min_{\{\ell^{(i)}\}}d(\{\ell^{(i)}\})
 \]
 
 
-By the lemma for parametric regression with smooth penalties, we get
-that 
+We claim that for all $(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\in H^{C}$,
+the $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+will be covered (almost everywhere) by the union of the differentiable
+spaces of $\left\{ \ell_{min}^{(i)}\right\} $ 
 \[
-\|g(\cdot|\hat{\theta}_{\ell_{i}})-g(\cdot|\hat{\theta}_{\ell_{(i)}})\|_{\infty}\le Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\ell_{i}-\ell_{(i)}\|_{2}
+d\left(\left\{ \ell_{min}^{(i)}\right\} \right)=0
 \]
 
 
-and similarly 
+\textbf{Proof of Claim 2:}
+
+Suppose 
 \[
-\|g(\cdot|\hat{\theta}_{\ell_{i+1}})-g(\cdot|\hat{\theta}_{\ell_{(i)}})\|_{\infty}\le Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\ell_{i+1}-\ell_{(i)}\|_{2}
+d\left(\left\{ \ell_{min}^{(i)}\right\} \right)>0
 \]
 
 
-Hence
+Consider the points not covered by the differentiable spaces:
+
+\[
+U=\left\{ \mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})-\left(\left[\cup_{i}\Omega^{L_{T}(\cdot,\ell^{(i)}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}))}\left(\hat{\theta}(\ell^{(i)}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}))\right)\right]\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right)\right\} 
+\]
+
+
+If every $U\subseteq K$, then $\left\Vert \mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap K\right\Vert \ge\left\Vert \mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap U\right\Vert >0$.
+This is clearly impossible since $(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\in H^{C}$.
+Therefore there must be a point $\boldsymbol{p}\in U\backslash K$.
+Then we note that 
+\[
+\left\Vert \Omega^{L_{T}(\cdot,\boldsymbol{p})}\left(\hat{\boldsymbol{\theta}}(\boldsymbol{p})\right)\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right\Vert >0
+\]
+
+
+This implies that
+\[
+d(\{\ell_{min}^{(i)}\})>d(\{\ell_{min}^{(i)}\}\cup\{p\})
+\]
+
+
+However contradicts the definition of $\left\{ \ell_{min}^{(i)}\right\} $.
+
+Combining Claim 1 and 2, we conclude that for almost every $(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$,
+there is a set of points $\left\{ \ell_{min}^{(i)}\right\} $ such
+that their differentiable spaces cover $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+almost everywhere. 
+
+Hence we can choose a (potentially infinite) set of points $\left\{ \boldsymbol{p^{(i)}}\right\} $
+such that the differentiable space of the training criterion over
+the interval $[\boldsymbol{p^{(i)},p^{(i+1)}}]$ is constant (basically
+choose the points at the edge of the differentiable spaces). Within
+each interval $[\boldsymbol{p^{(i)},p^{(i+1)}}]$, we can apply the
+smooth parametric lemma above since the training criterion is smooth
+with respect to the differentiable space and the local optimality
+space is equal to the differentiable space. So for every $i$, we
+have
+\[
+\|\boldsymbol{\hat{\theta}_{p^{(1)}}}-\boldsymbol{\hat{\theta}_{p^{(2)}}}\|_{2}\le\|\boldsymbol{p^{(i)}}-\boldsymbol{p^{(i+1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+\]
+
+
+By the triangle inequality,
 \begin{eqnarray*}
-\|g(\cdot|\hat{\theta}_{\lambda^{(1)}})-g(\cdot|\hat{\theta}_{\lambda^{(2)}})\|_{\infty} & \le & \sum_{i=0}^{N}\|g(\cdot|\hat{\theta}_{\ell_{i}})-g(\cdot|\hat{\theta}_{\ell_{(i)}})\|_{\infty}+\|g(\cdot|\hat{\theta}_{\ell_{i+1}})-g(\cdot|\hat{\theta}_{\ell_{(i)}})\|_{\infty}\\
- & \le & Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\left(\sum_{i=0}^{N}\|\ell_{i}-\ell_{(i)}\|_{2}+\|\ell_{i+1}-\ell_{(i)}\|_{2}\right)\\
- & = & Lp^{r}\frac{n^{t_{min}}\left(K+wG\right)}{wJ\|\beta\|_{2}}\|\lambda^{(1)}-\lambda^{(2)}\|_{2}
+\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2} & \le & \sum\|\boldsymbol{\hat{\theta}_{p^{(1)}}}-\boldsymbol{\hat{\theta}_{p^{(2)}}}\|_{2}\\
+ & \le & \sum\|\boldsymbol{p^{(i)}}-\boldsymbol{p^{(i+1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)\\
+ & \le & \|\boldsymbol{\lambda^{(i)}}-\boldsymbol{\lambda^{(2)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
 \end{eqnarray*}
 
 
