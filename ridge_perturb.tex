@@ -1,0 +1,106 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsbsy}
+\usepackage{babel}
+\begin{document}
+
+\title{The effect of adding a small ridge penalty}
+
+\maketitle
+We will show that adding a small ridge penalty scaled by some constant
+$w$ does not change the fitted model by very much.
+
+The proof will presume a parametric model space and that the training
+criterion is strongly convex. 
+
+Unfortunately, it is unclear how to extend this proof technique to
+the non-smooth case. In addition, showing this result for non-parametric
+regression models is quite difficult. More assumptions are probably
+needed. It may be easier to consider specific regression problem examples.
+
+
+\section{Parametric Models: Strongly Convex Penalized Objective}
+
+Let the training criterion be denoted $L_{T}$
+\[
+L_{T}(\boldsymbol{\theta})=\frac{1}{2}\|y-f(\cdot|\boldsymbol{\theta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})
+\]
+
+
+Suppose $\nabla^{2}L_{T}(\theta)$ exists and the training criterion
+is $m$-strongly convex in $\boldsymbol{\theta}$. That is, there
+is some constant $m>0$ such that
+\[
+\nabla^{2}L_{T}(\boldsymbol{\theta})\succeq mI
+\]
+
+
+Consider the minimizer of the perturbed problem
+
+\[
+\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\theta}L_{T}(\boldsymbol{\theta})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}
+\]
+
+
+So $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)$ is the solution
+to the original penalized regression problem. 
+
+Then for any $w$, we have 
+\begin{eqnarray*}
+\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2} & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|
+\end{eqnarray*}
+
+
+
+\subsubsection*{Proof}
+
+By page 460 of Boyd, we know that for strongly convex loss functions,
+we have that 
+\[
+\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2}\le\frac{2}{m}\|\nabla L_{T}(\boldsymbol{\theta})\|_{\theta=\hat{\theta}_{\lambda}(w)}
+\]
+
+
+By the gradient optimality conditions, we have that
+\[
+\nabla L_{T}(\boldsymbol{\theta})|_{\theta=\hat{\theta}_{\lambda}(w)}+\sum_{j=1}^{J}\lambda_{j}w\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=0
+\]
+
+
+So 
+\[
+\|\nabla L_{T}(\boldsymbol{\theta})\|_{\theta=\hat{\theta}_{\lambda}(w)}=\left(\sum_{j=1}^{J}\lambda_{j}\right)w\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|
+\]
+
+
+We can show that 
+\[
+\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|^{2}\le\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|^{2}
+\]
+
+
+To see this, use the definitions of $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)$
+and $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)$: 
+\[
+L_{T}(\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w))+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|^{2}\le L_{T}(\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0))+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|^{2}
+\]
+
+
+and 
+\[
+L_{T}(\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0))\le L_{T}(\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w))
+\]
+
+
+Plugging in the inequality, we get
+\begin{eqnarray*}
+\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2} & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|\\
+ & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|
+\end{eqnarray*}
+
+\end{document}
