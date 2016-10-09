@@ -1,0 +1,39 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsmath}
+\usepackage{babel}
+\begin{document}
+
+\subsection*{Lemma PSD\_Matrix\_Inverse}
+
+Suppose $A$ is a PSD matrix and $D$ is a diagonal matrix with positive
+entries. Then for any vector $x$, we have 
+\[
+\|D^{-1}x\|\ge\|(A+D)^{-1}x\|
+\]
+
+
+
+\subsubsection*{Proof}
+
+Notation: For matrix $B$, define $B^{2}=BB$.
+
+It suffices to show that for all $x$, 
+\[
+x^{T}\left(D^{-2}-(A+D)^{-2}\right)x\ge0
+\]
+
+
+That is, we are interested in showing that $D^{-2}-(A+D)^{-2}$ is
+PSD. This can be shown by noting that
+
+\[
+(A+D)^{2}\succeq D^{2}\implies D^{-2}\succeq(A+D)^{-2}
+\]
+
+\end{document}
