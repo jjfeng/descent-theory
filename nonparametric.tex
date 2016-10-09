@@ -1,0 +1,523 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage[landscape]{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsmath}
+\usepackage{babel}
+\begin{document}
+
+\title{Proofs for Smoothness of Non-Parametric Regression Models}
+
+\maketitle
+
+\section*{Intro}
+
+In this document, we consider nonparametric regression models $g$
+from function class $\mathcal{G}$. Throughout, we will suppose that
+the projection of the true model into the model space $\mathcal{G}$
+is $g^{*}$.
+
+We are interested in establishing inequalities of the form 
+\[
+\|\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(2)}\right)-\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(1)}\right)\|_{D}\le C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\]
+
+
+
+\subsubsection*{Document Outline}
+
+Let $D$ be some set of observed covariates (it could be the training
+and validation sets combined or just the validation set).
+
+We prove smoothness for two nonparametric regression examples:
+\begin{enumerate}
+\item Additive model
+\[
+\hat{g}\left(\cdot|\boldsymbol{\lambda}\right)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(g_{j})+\frac{w}{2}\|g_{j}\|_{D}^{2}\right)
+\]
+
+\item Multiple penalties for a single model
+\[
+\hat{g}\left(\cdot|\boldsymbol{\lambda}\right)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-g\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(g)+\frac{w}{2}\|g\|_{D}^{2}\right)
+\]
+
+
+\begin{enumerate}
+\item This regression problem is complicated and we may want to just leave
+it out. Depending on the situation, we get smoothness of the form
+\end{enumerate}
+
+\[
+\|\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(2)}\right)-\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(1)}\right)\|_{D}^{2}\le C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\]
+or
+\[
+\|\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(2)}\right)-\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(1)}\right)\|_{D}\le C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\]
+
+
+\end{enumerate}
+
+\section{Additive Model}
+
+Consider the problem 
+
+\[
+\mathcal{G}(T)=\left\{ \hat{g}\left(\cdot|\boldsymbol{\lambda}\right)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(g_{j})+\frac{w}{2}\|g_{j}\|_{D}^{2}\right)\right\} 
+\]
+
+
+where $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$.
+
+For all $j=1,...,J$, suppose the penalty functions $P_{j}$ are convex
+and twice-differentiable: For any functions $g,h$, the following
+second-derivative exists and the inequality holds: 
+\[
+\frac{\partial^{2}}{\partial m^{2}}P_{j}(g+mh)\ge0\forall j=1,..,J
+\]
+
+
+Let
+\[
+C=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}^{*}\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(g_{j}^{*})+\frac{w}{2}\|g_{j}^{*}\|_{D}^{2}\right)
+\]
+
+
+Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
+we have for all $j=1,...,J$
+
+\[
+\|\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\|_{D}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\lambda_{min}^{-1}w^{-1}
+\]
+
+
+
+\subsubsection*{Proof}
+
+For every $j=1,...,J$, let $h_{j}=\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})$.
+For notational convenient, let $\hat{g}_{1,j}(\cdot)=\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})$.
+
+Let the set of additive components with nonzero differences be denoted
+\[
+H_{nonzero}=\left\{ j:\|h_{j}\|_{D}>0\right\} 
+\]
+
+
+We consider the optimization problem restricted to the set of non-zero
+differences
+
+\[
+\hat{\boldsymbol{m}}(\boldsymbol{\lambda})=\left\{ \hat{m}_{j}(\boldsymbol{\lambda})\right\} _{j\in H_{nonzero}}=\arg\min_{m_{j}:j\in H_{nonzero}}\frac{1}{2}\|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\hat{g}_{1,j}+m_{j}h_{j})+\frac{w}{2}\|\hat{g}_{1,j}+m_{j}h_{j}\|_{D}^{2}\right)
+\]
+
+
+\textbf{1. Calculate $\nabla_{\lambda}\hat{m}_{j}(\lambda)$}
+
+By the gradient optimality conditions, the gradient of the objective
+with respect to $m_{\ell}$ for all $\ell\in H_{nonzero}$
+
+\begin{eqnarray*}
+ &  & \frac{\partial}{\partial m_{\ell}}\left[\frac{1}{2}\|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\hat{g}_{1,j}+m_{j}h_{j})+\frac{w}{2}\|\hat{g}_{1,j}+m_{j}h_{j}\|_{D}^{2}\right)\right]_{m=\hat{m}(\lambda)}\\
+ & = & \left.\left\langle y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right),h_{\ell}\right\rangle _{T}+\lambda_{\ell}\frac{\partial}{\partial m_{\ell}}P_{\ell}(\hat{g}_{1,\ell}+m_{\ell}h_{\ell})+\lambda_{\ell}w\langle h_{\ell},\hat{g}_{1,\ell}+m_{\ell}h_{\ell}\rangle_{D}\right|_{m=\hat{m}(\lambda)}\\
+ & = & 0
+\end{eqnarray*}
+
+
+Now we implicitly differentiate with respect to $\lambda_{k}$ for
+all $k\in H_{nonzero}$ to get 
+\begin{eqnarray*}
+ &  & \frac{\partial}{\partial\lambda_{k}}\left[\left\langle y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right),h_{\ell}\right\rangle _{T}+\lambda_{\ell}\frac{\partial}{\partial m_{\ell}}P_{\ell}(\hat{g}_{1,\ell}+m_{\ell}h_{\ell})+\lambda_{\ell}w\langle h_{\ell},\hat{g}_{1,\ell}+m_{\ell}h_{\ell}\rangle_{D}\right]_{m=\hat{m}(\lambda)}\\
+ & = & \left.\sum_{j=1}^{J}\left[\left\langle h_{j},h_{\ell}\right\rangle _{T}+1[\ell=j]\left(\lambda_{\ell}\frac{\partial^{2}}{\partial m_{\ell}^{2}}P_{\ell}(\hat{g}_{1,\ell}+m_{\ell}h_{\ell})+\lambda_{\ell}w\|h_{\ell}\|_{D}^{2}\right)\right]\frac{\partial\hat{m}_{j}(\lambda)}{\partial\lambda_{k}}+1\left[\ell=k\right]\left(\frac{\partial}{\partial m_{\ell}}P_{\ell}(\hat{g}_{1,\ell}+m_{\ell}h_{\ell})+w\langle h_{\ell},\hat{g}_{1,\ell}+m_{\ell}h_{\ell}\rangle_{D}\right)\right|_{m=\hat{m}(\lambda)}\\
+ & = & 0
+\end{eqnarray*}
+
+
+Define the following square matrices 
+\[
+S:S_{ij}=\langle h_{j},h_{\ell}\rangle_{T}\forall\ell,j\in H_{nonzero}
+\]
+\[
+D_{1}=diag\left(\left.\lambda_{\ell}\frac{\partial^{2}}{\partial m_{\ell}^{2}}P_{\ell}(\hat{g}_{1,\ell}+m_{\ell}h_{\ell})\right|_{m=\hat{m}(\lambda)}\forall\ell\in H_{nonzero}\right)
+\]
+
+
+\[
+D_{2}=diag\left(\lambda_{\ell}w\|h_{\ell}\|_{D}^{2}\forall\ell\in H_{nonzero}\right)
+\]
+
+
+\[
+D_{3}=diag\left(\left.\frac{\partial}{\partial m_{\ell}}P_{\ell}(\hat{g}_{1,\ell}+m_{\ell}h_{\ell})+w\langle h_{\ell},\hat{g}_{1,\ell}+m_{\ell}h_{\ell}\rangle_{D}\right|_{m=\hat{m}(\lambda)}\forall\ell\in H_{nonzero}\right)
+\]
+
+
+\[
+M:\mbox{ column }M_{j}=\nabla_{\lambda}\hat{m}_{j}(\lambda)\forall j\in H_{nonzero}
+\]
+
+
+From the implicit differentiation equations, we have the following
+system of equations: 
+\[
+M=D_{3}\left(S+D_{1}+D_{2}\right)^{-1}
+\]
+
+
+\textbf{2. We bound every diagonal element in $D_{3}$}:
+
+We first bound $\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|$
+for all $k\in H_{nonzero}$.
+
+Note that from the gradient optimality conditions, we have that
+
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)} & = & \left|\frac{1}{\lambda_{k}}\left\langle y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right),h_{k}\right\rangle _{T}+w\langle h_{k},\hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\rangle_{D}\right|\\
+ & \le & \frac{1}{\lambda_{min}}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}\|h_{k}\|_{T}+w\|h_{k}\|_{D}\left\Vert \hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\right\Vert _{D}\\
+ & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}+w\left\Vert \hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\right\Vert _{D}\right)\|h_{k}\|_{D}
+\end{eqnarray*}
+
+
+where the last line uses the fact that 
+\[
+n_{T}\|h_{k}\|_{T}^{2}\le n_{D}\|h_{k}\|_{D}^{2}\implies\|h_{k}\|_{T}\le\sqrt{\frac{n_{D}}{n_{T}}}\|h_{k}\|_{D}
+\]
+
+
+We can bound $\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}$
+using the basic inequality
+\begin{eqnarray*}
+\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\left\Vert \hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right\Vert _{D}^{2}\right) & \le & \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\|\hat{g}_{1,j}\|_{D}^{2}\right)\\
+ & = & \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\|\hat{g}_{1,j}\|_{D}^{2}\right)+\sum_{j=1}^{J}\left(\lambda_{j}-\lambda_{j}^{(1)}\right)\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\|\hat{g}_{1,j}\|_{D}^{2}\right)\\
+ & \le & \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}^{*}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(g_{j}^{*})+\frac{w}{2}\|g_{j}^{*}\|_{D}^{2}\right)+J\lambda_{max}\max_{j=1:J}\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\|\hat{g}_{1,j}\|_{D}^{2}\right)\\
+ & = & C+J\lambda_{max}\max_{j=1:J}\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\|\hat{g}_{1,j}\|_{D}^{2}\right)
+\end{eqnarray*}
+
+
+To bound $\max_{j=1:J}\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\|\hat{g}_{1,j}\|_{D}^{2}\right)$,
+we also use the basic inequality
+\begin{eqnarray*}
+\lambda_{min}\max_{j=1:J}\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\|\hat{g}_{1,j}\|_{D}^{2}\right) & \le & \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\hat{g}_{1,j})+\frac{w}{2}\|\hat{g}_{1,j}\|_{D}^{2}\right)\\
+ & \le & C
+\end{eqnarray*}
+
+
+Putting the two above inequalities together, we get
+\[
+\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}^{2}\le C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\implies\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}\le\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\]
+
+
+and 
+\[
+\lambda_{min}\frac{w}{2}\left\Vert \hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\right\Vert _{D}^{2}\le C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\implies\left\Vert \hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\right\Vert _{D}\le\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\]
+
+
+So 
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)} & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{k}\|_{D}
+\end{eqnarray*}
+
+
+Next we bound $\left|w\langle h_{k},g_{k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\rangle_{D}\right|$
+for all $k\in H_{nonzero}$. By Cauchy Schwarz
+\begin{eqnarray*}
+\left|w\langle h_{k},g_{k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\rangle_{D}\right| & \le & w\|h_{k}\|_{D}\|g_{k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\|_{D}\\
+ & \le & w\|h_{k}\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\end{eqnarray*}
+
+
+Define the matrix $D_{3,upper}$ which bounds the diagonal elements
+of $D_{3}$
+\[
+D_{3,upper}=\left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}diag\left(\|h_{k}\|_{D}\right)
+\]
+
+
+We know that $D_{3,upper}\succeq D_{3}$.
+
+\textbf{3. We bound the norm of $\nabla_{\lambda}\hat{m}_{k}(\lambda)$
+for all $k=1,...,J$.}
+
+Hence
+\begin{eqnarray*}
+\|\nabla_{\lambda}\hat{m}_{k}(\lambda)\| & = & \|Me_{k}\|\\
+ & = & \left\Vert D_{3}\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \\
+ & \le & \left\Vert D_{3,upper}\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \\
+ & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\max_{\ell=1:J}\|h_{\ell}\|_{D}\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \\
+ & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\max_{\ell=1:J}\|h_{\ell}\|_{D}\left\Vert D_{2}^{-1}e_{k}\right\Vert 
+\end{eqnarray*}
+
+
+Now let 
+\[
+\ell_{max}=\arg\max_{\ell}\|h_{\ell}\|_{D}
+\]
+
+
+Then for $k=\ell_{max}$ in the inequality above, we get 
+\begin{eqnarray*}
+\|\nabla_{\lambda}\hat{m}_{\ell_{max}}(\lambda)\| & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{\ell_{max}}\|_{D}\left\Vert D_{2}^{-1}e_{k}\right\Vert \\
+ & = & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{\ell_{max}}\|_{D}\lambda_{\ell_{max}}^{-1}w^{-1}\|h_{\ell_{max}}\|_{D}^{-2}\\
+ & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\lambda_{min}^{-1}w^{-1}\|h_{\ell_{max}}\|_{D}^{-1}
+\end{eqnarray*}
+
+
+\textbf{4. Apply the Mean Value Theorem}
+
+Since the training criterion is smooth, then $\hat{m}_{\ell_{max}}(\lambda)$
+is a continuous, differentiable function.
+
+By the MVT, we have that there exists an $\alpha\in(0,1)$ such that
+\begin{eqnarray*}
+\left|\hat{m}_{\ell_{max}}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{\ell_{max}}(\boldsymbol{\lambda}^{(1)})\right| & = & \left|\left\langle \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)},\nabla_{\lambda}\hat{m}_{\ell_{max}}(\boldsymbol{\lambda})\right\rangle _{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda}^{(1)}+(1-\alpha)\boldsymbol{\lambda}^{(2)}}\right|\\
+ & \le & \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\lambda_{min}^{-1}w^{-1}\|h_{\ell_{max}}\|_{D}^{-1}
+\end{eqnarray*}
+
+
+We know that $\hat{m}_{k}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{k}(\boldsymbol{\lambda}^{(1)})=\boldsymbol{1}$
+for all $k=1,..,J$. Rearranging the inequality above, we get
+\[
+\max_{j}\|\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\|_{D}=\|h_{\ell_{max}}\|_{D}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\lambda_{min}^{-1}w^{-1}
+\]
+
+
+
+\section{Multiple smooth penalties for a single model}
+
+Consider the problem 
+
+\[
+\mathcal{G}(T)=\left\{ \hat{g}\left(\cdot|\boldsymbol{\lambda}\right)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\left\Vert y-g\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}^{v_{j}}(g)+\frac{w}{2}\|g\|_{D}^{2}\right)\right\} 
+\]
+
+
+where $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$ and $v_{j}>1$
+for all $j-1,...,J$.
+
+For all $j=1,...,J$, suppose the penalty functions $P_{j}$ are convex
+and twice-differentiable: For any functions $g,h$, the following
+second-derivative exists and the inequality holds: 
+\[
+\frac{\partial^{2}}{\partial m^{2}}P_{j}(g+mh)\ge0\forall j=1,..,J
+\]
+
+
+Also, suppose that the penalty functions $P_{j}$ are semi-norms:
+for all functions $a,b$, the triangle inequality is satisfied
+\[
+P_{j}(a)+P_{j}(b)\ge P_{j}(a+b)
+\]
+
+
+For $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$ where $\|\boldsymbol{\lambda^{(1)}-\lambda^{(2)}}\|$
+is sufficiently small, we have
+
+\[
+\|\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})\|_{D}^{2}\le\|\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\|\left(w\sqrt{J}\lambda_{min}\right)^{-1}C_{0}
+\]
+
+
+where $C_{0}$ is a constant.
+
+
+\subsubsection*{Proof}
+
+Let $h=\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})$.
+For notational convenient, let $\hat{g}_{1}(\cdot)=\hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})$.
+Suppose $\|h\|_{D}>0$.
+
+We consider the optimization problem restricted to the set of non-zero
+differences
+
+\[
+\hat{m}(\boldsymbol{\lambda})=\arg\min_{m}\frac{1}{2}\left\Vert y-\left(\hat{g}_{1}+mh\right)\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}^{v_{j}}(\hat{g}_{1}+mh)+\frac{w}{2}\|\hat{g}_{1}+mh\|_{D}^{2}\right)
+\]
+
+
+\textbf{1. Calculate $\frac{\partial}{\partial\lambda}\hat{m}(\lambda)$}
+
+By the gradient optimality conditions, we have that
+
+\begin{eqnarray*}
+\left.\left\langle y-\left(\hat{g}_{1}+mh\right),h\right\rangle _{T}+\sum_{j=1}^{J}\lambda_{j}\left(\frac{\partial}{\partial m}P_{j}^{v_{j}}(\hat{g}_{1}+mh)+w\langle h,\hat{g}_{1}+mh\rangle_{D}\right)\right|_{m=\hat{m}(\lambda)} & = & 0
+\end{eqnarray*}
+
+
+Now we implicitly differentiate with respect to $\lambda_{k}$ to
+get 
+\begin{eqnarray*}
+ &  & \frac{\partial}{\partial\lambda_{k}}\left[\left.\left\langle y-\left(\hat{g}_{1}+mh\right),h\right\rangle _{T}+\sum_{j=1}^{J}\lambda_{j}\left(\frac{\partial}{\partial m}P_{j}^{v_{j}}(\hat{g}_{1}+mh)+w\langle h,\hat{g}_{1}+mh\rangle_{D}\right)\right|_{m=\hat{m}(\lambda)}\right]\\
+ & = & \left.\left[\|h\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(\frac{\partial^{2}}{\partial m^{2}}P_{j}^{v_{j}}(\hat{g}_{1}+mh)+w\|h\|_{D}^{2}\right)\right]_{m=\hat{m}(\lambda)}\frac{\partial\hat{m}(\lambda)}{\partial\lambda_{k}}+\left(\frac{\partial}{\partial m}P_{k}^{v_{k}}(\hat{g}_{1}+mh)+w\langle h,\hat{g}+mh\rangle_{D}\right)\right|_{m=\hat{m}(\lambda)}\\
+ & = & 0
+\end{eqnarray*}
+
+
+So 
+\[
+\frac{\partial\hat{m}(\lambda)}{\partial\lambda_{k}}=\left.-\left[\|h\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(\frac{\partial^{2}}{\partial m^{2}}P_{j}^{v_{j}}(\hat{g}_{1}+mh)+w\|h\|_{D}^{2}\right)\right]^{-1}\left(\frac{\partial}{\partial m}P_{k}^{v_{k}}(\hat{g}_{1}+mh)+w\langle h,\hat{g}+mh\rangle_{D}\right)\right|_{m=\hat{m}(\lambda)}
+\]
+
+
+\textbf{2. Bound $\frac{\partial\hat{m}(\lambda)}{\partial\lambda_{k}}$}
+
+The first multiplicand is bounded by 
+\[
+\left|\|h\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(\frac{\partial^{2}}{\partial m^{2}}P_{j}^{v_{j}}(\hat{g}_{1}+mh)+w\|h\|_{D}^{2}\right)\right|^{-1}\le\left(wJ\lambda_{min}\|h\|_{D}^{2}\right)^{-1}
+\]
+
+
+since the penalty functions are convex.
+
+By Lemma Semi-norm derivatives (Appendix), we have that since $P_{k}$
+is a semi-norm, then 
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial m}P_{j}(\hat{g}_{1}+mh)\right| & \le & P_{j}(h)\\
+ & = & P_{j}\left(\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})\right)\\
+ & \le & P_{j}\left(\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})\right)+P_{j}\left(\hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})\right)
+\end{eqnarray*}
+
+
+By the basic inequality, we know that
+\begin{eqnarray*}
+\lambda_{min}P_{j}\left(\hat{g}(\cdot|\boldsymbol{\lambda})\right) & \le & \frac{1}{2}\left\Vert y-g^{*}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}^{v_{j}}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)\\
+ & \le & C
+\end{eqnarray*}
+
+
+where
+\[
+C=\frac{1}{2}\left\Vert y-g^{*}\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}^{v_{j}}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)
+\]
+
+
+Therefore
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial m}P_{j}(\hat{g}_{1}+mh)\right| & \le & 2C/\lambda_{min}
+\end{eqnarray*}
+
+
+Also by the definition of $\hat{m}(\boldsymbol{\lambda})$,
+\begin{eqnarray*}
+\lambda_{min}\left(P_{k}^{v_{k}}(\hat{g}_{1}+\hat{m}(\boldsymbol{\lambda})h)+\frac{w}{2}\|\hat{g}+\hat{m}(\boldsymbol{\lambda})h\|_{D}^{2}\right) & \le & \frac{1}{2}\left\Vert y-\hat{g}_{1}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}^{v_{j}}(\hat{g}_{1})+\frac{w}{2}\|\hat{g}_{1}\|_{D}^{2}\right)\\
+ & = & \frac{1}{2}\left\Vert y-\hat{g}_{1}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}^{v_{j}}(\hat{g}_{1})+\frac{w}{2}\|\hat{g}_{1}\|_{D}^{2}\right)+\sum_{j=1}^{J}\left(\lambda_{j}-\lambda_{j}^{(1)}\right)\left(P_{j}^{v_{j}}(\hat{g}_{1})+\frac{w}{2}\|\hat{g}_{1}\|_{D}^{2}\right)\\
+ & \le & \frac{1}{2}\left\Vert y-g^{*}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}^{v_{j}}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)+J\lambda_{max}\max_{j}\left(P_{j}^{v_{j}}(\hat{g}_{1})+\frac{w}{2}\|\hat{g}_{1}\|_{D}^{2}\right)\\
+ & \le & C+J\lambda_{max}\max_{j}\left(P_{j}^{v_{j}}(\hat{g}_{1})+\frac{w}{2}\|\hat{g}_{1}\|_{D}^{2}\right)
+\end{eqnarray*}
+
+
+And by the definition of $\hat{g}_{1}$, 
+\[
+\lambda_{min}\max_{j}\left(P_{j}^{v_{j}}(\hat{g}_{1})+\frac{w}{2}\|\hat{g}_{1}\|_{D}^{2}\right)\le\frac{1}{2}\left\Vert y-g^{*}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}^{v_{j}}(g^{*})+\frac{w}{2}\|g^{*}\|_{D}^{2}\right)\le C
+\]
+
+
+Therefore
+\[
+\lambda_{min}P_{k}^{v_{k}}(\hat{g}_{1}+\hat{m}(\boldsymbol{\lambda})h)\le C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\implies P_{k}^{v_{k}-1}(\hat{g}_{1}+\hat{m}(\boldsymbol{\lambda})h)\le\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}
+\]
+
+
+and
+\[
+\lambda_{min}\frac{w}{2}\|\hat{g}+\hat{m}(\boldsymbol{\lambda})h\|_{D}^{2}\le C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\implies\|\hat{g}+\hat{m}(\boldsymbol{\lambda})h\|_{D}\le\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\]
+
+
+Hence
+\begin{eqnarray*}
+\left|\frac{\partial}{\partial m}P_{k}^{v_{k}}(\hat{g}_{1}+mh)+w\langle h,\hat{g}+mh\rangle_{D}\right| & \le & \left|\frac{\partial}{\partial m}P_{k}^{v_{k}}(\hat{g}_{1}+mh)\right|+w\|h\|_{D}\|\hat{g}+mh\|_{D}\\
+ & \le & \frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}+w\|h\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\end{eqnarray*}
+
+
+Therefore 
+\[
+\left|\frac{\partial\hat{m}(\boldsymbol{\lambda})}{\partial\lambda_{k}}\right|\le\left(wJ\lambda_{min}\|h\|_{D}^{2}\right)^{-1}\left[\frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}+w\|h\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\right]
+\]
+
+
+Therefore 
+\begin{eqnarray*}
+\left\Vert \nabla_{\lambda}\hat{m}(\boldsymbol{\lambda})\right\Vert  & \le & \sqrt{J}\left[\left(wJ\lambda_{min}\|h\|_{D}^{2}\right)^{-1}\left[\frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}+w\|h\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\right]\right]\\
+ & = & \left(w\sqrt{J}\lambda_{min}\|h\|_{D}^{2}\right)^{-1}\left[\frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}+w\|h\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\right]
+\end{eqnarray*}
+
+
+\textbf{3. Apply the Mean Value Theorem}
+
+Assuming that the penalty functions are smooth, then $\hat{m}(\boldsymbol{\lambda})$
+is continuous and differentiable. Then by the MVT, there is an $\alpha\in(0,1)$
+such that
+
+\begin{eqnarray*}
+\left|\hat{m}(\boldsymbol{\lambda}^{(2)})-\hat{m}(\boldsymbol{\lambda}^{(1)})\right| & = & \left\langle \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)},\left.\nabla_{\lambda}\hat{m}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda}^{(1)}+(1-\alpha)\boldsymbol{\lambda}^{(2)}}\right\rangle \\
+ & \le & \|\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\|\left\Vert \left.\nabla_{\lambda}\hat{m}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda}^{(1)}+(1-\alpha)\boldsymbol{\lambda}^{(2)}}\right\Vert \\
+ & \le & \|\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\|\left(w\sqrt{J}\lambda_{min}\|h\|_{D}^{2}\right)^{-1}\left[\frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}+w\|h\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\right]
+\end{eqnarray*}
+
+
+Since $\hat{m}(\boldsymbol{\lambda}^{(2)})-\hat{m}(\boldsymbol{\lambda}^{(1)})=1$,
+then we have
+\[
+\|h\|_{D}^{2}\le\|\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\|\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left[\frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}+w\|h\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\right]
+\]
+
+
+\textbf{Case 1:}
+
+Suppose $\frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}\ge w\|h\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}$. 
+
+Then 
+\[
+\|h\|_{D}^{2}\le\|\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\|\left(w\sqrt{J}\lambda_{min}\right)^{-1}\frac{4Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}
+\]
+
+
+\textbf{Case 2: }
+
+Suppose $\frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\right]^{(v_{k}-1)/v_{k}}\le w\|h\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}$. 
+
+\[
+\|h\|_{D}\le\|\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\|\left(\sqrt{J}\lambda_{min}\right)^{-1}2\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\]
+
+
+Unfortunately, for $\|\lambda^{(2)}-\lambda^{(1)}\|$ sufficiently
+small, then $\|h\|_{D}$ will be sufficiently small such that we will
+always be in Case 1.
+
+
+\section{Appendix}
+
+
+\subsubsection*{Lemma: Bounding the derivative of a semi-norm}
+
+Let $P$ be a semi-norm. Then
+
+\[
+\left|\frac{\partial}{\partial m}P(a+mb)\right|\le P(b)
+\]
+
+
+
+\subsubsection*{Proof}
+
+By triangle inequality, we know
+
+
+\subsubsection*{
+\[
+\left|P(a+mb)-P(a)\right|\le|m|P(b)
+\]
+}
+
+Therefore as we take $m\rightarrow0$, we have 
+\[
+\left|\frac{\partial}{\partial m}P(a+mb)\right|\le P(b)
+\]
+
+\end{document}

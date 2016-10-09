@@ -55,7 +55,7 @@ for two parametric regression examples:
 
 \item Additive model
 \[
-\hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}_{j})+\frac{w}{2}\|\boldsymbol{\theta}_{j}\|_{2}^{2}\right)
+\hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}_{j})+\frac{w}{2}\|\boldsymbol{\theta}_{j}\|_{2}^{2}\right)
 \]
 Then we extend these results to the situation where the penalty functions
 are non-smooth.
@@ -96,7 +96,7 @@ we have
 
 Let 
 \[
-C=\frac{1}{2}\|\boldsymbol{\epsilon}\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
+C=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
 \]
 
 
@@ -111,7 +111,7 @@ we have
 \subsubsection*{Proof}
 
 Consider any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$.
-Let $\boldsymbol{\beta}=\boldsymbol{\theta_{\lambda^{(1)}}}-\boldsymbol{\theta_{\lambda^{(2)}}}$.
+Let $\boldsymbol{\beta}=\hat{\boldsymbol{\theta}}_{\lambda^{(2)}}-\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}$.
 
 Define 
 \[
@@ -121,6 +121,9 @@ Define
 
 By definition, we know that $\hat{m}_{\beta}(\boldsymbol{\lambda^{(2)}})=1$
 and $\hat{m}_{\beta}(\boldsymbol{\lambda^{(1)}})=0$.
+
+\textbf{1. We calculate $\nabla_{\lambda}\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})$
+using the implicit differentiation trick.}
 
 By the KKT conditions, we have 
 \[
@@ -167,6 +170,8 @@ is the $J$-dimensional vector
 \end{array}\right]
 \]
 
+
+\textbf{2. Bound $\|\nabla_{\lambda}\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})\|$}
 
 \textbf{Bounding the first multiplicand:}
 
@@ -277,6 +282,8 @@ We can sum up these bounds to bound the norm of the gradient $\nabla_{\lambda}\h
 \end{eqnarray*}
 
 
+\textbf{3. Apply Mean Value Theorem}
+
 Since the training criterion is smooth, then $\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})$
 is continuous and differentiable over the line segment $\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} $.
 Therefore by MVT, there is some $\alpha\in(0,1)$ such that 
@@ -300,15 +307,15 @@ Rearranging, we get
 The function class of interest are the minimizers of the penalized
 least squares criterion: 
 \[
-\mathcal{G}(T)=\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\boldsymbol{\theta}_{j})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}_{j})+\frac{w}{2}\|\boldsymbol{\theta}_{j}\|_{2}^{2}\right):\boldsymbol{\lambda}\in\Lambda\right\} 
+\mathcal{G}(T)=\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}_{j})+\frac{w}{2}\|\boldsymbol{\theta}_{j}\|_{2}^{2}\right):\boldsymbol{\lambda}\in\Lambda\right\} 
 \]
 
 
 where $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$.
 
-Suppose that the penalties and the function $g(x|\boldsymbol{\theta})$
-is convex wrt $\boldsymbol{\theta}$: $\nabla_{\theta}P_{j}(\boldsymbol{\theta})$
-for all $j=1,...,J$ and $\nabla_{\theta}g(x|\boldsymbol{\theta}+m\boldsymbol{\beta})$
+Suppose that the penalties and the function $g_{j}(x|\boldsymbol{\theta}_{j})$
+is convex wrt $\boldsymbol{\theta}_{j}$: $\nabla_{\boldsymbol{\theta}_{j}}^{2}P_{j}(\boldsymbol{\theta}_{j})$
+for all $j=1,...,J$ and $\nabla_{\boldsymbol{\theta}_{j}}^{2}g_{j}(x|\boldsymbol{\theta}_{j})$
 are PSD matrices.
 
 Suppose there is some constant $K>0$ such that for all $j=1,...,J$
@@ -323,7 +330,7 @@ and all $\boldsymbol{\beta},\boldsymbol{\theta}$,
 
 Let 
 \[
-C=\frac{1}{2}\|\boldsymbol{\epsilon}\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
+C=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j}^{*})\right\Vert +\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}_{j}^{*})+\frac{w}{2}\|\boldsymbol{\theta}_{j}^{*}\|_{2}^{2}\right)
 \]
 
 
@@ -338,12 +345,12 @@ we have for all $j=1,...,J$
 \subsubsection*{Proof}
 
 Consider any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda$.
-Let $\boldsymbol{\beta}_{j}=\boldsymbol{\theta}_{\lambda^{(1)},j}-\boldsymbol{\theta}_{\lambda^{(2)},j}$
+Let $\boldsymbol{\beta}_{j}=\hat{\boldsymbol{\theta}}_{\lambda^{(2)},j}-\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}$
 for all $j=1,...,J$.
 
 Define 
 \[
-\boldsymbol{\hat{m}}(\boldsymbol{\lambda})=\arg\min_{\boldsymbol{m}}\frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\|_{2}^{2}\right)
+\boldsymbol{\hat{m}}(\boldsymbol{\lambda})=\arg\min_{\boldsymbol{m}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\|_{2}^{2}\right)
 \]
 
 
@@ -355,7 +362,7 @@ using the implicit differentiation trick.}
 
 By the KKT conditions, we have for all $j=1:J$ 
 \[
-\left.\frac{\partial}{\partial m_{j}}\left(\frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\|_{T}^{2}+\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+\lambda_{j}w\langle\boldsymbol{\beta}_{j},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\rangle\right|_{\boldsymbol{m}=\boldsymbol{\hat{m}}(\boldsymbol{\lambda})}=0
+\left.\frac{\partial}{\partial m_{j}}\left(\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+\lambda_{j}w\langle\boldsymbol{\beta}_{j},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\rangle\right|_{\boldsymbol{m}=\boldsymbol{\hat{m}}(\boldsymbol{\lambda})}=0
 \]
 
 
@@ -363,21 +370,20 @@ Now we implicitly differentiate with respect to $\lambda_{\ell}$
 for $\ell=1,2,...,J$
 
 \[
-\frac{\partial}{\partial\lambda_{\ell}}\left\{ \left.\left[\frac{\partial}{\partial m_{j}}\left(\frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\|_{T}^{2}+\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+\lambda_{j}w\langle\boldsymbol{\beta}_{j},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\rangle\right]\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\right\} =0
+\frac{\partial}{\partial\lambda_{\ell}}\left\{ \left.\left[\frac{\partial}{\partial m_{j}}\left(\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+\lambda_{j}w\langle\boldsymbol{\beta}_{j},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\rangle\right]\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\right\} =0
 \]
 
 
 By the product rule and chain rule, we have 
 
 \[
-\left.\left\{ \left[\sum_{k=1}^{J}\left[\frac{\partial^{2}}{\partial m_{k}\partial m_{j}}\left(\frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\|_{T}^{2}+1[k=j]\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+1[k=j]\lambda_{j}w\|\boldsymbol{\beta}_{j}\|_{2}^{2}\right]\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{k}(\boldsymbol{\lambda})\right]+1[j=\ell]\left(\frac{\partial}{\partial m}_{\ell}P_{\ell}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},\ell}+m_{\ell}\boldsymbol{\beta}_{\ell})+w\langle\boldsymbol{\beta}_{\ell},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},\ell}+m_{\ell}\boldsymbol{\beta}_{\ell}\rangle\right)\right\} \right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}=0
+\left.\left\{ \left[\sum_{k=1}^{J}\left[\frac{\partial^{2}}{\partial m_{k}\partial m_{j}}\left(\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+1[k=j]\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+1[k=j]\lambda_{j}w\|\boldsymbol{\beta}_{j}\|_{2}^{2}\right]\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{k}(\boldsymbol{\lambda})\right]+1[j=\ell]\left(\frac{\partial}{\partial m}_{\ell}P_{\ell}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},\ell}+m_{\ell}\boldsymbol{\beta}_{\ell})+w\langle\boldsymbol{\beta}_{\ell},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},\ell}+m_{\ell}\boldsymbol{\beta}_{\ell}\rangle\right)\right\} \right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}=0
 \]
 
 
 Define the following matrices 
 \begin{eqnarray*}
-S:S_{jk} & = & \left.\frac{\partial^{2}}{\partial m_{k}\partial m_{j}}\frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\|_{T}^{2}\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\\
- & = & \sum_{i=1}^{T}\left[\frac{\partial}{\partial m_{k}}g(x|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})\right]_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\left[\frac{\partial}{\partial m_{j}}g(x|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right]_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}
+S:S_{jk} & = & \left.\frac{\partial^{2}}{\partial m_{k}\partial m_{j}}\frac{1}{2}\|y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\|_{T}^{2}\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}
 \end{eqnarray*}
 
 
@@ -409,8 +415,12 @@ M=-D_{3}\left(S+D_{1}+D_{2}\right)^{-1}
 \]
 
 
-$S$ and $D_{1}$ are PSD matrices since we've assumed that $g$ and
-the penalty functions are convex.
+$S$ is a PSD matrix since the sum of convex functions is convex (so
+sum of $g_{j}$ is convex) and the composition of convex functions
+is convex (so the composition of the mean squared error and the sum
+of $g_{j}$ is convex).
+
+$D_{1}$ is a PSD matrix since the penalty functions are convex.
 
 \textbf{2. We bound every diagonal element in $D_{3}$}:
 
@@ -512,6 +522,8 @@ If we consider (8) for $k=\ell_{max}$, then
  & = & \left(K+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)\|\boldsymbol{\beta}_{\ell_{max}}\|^{-1}\lambda_{min}^{-1}w^{-1}
 \end{eqnarray*}
 
+
+\textbf{4. Apply the Mean Value Theorem}
 
 Since the training criterion is smooth, then $\hat{m}_{\ell_{max}}(\lambda)$
 is a continuous, differentiable function.
