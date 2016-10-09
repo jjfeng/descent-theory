@@ -286,7 +286,8 @@ lines(
 legend(50,0.2,c("Training/Validation Split", "Oracle"),lty=c(1,1), lwd=c(2.5,2.5), col=c("red","green"))
 # dev.off()
 
-pdf('figures/validation_size_loss_diff.pdf', width=7, height=5)
+pdf('figures/validation_size_loss_diff.pdf', width=10, height=6)
+par(mar=c(5,5,1,1))
 plot(
     cv_to_oracle_compare_w$n,
     cv_to_oracle_compare_w$loss_diff,
@@ -295,9 +296,29 @@ plot(
     ylab="Validation Loss Diff (log-scaled)",
     xlab="Validation Set Size (log-scaled)",
     xaxt="n",
-    log="xy"
+    log="xy",
+    cex.axis=1.25,
+    cex.lab=1.25
 )
 axis(1, at = cv_to_oracle_compare_w$n, las=2)
+dev.off()
+
+pdf('figures/validation_size_loss_diff_poster.pdf', width=18, height=7)
+par(mar=c(6,6,1,1), oma=c(0,0,0,0))
+plot(
+    cv_to_oracle_compare_w$n,
+    cv_to_oracle_compare_w$loss_diff,
+    type = "l",
+    lwd=3,
+    # ylim = c(0.1, 0.2),
+    ylab="Validation Loss Diff",
+    xlab="Validation Set Size",
+    log="xy",
+    xaxt="n",
+    cex.axis=2,
+    cex.lab=3
+)
+axis(1, at = cv_to_oracle_compare_w$n, las=0, cex.axis=2)
 dev.off()
 
 pdf('figures/qqplot.pdf', width=5, height=5)
