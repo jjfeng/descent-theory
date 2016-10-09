@@ -6,6 +6,7 @@
 \usepackage[landscape]{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \usepackage{amsmath}
+\usepackage{esint}
 \usepackage{babel}
 \begin{document}
 
@@ -489,6 +490,27 @@ Suppose $\frac{2Cv_{k}}{\lambda_{min}}\left[\frac{C}{\lambda_{min}}\left(1+\frac
 Unfortunately, for $\|\lambda^{(2)}-\lambda^{(1)}\|$ sufficiently
 small, then $\|h\|_{D}$ will be sufficiently small such that we will
 always be in Case 1.
+
+
+\section{Examples}
+
+Sobolev satisfies the conditions in Section 2
+\[
+\arg\min_{g\in\mathcal{G}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(g_{j})+\frac{w}{2}\|g_{j}\|_{D}^{2}\right)
+\]
+
+
+where 
+\[
+P_{j}(g_{j})=\int\left(g_{j}^{(r_{j})}(x)\right)^{2}dx
+\]
+
+
+Note that the Sobolev penalty is convex since 
+\[
+\frac{\partial^{2}}{\partial m^{2}}P_{j}(g+mh)=P_{j}(h)\ge0
+\]
+
 
 
 \section{Appendix}
