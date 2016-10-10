@@ -96,7 +96,7 @@ Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{
 \end{eqnarray*}
 
 
-for a constant $c$.
+for a constant $c>0$.
 
 
 \subsubsection*{Proof}
@@ -179,9 +179,17 @@ $C,\kappa$ such that for any $u>0$, we have for all $\lambda\in\Lambda$
 \]
 
 
-Then there are constants $c,c_{1},c_{2}$ s.t. with high probability,
+Then there are universal constants $c_{1},c_{2}>0$ and constants
+$c_{3},c_{4}>0$ such that
+
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right) & \le & c_{3}\exp\left(-\frac{n_{V}\delta^{4}}{c_{3}^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c_{3}\exp\left(-\frac{n_{V}\delta^{2}}{c_{3}^{2}}\right)+Pr\left(\|\epsilon\|_{T}\le2\sigma\right)
+\end{eqnarray*}
+
+
+where 
 \[
-\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+c_{1}\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}+c_{4}}{n_{V}}\right)^{1/2}+c_{2}\sqrt{\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}+c_{4}}{n_{V}}\right)^{1/2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}
+\delta=c_{1}\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}+c_{4}}{n_{V}}\right)^{1/2}+c_{2}\sqrt{\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}+c_{4}}{n_{V}}\right)^{1/2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}
 \]
 
 
@@ -238,11 +246,11 @@ The third inequality follows from concavity of the square root.
 By Theorem 3, there is a constant $C_{0}>0$ such that the oracle
 inequality 
 \[
-\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+\delta
+\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta
 \]
 
 
-holds with high probability for all $\delta>0$ such that 
+holds with probability $p(\delta)$ for all $\delta>0$ such that
 \begin{equation}
 \sqrt{n_{V}}\delta^{2}\ge2CR\left(\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(n_{V}^{t_{max}+\kappa}\right)+J\log\frac{1}{R}\right]^{1/2}\vee1\right)
 \end{equation}
@@ -300,10 +308,10 @@ for $\delta$ such that
 \textbf{3. Re-writing the condition on $\delta$ to be more intuitive}
 
 For a more intuitive understanding of this lower bound for $\delta$,
-we can use a slightly bigger lower bound: 
-\[
+we can apply Theorem 3 with a slightly bigger lower bound: 
+\begin{equation}
 \delta\ge c_{1}\frac{K}{\sqrt{n_{V}}}+c_{2}\sqrt{\frac{K}{n_{V}}\omega}
-\]
+\end{equation}
 
 
 for universal constants $c_{1}=1+\frac{1}{\sqrt{2}}$ and $c_{2}=2\sqrt{2}$.
@@ -323,16 +331,6 @@ Case 2. $K<4\omega\sqrt{n_{V}}$
  & \le & \frac{K}{2\sqrt{n_{V}}}+\sqrt{\frac{8K}{\sqrt{n_{V}}}\omega}
 \end{eqnarray*}
 
-
-Plug this inequality back into (1) to gives us the final result.
-
-Theorem 3 gives us that with high probability 
-\[
-\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+c_{1}\frac{2C_{0}\left(\left[c+J\left(1+t_{max}+\kappa\right)\log n_{V}\right]^{1/2}\right)\vee1}{\sqrt{n_{V}}}+c_{2}\sqrt{\frac{2C_{0}\left(\left[c+J\left(1+t_{max}+\kappa\right)\log n_{V}\right]^{1/2}\right)\vee1}{n_{V}}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}
-\]
-
-
-where $c=\log\frac{1}{C_{J}}+J(1+\log4+\log8C)$
 
 
 \section{Appendix}
