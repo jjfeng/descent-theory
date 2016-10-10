@@ -36,4 +36,45 @@ PSD. This can be shown by noting that
 (A+D)^{2}\succeq D^{2}\implies D^{-2}\succeq(A+D)^{-2}
 \]
 
+
+
+\subsection*{Lemma: Lipschitz Definition Equivalence}
+
+The following two conditions are equivalent:
+\begin{enumerate}
+\item For all $u>0$ and any $\lambda^{(1)},\lambda^{(2)}$ that satisfy
+\[
+\|\lambda^{(1)}-\lambda^{(2)}\|\le Cu
+\]
+
+\end{enumerate}
+then 
+\[
+\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{D}\le u
+\]
+
+\begin{enumerate}
+\item $\hat{g}(\cdot|\lambda)$ is $1/C$-Lipschitz in $\lambda$: 
+\[
+\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{D}\le\frac{1}{C}\|\lambda^{(1)}-\lambda^{(2)}\|
+\]
+
+\end{enumerate}
+
+\subsubsection*{Proof}
+
+It is clear that Condition 2 implies Condition 1. 
+
+To show Condition 1 implies Condition 2, suppose for any $\lambda^{(1)},\lambda^{(2)}$,
+we have 
+\[
+\|\lambda^{(1)}-\lambda^{(2)}\|=d=C\frac{d}{C}
+\]
+
+
+Then 
+\[
+\|\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})\|_{D}\le\frac{d}{C}=\frac{1}{C}\|\lambda^{(1)}-\lambda^{(2)}\|
+\]
+
 \end{document}
