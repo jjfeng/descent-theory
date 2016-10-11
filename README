@@ -1,0 +1,7 @@
+* cv_proof.pdf : The proof for modified averaged version of CV using Mitchell’s proof
+* nonparametric.pdf : The proof for the smoothness of nonparametric regression models
+* parametric.pdf : The proof for the smoothness of parametric regression models.
+* proof_utils.pdf: Small little proofs that were utilized for more than two pdfs. Also just random proofs Jean might have done that I decided to keep handy.
+* ridge_perturb.pdf: A proof that the ridge perturbation doesn’t change the fitted model very much if we are in a parametric setting with a strongly convex training loss.
+* theorem1_proof.pdf : The proof for Training/Validation split.
+
