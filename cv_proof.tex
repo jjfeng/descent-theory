@@ -3,104 +3,216 @@
 \documentclass[english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
-\usepackage{geometry}
+\usepackage[landscape]{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{mathtools}
+\usepackage{amsbsy}
 \usepackage{esint}
 \usepackage{babel}
 \begin{document}
 
-\subsubsection*{CV Proof: Mitchell's Thrm}
+\title{Almost-Cross-Validation Theorem}
 
-Consider the CV problem with 
+\maketitle
+We are interested in bounding the error of the selected model when
+tuning penalty parameters by a ``modified averaged version of cross-validation''.
+Our result is an application of Mitchell's result to penalized regression
+problems where the fitted functions are smooth with respect to the
+penalty parameters.
+
+Suppose that the data is generated from the model
 \[
-\hat{\lambda}=\arg\min_{\lambda}\sum_{k=1}^{K}\|y-\hat{g}_{\lambda}(\cdot|D_{-k})\|_{k}^{2}
+y=g^{*}(x)+\epsilon
 \]
 
 
-We consider the behavior of 
+Suppose the errors are independent and bounded ($\|\epsilon\|_{\infty}<\infty$
+).
+
+The penalized regression model fitted on dataset $D$ is denoted
 \[
-\hat{g}_{MCV}=\sum_{k=1}^{K}\hat{g}_{\lambda}(\cdot|D_{-k})
+\hat{g}_{D}(\cdot|\boldsymbol{\lambda})=\arg\min_{g\in\mathcal{G}}L_{D}(g|\boldsymbol{\lambda})
 \]
 
 
-and its generalization error 
+Split data $D$ into $K$ folds, where each fold is $D_{k}$ and $D_{-k}=D\backslash D_{k}$.
+Suppose $D$ has size $n$, $D_{k}$ all have size $n_{V}$, and $D_{-k}$
+all have size $n_{T}$.
+
+We select penalty parameters such that 
+\[
+\hat{\boldsymbol{\lambda}}=\arg\min_{\lambda}\sum_{k=1}^{K}\|y-\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda})\|_{k}^{2}
+\]
+
+
+We consider the behavior of the ``modified averaged version of cross-validation''
+\[
+\hat{g}_{MCV}(\cdot|D)=\frac{1}{K}\sum_{k=1}^{K}\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda})
+\]
+
+
+Under sufficient entropy conditions, the error of the selected model
+will converge to the error of the oracle. 
+
+We are interested in bounding its generalization error 
 \[
 E_{D}\|\hat{g}_{MCV}(\cdot|D)-g^{*}\|^{2}=E_{D}\left[\int\left(\hat{g}_{MCV}(x|D)-g^{*}(x)\right)^{2}d\mu(x)\right]
 \]
 
 
-We will assume that $\sup_{g\in\mathcal{G}}\|g\|_{\infty}\le G$,
-so Assumption A.1 and A.2 are satisfied.
 
-Suppose the errors are bounded ($\|\epsilon\|_{\infty}<\infty$ ).
+\section{Theorem 2}
 
-Suppose we can show 
+We will assume that $\sup_{g\in\mathcal{G}}\|g\|_{\infty}\le G$.
+
+Suppose that for all $k=1,...,K$, the following smoothness condition
+holds: 
 \[
-\|g_{\lambda_{1}}-g_{\lambda_{2}}\|_{\infty}\le\left|\lambda_{1}-\lambda_{2}\right|n^{\kappa}C
+\|\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda}_{1})-\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda}_{2})\|_{\infty}\le Cn^{\kappa}\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
 \]
 
 
-So we get that
+Then for all $a>0$,
 \[
-E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right]\le(1+a)E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\tilde{\lambda}}(\cdot|D_{-k})\|^{2}\right]+c_{a}J^{2}\max_{k=1:K}\frac{\left(\log n\right)^{2}}{n_{k}}
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c_{a}}{n_{V}}\left[c_{1}\log n_{T}+c_{2}J\log n_{V}+c_{3}\right]
 \]
 
+
+where $c_{1},c_{2},c_{3},c_{a}$ are constants.
 
 
 \subsubsection*{Proof}
 
-First note that the assumption A.2 is satisfied: 
-\begin{eqnarray*}
-\int\left(g^{*}(x)-g_{\lambda}(x|D_{0})\right)^{4}d\mu(x) & \le & \|\left(g^{*}-g_{\lambda}\right)^{2}\|_{1}\|\left(g^{*}-g_{\lambda}\right)^{2}\|_{\infty}\\
- & \le & 4G^{2}\|g^{*}-g_{\lambda}\|_{2}^{2}
-\end{eqnarray*}
-
-
-Let 
+We apply Theorem 3.5 in Mitchell's paper. We consider the loss function
+$Q(x,g)=\left(g(x)-g^{*}(x)\right)^{2}$. Clearly $Q(x,g^{*})=0$.
+We will use the set of statistics 
 \[
-\mathcal{Q}(T)=\left\{ q_{\lambda}(x,y)=(g^{*}-\hat{g}_{\lambda})^{2}:\lambda\in\Lambda\right\} 
+\mathcal{G}(T)=\left\{ \hat{g}_{T}(\cdot|\boldsymbol{\lambda})\right\} 
 \]
 
 
-To compute the upper bound, we need the $\|\cdot\|_{\psi_{1}}$ and
-$\|\cdot\|_{L_{2}}$ entropy of the function class 
+where $T$ is some training data.
 
+\textbf{1. Establish Assumptions A.1 and A.2 are satisfied:}
+
+Theorem 3.5 relies on assumption A.1 and A.2 to be satisfied. 
+
+Assumption A.1 states that the Orlicz norm with $\psi_{1}=\exp(x)-1$
+is bounded for some constant $K_{0}$:
 \[
-\mathcal{Q}_{d}^{L_{2}}(T)=\left\{ q\in\mathcal{Q}(T):\|Q(Z)\|_{2}\le\sqrt{d}\right\} 
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{\psi_{1}}}\le K_{0}
 \]
 
 
-From our assumptions, we note that 
+where 
+\[
+\|f\|_{\psi_{1}}=\inf\left\{ C>0:E\psi(|f|/C)\le1\right\} 
+\]
+
+
+Since we have assumed that $\|g\|_{\infty}\le G$, then by Lemma Orlicz-norm-properties
+(see Appendix)
+\[
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{\psi_{1}}}\le2\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{\infty}\le8G^{2}
+\]
+
+
+Assumption A.2 states that
+\[
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{2}}\le K_{1}\|\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{L_{2}}
+\]
+
+
+To see that this is satisfied, note that 
 \begin{eqnarray*}
-\|q_{\lambda_{1}}-q_{\lambda_{2}}\|_{\psi_{1}} & = & \|(g^{*}-g_{\lambda_{1}})^{2}-(g^{*}-g_{\lambda_{2}})^{2}\|_{\psi_{1}}\\
- & = & \|(g_{\lambda_{1}}-g_{\lambda_{2}})(2g^{*}-g_{\lambda_{1}}-g_{\lambda_{2}})\|_{\psi_{1}}\\
- & \le & \|g_{\lambda_{1}}-g_{\lambda_{2}}\|_{\infty}\|2g^{*}-g_{\lambda_{1}}-g_{\lambda_{2}}\|_{\infty}\\
- & \le & \left|\lambda_{1}-\lambda_{2}\right|4Cn^{\kappa}G
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{2}}^{2} & = & \int\left(g^{*}(x)-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{4}d\mu(x)\\
+ & \le & \left\Vert \left(g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{2}\right\Vert _{L_{1}}\left\Vert \left(g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{2}\right\Vert _{\infty}\\
+ & \le & 4G^{2}\left\Vert g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right\Vert _{L_{2}}^{2}
 \end{eqnarray*}
 
 
-and similarly for $\|\cdot\|_{L_{2}}$ (we're using a loose bound
-for $\|\cdot\|_{L_{2}}$ since calculating its inverse/convex conjugate
-is difficult).
+\textbf{2. Calculate the $L_{2}$ and $\psi_{1}$ entropies}
 
-Hence (for a different constant $\kappa$)
+Theorem 3.5 requires calculating the entropies of the excess loss
+functions 
+\[
+\mathcal{Q}(T)=\left\{ Q(x|\boldsymbol{\lambda})=\left(\hat{g}_{T}(x|\boldsymbol{\lambda})-g^{*}(x)\right)^{2}:\lambda\in\Lambda\right\} 
+\]
+
+
+where $T$ is any training dataset.
+
+We are interested in calculating the $\|\cdot\|_{\psi_{1}}$ and $\|\cdot\|_{L_{2}}$
+entropy of the function class 
+\[
+\mathcal{Q}_{d}^{L_{2}}(T)=\left\{ Q\in\mathcal{Q}(T):\|Q\|_{L_{2}}\le\sqrt{d}\right\} 
+\]
+
+
+To bound these two entropies, we'll actually bound $H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\infty})$
+since
+\[
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le H(u/2,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\infty})
+\]
+
+
+and
+\[
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\infty})
+\]
+
+
+We show that the excess log functions $Q(x|\boldsymbol{\lambda})$
+are smoothly parametric in $\boldsymbol{\lambda}$:
+
+\begin{eqnarray*}
+\left\Vert Q(x|\boldsymbol{\lambda}_{1})-Q(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty} & = & \left\Vert \left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-g^{*}(x)\right)^{2}-\left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})-g^{*}(x)\right)^{2}\right\Vert _{\infty}\\
+ & = & \left\Vert \left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right)\left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})+\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})-2g^{*}(x)\right)\right\Vert _{\infty}\\
+ & \le & \left\Vert \hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\left\Vert \hat{g}_{T}(x|\boldsymbol{\lambda}_{1})+\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})-2g^{*}(x)\right\Vert _{\infty}
+\end{eqnarray*}
+
+
+Under the assumption that
+\[
+\left\Vert \hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\le Cn^{\kappa}\left\Vert \boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\right\Vert 
+\]
+
+
+then
+\[
+\left\Vert Q(x|\boldsymbol{\lambda}_{1})-Q(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\le4GCn^{\kappa}\left\Vert \boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\right\Vert 
+\]
+
+
+Hence
+
+\begin{eqnarray*}
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\infty}) & \le & H\left(\frac{u}{4GCn^{\kappa}},\Lambda,\|\cdot\|_{2}\right)\\
+ & \le & \log\left[\frac{1}{C_{J}}\left(\frac{16GCn^{\kappa}\lambda_{max}+2u}{u}\right)^{J}\right]
+\end{eqnarray*}
+
+
+Hence
 
 \[
-H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le\log\left[\frac{1}{C_{J}}\left(\frac{32GCn^{\kappa}\lambda_{max}+2u}{u}\right)^{J}\right]
 \]
 
 
 and
 
 \[
-H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le\log\left[\frac{1}{C_{J}}\left(\frac{16GCn^{\kappa}\lambda_{max}+2u}{u}\right)^{J}\right]
 \]
 
 
 We calculate each component of the complexity term $J(d)$: 
 \begin{eqnarray*}
-\gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}}) & = & \int_{0}^{G}H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})du\\
- & = & JG\left(1+\log(4Cn^{\kappa}G)\right)
+\gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}}) & \le & \int_{0}^{2G}H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})du\\
+ & = & \int_{0}^{2G}\log\left[\frac{1}{C_{J}}\left(\frac{32GCn^{\kappa}\lambda_{max}+2u}{u}\right)^{J}\right]du\\
+ & = & 2G\int_{0}^{1}\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GCn^{\kappa}\lambda_{max}+4Gv}{2Gv}\right)dv\\
+ & \le & 2G\left[\int_{0}^{1}\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32Cn^{\kappa}\lambda_{max}}{v}\right)+J\log4dv\right]\\
+ & \le & 2G\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32Cn^{\kappa}\lambda_{max}\right)\right)\right]
 \end{eqnarray*}
 
 
@@ -108,42 +220,169 @@ and
 
 \begin{eqnarray*}
 \gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}}) & = & \int_{0}^{\sqrt{d}}\left[H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\right]^{1/2}du\\
- & = & \sqrt{d}\int_{0}^{1}\left[J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)\right]^{1/2}du\\
- & \le & \sqrt{d}\left[\int_{0}^{1}J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)du\right]^{1/2}\\
- & = & \sqrt{d}\left[J\left(1+\log(4Cn^{\kappa}G)\right)\right]^{1/2}
+ & = & \sqrt{d}\int_{0}^{1}\left(\log\left[\frac{1}{C_{J}}\left(\frac{16GCn^{\kappa}\lambda_{max}+2\sqrt{d}v}{\sqrt{d}v}\right)^{J}\right]\right)^{1/2}dv\\
+ & \le & \sqrt{d}\left[\int_{0}^{1}\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GCn^{\kappa}\lambda_{max}}{\sqrt{d}}\right)+J\log\frac{1}{u}+J\log4du\right]^{1/2}\\
+ & = & \sqrt{d}\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(\frac{32GCn^{\kappa}\lambda_{max}}{\sqrt{d}}\right)\right)\right]^{1/2}
 \end{eqnarray*}
 
 
-So we can define 
-\begin{eqnarray*}
-J(d) & \equiv & J\left(1+\log(4Cn^{\kappa}G)\right)\left[\sqrt{d}+\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\right]\\
- & \ge & \sqrt{d}\left[J\left(1+\log(4Cn^{\kappa}G)\right)\right]^{1/2}+\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)JG\left(1+\log(4Cn^{\kappa}G)\right)
-\end{eqnarray*}
+\textbf{3. Apply Theorem 3.5}
+
+Now we must select an increasing function $J$ such that $J^{-1}$
+is strictly convex and
+
+\[
+J(d)\ge\gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})+\frac{\left(\log n_{T}\right)\gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})}{\sqrt{n_{V}}}\forall d\ge d_{min}
+\]
+
+
+Let us choose $d_{min}=1/n_{V}$. Then note that 
+\[
+\gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le\sqrt{d}\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32GCn^{\kappa}\sqrt{n_{V}}\lambda_{max}\right)\right)\right]^{1/2}
+\]
+
+
+Then let 
+\[
+K_{n,1}=\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32GCn^{\kappa}\sqrt{n_{V}}\lambda_{max}\right)\right)\right]^{1/2}
+\]
+
+
+and
+\[
+K_{n,2}=\frac{\left(\log n_{T}\right)2G\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32Cn^{\kappa}\lambda_{max}\right)\right)\right]}{\sqrt{n_{V}}}
+\]
+
+
+We define
+
+\[
+J(d)\coloneqq\sqrt{d}K_{n,1}+K_{n,2}
+\]
  
 
 Then$J^{-1}(b)$ is
 \[
-J^{-1}(b)=\left(\frac{b}{J\left(1+\log(4Cn^{\kappa}G)\right)}-\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\right)^{2}
+J^{-1}(b)=\left(\frac{b-K_{n,2}}{K_{n,1}}\right)^{2}
 \]
 
 
 The convex conjugate of $J^{-1}(b)$ is
+\begin{eqnarray*}
+\psi(z) & = & \sup_{x}xz-J^{-1}(x)\\
+ & = & \sup_{x}xz-\left(\frac{x-K_{n,2}}{K_{n,1}}\right)^{2}\\
+ & = & \frac{K_{n,1}^{2}z^{2}}{4}+K_{n,2}z
+\end{eqnarray*}
+
+
+Note that $\psi(z)/z^{r}$ is a decreasing function in $z$ for all
+$r>2$. Also $\lim_{z\rightarrow\infty}\psi(z)=\infty$.
+
+Theorem 3.5 states that for all $a>0,q>1$, we have
+
 \[
-\psi(v)=\frac{1}{2}\left(vJ\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}+J\left(1+\log(4Cn^{\kappa}G)\right)\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)v
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{ac\epsilon_{q}(1/q)}{q}
 \]
 
 
-Therefore
+where $\epsilon_{q}(u)=\psi\left(\frac{2q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\forall u>0$.
+
+To calculate $\epsilon_{q}(1/q)$ (with $r=3)$, note that 
 \begin{eqnarray*}
-\epsilon_{q}(1/q) & = & \psi\left(\max_{k=1:K}\frac{2q(1+a)}{a\sqrt{n_{k}}}\right)\\
- & = & \frac{1}{2}\left(\frac{2q(1+a)}{a\sqrt{n_{k}}}J\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}+J\left(1+\log(4Cn^{\kappa}G)\right)\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\frac{2q(1+a)}{a\sqrt{n_{k}}}\\
- & \le & \max_{k=1:K}\left(\frac{2q(1+a)}{a\sqrt{n_{k}}}J\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}
+\psi\left(\frac{2q^{4}(1+a)\frac{1}{q}}{a\sqrt{n_{V}}}\right) & = & \frac{K_{n,1}^{2}}{4}\left(\frac{2q^{3}(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\left(\frac{2q^{3}(1+a)}{a\sqrt{n_{V}}}\right)
 \end{eqnarray*}
 
 
 Finally, we get
 \[
-E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right]\le(1+a)E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\tilde{\lambda}}(\cdot|D_{-k})\|^{2}\right]+\frac{c(1+a)^{2}}{a}\frac{J^{2}\left(1+\log(4Cn^{\kappa}G)\right)^{2}}{\min_{k=1:K}n_{k}}
+E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right]\le(1+a)E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\tilde{\lambda}}(\cdot|D_{-k})\|^{2}\right]+ac\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\left(\frac{2q^{2}(1+a)}{a\sqrt{n_{V}}}\right)\right)
 \]
+
+
+where 
+\[
+K_{n,1}=\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32GCn^{\kappa}\sqrt{n_{V}}\lambda_{max}\right)\right)\right]^{1/2}
+\]
+
+
+and
+\[
+K_{n,2}=\frac{\left(\log n_{T}\right)2G\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32Cn^{\kappa}\lambda_{max}\right)\right)\right]}{\sqrt{n_{V}}}
+\]
+
+
+The last term is $1/n_{V}$. We can just swap out constants to see
+this: 
+\[
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{ac}{n_{V}}\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a}\right)^{2}+C_{n,2}\left(\frac{2q^{2}(1+a)}{a}\right)\right)
+\]
+
+
+where $C_{n,2}$ is the numerator of $K_{n,2}$.
+
+
+\section{Appendix}
+
+
+\subsubsection{Lemma: Orlicz Norm Properties}
+
+For any function $f$, we have 
+\[
+\|f\|_{\psi_{1}}\le2\|f\|_{\infty}
+\]
+
+
+Also
+\[
+\|Kf\|_{\psi}=K\|f\|_{\psi}
+\]
+
+
+Also suppose that $\psi$ is a monotone function. Then
+\[
+\|gf\|_{\psi}\le\|g\|_{\infty}\|f\|_{\psi}
+\]
+
+
+
+\subsubsection*{Proof}
+
+To prove the bound:
+\[
+E\left[\exp\left(\frac{f}{2\|f\|_{\infty}}\right)-1\right]\le\exp\frac{1}{2}-1<1
+\]
+
+
+To prove the norm scaling property: 
+\begin{eqnarray*}
+\|Kf\|_{\psi} & = & \inf\left\{ C>0:E\psi(|Kf|/C)\le1\right\} \\
+ & = & \inf\left\{ C>0:E\psi(|f|/(C/K))\le1\right\} \\
+ & = & \inf\left\{ KC>0:E\psi(|f|/C)\le1\right\} \\
+ & = & K\inf\left\{ C>0:E\psi(|f|/C)\le1\right\} \\
+ & = & K\|f\|_{\psi}
+\end{eqnarray*}
+
+
+To prove the last bound, note that under the assumption that $\psi$
+is a monotone function, then
+\[
+E\psi(|gf|/C)\le E\psi\left(\left|\|g\|_{\infty}f\right|/C\right)
+\]
+
+
+Therefore
+\[
+\inf_{C}E\psi(|gf|/C)\le\inf_{C}E\psi\left(\left|\|g\|_{\infty}f\right|/C\right)
+\]
+
+
+Therefore
+
+\begin{eqnarray*}
+\|gf\|_{\psi} & = & \inf\left\{ C>0:E\psi(|gf|/C)\le1\right\} \\
+ & \le & \inf\left\{ C>0:E\psi\left(\left|\|g\|_{\infty}f\right|/C\right)\le1\right\} \\
+ & = & \|g\|_{\infty}\inf\left\{ C>0:E\psi\left(\left|f\right|/C\right)\le1\right\} \\
+ & = & \|g\|_{\infty}\|f\|_{\psi}
+\end{eqnarray*}
 
 \end{document}

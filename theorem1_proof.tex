@@ -62,6 +62,7 @@ The document is organized as follows
 conditions. 
 \item Theorem 1 applies Theorem 3 to the special case when the fitted functions
 are Lipschitz in the penalty parameters
+\item Understand the behavior of the oracle error $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$
 \end{enumerate}
 
 \section{Theorem 3}
@@ -207,7 +208,7 @@ N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right)\le N\left(\frac{u}{Cn^{\kappa}},\La
 \]
 
 
-By Lemma param\_covering\_cube, we know that
+By Lemma param\_covering\_cube (See Appendix), we know that
 \begin{eqnarray*}
 N\left(u,\Lambda,\|\cdot\|_{2}\right) & \le & \frac{1}{C_{J}}\left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2\frac{u}{Cn^{\kappa}}}{\frac{u}{Cn^{\kappa}}}\right)^{J}\\
  & = & \frac{1}{C_{J}}\left(\frac{4\left(n_{V}^{t_{max}}-n_{V}^{-t_{min}}\right)Cn^{\kappa}+2u}{u}\right)^{J}\\
@@ -329,6 +330,70 @@ Case 2. $K<4\omega\sqrt{n_{V}}$
 \begin{eqnarray*}
 \frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}} & \le & \frac{K+\sqrt{8K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}\\
  & \le & \frac{K}{2\sqrt{n_{V}}}+\sqrt{\frac{8K}{\sqrt{n_{V}}}\omega}
+\end{eqnarray*}
+
+
+
+\section{Understanding the behavior of the oracle error}
+
+All of the oracle inequalities that we have derived use the oracle
+error over the validation observations, $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$
+, as an upper bound. Intuitively, one would think that the oracle
+error $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$
+is small, but we did not prove this earlier. We are interested in
+showing that this quantity is small if $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert $
+is small. To do this, we use Theorem 2.1 in Vandegeer (from the paper
+On the uniform convergence...). Note that$\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert $
+is valid to use in the upper bound since Mitchell's paper also uses
+this value.
+
+Consider the function class composed of just the single function:
+\[
+\mathcal{G}(T)=\left\{ \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\} 
+\]
+
+
+We note that this function class is dependent on the training data
+but independent of validation set.
+
+Since this class contains a single function, its entropy is zero.
+
+Suppose that 
+\[
+K=\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\|_{\infty}
+\]
+
+
+Then by Theorem 2.1, for any $t>0$, we can bound the conditional
+probability (training set $T$ is given)
+\[
+Pr_{V}\left(\left.\frac{1}{C_{1}}\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert ^{2}\right|\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right|T\right)\le1-\exp(-t)
+\]
+
+
+where $C_{1}$ is a constant given in the theorem. Rearranging the
+inequality can give us a better understanding of $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$:
+\begin{eqnarray*}
+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert ^{2}+C_{1}\left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right)\\
+ & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert ^{2}+2C_{1,m}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+C_{1,m}^{2}\frac{K^{2}t}{n_{V}}\\
+ & = & \left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert +C_{1,m}K\sqrt{\frac{t}{n_{V}}}\right)^{2}
+\end{eqnarray*}
+
+
+where $C_{1,m}=\max\left(C_{1},0\right)$. Then 
+\begin{eqnarray*}
+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert +C_{1,m}K\sqrt{\frac{t}{n_{V}}}
+\end{eqnarray*}
+
+
+So we have indeed shown that $\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$
+is small when $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert $
+is small.
+
+Combining this result with our inequality bounds from Sections 1 and
+2, we get that with high probability 
+\begin{eqnarray*}
+\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert +C_{1,m}K\sqrt{\frac{t}{n_{V}}}+\mbox{additional error}
 \end{eqnarray*}
 
 
