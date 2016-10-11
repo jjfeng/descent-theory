@@ -48,19 +48,18 @@ We prove smoothness for two nonparametric regression examples:
 
 \begin{enumerate}
 \item This regression problem is complicated and we may want to just leave
-it out. Depending on the situation, we get smoothness of the form
+it out of the real paper. This regression model will give two possible
+smoothness conditions
+
+\begin{enumerate}
+\item $\|\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(2)}\right)-\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(1)}\right)\|_{D}^{2}\le C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}$
+\item $\|\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(2)}\right)-\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(1)}\right)\|_{D}\le C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}$
 \end{enumerate}
-
-\[
-\|\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(2)}\right)-\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(1)}\right)\|_{D}^{2}\le C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
-\]
-or
-\[
-\|\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(2)}\right)-\hat{g}\left(\cdot|\boldsymbol{\lambda}^{(1)}\right)\|_{D}\le C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
-\]
-
-
 \end{enumerate}
+\end{enumerate}
+We also note that Sobolev is an example of a non-parametric additive
+regression model that satisfies the theorem conditions.
+
 
 \section{Additive Model}
 
