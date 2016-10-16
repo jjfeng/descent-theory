@@ -97,7 +97,7 @@
 \bigskip
 \begin{abstract}
 
-In penalized least squares problems, penalty parameters determine the tradeoff between minimizing the residual sum of squares and the model complexity. The oracle set of penalty parameter values that minimize the generalization error are usually estimated by evaluating the models on a separate validation set or by cross-validation. We find that in many problems, the fitted models are smoothly parameterized by the penalty parameters. Thus we can show that the difference between the prediction error of the selected model and the oracle converges at a near-parametric rate. This finding justifies recent work on combining penalty functions using separate penalty parameters.
+In penalized regression problems, the choice of penalty parameters is important since they ultimately determine the fitted model. The penalty parameters that minimize the generalization error are generally unknown and must be estimated. In this paper, we establish finite-sample oracle inequalities for penalty parameters selected by either a training/validation split framework or cross-validation. We show that if the fitted models are smoothly parameterized by the penalty parameters, the upper bound of the model error depends on the oracle error and a near-parametric term. This near-parametric term roughly corresponds to the error from tuning penalty parameters. In semi- or non-parametric problems, the upper bound is generally dominated by the oracle error and, in fact, the number of penalty parameters can grow with the sample size without affecting the asymptotic convergence rate.
 
 \end{abstract}
 
