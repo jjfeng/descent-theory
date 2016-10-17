@@ -143,22 +143,22 @@ Section \ref{sec:proofs} contains the proofs and other technical details.
 
 \subsection{Training/Validation Split}
 
-Given the total observed dataset $D$ of size $n$, suppose it is randomly split into a training set $T$ of size $n_T$ and validation set $V$ of size $n_V$. For a function $h$, define $\| h \|_V^2 = \frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ and similarly for $T$. Using this notation, the fitted model defined in  \eqref{intro_train_criterion} can be reformulated as
+Given the total observed dataset $D$ of size $n$, suppose it is randomly split into a training set $T$ of size $n_T$ and validation set $V$ of size $n_V$. For a function $h$, define $\| h \|_V^2 = \frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ and similarly for $T$. Using this notation, the fitted model defined in  \eqref{intro_train_criterion} can be written as
 \begin{equation}
 \hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{2} \left \|y -  g \right \|_T^2 + \sum_{j=1}^J \lambda_j P_j(g)
 \end{equation}
-In the training/validation framework, the selected penalty parameters minimize the validation error as follows
+
+In the training/validation framework, we minimize the validation error by tuning over the range of possible penalty parameters values $\Lambda$. The selected penalty parameter can be expressed as
 \begin{equation}
 \label{cv_lambda}
-\hat{\boldsymbol \lambda} = \arg\min_{\lambda\in\Lambda} \frac{1}{2} \left \| y-\hat{g}(\cdot | \boldsymbol \lambda) \right \|_{V}^{2}
+\hat{\boldsymbol \lambda} = \arg\min_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}(\cdot | \boldsymbol \lambda) \right \|_{V}^{2}
 \end{equation}
-where $\Lambda$ is the range of penalty parameter values. We are interested in bounding the difference between the fitted model and the true model at the observed covariates in the validation set, which can be expressed as $\left \|\hat{g}(\cdot | \hat{\boldsymbol \lambda}) - g^* \right \|_V$.
-
-Our bound is based on the basic inequality \citep{van2000empirical}. Let the oracle penalty parameters $\tilde{\boldsymbol \lambda}$ be defined as
+We are interested in comparing its performance to the oracle penalty parameters $\tilde{\boldsymbol \lambda}$, which minimizes the model error as follows
 \begin{equation}
-\tilde{\boldsymbol \lambda} = \argmin_{\lambda \in \Lambda} \frac{1}{2} \left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|^2
+\tilde{\boldsymbol \lambda} = \argmin_{\boldsymbol{\lambda} \in \Lambda} \frac{1}{2} \left \| g^* - \hat{g}(\cdot | \boldsymbol \lambda) \right \|^2_V
 \end{equation}
-where $\| h \| = \int h^2(x) d\mu(x)$. Let the set of fitted models be denoted
+
+We will establish a sharp oracle inequality for the model over the observed covariates in the validation set. Our bound is based on the basic inequality \citep{van2000empirical}.  Let the set of fitted models be denoted
 \begin{equation}
 \label{function_class_GT}
 \mathcal{G}(T) = \left \{ \hat{g}(\cdot | \boldsymbol \lambda) : \lambda \in \Lambda  \right \}
@@ -173,45 +173,93 @@ From the definition of $\hat{\boldsymbol \lambda}$, we have
 & \le &
 \left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|_V^2 +
 \sup_{g \in \mathcal{G}(T)} 2 \left \langle \epsilon, g - \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) \right \rangle_V
+\label{eq:basic_ineq_emp_process}
 \end{eqnarray}
-where $\langle h, \ell \rangle_A = \frac{1}{size(A)}\sum_{i\in A} h(x_i) \ell(x_i)$. This upper bound can be understood as a bias-variance tradeoff. The first term is the difference between the oracle model and the truth, so this is just the bias from using the model class $\mathcal{G}(T)$. The second term is an empirical process term that can be bounded by its variance, so this can be thought of as the ``variance" of $\mathcal{G}(T)$.
+where $\langle h, \ell \rangle_V = \frac{1}{n_V}\sum_{i\in V} h(x_i) \ell(x_i)$. The first term in the upper bound is the best error achievable in the model class $\mathcal{G}(T)$. In this paper, the model class is pre-defined so this term can be treated as fixed. Our primary interest is bounding the second term, which is the supremum of empirical processes.
 
-Empirical process theory provides a more formal framework for characterizing the behavior of the empirical process term. ``Variance" is usually referred to as complexity and can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. Here we only highlight the fact that functions smoothly parameterized by $\boldsymbol \theta$ as follows
+The supremum of empirical processes can be bounded using the complexity of the model class $\mathcal{G}(T)$. Complexity can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. In this section, we only concern ourselves with smoothly-parameterized functions. More formally, a functions is $C$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ if
 \begin{equation}
-\left \| f(\cdot | \boldsymbol \theta) - f(\cdot | \boldsymbol \theta') \right \|
+\left \| f(\cdot | \boldsymbol \lambda_1) - f(\cdot | \boldsymbol \lambda_2) \right \|
 \le
-O_p \left (\| \boldsymbol \theta - \boldsymbol \theta' \|_2 \right ) 
+C \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \|_2 
+\forall \boldsymbol \lambda_1,\boldsymbol \lambda_2 \in \Lambda
+\label{eq:smooth_funcs}
 \end{equation}
-have low metric entropy. Hence their empirical process terms are small with high probability.
+Function classes that are $C$-smoothly parameterized have low metric entropy. Hence their empirical process terms are small with high probability.
 
-In the penalized regression setting, the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are parameterized by $\boldsymbol \lambda$. Moreover, we show in Section \ref{sec:entropy} that $\hat{g}(\cdot | \boldsymbol \lambda)$ is smoothly parameterized by $\boldsymbol \lambda$ for many penalized regression problems. This fact combined with \eqref{basic_ineq} provides a finite-sample upper bound on the error of the fitted model $\hat{g}_{\hat \lambda}(\cdot | T)$ over the validation points.
+In the penalized regression setting, we are interested in bounding the metric entropy of $\mathcal{G}(T)$. It is clear that the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are parameterized by $\boldsymbol \lambda$, but more work is required to show that they are \textit{smoothly}-parameterized. We defer that discussion to Section \ref{sec:entropy}, where we provide examples of penalized regression problems that satisfy \ref{eq:smooth_funcs}.
+
+We now present a sharp oracle inequality for the penalty parameters selected by a training/validation split. The result is a special case of Theorem \ref{train_val_thrm_complicated}.
+
+%Theorem \ref{train_val_thrm} assumes that the range of the penalty parameters grows at a polynomial rate in the sample size.
+
+%Note that the oracle penalty parameter usually shrinks at some polynomial rate in the sample size (CITE?). Therefore we are interested in the case where the lower limit of possible penalty parameter values shrinks at a polynomial rate in the sample size. In Section \ref{sec:entropy}, we find that when the range of penalty parameters grow at a polynomial rate, the fitted functions will be $Cn^\kappa$-smoothly parameterized for constants $C, \kappa \ge 0$. Theorem \ref{train_val_thrm} bounds the model error under these conditions.
+
+
 
 \begin{theorem}
-\label{train_val_thrm}
-Suppose that $\sup_{g \in \mathcal{G(\cdot | T)}} \| g \|_\infty \le G < \infty$.
-Suppose that $\Lambda = [ n_V^{-t_{\min}}, n_V^{t_{\max}} ]^J $.
+\label{train_val_thrm} (give the theorem with $\lambda_{min}$ and $\lambda_{max}$ )
+Suppose $\Lambda=[n_{V}^{-t_{min}},n_{V}^{t_{max}}]^{J}$.
 
-Suppose that if $\| \epsilon \|_T \le 2 \sigma $, there is some constant $C, \kappa$ such that for any $u> 0$, we have
-\begin{equation}
-\left \| \hat{g}(\cdot | \boldsymbol \lambda_1) - \hat{g}(\cdot | \boldsymbol \lambda_2) \right \|_V 
-\le 
-\frac{1}{C} n^{-\kappa} \left \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \right \|
-\end{equation}
+Suppose that if $\|\epsilon\|_{T}\le2\sigma$, there are constants
+$C,\kappa$ such that for any $u>0$, we have for all $\lambda\in\Lambda$ (give the theorem with $C$ rather than $Cn^\kappa$)
+\[
+\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})-\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})\right\Vert _{V}\le Cn^{\kappa}\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
+\]
 
-Then with high probability, we have for constants $c_1, c_2$
-\begin{equation}
-\label{error_bound}
-\left\Vert \hat{g}(\cdot | \hat{\lambda}) -g^{*}\right\Vert _{V} 
-\le
-\|\hat{g}(\cdot | \tilde{\lambda} ) -g^{*}\|_{V}
-+c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2}
-+\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \|\hat{g}(\cdot | \tilde{\lambda} ) -g^{*}\|_{V}}
-\end{equation}
+
+Then there are universal constants $c_{1},c_{2}>0$ and constants
+$c_{3},c_{4}>0$ such that
+
+$$
+	Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right)
+$$
+$$
+	\le c_{3}\exp\left(-\frac{n_{V}\delta^{4}}{c_{3}^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c_{3}\exp\left(-\frac{n_{V}\delta^{2}}{c_{3}^{2}}\right)+Pr\left(\|\epsilon\|_{T}\le2\sigma\right)
+$$
+
+
+where 
+\[
+\delta=c_{1}\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}+c_{4}}{n_{V}}\right)^{1/2}+c_{2}\sqrt{\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}+c_{4}}{n_{V}}\right)^{1/2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}
+\]
 \end{theorem}
-Theorem \ref{train_val_thrm} is a special case of Theorem \ref{train_val_thrm_complicated} and their proofs are given in Section \ref{sec:proofs}.
 
-The $\log n_V$ terms are the result of increasing the range of $\Lambda$ at a polynomial rate. Increasing the range of $\Lambda$ in important to ensure fast convergence rates.
+Technically we would like to tune the penalty parameters over the entire range $\Lambda = \mathbb{R}^J_+$, but $\hat g(\cdot | \boldsymbol{\lambda})$ can be very ill-behaved under such general conditions. A close approximation is if we ensure that $\Lambda$ includes the penalty parameter
+\begin{equation}
+\label{eq:true_oracle}
+\tilde{\boldsymbol{\lambda}}_{\mathbb{R}_+}
+= \argmin_{\boldsymbol{\lambda} \in \mathbb{R}^J_+}\left \| g^* - \hat{g}(\cdot | \boldsymbol \lambda) \right \|^2_V
+\end{equation}
+As shown in Lemma ? (Or cite van de geer), $\tilde{\boldsymbol{\lambda}}_{\mathbb{R}_+}$ shrinks at some polynomial rate $O_p(n^{-\omega})$, so the lower limit of $\Lambda$ just needs to shrink at a faster polynomial rate $O_p(n^{-t_{\min}})$ where $t_{\min} > \omega$. Suppose $\Lambda = [n^{-t_{min}},n^{t_{max}}]^{J}$. Under this condition, we find that the fitted models $\hat g({\cdot | \boldsymbol{\lambda}})$ for all our examples in Section \ref{sec:entropy} are $Cn^{-\kappa}$-smoothly parameterized by $\boldsymbol{\lambda}$. We can now apply Theorem \ref{train_val_thrm} to this special case. For ease of interpretation, we present the results in asymptotic notation this time:
 
+\begin{lemma}
+	$\Lambda=[n_{V}^{-t_{min}},n_{V}^{t_{max}}]^{J}$
+	Suppose that if $\|\epsilon\|_{T}\le2\sigma$, there are constants
+	$C,\kappa$ such that for any $u>0$, we have for all $\lambda\in\Lambda$ (give the theorem with $C$ rather than $Cn^\kappa$)
+	\[
+	\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})-\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})\right\Vert _{V}\le Cn^{\kappa}\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
+	\]
+	Then
+	\begin{eqnarray}
+	\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le 
+	&& \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V} \label{eq:asym_train_val_theorem1} \\
+	&& + O_p \left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}}{n_{V}}\right)^{1/2} \label{eq:asym_train_val_theorem2} \\
+	&& + O_p \left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}}{n_{V}}\right)^{1/4} \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{1/2} \label{eq:asym_train_val_theorem3}
+	\end{eqnarray}
+\end{lemma}
+
+Therefore the model error is upper bounded by the sum of three terms: the oracle error, the near-parametric term in \ref{eq:asym_train_val_theorem2}, and the geometric mean of the two. We call \ref{eq:asym_train_val_theorem2} near-parametric since the convergence rate for a $J$-dimensional parametric model is usually $(J/n)^{1/2}$ and \ref{eq:asym_train_val_theorem2} has a $\log n$ term in the numerator. The $\log n$ term appears because the range of the penalty parameters grows at a polynomial rate in the number of samples. Since $\log n$ grows very slowly, its contribution is nearly negligible.
+
+In the semi- or non-parametric regression setting, the oracle error is likely to dominate in finite samples and will certainly dominate asymptotically.
+
+2. There is an interesting log n term. it appears because the range of Lambda grows with $n_V$ The $\log n_V$ terms are the result of increasing the range of $\Lambda$ at a polynomial rate. (Not true). Increasing the range of $\Lambda$ in important to ensure fast convergence rates. (True... but is this important to put here)
+
+3. An interesting geometric mean has appeared. We analyze if this is truly necessary in the simuations... though i still have no idea if it is.
+
+4. Mention no one else has a sharp oracle inequality. Possibly caus they are dealing with generalization error rather than the validation error.
+
+5. The oracle error is small.
 
 
 \subsection{Cross-Validation}
