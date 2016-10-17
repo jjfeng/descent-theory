@@ -115,7 +115,7 @@ Per the usual regression framework, we observe response $y \in \mathbb{R}$ and p
 \begin{equation}
 y = g^*(\boldsymbol x) + \epsilon
 \end{equation}
-where $\epsilon_i$ are random errors. Our goal is to find the best model in $\mathcal{G}$ to model $y$ given $\boldsymbol x$.
+where $\epsilon_i$ are random errors with expectation zero. Our goal is to find the best model in $\mathcal{G}$ to model $y$ given $\boldsymbol x$.
 
 In high-dimensional ($p \gg n$) or ill-posed problems, the ordinary least squares estimate performs poorly as it overfits to the training data. A common solution is to add regularization, or penalization, to control model complexity and induce desired structure. The penalized least squares estimate minimizes a criterion of the form
 \begin{equation}
@@ -290,93 +290,117 @@ On the other hand, if the oracle error converges at a parametric rate, we have t
 
 \subsection{Cross-Validation}
 
-In this section, we give an oracle inequality for $K$-fold cross-validation. Instead of bounding the loss over the observed covariates, we will now bound the generalization error. Toward this end, we will apply the oracle inequality in \citet{lecue2012oracle} to the problem of penalized regression.
+In this section, we give an oracle inequality for $K$-fold cross-validation. Instead of bounding the model error over the observed covariates, we will bound the generalization error, which is the squared $L2$-norm of the difference:
+\begin{equation}
+\left \| g - g^* \right \|^2 = \int \left |g(x) - g^*(x) \right |^2 dx
+\end{equation}
+Toward this end, we will apply the oracle inequality in \citet{lecue2012oracle}.
 
-The problem setup for $K$-fold CV is as follows. Let the $K$ partitions for $k=1,...,K$ be denoted $D_k$ (with size $n_k$) and the entire set minus the $D_k$ will be denoted $D_{-k}$. Consider the joint optimization problem for $K$-fold CV:
+We will generalize the notation from the previous section. Let a dataset with $n$ samples be denoted $D^{(n)}$. The fitted model given any training data $D^{(n)}$ is denoted
+\begin{equation}
+\hat{g}_{D^{(n)}}(\cdot | \boldsymbol \lambda)= \arg\min_{g\in\mathcal{G}} \frac{1}{2} \| y-g \|_{D^{(n)}}^{2} + \sum_{j=1}^J \lambda_j P_j(g)
+\end{equation}
+
+For $K$-fold cross-validation, the problem setup is as follows. As before, let $D^{(n)}$ be the entire dataset. For simplicity, suppose the dataset can be partitioned into $K$ sets of equal size $n_V$. Let $n_T = n - n_V$. Then partition $k$ will be denoted $D_k^{(n_V)}$ and its complement will be denoted $D_{-k}^{(n_T)} = D \setminus D_k^{(n_V)}$. The selected penalty parameters is
 \begin{eqnarray}
 \label{kfold_opt}
-\hat{\boldsymbol \lambda} &=& \arg\min_{\lambda\in\Lambda} \frac{1}{2K} \sum_{k=1}^K  \| y-\hat{g}_{k}(\cdot | \boldsymbol \lambda) \|_{D_k}^{2} \\
-\hat{g}_{k}(\cdot | \boldsymbol \lambda) &=&\arg\min_{g\in\mathcal{G}} \frac{1}{2} \| y-g \|_{D_{-k}}^{2} + \sum_{j=1}^J \lambda_j P_j(g)
+\hat{\boldsymbol \lambda} &=& \arg\min_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2K} \sum_{k=1}^K  \left \| y-\hat{g}_{D_{-k}^{n_T}}(\cdot | \boldsymbol \lambda) \right \|_{D_k}^{2}
 \end{eqnarray}
 
-In traditional cross-validation, the final model is retrained on all the data with $\hat{\lambda}$. However, bounding its generalization error requires additional regularity assumptions \citep{lecue2012oracle}. We consider the following ``averaged version of cross-validation" instead
+In traditional cross-validation, the final model is retrained on all the data with $\hat{\boldsymbol{\lambda}}$. However, bounding its generalization error requires additional regularity assumptions \citep{lecue2012oracle}. We consider the following ``averaged version of cross-validation" instead
 \begin{equation}
-\hat{g}_{ACV}(\cdot) = \frac{1}{K} \sum_{k=1}^K \hat{g}_{k}
-(\cdot | \hat{\boldsymbol \lambda})
+\bar{g}_{D^{n}}(x) = \frac{1}{K} \sum_{k=1}^K \hat{g}_{D^{(n_T)}_{-k}}
+(x | \hat{\boldsymbol \lambda})
 \end{equation}
-The following theorem bounds the generalization error of $\hat{g}_{ACV}$.
 
+
+The following theorem bounds the generalization error of $\bar{g}_{D^{n}}$.
 \begin{theorem}
-\label{kfold_thrm}
-
-Suppose the errors have expectation zero and $\| \epsilon \|_\infty < \infty $.
+\label{thrm:kfold}
 
 Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
 
-Suppose there are constants $C, \kappa$ such that
-\begin{equation}
-\| \hat{g}(\cdot | \boldsymbol \lambda_1) - \hat g (\cdot | \boldsymbol \lambda_2) \|_\infty \le \frac{1}{C} n^{-\kappa} \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \| 
-\end{equation}
-Suppose that $\Lambda = [ n^{-t_{\min}}, n^{t_{\max}} ]^J $.
+Suppose $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$.
 
+Suppose there exist constants $C$ such that for any dataset $D^{n_T}$, $\hat{g}_{D^{n_T}}(\cdot | \boldsymbol \lambda)$ is $C$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to $\| \cdot \|_\infty$.
 
-With high probability, we have for any $a > 0$,
+For all $a > 0$,
 \begin{equation}
-\label{smooth_error_bound}
-E_{D} \left \| \hat{g}_{ACV} - g^* \right \|^2 \le
-(1+a) \min_{k\in 1:K, \lambda \in \Lambda}  E_{D} \left \| \hat{g}_k(\cdot |\boldsymbol \lambda) - g^* \right \|^2
-+ c_a \max_{k=1:K} \frac{\log^2(n)}{n_k}
+E_{D^{(n)}} \left \| \bar{g}_{D^{n}} - g^* \right \|^2 \le
+(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}_{D^{(n_T)}}(\cdot |\boldsymbol \lambda) - g^* \right \|^2
++  \frac{c_a}{n_V} \left (complicated \log n term \right )
 \end{equation}
-where $c_a$ is given in Mitchell.
+where $c_a$ is some constant.
 \end{theorem}
 
+There are some clear differences between Theorems \ref{train_val_thrm} and \ref{thrm:kfold}. Theorem \ref{thrm:kfold} allows us to bound the generalization error, but it comes at a price. One, it requires that the fitted functions are smoothly parameterized by $\boldsymbol{\lambda}$ over the entire domain. In addition, Theorem \ref{thrm:kfold} is no longer a strict oracle inequality since the oracle error is scaled by the constant $1+a$.
 
-Theorem \ref{kfold_thrm} is a stronger result than Theorem \ref{train_val_thrm}, but one is required to show that $\hat{g}_\lambda$ is smoothly parameterized by $\lambda$ over the entire domain, not just the validation points.
+Now we apply Theorem \ref{thrm:kfold} to the special case where $\Lambda$ grows at a polynomial rate with the sample size. We will use the same assumptions as we did in Lemma \ref{lemma:train_val_special}.
 
-\subsubsection{Example}
+\begin{lemma}
+	\label{lemma:kfold_special}
+Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
 
-We present a nonparametric additive model as an example.
+Suppose $\Lambda = [n^{-t_{\min}}, n^{t_{\max}}]^J$.
 
-Consider the training criterion with Sobolev penalties on each of the components
+Suppose there are constants $C,\kappa$ such that for any dataset $D^{(n_T)}$, $\hat{g}_{D^{(n_T)}}(\cdot | \boldsymbol \lambda)$ is $Cn^\kappa$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to $\| \cdot \|_\infty$.
+
+For all $a > 0$,
 \begin{equation}
-\hat{f}(\cdot | {\boldsymbol \lambda}), \hat{g}(\cdot | {\boldsymbol \lambda}) =
-\argmin_{f,g \in \mathcal{G}}
-\| y - (f + g) \|_n^2 +
-\lambda_1 \int_0^1 |f^{(s)}(x)|^2 dx +
-\lambda_2 \int_0^1 |g^{(t)}(x)|^2 dx
+E_{D^{(n)}} \left \| \bar{g}_{D^{(n)}} - g^* \right \|^2 \le
+(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}_{D^{(n_T)}}(\cdot |\boldsymbol \lambda) - g^* \right \|^2
++  c_a \left (\frac{\log(n_V) + \log(n_T) + stuff}{n_V}\right )
 \end{equation}
-where $\mathcal{G}$ are functions defined over the domain [0,1].
-It can be shown that the estimate is a spline. According to \citet{van2014additive}, the oracle convergence rate is
-\begin{equation}
-\| \hat{f}(\cdot | \tilde{\boldsymbol{\lambda}}) - f^* \| = O_p(n^{-\frac{s}{2s+1}}),
-\| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \| = O_p(n^{-\frac{t}{2t+1}})
-\end{equation}
-However, one would need to know the Sobolev penalties of $f^*$ and $g^*$ in order
-to determine the oracle penalty parameters.
-If the penalty parameters are chosen using the training/validation framework, Theorem \ref{train_val_thrm} gives us
-\begin{eqnarray*}
-\| \hat{f}(\cdot | \hat{\boldsymbol{\lambda}}) + \hat{g}(\cdot | \hat{\boldsymbol{\lambda}}) - (f^* + g^*) \|_V &=&
-O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}})
-+c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \\
-&& +\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2}  \left (O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}}) \right) }
-\end{eqnarray*}
-If the penalty parameters are chosen instead using a $K$-fold cross-validation framework, Theorem \ref{kfold_thrm} states that the
-averaged version of cross-validation has a generalization error that is bounded as follows
-\begin{eqnarray*}
-E_D \| \hat{f}_{ACV} + \hat{g}_{ACV} - (f^* + g^*) \|^2 &=&
-(1+a) E_D  \left (O_p(n_k^{-\frac{s}{2s+1}}) + O_p(n_k^{-\frac{t}{2t+1}})  \right )
-+ c_a \max_{k=1:K} \frac{\log^2(n)}{n_k}
-\end{eqnarray*}
+\end{lemma}
+Lemmas \ref{lemma:kfold_special} and \ref{lemma:train_val_special} are quite similar in that the upper bounds are functions of the oracle error and a near-parametric term. The asymptotic convergence rate of the selected model is determined by whichever term dominates. For both the training/validation split framework and cross-validation, we find that tuning penalty parameters is a relatively ``cheap" problem to solve. If the oracle error is sub-parametric, the cost of tuning penalty parameters is negligible asymptotically.
 
-\subsubsection{Implications}
-Theorem \ref{train_val_thrm} and \ref{kfold_thrm} imply that $\hat{g}(\cdot | \hat{\boldsymbol{\lambda}})$ has a semi-parametric convergence rate: the nonparametric (or potentially parametric) convergence rate of the oracle and the parametric convergence rate of the cross-validated model to the oracle. As long as the number of penalty parameters is finite, it does not affect the convergence rate of the model asymptotically.
+The theorems and lemmas given in this section are all  finite-sample results. One could try to minimize the upper bound by increasing the number of penalty parameters or changing the ratio between the training and validation set sizes. Determining the optimal number of penalty parameters will unfortunately require knowing characteristics about the error variables $\epsilon$. (Perhaps you can use cross-validation to determine the number of penalty parameters to use. Ha! How meta!)
 
-We can minimize the prediction error by balancing the two terms in the upper bound. The inequalities suggest that there are many approaches. One could change increase the training to validation ratio as the sample size grows. Alternatively, one could increase the number of penalties and penalty parameters with the number of samples. Of course, finding the true minimizer of the upper bound will require knowing properties about the true model, so this would have to be done in some heuristic manner.
+
+%Theorem \ref{train_val_thrm} and \ref{thrm:kfold} imply that $\hat{g}(\cdot | \hat{\boldsymbol{\lambda}})$ has a semi-parametric convergence rate: the nonparametric (or potentially parametric) convergence rate of the oracle and the parametric convergence rate of the cross-validated model to the oracle. As long as the number of penalty parameters is finite, it does not affect the convergence rate of the model asymptotically.
+
+%We can minimize the prediction error by balancing the two terms in the upper bound. The inequalities suggest that there are many approaches. One could change increase the training to validation ratio as the sample size grows. Alternatively, one could increase the number of penalties and penalty parameters with the number of samples. Of course, finding the true minimizer of the upper bound will require knowing properties about the true model, so this would have to be done in some heuristic manner.
+
+
+%\subsubsection{Example}
+%
+%We present a nonparametric additive model as an example.
+%
+%Consider the training criterion with Sobolev penalties on each of the components
+%\begin{equation}
+%\hat{f}(\cdot | {\boldsymbol \lambda}), \hat{g}(\cdot | {\boldsymbol \lambda}) =
+%\argmin_{f,g \in \mathcal{G}}
+%\| y - (f + g) \|_n^2 +
+%\lambda_1 \int_0^1 |f^{(s)}(x)|^2 dx +
+%\lambda_2 \int_0^1 |g^{(t)}(x)|^2 dx
+%\end{equation}
+%where $\mathcal{G}$ are functions defined over the domain [0,1].
+%It can be shown that the estimate is a spline. According to \citet{van2014additive}, the oracle convergence rate is
+%\begin{equation}
+%\| \hat{f}(\cdot | \tilde{\boldsymbol{\lambda}}) - f^* \| = O_p(n^{-\frac{s}{2s+1}}),
+%\| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \| = O_p(n^{-\frac{t}{2t+1}})
+%\end{equation}
+%However, one would need to know the Sobolev penalties of $f^*$ and $g^*$ in order
+%to determine the oracle penalty parameters.
+%If the penalty parameters are chosen using the training/validation framework, Theorem \ref{train_val_thrm} gives us
+%\begin{eqnarray*}
+%\| \hat{f}(\cdot | \hat{\boldsymbol{\lambda}}) + \hat{g}(\cdot | \hat{\boldsymbol{\lambda}}) - (f^* + g^*) \|_V &=&
+%O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}})
+%+c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \\
+%&& +\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2}  \left (O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}}) \right) }
+%\end{eqnarray*}
+%If the penalty parameters are chosen instead using a $K$-fold cross-validation framework, Theorem \ref{thrm:kfold} states that the
+%averaged version of cross-validation has a generalization error that is bounded as follows
+%\begin{eqnarray*}
+%E_D \| \hat{f}_{ACV} + \hat{g}_{ACV} - (f^* + g^*) \|^2 &=&
+%(1+a) E_D  \left (O_p(n_k^{-\frac{s}{2s+1}}) + O_p(n_k^{-\frac{t}{2t+1}})  \right )
+%+ c_a \max_{k=1:K} \frac{\log^2(n)}{n_k}
+%\end{eqnarray*}
 
 \section{Smoothness of $\hat{g}(\cdot | \boldsymbol{\lambda})$ in $\boldsymbol \lambda$}
 \label{sec:entropy}
 
-We now show that $\hat{g}(\cdot | \boldsymbol{\lambda})$ is smoothly parametrized by $\lambda$. Theorem \ref{train_val_thrm} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{kfold_thrm} requires this to hold over the entire domain. Smoothness over the validation set is generally easier to show. We will prove it for nonparametric additive models with smooth penalties and certain nonsmooth penalties. Smoothness over the entire domain is harder to show, so we consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
+We now show that $\hat{g}(\cdot | \boldsymbol{\lambda})$ is smoothly parametrized by $\lambda$. Theorem \ref{train_val_thrm} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{thrm:kfold} requires this to hold over the entire domain. Smoothness over the validation set is generally easier to show. We will prove it for nonparametric additive models with smooth penalties and certain nonsmooth penalties. Smoothness over the entire domain is harder to show, so we consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
 
 Throughout, we will presume that $\mathcal{G}$ is a convex function class.
 
@@ -754,7 +778,7 @@ Chaining and peeling.
 
 
 
-\paragraph{Proof of Theorem \ref{kfold_thrm}}
+\paragraph{Proof of Theorem \ref{thrm:kfold}}
 
 \begin{lemma}
 \label{oracle_maintained}
