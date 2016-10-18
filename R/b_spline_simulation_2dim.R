@@ -222,20 +222,20 @@ set.seed(10)
 
 
 # new settings!
-n_train <- 100
-n_test <- 800
-lambdas1 <- 10^seq(from=-6, to=-1, by=0.2)
-lambdas2 <- 10^seq(from=-6, to=-1, by=0.2)
-n_sizes <- seq(from=20, to=80, by=10)
-n_reps <- 30
-snr <- 2
+# n_train <- 100
+# n_test <- 800
+# lambdas1 <- 10^seq(from=-6, to=-1, by=0.2)
+# lambdas2 <- 10^seq(from=-6, to=-1, by=0.2)
+# n_sizes <- seq(from=20, to=90, by=5)
+# n_reps <- 30
+# snr <- 2
 
 # trying more reps and bigger sizes
 n_train <- 100
 n_test <- 800
 lambdas1 <- 10^seq(from=-6, to=-1, by=0.2)
 lambdas2 <- 10^seq(from=-6, to=-1, by=0.2)
-n_sizes <- floor(5 * 1.5^seq(0, 11))
+n_sizes <- floor(5 * 1.25^seq(0, 25))
 n_reps <- 50
 snr <- 2
 
@@ -321,17 +321,27 @@ plot(
 axis(1, at = cv_to_oracle_compare_w$n, las=0, cex.axis=2)
 dev.off()
 
-pdf('figures/qqplot.pdf', width=5, height=5)
-v_sqrt <- sqrt(cv_to_oracle_compare_w$n)
+# pdf('figures/qqplot.pdf', width=5, height=5)
+v_rate <- 1/sqrt(cv_to_oracle_compare_w$n)
 oracle_rate <- (cv_to_oracle_compare_w$oracle_true_validation_loss)
-expected_loss_diff <- 1/sqrt(v_sqrt) #+ 1/v_sqrt
+expected_loss_diff1 <- v_rate
+expected_loss_diff2 <- sqrt(v_rate) * sqrt(oracle_rate)
 plot(
     expected_loss_diff,
     abs(cv_to_oracle_compare_w$loss_diff),
     xlab="Expected Convergence Rate",
     ylab="Empirical Validation Loss Difference"
 )
-dev.off()
+# dev.off()
+
+# Maybe we can confirm the existance of the geometric mean by linear regression??
+b <- lm(cv_to_oracle_compare_w$loss_diff ~ expected_loss_diff1)
+summary(b)
+a <- lm(cv_to_oracle_compare_w$loss_diff ~ expected_loss_diff2)
+summary(a)
+a2 <- lm(cv_to_oracle_compare_w$loss_diff ~ expected_loss_diff2 + expected_loss_diff1)
+summary(a2)
+anova(b, a2)
 
 regl1 <- lm(loss_diff ~ I((n)^-0.25) + I((n)^-0.5), cv_to_oracle_compare_w)
 summary(regl1)

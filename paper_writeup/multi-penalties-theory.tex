@@ -275,12 +275,11 @@ From Lemma \ref{lemma:train_val_special}, we see that the model error is upper b
 The appearance of a near-parametric term makes intuitive sense. We are trying to estimate the oracle penalty parameters using the validation set, which roughly corresponds to solving a parametric regression problem. The reason we refer to \ref{eq:asym_train_val_theorem2} as near-parametric is that the convergence rate of a $J$-dimensional parametric regression problem is usually $(J/n)^{1/2}$ but \ref{eq:asym_train_val_theorem2} has a $\log n$ term in the numerator. The $\log n$ term was introduced when we allowed the range of $\Lambda$ to grow with the sample size.
 
 However, the appearance of the geometric mean suggests that treating the problem of tuning penalty parameters as a parametric regression problem is an oversimplification. We are truly solving the bi-level optimization problem:
-$$
-\hat{\boldsymbol \lambda} = \arg\min_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}(\cdot | \boldsymbol \lambda) \right \|_{V}^{2}
-$$
-$$
-\text{s.t. } \hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{2} \left \|y -  g \right \|_T^2 + \sum_{j=1}^J \lambda_j P_j(g)
-$$
+\begin{eqnarray}
+\label{eq:bilevel}
+&& \hat{\boldsymbol \lambda} = \arg\min_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}(\cdot | \boldsymbol \lambda) \right \|_{V}^{2}\\
+\text{s.t. } && \hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{2} \left \|y -  g \right \|_T^2 + \sum_{j=1}^J \lambda_j P_j(g)
+\end{eqnarray}
 For example, if the lower level optimization problem is non-parametric, the upper level optimization problem isn't truly parametric.
 
 Now we consider the asymptotic behavior of model error. As long as the oracle error converges at a sub-parametric rate, the oracle error will dominate and the other two terms will be negligible. Therefore in these settings, we can actually allow the number of penalty parameters to grow with the sample size without affecting the asymptotic convergence rate. That is, we can allow the number of penalty parameters $J$ grow at the rate
@@ -731,7 +730,7 @@ stuff
 
 \section{Simulations}\label{sec:simulations}
 
-We now provide a simulation study for the prediction error bound given in Theorem \ref{train_val_thrm_complicated}. The penalty parameters are chosen by a training/validation split. We show that the error of the select model converges to that of the oracle model at the expected $(\log(n_V)/n_V)^{1/2}$ rate.
+We now provide a simulation study for the prediction error bound given in Theorem \ref{train_val_thrm}. The penalty parameters are chosen by a training/validation split. We show that the error of the select model converges to that of the oracle model at the expected $(\log(n_V)/n_V)^{1/2}$ rate.
 
 Observations were generated from the model
 \begin{equation}
@@ -761,16 +760,24 @@ Figure \ref{fig:emp_v_theory} plots the validation loss $\| \hat{g}_{\lambda} - 
 
 \section{Discussion}\label{sec:discussion}
 
-In this paper, we have shown that the difference in prediction error of the model chosen by cross-validation and the oracle model decreases at a near-parametric rate if the fitted models are smoothly parameterized in terms of the penalty parameters. For many penalized regression problems, we find that this is indeed the case. Our results show that adding penalty parameters does not drastically increase the model complexity. This supports recent efforts to combine regularization methods and ``un-pool" regularization parameters. Furthermore, since our result holds for a search over a dense set of penalty parameters, our prediction error bounds apply to cross-validation over a continuum of values, as done in hyper-parameter optimization methods.
+In this paper, we have established oracle inequalities for penalty parameter selection using a training/validation split framework or $k$-fold cross-validation. The results address the concern in \citet{bengio2000gradient} regarding ``the amount of overfitting that can be brought when too many hyperparameters are optimized.'' Our results show that 
+this should not be a major concern. In a non-parametric setting or parametric setting where $p$ grows with $n$, the oracle error is the dominating term in the upper bound. At worst, the tuning penalty parameter problem contributes an error that is on the same order as the oracle error, say in a parametric setting where $p$ is fixed. 
 
-The main caveat is that our theorems bound the prediction error of the global minimizer of the validation set. However this is hard to achieve practically since the validation loss is not convex in the penalty parameters. More investigation needs to be done to bound the prediction error of fitted models that are local minima.
+There is recent interest in combining regularization methods, but seems to be an artificial restriction to two or three penalty parameters. The area of penalized regression methods with tens or hundreds of penalty parameters remains largely unexplored. Our results suggest that this direction of research could be fruitful. As shown in Feng and Simon (TBD), un-pooling the penalty parameters in a sparse group lasso model is surprisingly effective.
 
-A different approach we could have taken in this paper is to bound the distance between the estimated and oracle penalty parameters
+One major caveat to our results is that we have assumed that the penalty parameters can be tuned such that the validation loss is minimized. However it is difficult to find the global minimizer since the validation loss is not convex in the penalty parameters. Optimization methods need to be developed to effectively solve the bilevel optimization problems in \eqref{eq:bilevel}. In addition, it would be worthwhile to understand the performance of models that are only local minimizers of the validation loss.
+
+Finally, there are still many open questions to explore. Our results assume that the fitted models are smoothly parameterized with respect to the penalty parameters and we provide a number of examples that satisfy these conditions. There are probably many more examples of regression problems that satisfy the smoothness condition and the smoothness condition itself can probably be generalized.
+
+In addition, it would be interesting to bound the distance between the selected and oracle penalty parameters
 \begin{equation}
 \label{penalty_diff}
 \left \| \hat{\boldsymbol \lambda} - \tilde{\boldsymbol \lambda} \right \|_2
 \end{equation}
-instead of the fitted values. Bounding \ref{penalty_diff} is not obvious from the definitions of $\hat{\boldsymbol{\lambda}}$ and would probably require more regularity assumptions on the model class. However, it could provide a more intuitive understanding of the behavior of cross-validation-like procedures.
+Such a result would perhaps give a more intuitive understanding of penalty parameter selection methods.
+
+
+%We find that the difference between the oracle error and the selected model error does not increase dramatically with the number of penalty parameters. the increase in error from tuning parameters model decreases at a near-parametric rate if the fitted models are smoothly parameterized in terms of the penalty parameters. For many penalized regression problems, we find that this is indeed the case. Our results show that adding penalty parameters does not drastically increase the model complexity. This supports recent efforts to combine regularization methods and ``un-pool" regularization parameters. Furthermore, since our result holds for a search over a dense set of penalty parameters, our prediction error bounds apply to cross-validation over a continuum of values, as done in hyper-parameter optimization methods.
 
 \section{The Proof} \label{sec:proofs}
 
