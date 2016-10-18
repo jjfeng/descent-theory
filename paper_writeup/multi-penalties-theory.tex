@@ -400,26 +400,28 @@ The theorems and lemmas given in this section are all  finite-sample results. On
 \section{Smoothness of $\hat{g}(\cdot | \boldsymbol{\lambda})$ in $\boldsymbol \lambda$}
 \label{sec:entropy}
 
-We now show that $\hat{g}(\cdot | \boldsymbol{\lambda})$ is smoothly parametrized by $\lambda$. Theorem \ref{train_val_thrm} requires this smoothness assumption to hold over the validation observations whereas Theorem \ref{thrm:kfold} requires this to hold over the entire domain. Smoothness over the validation set is generally easier to show. We will prove it for nonparametric additive models with smooth penalties and certain nonsmooth penalties. Smoothness over the entire domain is harder to show, so we consider two specific examples: parametric regression problems (where $p$ can grow with $n$) and smoothing splines.
+Theorem \ref{train_val_thrm} and \ref{thrm:kfold} require the fitted functions $\hat{g}(\cdot | \boldsymbol{\lambda})$ to be smoothly parametrized by $\boldsymbol{\lambda}$. We now present examples of penalized regression problems where these conditions are satisfied. Recall that Theorem \ref{train_val_thrm} requires smoothness with respect to $\|\cdot \|_V$ whereas Theorem \ref{thrm:kfold} requires smoothness with respect to $\|\cdot\|_\infty$. Therefore any example that satisfies the smoothness condition for Theorem \ref{thrm:kfold} also satisfies the smoothness condition for Theorem \ref{train_val_thrm}.
 
-Throughout, we will presume that $\mathcal{G}$ is a convex function class.
+? Throughout, we will presume that $\mathcal{G}$ is a convex function class.
 
 \subsection{Smoothness over the Validation Set}
 \label{sec:smoothness_validation}
-We will show that $\hat{g}(\cdot | \boldsymbol{\lambda})$ varies smoothly with respect to $\lambda$ over the observed covariates, which will directly imply smoothness over the validation set. Suppose we are in the additive model setting. The fitted models minimize the training criterion
+
+Theorem \ref{train_val_thrm} requires that $\hat{g}(\cdot | \boldsymbol{\lambda})$ is $C$-smoothly-parameterized by $\boldsymbol{\lambda}$ over $\Lambda$ with respect to $\| \cdot \|_V$. We show that additive models satisfy this smoothness condition.
+
+Penalized regression problems for additive models usually minimize a training criterion of the following form
 \begin{equation}
 \label{orig_train_criterion}
-\left\{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J = \argmin_{g\in \mathcal{G}} \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \|^2_T + \sum_{j=1}^J \lambda_j P_j(g_j)
+\left\{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J = \argmin_{g\in \mathcal{G}} \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T + \sum_{j=1}^J \lambda_j P_j(g_j)
 \end{equation}
-
-We will not directly consider functions that minimize \eqref{orig_train_criterion}. Instead we will characterize the function class that minimize the perturbed training criterion
+Instead of dealing with \eqref{orig_train_criterion} directly, we consider minimizers of the perturbed training criterion
 \begin{equation}
 \label{train_crit_ridge}
-\left\{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J = \argmin_{g\in \mathcal{G}} \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \|^2_T + \sum_{j=1}^J \lambda_j \left ( P_j(g_j) + \frac{w}{2} \| g_j \|^2_D \right )
+\left\{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J = \argmin_{g\in \mathcal{G}} \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T + \sum_{j=1}^J \lambda_j \left ( P_j(g_j) + \frac{w}{2} \| g_j \|^2_D \right )
 \end{equation}
-where $w > 0$ is some constant. The additional ridge penalty will be used in the proofs to ensure that the model is ``well-conditioned" over the observed covariates.
+\eqref{train_crit_ridge} has an additional ridge penalty for each of the additive components, where each of the ridge penalties is scaled by a fixed constant $w > 0$. 
 
-In practice, one can choose $w$ to be small enough such that the fitted models from \eqref{train_crit_ridge} are indistinguishable from those in \eqref{orig_train_criterion}. Lemma \ref{oracle_maintained} proves that the convergence rate of the oracle penalty parameters is preserved for small enough $w$.
+For both this example and the one in Section \ref{sec:smoothness_domain}, we perturb the penalized regression problems with additional ridge penalties scaled by a constant $w$. The ridge penalty is primarily for the proofs to carry through: it ensures that the fitted functions are ``well-conditioned.'' In practice, $w$ can be chosen small enough that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. In addition, we show in Lemma \ref{oracle_maintained} that for parametric regression problems that are strongly convex, the effect of the ridge penalty is negligible. Of course we would like to do without the ridge penalty, but one will probably need more assumptions about the penalized regression problem.
 
 \subsubsection{Smooth Penalties}
 We will first consider the simple case where the penalties $P_j$ are twice-differentiable everywhere. The following lemma shows that fitted function values vary smoothly in the penalty parameters.
@@ -568,6 +570,9 @@ For any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)} \in \Lambda$, we h
 
 \subsection{Smoothness over the entire domain}
 \label{sec:smoothness_domain}
+
+Theorem \ref{thrm:kfold} requires smoothness with respect to the infinity norm $\| \cdot \|_\infty$. We show that parametric models (where dimension $p$ can grow with $n$) satisfy this assumption.
+
 
 To show that the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ vary smoothly with respect to $\boldsymbol \lambda$ over the entire domain, we will need additional assumptions. In Section \ref{sec:smoothness_validation}, we controlled the difference between the fitted values at the validation points by adding a ridge penalty. Unfortunately this trick does not allow us to control the sup norm between the fitted functions.
 
