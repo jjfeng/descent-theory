@@ -182,6 +182,7 @@ where $\langle h, \ell \rangle_V = \frac{1}{n_V}\sum_{i\in V} h(x_i) \ell(x_i)$.
 The supremum of empirical processes can be bounded using the complexity of the model class $\mathcal{G}(T)$. Complexity can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. In this section, we only concern ourselves with smoothly-parameterized functions. We define this more formally as follows:
 
 \begin{definition}
+\label{def:smooth_funcs}
 A function $f(\cdot | \boldsymbol{\lambda})$ is $C$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to norm $\| \cdot \|$ if
 \begin{equation}
 \left \| f(\cdot | \boldsymbol \lambda_1) - f(\cdot | \boldsymbol \lambda_2) \right \|
@@ -191,8 +192,7 @@ C \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \|_2
 \label{eq:smooth_funcs}
 \end{equation}
 \end{definition}
-
-Function classes that are $C$-smoothly parameterized have low metric entropy. Hence their empirical process terms are small with high probability.
+\eqref{eq:smooth_funcs} can also be viewed as a generalized Lipschitz condition for the functional case. Function classes that satisfy \eqref{eq:smooth_funcs} have low metric entropy. Hence their empirical process terms are small with high probability.
 
 In the penalized regression setting, we are interested in bounding the metric entropy of $\mathcal{G}(T)$. It is clear that the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are parameterized by $\boldsymbol \lambda$, but more work is required to show that they are \textit{smoothly}-parameterized. We defer that discussion to Section \ref{sec:entropy}, where we provide examples of penalized regression problems that satisfy \ref{eq:smooth_funcs}.
 
@@ -206,6 +206,8 @@ We now present a sharp oracle inequality for the penalty parameters selected by 
 
 \begin{theorem}
 \label{train_val_thrm}
+Suppose that the error $\epsilon$ are sub-Gaussian random variables with expectation zero.
+
 Suppose $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$.
 
 Suppose that if $\|\epsilon\|_{T}\le 2\sigma$, then $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-smoothly-parameterized by $\boldsymbol{\lambda}$ over $\Lambda$ with respect to $\| \cdot \|_V$.
@@ -218,7 +220,9 @@ $$
 	Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right)
 $$
 $$
-	\le c_{3}\exp\left(-\frac{n_{V}\delta^{4}}{c_{3}^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c_{3}\exp\left(-\frac{n_{V}\delta^{2}}{c_{3}^{2}}\right)+Pr\left(\|\epsilon\|_{T}\le2\sigma\right)
+	\le c_{3}\exp\left(-\frac{n_{V}\delta^{4}}{c_{3}^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)
+	+c_{3}\exp\left(-\frac{n_{V}\delta^{2}}{c_{3}^{2}}\right)
+	+c_{3}\exp\left(-\frac{n_{T}\delta^{2}}{c_{3}^{2}}\right)
 $$
 
 
@@ -317,12 +321,12 @@ In traditional cross-validation, the final model is retrained on all the data wi
 The following theorem bounds the generalization error of $\bar{g}_{D^{n}}$.
 \begin{theorem}
 \label{thrm:kfold}
-
+Suppose the error $\epsilon$ are sub-Gaussian random variables with expectation zero.
 Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
 
 Suppose $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$.
 
-Suppose there exist constants $C$ such that for any dataset $D^{n_T}$, $\hat{g}_{D^{n_T}}(\cdot | \boldsymbol \lambda)$ is $C$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to $\| \cdot \|_\infty$.
+Suppose that if $\|\epsilon\|_{T}\le 2\sigma$, there exist constants $C$ such that for any dataset $D^{n_T}$, $\hat{g}_{D^{n_T}}(\cdot | \boldsymbol \lambda)$ is $C$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to $\| \cdot \|_\infty$.
 
 For all $a > 0$,
 \begin{equation}
@@ -343,7 +347,7 @@ Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
 
 Suppose $\Lambda = [n^{-t_{\min}}, n^{t_{\max}}]^J$.
 
-Suppose there are constants $C,\kappa$ such that for any dataset $D^{(n_T)}$, $\hat{g}_{D^{(n_T)}}(\cdot | \boldsymbol \lambda)$ is $Cn^\kappa$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to $\| \cdot \|_\infty$.
+Suppose that if $\|\epsilon\|_{T}\le 2\sigma$, there are constants $C,\kappa$ such that for any dataset $D^{(n_T)}$, $\hat{g}_{D^{(n_T)}}(\cdot | \boldsymbol \lambda)$ is $Cn^\kappa$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to $\| \cdot \|_\infty$.
 
 For all $a > 0$,
 \begin{equation}
@@ -400,14 +404,14 @@ The theorems and lemmas given in this section are all  finite-sample results. On
 \section{Smoothness of $\hat{g}(\cdot | \boldsymbol{\lambda})$ in $\boldsymbol \lambda$}
 \label{sec:entropy}
 
-Theorem \ref{train_val_thrm} and \ref{thrm:kfold} require the fitted functions $\hat{g}(\cdot | \boldsymbol{\lambda})$ to be smoothly parametrized by $\boldsymbol{\lambda}$. We now present examples of penalized regression problems where these conditions are satisfied. Recall that Theorem \ref{train_val_thrm} requires smoothness with respect to $\|\cdot \|_V$ whereas Theorem \ref{thrm:kfold} requires smoothness with respect to $\|\cdot\|_\infty$. Therefore any example that satisfies the smoothness condition for Theorem \ref{thrm:kfold} also satisfies the smoothness condition for Theorem \ref{train_val_thrm}.
+Theorem \ref{train_val_thrm} and \ref{thrm:kfold} require the fitted functions $\hat{g}(\cdot | \boldsymbol{\lambda})$ to be smoothly parametrized by $\boldsymbol{\lambda}$ as defined in \eqref{eq:smooth_funcs}. We now present examples of penalized regression problems where these conditions are satisfied. Recall that Theorem \ref{train_val_thrm} requires smoothness with respect to $\|\cdot \|_V$ whereas Theorem \ref{thrm:kfold} requires smoothness with respect to $\|\cdot\|_\infty$. Therefore any example that satisfies the smoothness condition for Theorem \ref{thrm:kfold} also satisfies the smoothness condition for Theorem \ref{train_val_thrm}.
 
-? Throughout, we will presume that $\mathcal{G}$ is a convex function class.
+Throughout, we will presume that $\mathcal{G}$ is a convex function class.
 
 \subsection{Smoothness over the Validation Set}
 \label{sec:smoothness_validation}
 
-Theorem \ref{train_val_thrm} requires that $\hat{g}(\cdot | \boldsymbol{\lambda})$ is $C$-smoothly-parameterized by $\boldsymbol{\lambda}$ over $\Lambda$ with respect to $\| \cdot \|_V$. We show that additive models satisfy this smoothness condition.
+Theorem \ref{train_val_thrm} requires that $\hat{g}(\cdot | \boldsymbol{\lambda})$ is $C$-smoothly-parameterized by $\boldsymbol{\lambda}$ over $\Lambda$ with respect to $\| \cdot \|_V$. We show that nonparametric additive models satisfy this smoothness condition.
 
 Penalized regression problems for additive models usually minimize a training criterion of the following form
 \begin{equation}
@@ -421,40 +425,68 @@ Instead of dealing with \eqref{orig_train_criterion} directly, we consider minim
 \end{equation}
 \eqref{train_crit_ridge} has an additional ridge penalty for each of the additive components, where each of the ridge penalties is scaled by a fixed constant $w > 0$. 
 
-For both this example and the one in Section \ref{sec:smoothness_domain}, we perturb the penalized regression problems with additional ridge penalties scaled by a constant $w$. The ridge penalty is primarily for the proofs to carry through: it ensures that the fitted functions are ``well-conditioned.'' In practice, $w$ can be chosen small enough that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. In addition, we show in Lemma \ref{oracle_maintained} that for parametric regression problems that are strongly convex, the effect of the ridge penalty is negligible. Of course we would like to do without the ridge penalty, but one will probably need more assumptions about the penalized regression problem.
+For both this example and the one in Section \ref{sec:smoothness_domain}, we perturb the penalized regression problems with additional ridge penalties scaled by a constant $w$. The ridge penalty is primarily for the proofs to carry through; it ensures that the fitted functions are ``well-conditioned.'' In practice, $w$ can be chosen small enough that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. In addition, we show in Lemma \ref{oracle_maintained} that for parametric regression problems that are strongly convex, the effect of the ridge penalty is negligible. Of course we would like to do without the ridge penalty, but one will probably need more assumptions about the penalized regression problem.
 
-\subsubsection{Smooth Penalties}
-We will first consider the simple case where the penalties $P_j$ are twice-differentiable everywhere. The following lemma shows that fitted function values vary smoothly in the penalty parameters.
+We will consider the case where the penalty functions $P_j$ are convex and twice-differentiable. In the nonparametric setting, we will need the concept of pathwise differentiability:
+\begin{definition}
+	Let $\mathcal{G}$ be a function class.
+	Let $P:\mathcal{G} \mapsto \mathbb{R}$ be a functional and $g$ and $h$ be functions in $\mathcal{G}$.
+	The pathwise derivative of $P$ at $g$ with respect to $h$ is defined as
+	$$
+	\frac{d}{d m} P(g + mh) = \lim_{m \rightarrow 0} \frac{P(g + mh) - P(g)}{m}
+	$$
+	if the limit exists.
+	The pathwise second derivative of $P$ at $g$ with respect to $h$ is defined as
+	$$
+	\frac{d^2}{d m^2} P(g + mh) = \lim_{m \rightarrow 0} \frac{\frac{d}{d t} P(g + th) - \frac{d}{d m} P(g)}{m}
+	$$	
+	if the pathwise derivative of $P$ and the limit exists.
+	$P$ is twice-differentiable if the pathwise second derivative of $P$ at any $g \in \mathcal{G}$ with respect to any $h \in \mathcal{G}$ exists.
+\end{definition}
+Furthermore, one can show that the functional $P$ is convex if the pathwise second derivative of a penalty function is always positive as follows
+\begin{equation}
+\frac{d^2}{d m^2} P_j(f + mh) \ge 0 \forall j= 1,...,J \text{ and } \forall h \in \mathcal{G}
+\end{equation}
+\textcolor{red}{(Do I need to prove or define this? Has someone done this already?)}. 
+
+As an example, consider the $r$-th degree Sobolev penalty
+\begin{equation}
+P(g) = \int \left(g^{(r)}(x) \right)^2 dx
+\end{equation}
+Its pathwise second derivative at $g$ with respect to $h$ is
+\begin{eqnarray}
+\frac{d^2}{dm^2} P(g) &=& \frac{d^2}{dm^2} \int \left((g + mh)^{(r)}(x) \right)^2 dx\\
+&=& 2 \int \left(h^{(r)}(x) \right)^2 dx
+\end{eqnarray}
+
+The following lemma states that the fitted functions from \ref{train_crit_ridge} are smoothly parameterized by the penalty parameters.
 
 \begin{lemma}
 \label{lemma:smooth}
-We suppose the penalty functions $P_{j}$ are convex and twice-differentiable.
-Suppose that $\sup_{g\in\mathcal{G}}\|g\|_{D}\le G$.
-Suppose $\lambda_j \ge \lambda_{\min}$ for all $j$.
+Consider $\hat{g}_{j}(\cdot| \boldsymbol \lambda)$ as defined in \ref{train_crit_ridge}.
+Suppose the penalty functions $P_{j}$ is twice-differentiable and convex.
 
-%For all $d>0$, any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)}$ that satisfy
-%\[
-%\|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}\|\le\frac{dw}{2J}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}\lambda_{\min}
-%\]
+Suppose $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$.
 
 For all $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)} \in \Lambda$, we have
 \[
 \left \|
 \sum_{j=1}^{J}\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(1)})-\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(2)})
-\right \|_{D}
+\right \|_{V}
 \le
-\frac{2J}{w\lambda_{\min}}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right) 
 \left \|
 \boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}
 \right \|
+stuff
 \]
+where $stuff$ depends on $\| \epsilon \|_T$.
 \end{lemma}
 
 All of the proofs on the smoothness of $\hat{g}(\cdot | \boldsymbol \lambda)$ follow the same recipe. The first step is to consider the optimization problem \eqref{orig_train_criterion} restricted to models on the line
 \begin{equation}
 \left \{ \hat{g}(\cdot |\boldsymbol \lambda^{(1)}) + m \left (\hat{g}(\cdot |\boldsymbol \lambda^{(2)})  - \hat{g}(\cdot |\boldsymbol \lambda^{(1)}) \right ) : m \in [0,1] \right \}
 \end{equation}
-By implicit differentiation of the KKT conditions, we can then determine how the fitted models change with respect to the penalty parameters. Finally, the difference $\| \hat{g}(\cdot | \boldsymbol \lambda^{(1)}) -  \hat{g}(\cdot | \boldsymbol \lambda^{(2)}) \|$ is bounded using the mean value theorem. Depending on the situation, the result can be proven directly or by contradiction.
+By implicit differentiation of the KKT conditions, we can then determine how the fitted models change with respect to the penalty parameters. Finally, the difference $\| \hat{g}(\cdot | \boldsymbol \lambda^{(1)}) -  \hat{g}(\cdot | \boldsymbol \lambda^{(2)}) \|$ is bounded using the mean value theorem.
 
 For illustration, we present the proof for Lemma \ref{lemma:smooth} in the case where there is only one penalty parameter. The case with multiple penalty parameters is given in Section \ref{sec:proofs}.
 
@@ -479,15 +511,20 @@ It's implicit derivative with respect to $\lambda$ is
 \left ( \frac{\partial}{\partial m}P(g+mh)+w\langle h,g+mh\rangle_{D} \right )
 \end{equation}
 
-From the KKT conditions, we can show
+By the KKT conditions and the definitions of $\hat{m}(\lambda)$, e can show
 \[
-\left | \frac{\partial}{\partial m}P(g+mh) \right |  \le
-\left(\frac{n}{n_{T} \lambda_{\min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)  \|h\|_{D}
+\left | \frac{\partial}{\partial m}P(g+mh) \right |_{m = \hat{m}(\lambda)}  \le
+C \|h\|_{D}
 \]
+and
+$$
+\left . w\langle h,g+mh\rangle_{D} \right |_{m = \hat{m}(\lambda)} \le C \|h\|_{D}
+$$
+for some constant $C$.
 Hence
 \[
 \left|\frac{\partial}{\partial\lambda}\hat{m}(\lambda)\right| \le
-\left(\frac{n}{n_{T}}n^{\tau_{min}}\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)n^{\tau_{\min}}w^{-1}\|h\|_{D}^{-1}
+2C (\lambda_{\min}w)^{-1}\|h\|_{D}^{-1}
 \]
 
 By the MVT, there is some $\alpha\in (\lambda^{(1)},\lambda^{(2)})$ such that
@@ -496,77 +533,11 @@ By the MVT, there is some $\alpha\in (\lambda^{(1)},\lambda^{(2)})$ such that
 \left|\left ( \lambda^{(2)}-\lambda^{(1)} \right )
 \left . \frac{\partial \hat{m}(\lambda) }{\partial\lambda}\right |_{\lambda=\alpha} \right|\\
  & \le & |\lambda^{(2)}-\lambda^{(1)}|
-\left(\frac{n}{n_{T} \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)\frac{1}{wd \lambda_{\min} } \\
- & = & 1/2
+2C (\lambda_{\min}w)^{-1}\|h\|_{D}^{-1}
 \end{eqnarray*}
-
-
-But this is a contradiction since we know that $\hat{m}(\lambda^{(2)})=1$
-and $\hat{m}_{\tilde{k}}(\lambda^{(1)})=0$.
+Since we know that $\hat{m}(\lambda^{(2)})=1$
+and $\hat{m}_{\tilde{k}}(\lambda^{(1)})=0$, we can rearrange the inequality to get our final result.
 \end{proof}
-
-\subsubsection{Nonsmooth penalties}\label{sec:nonsmooth}
-
-If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless, we find that for many popular non-smooth penalty functions, the functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
-
-\begin{definition}
-The differentiable space of a real-valued function $L$ at $g \in \mathcal{G}$ is the set of functions
-\begin{equation}
-\Omega^{L}(g) = \left \{ h \in \mathcal{G} \middle | \lim_{\epsilon \rightarrow 0} \frac{L(g + \epsilon h) - L(g)}{\epsilon} \text{ exists } \right \}
-\end{equation}
-\end{definition}
-
-\begin{definition}
-$S$ is a local optimality space for a convex function $L(\cdot, \boldsymbol \lambda_0)$ if there exists a neighborhood $W$ containing $\boldsymbol \lambda_0$ such that for every $\boldsymbol \lambda \in W$,
-\begin{equation}
-\argmin_{g \in \mathcal{G}} L(g, \boldsymbol \lambda) =
-\argmin_{g \in S} L(g, \boldsymbol \lambda)
-\end{equation}
-\end{definition}
-
-Let the training criterion be denoted
-\begin{eqnarray*}
-L_T(g, \lambda) &=& \argmin_{g\in \mathcal{G}} 
-\left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T 
-+ \sum_{j=1}^J \lambda_j \left ( P_j(g_j) + \frac{w}{2} \| g_j \|^2_D \right )
-\end{eqnarray*}
-
-We will need following conditions to hold for almost every $\boldsymbol{\lambda}$:
-\begin{condition}
-\label{condn:nonsmooth1}
-The differentiable space $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right))$ is a local optimality space for $L_T\left(\cdot,\boldsymbol{\lambda}\right)$.
-\end{condition}
-\begin{condition}
-\label{condn:nonsmooth2}
-$L_T(\cdot, \boldsymbol{\lambda})$ is twice continuously differentiable along directions in $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right))$.
-\end{condition}
-
-Nonsmooth penalties that satisfy Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2} include ? (I'm not sure which nonparametric penalties actually satisfy this.)
-
-Equipped with the conditions above, we can characterize the smoothness of the fitted functions when the penalties are nonsmooth. In fact the result is exactly the same as Lemma \ref{lemma:smooth}. The proof is given in Section \ref{sec:proofs}.
-
-\begin{lemma}
-\label{lemma:nonsmooth}
-Suppose that $\sup_{g\in\mathcal{G}}\|g\|_{D}\le G$.
-Suppose $\lambda_j \ge \lambda_{\min}$ for all $j$.
-Suppose the penalty functions are convex.
-Suppose Conditions 1 and 2 hold for almost every $\boldsymbol{\lambda}$.
-
-%For all $d>0$, any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)}$ that satisfy
-%\[
-%\|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}\|\le
-%\frac{dw}{2J}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}\lambda_{\min}
-%\]
-
-For any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)} \in \Lambda$, we have
-\[
-\left \|\sum_{j=1}^{J}\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(1)})-\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(2)}) \right \|_{D}
-\le
-\frac{2J}{w\lambda_{\min}}
-\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)
-\left \|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)} \right \|
-\]
-\end{lemma}
 
 \subsection{Smoothness over the entire domain}
 \label{sec:smoothness_domain}
@@ -622,6 +593,69 @@ For any $\lambda^{(1)}, \lambda^{(2)} \in \Lambda$, we have
 \frac{2Lp^{r}\left(K+wG\right)}{wJ\lambda_{\min}} 
 \left \|\lambda^{(2)}-\lambda^{(1)} \right \|_{2}
 \]
+\end{lemma}
+
+\subsubsection{Nonsmooth penalties}\label{sec:nonsmooth}
+
+If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless, we find that for many popular non-smooth penalty functions, the functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
+
+\begin{definition}
+	The differentiable space of a real-valued function $L$ at $g \in \mathcal{G}$ is the set of functions
+	\begin{equation}
+	\Omega^{L}(g) = \left \{ h \in \mathcal{G} \middle | \lim_{\epsilon \rightarrow 0} \frac{L(g + \epsilon h) - L(g)}{\epsilon} \text{ exists } \right \}
+	\end{equation}
+\end{definition}
+
+\begin{definition}
+	$S$ is a local optimality space for a convex function $L(\cdot, \boldsymbol \lambda_0)$ if there exists a neighborhood $W$ containing $\boldsymbol \lambda_0$ such that for every $\boldsymbol \lambda \in W$,
+	\begin{equation}
+	\argmin_{g \in \mathcal{G}} L(g, \boldsymbol \lambda) =
+	\argmin_{g \in S} L(g, \boldsymbol \lambda)
+	\end{equation}
+\end{definition}
+
+Let the training criterion be denoted
+\begin{eqnarray*}
+	L_T(g, \lambda) &=& \argmin_{g\in \mathcal{G}} 
+	\left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T 
+	+ \sum_{j=1}^J \lambda_j \left ( P_j(g_j) + \frac{w}{2} \| g_j \|^2_D \right )
+\end{eqnarray*}
+
+We will need following conditions to hold for almost every $\boldsymbol{\lambda}$:
+\begin{condition}
+	\label{condn:nonsmooth1}
+	The differentiable space $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right))$ is a local optimality space for $L_T\left(\cdot,\boldsymbol{\lambda}\right)$.
+\end{condition}
+\begin{condition}
+	\label{condn:nonsmooth2}
+	$L_T(\cdot, \boldsymbol{\lambda})$ is twice continuously differentiable along directions in $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right))$.
+\end{condition}
+
+Nonsmooth penalties that satisfy Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2} include ? (I'm not sure which nonparametric penalties actually satisfy this.)
+
+Equipped with the conditions above, we can characterize the smoothness of the fitted functions when the penalties are nonsmooth. In fact the result is exactly the same as Lemma \ref{lemma:smooth}. The proof is given in Section \ref{sec:proofs}.
+
+\begin{lemma}
+	\label{lemma:nonsmooth}
+	Suppose that $\sup_{g\in\mathcal{G}}\|g\|_{D}\le G$.
+	Suppose $\lambda_j \ge \lambda_{\min}$ for all $j$.
+	Suppose the penalty functions are convex.
+	Suppose Conditions 1 and 2 hold for almost every $\boldsymbol{\lambda}$.
+	
+	%For all $d>0$, any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)}$ that satisfy
+	%\[
+	%\|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}\|\le
+	%\frac{dw}{2J}\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)^{-1}\lambda_{\min}
+	%\]
+	
+	For any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)} \in \Lambda$, we have
+	\[
+	\left \|\sum_{j=1}^{J}\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(1)})-\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(2)}) \right \|_{D}
+	\le
+	\frac{2J}{w\lambda_{\min}}
+	\left(\frac{n}{n_T \lambda_{\min} }\left(2G+\|\epsilon\|_{T}\right)+wG+G\right)
+	\left \|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)} \right \|
+	\]
 \end{lemma}
 
 \subsubsection{Smoothing Splines with a Sobolev Penalty}
