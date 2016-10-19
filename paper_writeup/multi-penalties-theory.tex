@@ -742,9 +742,23 @@ Smoothing splines were fit with a Sobolev penalty
 \begin{equation}
 \hat{g}_{1, \lambda}, \hat{g}_{2, \lambda} = \argmin_{g_1, g_2} \| y - f_1(x_1) - f_2(x_2) \|_T^2 + \int_0^6 (f_1^{(2)}(x))^2 dx + \int_0^6 (f_2^{(2)}(x))^2 dx
 \end{equation}
-The training set contained 100 samples and models were fitted with 10 knots. A grid search was performed over the penalty parameter values $\{10^{-6 + 0.2i}: i = 0, ..., 25 \}$. We tested validation set sizes $n_V = 20, 30, ..., 80$. The oracle penalty parameters were chosen by minimizing the difference between the fitted model and the true model over a separate test set of 800 samples. A total of 30 simulations were run for each validation set size.
+The training set contained 100 samples and models were fitted with 10 knots. A grid search was performed over the penalty parameter values $\{10^{-6 + 0.2i}: i = 0, ..., 25 \}$. We tested 26 validation set sizes $n_V = \lfloor 5 * 1.25^{i} \rfloor $ for $i = 0, ..., 20$. The oracle penalty parameters were chosen by minimizing the difference between the fitted model and the true model over a separate test set of 800 samples. A total of 30 simulations were run for each validation set size.
 
-Figure \ref{fig:emp_v_theory} plots the validation loss $\| \hat{g}_{\lambda} - g^* \|_V$ of the model tuned using a validation set versus the model fit using the oracle penalty parameters. As the validation set increases, the error of the tuned model converges towards the oracle model as expected. In addition we compare the observed difference between the validation losses for the two models and the expected convergence rate of $O_p\left (n_{V}^{-1/4} \right)$. (Note that all other factors that influence the convergence rate are constant since we only vary the validation set size.) The plot shows that theory closely matches the empirical evidence.
+Figure \ref{fig:emp_v_theory} plots the difference of between the model loss and the oracle loss
+$$
+\left \| \hat{g}(\cdot | \hat{\boldsymbol{\lambda}}) - g^* \right \|_V - 
+\left \| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \right \|_V
+$$
+as the validation set size increases. As expected, it drops quickly.
+
+%As stated in Lemma \ref{lemma:train_val_special}, the validation loss difference should be bounded by the sum of a near-parametric term \eqref{eq:asym_train_val_theorem2} and the geometric mean of the oracle error and the near-parametric term \eqref{eq:asym_train_val_theorem3}. To determine if \eqref{eq:asym_train_val_theorem3} is truly necessary, we compared the two linear regression models:
+%\begin{eqnarray}
+%\text{Validation loss difference} &\sim & \beta_1 \left (\frac{1}{n_V} \right)^{1/2} \\
+%\label{eq:model_no_geom}
+%\text{Validation loss difference} &\sim& \beta_1' \left (\frac{1}{n_V} \right )^{1/2} + \beta_2' \sqrt{\left (\frac{1}{n_V} \right )^{1/2}\left \| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \right \|_V}
+%\label{eq:model_geom}
+%\end{eqnarray}
+%where \eqref{eq:model_geom} corresponds to the model that includes the geometric term. (Note that we remove the $\log n$ term in the near-parametric term since the range of $\Lambda$ is fixed in this simulation study.) From an ANOVA test, we reject the null hypothesis that the validation loss difference follows the model in \eqref{eq:model_no_geom} (p-value $< 1$e$^{-3}$). This gives us confidence that the geometric term is indeed necessary in Theorem \ref{train_val_thrm} and Lemma \ref{lemma:train_val_special}.
 
 \begin{figure}
 \label{fig:emp_v_theory}

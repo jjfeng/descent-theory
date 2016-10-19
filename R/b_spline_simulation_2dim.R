@@ -88,7 +88,8 @@ Make_data <- function(n_train, n_validate, n_test, ord=4, snr=2, xmin=0, xmax=6)
     X <- list(x1, x2)
     
     epsilon <- rnorm(n=n, sd=1)
-    true_y <- sin(x1) + 0.5 * sin(x2 * 2 + 1)
+    # true_y <- sin(x1) + 0.5 * sin(x2 * 2 + 1)
+    true_y <- sin(x1) + 0.5 * sin(x2 * 1.2 + 1)
     y <- true_y + epsilon * Get_norm2(true_y) / Get_norm2(epsilon) / snr
     
     ## Split train and validation
@@ -158,12 +159,12 @@ Do_bspline_CV_oracle <- function(dataset, lambdas1, lambdas2) {
     # plot(val_X1, dataset$val_true_y)
     # lines(val_X1, dataset$val_bspline_matrix %*% res[[cv_lam_idx]]$coef, col="red")
     # lines(val_X1, dataset$val_bspline_matrix %*% res[[oracle_lam_idx]]$coef, col="green")
-    
-    # train_X1 <- dataset$X[[1]][dataset$train_idx]
-    # plot(train_X1, dataset$train_y)
-    # lines(train_X1, dataset$train_bspline_matrix %*% res[[cv_lam_idx]]$coef, col="red")
-    # lines(train_X1, dataset$train_bspline_matrix %*% res[[oracle_lam_idx]]$coef, col="green")
-    # 
+
+    train_X1 <- dataset$X[[1]][dataset$train_idx]
+    plot(train_X1, dataset$train_y)
+    lines(train_X1, dataset$train_bspline_matrix %*% res[[cv_lam_idx]]$coef, col="red")
+    lines(train_X1, dataset$train_bspline_matrix %*% res[[oracle_lam_idx]]$coef, col="green")
+
     # test_X1 <- dataset$X[[1]][dataset$test_idx]
     # plot(test_X1, dataset$test_true_y)
     # lines(test_X1, dataset$test_bspline_matrix %*% res[[cv_lam_idx]]$coef, col="red")
@@ -233,16 +234,25 @@ set.seed(10)
 # trying more reps and bigger sizes
 n_train <- 100
 n_test <- 800
-lambdas1 <- 10^seq(from=-6, to=-1, by=0.2)
-lambdas2 <- 10^seq(from=-6, to=-1, by=0.2)
-n_sizes <- floor(5 * 1.25^seq(0, 25))
-n_reps <- 50
+lambdas1 <- 10^seq(from=-10, to=-1, by=0.25)
+lambdas2 <- 10^seq(from=-10, to=-1, by=0.25)
+n_sizes <- floor(10 * 1.25^seq(0, 18))
+n_reps <- 40
 snr <- 2
+
+# jean test
+n_train <- 100
+n_test <- 800
+lambdas1 <- 10^seq(from=-9, to=-1, by=0.2)
+lambdas2 <- 10^seq(from=-9, to=-1, by=0.2)
+n_sizes <- seq(20, 400, by=20)
+n_reps <- 60
+snr <- 4
 
 ## Important: To see useful trends in the empirical process term,
 # we should vary only the number of validation samples
 # and keep all other terms constant!
-cv_to_oracle_compare_w <- lapply(n_sizes, function(n) {
+cv_to_oracle_all <- lapply(n_sizes, function(n) {
     print(n)
     cv_oracle <- Do_bspline_cv_oracle_repl(
         reps=n_reps, 
@@ -256,34 +266,35 @@ cv_to_oracle_compare_w <- lapply(n_sizes, function(n) {
     print(colMeans(cv_oracle))
     data.frame(
         n=n,
-        t(colMeans(cv_oracle))
+        cv_oracle
     )
 })
-cv_to_oracle_compare_w <- do.call("rbind", cv_to_oracle_compare_w)
-save(cv_to_oracle_compare_w, file = "cv_to_oracle_compare_w.RData")
+cv_to_oracle_all <- do.call("rbind", cv_to_oracle_all)
+# save(cv_to_oracle_all, file = "cv_to_oracle_all.RData")
+cv_to_oracle_compare_w <- aggregate(loss_diff ~ n, cv_to_oracle_all, FUN = mean)
 
-ylim <- c(min(
-        cv_to_oracle_compare_w$oracle_true_validation_loss,
-        cv_to_oracle_compare_w$cv_true_validation_loss
-    ), max(
-        cv_to_oracle_compare_w$oracle_true_validation_loss,
-        cv_to_oracle_compare_w$cv_true_validation_loss
-))
-
-# pdf('figures/validation_size_loss.pdf', width=7, height=5)
-plot(
-    cv_to_oracle_compare_w$n, cv_to_oracle_compare_w$cv_true_validation_loss, type = "b", col="red",
-    ylim = c(0.1, 0.2),
-    ylab="Validation Loss",
-    xlab="Validation Set Size"
-)
-lines(
-    cv_to_oracle_compare_w$n,
-    # rep(mean(cv_to_oracle_compare_w$oracle_true_validation_loss), length(n_sizes)),
-    cv_to_oracle_compare_w$oracle_true_validation_loss,
-    col="green"
-)
-legend(50,0.2,c("Training/Validation Split", "Oracle"),lty=c(1,1), lwd=c(2.5,2.5), col=c("red","green"))
+# ylim <- c(min(
+#         cv_to_oracle_compare_w$oracle_true_validation_loss,
+#         cv_to_oracle_compare_w$cv_true_validation_loss
+#     ), max(
+#         cv_to_oracle_compare_w$oracle_true_validation_loss,
+#         cv_to_oracle_compare_w$cv_true_validation_loss
+# ))
+# 
+# # pdf('figures/validation_size_loss.pdf', width=7, height=5)
+# plot(
+#     cv_to_oracle_compare_w$n, cv_to_oracle_compare_w$cv_true_validation_loss, type = "b", col="red",
+#     ylim = c(0.1, 0.2),
+#     ylab="Validation Loss",
+#     xlab="Validation Set Size"
+# )
+# lines(
+#     cv_to_oracle_compare_w$n,
+#     # rep(mean(cv_to_oracle_compare_w$oracle_true_validation_loss), length(n_sizes)),
+#     cv_to_oracle_compare_w$oracle_true_validation_loss,
+#     col="green"
+# )
+# legend(50,0.2,c("Training/Validation Split", "Oracle"),lty=c(1,1), lwd=c(2.5,2.5), col=c("red","green"))
 # dev.off()
 
 pdf('figures/validation_size_loss_diff.pdf', width=10, height=6)
@@ -293,14 +304,14 @@ plot(
     cv_to_oracle_compare_w$loss_diff,
     type = "b",
     # ylim = c(0.1, 0.2),
-    ylab="Validation Loss Diff (log-scaled)",
-    xlab="Validation Set Size (log-scaled)",
-    xaxt="n",
-    log="xy",
+    ylab="Validation Loss Diff",
+    xlab="Validation Set Size",
+    # xaxt="n",
+    # log="xy",
     cex.axis=1.25,
     cex.lab=1.25
 )
-axis(1, at = cv_to_oracle_compare_w$n, las=2)
+# axis(1, at = cv_to_oracle_compare_w$n, las=2)
 dev.off()
 
 pdf('figures/validation_size_loss_diff_poster.pdf', width=18, height=7)
@@ -313,7 +324,7 @@ plot(
     # ylim = c(0.1, 0.2),
     ylab="Validation Loss Diff",
     xlab="Validation Set Size",
-    log="xy",
+    # log="xy",
     xaxt="n",
     cex.axis=2,
     cex.lab=3
@@ -322,38 +333,66 @@ axis(1, at = cv_to_oracle_compare_w$n, las=0, cex.axis=2)
 dev.off()
 
 # pdf('figures/qqplot.pdf', width=5, height=5)
-v_rate <- 1/sqrt(cv_to_oracle_compare_w$n)
-oracle_rate <- (cv_to_oracle_compare_w$oracle_true_validation_loss)
-expected_loss_diff1 <- v_rate
-expected_loss_diff2 <- sqrt(v_rate) * sqrt(oracle_rate)
-plot(
-    expected_loss_diff,
-    abs(cv_to_oracle_compare_w$loss_diff),
-    xlab="Expected Convergence Rate",
-    ylab="Empirical Validation Loss Difference"
-)
+# plot(
+#     expected_loss_diff,
+#     abs(cv_to_oracle_compare_w$loss_diff),
+#     xlab="Expected Convergence Rate",
+#     ylab="Empirical Validation Loss Difference"
+# )
 # dev.off()
 
-# Maybe we can confirm the existance of the geometric mean by linear regression??
-b <- lm(cv_to_oracle_compare_w$loss_diff ~ expected_loss_diff1)
+v_rate <- 1/sqrt(cv_to_oracle_all$n)
+cv_to_oracle_all$expected_loss_diff1 <- v_rate
+cv_to_oracle_all$expected_loss_diff2 <- sqrt(v_rate) * sqrt(cv_to_oracle_all$oracle_true_validation_loss)
+cv_to_oracle_all$expected_diff1 <- sqrt(v_rate)
+cv_to_oracle_all$expected_diff2 <- sqrt(cv_to_oracle_all$oracle_true_validation_loss)
+
+# cv_to_oracle_some <- cv_to_oracle_all[cv_to_oracle_all$loss_diff > 0 & cv_to_oracle_all$n > 100,]
+# cv_to_oracle_some <- cv_to_oracle_all[cv_to_oracle_all$loss_diff > 0,]
+cv_to_oracle_some <- cv_to_oracle_all
+cv_to_oracle_some <- merge(cv_to_oracle_compare_w, cv_to_oracle_some, by="n")
+cv_to_oracle_some <- cv_to_oracle_some[cv_to_oracle_some$loss_diff.x < cv_to_oracle_some$loss_diff.y,]
+# cv_to_oracle_some <- cv_to_oracle_some[0< cv_to_oracle_some$loss_diff.y,]
+cv_to_oracle_some$other <- cv_to_oracle_some$loss_diff.y * (cv_to_oracle_some$n)^(1/4)
+
+b <- lm((other) ~ (expected_diff1) + 0, cv_to_oracle_some)
 summary(b)
-a <- lm(cv_to_oracle_compare_w$loss_diff ~ expected_loss_diff2)
+b1 <- lm((other) ~ (expected_diff1), cv_to_oracle_some)
+summary(b1)
+anova(b, b1)
+a <- lm((other) ~ (expected_diff2), cv_to_oracle_some)
 summary(a)
-a2 <- lm(cv_to_oracle_compare_w$loss_diff ~ expected_loss_diff2 + expected_loss_diff1)
+a2 <- lm((other) ~ (expected_diff2) + (expected_diff1) + 0, cv_to_oracle_some)
 summary(a2)
 anova(b, a2)
 
-regl1 <- lm(loss_diff ~ I((n)^-0.25) + I((n)^-0.5), cv_to_oracle_compare_w)
-summary(regl1)
+b <- lm(log(other) ~ log(expected_diff1) + 0, cv_to_oracle_some)
+summary(b)
+b1 <- lm(log(other) ~ log(expected_diff1), cv_to_oracle_some)
+summary(b1)
+anova(b, b1)
+a <- lm(log(other) ~ log(expected_diff2) + 0, cv_to_oracle_some)
+summary(a)
+a2 <- lm(log(other) ~ log(expected_diff2) + log(expected_diff1) + 0, cv_to_oracle_some)
+summary(a2)
+anova(b, a2)
 
-regl2 <- lm(loss_diff ~ I((n)^-0.5), cv_to_oracle_compare_w)
-summary(regl2)
+cor(cv_to_oracle_all$expected_diff1, cv_to_oracle_all$expected_diff2)
+plot(cv_to_oracle_all$n, cv_to_oracle_all$expected_diff2)
 
-anova(regl2, regl1)
+mean(log(cv_to_oracle_some$loss_diff, base = cv_to_oracle_some$n))
 
-plot(
-    (1/cv_to_oracle_compare_w$n)^0.5,
-    abs(cv_to_oracle_compare_w$loss_diff),
-    xlab="Expected Convergence Rate (1/n-1/2)",
-    ylab="Empirical Validation Loss Difference"
-)
+# regl1 <- lm(loss_diff ~ I((n)^-0.25) + I((n)^-0.5), cv_to_oracle_compare_w)
+# summary(regl1)
+# 
+# regl2 <- lm(loss_diff ~ I((n)^-0.5), cv_to_oracle_compare_w)
+# summary(regl2)
+# 
+# anova(regl2, regl1)
+# 
+# plot(
+#     (1/cv_to_oracle_compare_w$n)^0.5,
+#     abs(cv_to_oracle_compare_w$loss_diff),
+#     xlab="Expected Convergence Rate (1/n-1/2)",
+#     ylab="Empirical Validation Loss Difference"
+# )
