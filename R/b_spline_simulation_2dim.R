@@ -341,19 +341,22 @@ dev.off()
 # )
 # dev.off()
 
-v_rate <- 1/sqrt(cv_to_oracle_all$n)
-cv_to_oracle_all$expected_loss_diff1 <- v_rate
-cv_to_oracle_all$expected_loss_diff2 <- sqrt(v_rate) * sqrt(cv_to_oracle_all$oracle_true_validation_loss)
-cv_to_oracle_all$expected_diff1 <- sqrt(v_rate)
-cv_to_oracle_all$expected_diff2 <- sqrt(cv_to_oracle_all$oracle_true_validation_loss)
+cv_to_oracle_all_pos <- cv_to_oracle_all[cv_to_oracle_all$loss_diff > 0,]
+cv_to_oracle_compare_w_pos <- aggregate(cbind(loss_diff, oracle_true_validation_loss) ~ n, cv_to_oracle_all_pos, FUN = mean)
 
-# cv_to_oracle_some <- cv_to_oracle_all[cv_to_oracle_all$loss_diff > 0 & cv_to_oracle_all$n > 100,]
-# cv_to_oracle_some <- cv_to_oracle_all[cv_to_oracle_all$loss_diff > 0,]
-cv_to_oracle_some <- cv_to_oracle_all
-cv_to_oracle_some <- merge(cv_to_oracle_compare_w, cv_to_oracle_some, by="n")
+# cv_to_oracle_all_pos$expected_loss_diff1 <- v_rate
+# cv_to_oracle_all_pos$expected_loss_diff2 <- sqrt(v_rate) * sqrt(cv_to_oracle_all_pos$oracle_true_validation_loss)
+
+# cv_to_oracle_some <- cv_to_oracle_all_pos[cv_to_oracle_all_pos$loss_diff > 0 & cv_to_oracle_all_pos$n > 100,]
+# cv_to_oracle_some <- cv_to_oracle_all_pos[cv_to_oracle_all_pos$loss_diff > 0,]
+cv_to_oracle_some <- cv_to_oracle_all_pos
+cv_to_oracle_some <- merge(cv_to_oracle_compare_w_pos, cv_to_oracle_some, by="n")
 cv_to_oracle_some <- cv_to_oracle_some[cv_to_oracle_some$loss_diff.x < cv_to_oracle_some$loss_diff.y,]
 # cv_to_oracle_some <- cv_to_oracle_some[0< cv_to_oracle_some$loss_diff.y,]
 cv_to_oracle_some$other <- cv_to_oracle_some$loss_diff.y * (cv_to_oracle_some$n)^(1/4)
+cv_to_oracle_some$expected_diff1 <- (cv_to_oracle_some$n)^(-1/4)
+cv_to_oracle_some$expected_diff2 <- sqrt(cv_to_oracle_some$oracle_true_validation_loss.x)
+    #sqrt(cv_to_oracle_some$oracle_true_validation_loss)
 
 b <- lm((other) ~ (expected_diff1) + 0, cv_to_oracle_some)
 summary(b)
@@ -371,14 +374,16 @@ summary(b)
 b1 <- lm(log(other) ~ log(expected_diff1), cv_to_oracle_some)
 summary(b1)
 anova(b, b1)
-a <- lm(log(other) ~ log(expected_diff2) + 0, cv_to_oracle_some)
+a <- lm(log(other) ~ log(expected_diff2) , cv_to_oracle_some)
 summary(a)
 a2 <- lm(log(other) ~ log(expected_diff2) + log(expected_diff1) + 0, cv_to_oracle_some)
 summary(a2)
+a2 <- lm(log(other) ~ log(expected_diff2) + log(expected_diff1), cv_to_oracle_some)
+summary(a2)
 anova(b, a2)
 
-cor(cv_to_oracle_all$expected_diff1, cv_to_oracle_all$expected_diff2)
-plot(cv_to_oracle_all$n, cv_to_oracle_all$expected_diff2)
+cor(cv_to_oracle_all_pos$expected_diff1, cv_to_oracle_all_pos$expected_diff2)
+plot(cv_to_oracle_all_pos$n, cv_to_oracle_all_pos$expected_diff2)
 
 mean(log(cv_to_oracle_some$loss_diff, base = cv_to_oracle_some$n))
 
