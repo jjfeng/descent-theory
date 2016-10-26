@@ -5,10 +5,6 @@ library(splines)
 library(mgcv)
 library(fda)
 
-# n_cores <- 3
-# cluster <- makeCluster(n_cores)
-# registerDoParallel(cluster)
-
 w <- 0
 
 Get_norm2 <- function(h) { sqrt(mean(h^2)) }
@@ -50,18 +46,26 @@ Make_bspline_matrix <- function(X, idx, basis_objs, ord) {
     bspline_matrices <- mapply(function(x, basisobj) {
         dropind <- c(seq(1, ord - 1), basisobj$nbasis - seq(ord - 2, 0))
         getbasismatrix(x[idx], basisobj)[,-dropind]
+        
+        #eval.basis(x[idx], basisobj)
     }, X, basis_objs, SIMPLIFY = F)
-    do.call("cbind", bspline_matrices)
+    cols <- lapply(bspline_matrices, function(m){ncol(m)})
+    bspline_matrices <- do.call("cbind", bspline_matrices)
 }
 
+# choose sqrt n_train for spline knots
 Make_bspline_objects <- function(X, train_idx, ord, xmin, xmax) {
     bspline_objs <- lapply(X, function(x) {
-        spline_xs <- sort(sample(x[train_idx], sqrt(length(train_idx)), replace = F))
-        create.bspline.basis(
+        sorted_X <- sort(x)
+        sorted_trainX <- sort(x[train_idx])
+        n <- length(train_idx)
+        num_knots <- floor(sqrt(n))
+        spline_xs <- sorted_trainX[seq(1, n, by=floor(n/num_knots))]
+        spl <- create.bspline.basis(
             c(-0.1 + xmin, 0.1 + xmax),
-            breaks=c(rep(xmin, ord), spline_xs, rep(xmax, ord)),
+            breaks=c(rep(sorted_X[1], ord), spline_xs, rep(sorted_X[length(x)], ord)),
             norder=ord
-        )    
+        ) # plot(spl)
     })
     bspline_objs
 }
@@ -70,13 +74,15 @@ Make_bspline_pen <- function(bspline_objs, ord) {
     penmats <- lapply(bspline_objs, function(basisobj) {
         dropind <- c(seq(1, ord - 1), basisobj$nbasis - seq(ord - 2, 0))
         bsplinepen(basisobj, Lfdobj=2)[-dropind,-dropind]
+        
+        #bsplinepen(basisobj, Lfdobj=2)
     })
     penmats
 }
 
 
 # sqrt n_train knots
-Make_data <- function(n_train, n_validate, n_test, ord=4, snr=2, xmin=0, xmax=6) {
+Make_data <- function(n_train, n_validate, n_test, ord=4, snr=2, xmin=0, xmax=1) {
     ## Generate X data
     n <- n_train + n_validate + n_test
     x1 <- runif(n, min=xmin, max=xmax)
@@ -89,7 +95,7 @@ Make_data <- function(n_train, n_validate, n_test, ord=4, snr=2, xmin=0, xmax=6)
     
     epsilon <- rnorm(n=n, sd=1)
     # true_y <- sin(x1) + 0.5 * sin(x2 * 2 + 1)
-    true_y <- sin(x1) + 0.5 * sin(x2 * 1.2 + 1)
+    true_y <- exp(x1) #+ sin(x2 * 5)
     y <- true_y + epsilon * Get_norm2(true_y) / Get_norm2(epsilon) / snr
     
     ## Split train and validation
@@ -139,6 +145,7 @@ Do_bspline_CV_oracle <- function(dataset, lambdas1, lambdas2) {
     cv_validation_loss <- res[[cv_lam_idx]]$validation
     cv_true_test_loss <- res[[cv_lam_idx]]$true_test_loss
     
+    # test_errs <- unlist(lapply(res, "[[", "true_validation_loss"))
     test_errs <- unlist(lapply(res, "[[", "true_test_loss"))
     oracle_lam_idx <- which.min(test_errs)
     oracle_best_lams <- lambda_grid[oracle_lam_idx,]
@@ -154,22 +161,11 @@ Do_bspline_CV_oracle <- function(dataset, lambdas1, lambdas2) {
     if (oracle_lam_idx == 1 || oracle_lam_idx == length(lambda_grid)) {
         print(paste("oracle_lam_idx", oracle_lam_idx))
     }
+    print(paste("loss diff", cv_true_validation_loss - oracle_true_validation_loss))
     
-    # val_X1 <- dataset$X[[1]][dataset$val_idx]
-    # plot(val_X1, dataset$val_true_y)
-    # lines(val_X1, dataset$val_bspline_matrix %*% res[[cv_lam_idx]]$coef, col="red")
-    # lines(val_X1, dataset$val_bspline_matrix %*% res[[oracle_lam_idx]]$coef, col="green")
+    # Plot_bpline_fits(dataset, dataset$train_idx, dataset$train_bspline_matrix, res[[oracle_lam_idx]], res[[cv_lam_idx]])
+    Plot_bpline_fits(dataset, dataset$val_idx, dataset$val_bspline_matrix, res[[oracle_lam_idx]], res[[cv_lam_idx]])
 
-    train_X1 <- dataset$X[[1]][dataset$train_idx]
-    plot(train_X1, dataset$train_y)
-    lines(train_X1, dataset$train_bspline_matrix %*% res[[cv_lam_idx]]$coef, col="red")
-    lines(train_X1, dataset$train_bspline_matrix %*% res[[oracle_lam_idx]]$coef, col="green")
-
-    # test_X1 <- dataset$X[[1]][dataset$test_idx]
-    # plot(test_X1, dataset$test_true_y)
-    # lines(test_X1, dataset$test_bspline_matrix %*% res[[cv_lam_idx]]$coef, col="red")
-    # lines(test_X1, dataset$test_bspline_matrix %*% res[[oracle_lam_idx]]$coef, col="green")
-    
     data.frame(
         eps=mean((dataset$val_y - dataset$val_true_y)^2),
         cv_true_validation_loss=cv_true_validation_loss,
@@ -184,19 +180,26 @@ Do_bspline_CV_oracle <- function(dataset, lambdas1, lambdas2) {
     )
 }
 
+
+Plot_bpline_fits <- function(dataset, observations_idx, dataset_bspline_matrix, oracle_res, cv_res) {
+    num_knots <- ncol(dataset_bspline_matrix)/2
+    
+    X1 <- dataset$X[[1]][observations_idx]
+    plot(X1, exp(X1), ylim = c(0, 3)) # truth
+    points(X1, dataset_bspline_matrix[,seq(num_knots)] %*% cv_res$coef[seq(num_knots)], col="red")
+    points(X1, dataset_bspline_matrix[,seq(num_knots)] %*% oracle_res$coef[seq(num_knots)], col="green")
+    
+    X2 <- dataset$X[[2]][observations_idx]
+    plot(X2, sin(X2 * 5), ylim = c(-3, 2)) # truth
+    points(X2, dataset_bspline_matrix[,seq(num_knots + 1, num_knots*2)] %*% cv_res$coef[seq(num_knots + 1, num_knots*2)], col="red")
+    points(X2, dataset_bspline_matrix[,seq(num_knots + 1, num_knots*2)] %*% oracle_res$coef[seq(num_knots + 1, num_knots*2)], col="green")
+}
+
 Do_bspline_cv_oracle_repl <- function(reps, n_train, n_validate, n_test, lambdas1, lambdas2, snr=2) {
     res <- replicate(reps, {
         dataset <- Make_data(n_train, n_validate, n_test, snr=snr)
         Do_bspline_CV_oracle(dataset, lambdas1, lambdas2)
     }, simplify = T)
-    # res <- foreach(
-    #     rep=seq(reps),
-    #     .combine= rbind,
-    #     .export=ls(envir=globalenv())
-    # ) %dopar% {
-    #     dataset <- Make_data(n_train, n_validate, n_test, snr=snr)
-    #     Do_bspline_CV_oracle(dataset, lambdas = lambdas)
-    # }
     res <- data.frame(t(res))
     data.frame(sapply(res, as.numeric))
 }
@@ -204,98 +207,41 @@ Do_bspline_cv_oracle_repl <- function(reps, n_train, n_validate, n_test, lambdas
 set.seed(10)
 
 # very good settings!
-# n_train <- 30
-# n_test <- 400
-# lambdas1 <- 10^seq(from=-5, to=-0.5, by=0.2)
-# lambdas2 <- 10^seq(from=-9, to=-3, by=0.2)
-# n_sizes <- seq(from=5, to=30, by=5)
-# n_reps <- 25
-# snr <- 2
-# 
-# # only x1
-# n_train <- 80
-# n_test <- 800
-# lambdas1 <- 10^seq(from=-4, to=-1, by=1)
-# lambdas2 <- 10
-# n_sizes <- seq(from=10, to=50, by=20)
-# n_reps <- 30
-# snr <- 2
-
-
-# new settings!
-# n_train <- 100
-# n_test <- 800
-# lambdas1 <- 10^seq(from=-6, to=-1, by=0.2)
-# lambdas2 <- 10^seq(from=-6, to=-1, by=0.2)
-# n_sizes <- seq(from=20, to=90, by=5)
-# n_reps <- 30
-# snr <- 2
-
-# trying more reps and bigger sizes
-n_train <- 100
-n_test <- 800
-lambdas1 <- 10^seq(from=-10, to=-1, by=0.25)
-lambdas2 <- 10^seq(from=-10, to=-1, by=0.25)
-n_sizes <- floor(10 * 1.25^seq(0, 18))
-n_reps <- 40
-snr <- 2
-
-# jean test
-n_train <- 100
-n_test <- 800
-lambdas1 <- 10^seq(from=-9, to=-1, by=0.2)
-lambdas2 <- 10^seq(from=-9, to=-1, by=0.2)
-n_sizes <- seq(20, 400, by=20)
-n_reps <- 60
-snr <- 4
+n_trains <- c(500) #25, 50, 75, 100) #800?
+n_test <- 10000 #3000
+lambdas1 <- c(10^-11, 10^-9, 10^-6, 10^-3) #10^seq(from=-7, to=-3, by=0.2)
+lambdas2 <- c(10^-11, 10^-9, 10^-6, 10^-3) # 10^seq(from=-7, to=-3, by=0.2)
+n_sizes <- c(100, 500) # floor(seq(0.15, 0.45, by=0.02)^-4)
+n_reps <- 2
+snr <- 8
 
 ## Important: To see useful trends in the empirical process term,
 # we should vary only the number of validation samples
 # and keep all other terms constant!
-cv_to_oracle_all <- lapply(n_sizes, function(n) {
-    print(n)
-    cv_oracle <- Do_bspline_cv_oracle_repl(
-        reps=n_reps, 
-        n_train=n_train,
-        n_validate=n,
-        n_test=n_test,
-        lambdas1=lambdas1,
-        lambdas2=lambdas2,
-        snr=snr
-    )
-    print(colMeans(cv_oracle))
-    data.frame(
-        n=n,
-        cv_oracle
-    )
+cv_to_oracle_all <- lapply(n_sizes, function(n_val) {
+    cv_to_oracle_ntrains <- lapply(n_trains, function(n_train){
+        print(paste("train", n_train, "val", n_val))
+        cv_oracle <- Do_bspline_cv_oracle_repl(
+            reps=n_reps, 
+            n_train=n_train,
+            n_validate=n_val,
+            n_test=n_test,
+            lambdas1=lambdas1,
+            lambdas2=lambdas2,
+            snr=snr
+        )
+        print(colMeans(cv_oracle))
+        data.frame(
+            n=n_val,
+            n_train=n_train,
+            cv_oracle
+        )
+    })
+    do.call("rbind", cv_to_oracle_ntrains)
 })
 cv_to_oracle_all <- do.call("rbind", cv_to_oracle_all)
-# save(cv_to_oracle_all, file = "cv_to_oracle_all.RData")
+# save(cv_to_oracle_all_pos, file = "cv_to_oracle_all_pos.RData")
 cv_to_oracle_compare_w <- aggregate(loss_diff ~ n, cv_to_oracle_all, FUN = mean)
-
-# ylim <- c(min(
-#         cv_to_oracle_compare_w$oracle_true_validation_loss,
-#         cv_to_oracle_compare_w$cv_true_validation_loss
-#     ), max(
-#         cv_to_oracle_compare_w$oracle_true_validation_loss,
-#         cv_to_oracle_compare_w$cv_true_validation_loss
-# ))
-# 
-# # pdf('figures/validation_size_loss.pdf', width=7, height=5)
-# plot(
-#     cv_to_oracle_compare_w$n, cv_to_oracle_compare_w$cv_true_validation_loss, type = "b", col="red",
-#     ylim = c(0.1, 0.2),
-#     ylab="Validation Loss",
-#     xlab="Validation Set Size"
-# )
-# lines(
-#     cv_to_oracle_compare_w$n,
-#     # rep(mean(cv_to_oracle_compare_w$oracle_true_validation_loss), length(n_sizes)),
-#     cv_to_oracle_compare_w$oracle_true_validation_loss,
-#     col="green"
-# )
-# legend(50,0.2,c("Training/Validation Split", "Oracle"),lty=c(1,1), lwd=c(2.5,2.5), col=c("red","green"))
-# dev.off()
 
 pdf('figures/validation_size_loss_diff.pdf', width=10, height=6)
 par(mar=c(5,5,1,1))
@@ -314,90 +260,41 @@ plot(
 # axis(1, at = cv_to_oracle_compare_w$n, las=2)
 dev.off()
 
-pdf('figures/validation_size_loss_diff_poster.pdf', width=18, height=7)
-par(mar=c(6,6,1,1), oma=c(0,0,0,0))
-plot(
-    cv_to_oracle_compare_w$n,
-    cv_to_oracle_compare_w$loss_diff,
-    type = "l",
-    lwd=3,
-    # ylim = c(0.1, 0.2),
-    ylab="Validation Loss Diff",
-    xlab="Validation Set Size",
-    # log="xy",
-    xaxt="n",
-    cex.axis=2,
-    cex.lab=3
-)
-axis(1, at = cv_to_oracle_compare_w$n, las=0, cex.axis=2)
-dev.off()
+# cv_to_oracle_all_pos <- rbind(cv_to_oracle_all, do.call("rbind", cv_to_oracle_all0))
+# cv_to_oracle_all_pos <- cv_to_oracle_all_pos[cv_to_oracle_all_pos$loss_diff > 0,]
 
-# pdf('figures/qqplot.pdf', width=5, height=5)
-# plot(
-#     expected_loss_diff,
-#     abs(cv_to_oracle_compare_w$loss_diff),
-#     xlab="Expected Convergence Rate",
-#     ylab="Empirical Validation Loss Difference"
-# )
-# dev.off()
-
-cv_to_oracle_all_pos <- cv_to_oracle_all[cv_to_oracle_all$loss_diff > 0,]
-cv_to_oracle_compare_w_pos <- aggregate(cbind(loss_diff, oracle_true_validation_loss) ~ n, cv_to_oracle_all_pos, FUN = mean)
-
-# cv_to_oracle_all_pos$expected_loss_diff1 <- v_rate
-# cv_to_oracle_all_pos$expected_loss_diff2 <- sqrt(v_rate) * sqrt(cv_to_oracle_all_pos$oracle_true_validation_loss)
-
-# cv_to_oracle_some <- cv_to_oracle_all_pos[cv_to_oracle_all_pos$loss_diff > 0 & cv_to_oracle_all_pos$n > 100,]
-# cv_to_oracle_some <- cv_to_oracle_all_pos[cv_to_oracle_all_pos$loss_diff > 0,]
-cv_to_oracle_some <- cv_to_oracle_all_pos
+cv_to_oracle_some <- cv_to_oracle_all
+cv_to_oracle_compare_w_pos <- aggregate(loss_diff ~ n, cv_to_oracle_some, FUN = mean)
+cv_to_oracle_some$other <- cv_to_oracle_some$loss_diff * (cv_to_oracle_some$n)^(1/4)
 cv_to_oracle_some <- merge(cv_to_oracle_compare_w_pos, cv_to_oracle_some, by="n")
-cv_to_oracle_some <- cv_to_oracle_some[cv_to_oracle_some$loss_diff.x < cv_to_oracle_some$loss_diff.y,]
-# cv_to_oracle_some <- cv_to_oracle_some[0< cv_to_oracle_some$loss_diff.y,]
-cv_to_oracle_some$other <- cv_to_oracle_some$loss_diff.y * (cv_to_oracle_some$n)^(1/4)
-cv_to_oracle_some$expected_diff1 <- (cv_to_oracle_some$n)^(-1/4)
-cv_to_oracle_some$expected_diff2 <- sqrt(cv_to_oracle_some$oracle_true_validation_loss.x)
-    #sqrt(cv_to_oracle_some$oracle_true_validation_loss)
+cv_to_oracle_some <- cv_to_oracle_some[cv_to_oracle_some$loss_diff.y > 0,]
 
-b <- lm((other) ~ (expected_diff1) + 0, cv_to_oracle_some)
-summary(b)
-b1 <- lm((other) ~ (expected_diff1), cv_to_oracle_some)
-summary(b1)
-anova(b, b1)
-a <- lm((other) ~ (expected_diff2), cv_to_oracle_some)
-summary(a)
-a2 <- lm((other) ~ (expected_diff2) + (expected_diff1) + 0, cv_to_oracle_some)
-summary(a2)
-anova(b, a2)
+negligible_fit <- lm(log(loss_diff.y) ~ log(n), cv_to_oracle_some)
+summary(negligible_fit)
 
-b <- lm(log(other) ~ log(expected_diff1) + 0, cv_to_oracle_some)
-summary(b)
-b1 <- lm(log(other) ~ log(expected_diff1), cv_to_oracle_some)
-summary(b1)
-anova(b, b1)
-a <- lm(log(other) ~ log(expected_diff2) , cv_to_oracle_some)
-summary(a)
-a2 <- lm(log(other) ~ log(expected_diff2) + log(expected_diff1) + 0, cv_to_oracle_some)
-summary(a2)
-a2 <- lm(log(other) ~ log(expected_diff2) + log(expected_diff1), cv_to_oracle_some)
-summary(a2)
-anova(b, a2)
+negligible_fit_big_errs <- lm(log(loss_diff.y) ~ log(n), cv_to_oracle_some[cv_to_oracle_some$loss_diff.x < cv_to_oracle_some$loss_diff.y,])
+summary(negligible_fit_big_errs)
 
-cor(cv_to_oracle_all_pos$expected_diff1, cv_to_oracle_all_pos$expected_diff2)
-plot(cv_to_oracle_all_pos$n, cv_to_oracle_all_pos$expected_diff2)
+nv_negligible_fit <- lm(other ~ I(n^(-1/4)) + oracle_true_validation_loss + 0, cv_to_oracle_some)
+summary(nv_negligible_fit)
 
-mean(log(cv_to_oracle_some$loss_diff, base = cv_to_oracle_some$n))
+nv_negligible_fit_big_errs <- lm(other ~ I(n^(-1/4))+ oracle_true_validation_loss + 0, cv_to_oracle_some[cv_to_oracle_some$loss_diff.x < cv_to_oracle_some$loss_diff.y,])
+summary(nv_negligible_fit_big_errs)
 
-# regl1 <- lm(loss_diff ~ I((n)^-0.25) + I((n)^-0.5), cv_to_oracle_compare_w)
-# summary(regl1)
-# 
-# regl2 <- lm(loss_diff ~ I((n)^-0.5), cv_to_oracle_compare_w)
-# summary(regl2)
-# 
-# anova(regl2, regl1)
-# 
-# plot(
-#     (1/cv_to_oracle_compare_w$n)^0.5,
-#     abs(cv_to_oracle_compare_w$loss_diff),
-#     xlab="Expected Convergence Rate (1/n-1/2)",
-#     ylab="Empirical Validation Loss Difference"
-# )
+cv_to_oracle_compare_max <- aggregate(loss_diff ~ n, cv_to_oracle_all, FUN = max)
+cv_to_oracle_compare_max <- merge(cv_to_oracle_all, cv_to_oracle_compare_max, by=c("loss_diff", "n"))
+cv_to_oracle_compare_max$other <- cv_to_oracle_compare_max$n^(0.25) * cv_to_oracle_compare_max$loss_diff
+
+nv_negligible_fit_max <- lm(other ~ I(n^(-1/4)) + oracle_true_validation_loss + 0, cv_to_oracle_compare_max)
+summary(nv_negligible_fit_max)
+
+summary(lm(log(loss_diff) ~ log(n), cv_to_oracle_compare_max))
+
+plot((cv_to_oracle_some$n), cv_to_oracle_some$loss_diff.y)
+
+plot((cv_to_oracle_some$n)^(-1/4), cv_to_oracle_some$other)
+
+plot((cv_to_oracle_compare_max$n)^(-1/4), cv_to_oracle_compare_max$other)
+lines(cv_to_oracle_compare_max$n^(-0.25), nv_negligible_fit_max$fitted.values)
+
+cv_to_oracle_all

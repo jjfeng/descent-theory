@@ -1,0 +1,248 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amsbsy}
+\usepackage{esint}
+\usepackage{babel}
+\begin{document}
+
+\title{Convergence Rates of $\lambda$}
+
+\maketitle
+Let's bound $\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|$
+instead.
+
+This will actually get rid of the geometric mean term in Theorems
+1 and 3. 
+
+We will suppose that the data is generated from the model:
+\[
+y=g^{*}(x)+\epsilon
+\]
+
+
+where $\epsilon$ are independent, sub-gaussian errors. The penalized
+regression models are 
+\[
+\hat{g}(\cdot|\boldsymbol{\lambda})=\arg\min_{g\in\mathcal{G}}L_{T}(g|\boldsymbol{\lambda})
+\]
+
+
+Let the model class after fitting on the training data be 
+\[
+\mathcal{G}(T)=\left\{ \hat{g}(\cdot|\boldsymbol{\lambda}):\boldsymbol{\lambda}\in\Lambda\right\} 
+\]
+
+
+The selected penalty parameters are
+\[
+\hat{\boldsymbol{\lambda}}=\arg\min_{\boldsymbol{\lambda}\in\Lambda}\left\Vert y-\hat{g}(\cdot|\boldsymbol{\lambda})\right\Vert _{V}^{2}
+\]
+
+
+
+\subsection*{Convergence of $\hat{\lambda}$ to $\tilde{\lambda}$}
+
+Suppose that if $\|\epsilon\|_{T}\le2\sigma$, then $\mathcal{G}(T)$
+satisfies the entropy condition 
+\[
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi_{T}(R)
+\]
+
+
+Furthermore, suppose that
+
+\[
+\frac{\psi_{T}\left(u\right)}{u^{2}}
+\]
+
+
+is nonincreasing wrt to $u$ for all $u>0$.
+
+Let $L_{V}^{*}(\boldsymbol{\lambda})=\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{V}^{2}$
+be the true validation loss and let $\tilde{\boldsymbol{\lambda}}$
+be the global minimizer of $L_{V}^{*}(\boldsymbol{\lambda})$. 
+\[
+\tilde{\boldsymbol{\lambda}}=\arg\min_{\lambda}L_{V}^{*}(\boldsymbol{\lambda})
+\]
+
+
+Let $\tilde{\boldsymbol{\lambda}}_{gen}$ be the global minimizer
+of the generalization error.
+\[
+\tilde{\boldsymbol{\lambda}}_{gen}=\arg\min_{\lambda}E_{V}\left[L_{V}^{*}(\boldsymbol{\lambda})\right]=\arg\min\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|^{2}
+\]
+
+\begin{itemize}
+\item \textbf{Local strong convexity assumption:} Suppose that there is
+a neighborhood $N(\tilde{\boldsymbol{\lambda}}_{gen})$ around $\tilde{\boldsymbol{\lambda}}_{gen}$
+such that the true validation loss is smooth in $\boldsymbol{\lambda}$
+for all $\boldsymbol{\lambda}\in N\left(\tilde{\boldsymbol{\lambda}}_{gen}\right)$
+and for all $\boldsymbol{\lambda}\in N(\tilde{\boldsymbol{\lambda}})$,
+the true validation loss is $m$-strongly convex in $\boldsymbol{\lambda}$
+for some $m>0$:
+\[
+\nabla_{\lambda}^{2}L_{V}^{*}(\boldsymbol{\lambda})=\nabla_{\lambda}^{2}\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{V}^{2}\succeq mI
+\]
+Important: $m$ cannot shrink in $n_{T}$ and $n_{V}$
+\item \textbf{Lipschitz assumption:} Let us also assume that for all $\boldsymbol{\lambda}\in N(\tilde{\boldsymbol{\lambda}}_{gen})$,
+the fitted functions are locally $K$-Lipschitz: 
+\[
+\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le K\|\boldsymbol{\lambda}-\tilde{\boldsymbol{\lambda}}\|
+\]
+Important: $K$ cannot grow in $n_{V},n_{T}$ (I don't even think
+this holds for ridge regression though...)
+\end{itemize}
+If $\delta$ is chosen such that
+
+\begin{eqnarray*}
+\sqrt{n_{V}}\delta^{2} & \ge & 2C\left[\psi_{T}\left(2\delta\right)\vee\left(2\delta\right)\right]
+\end{eqnarray*}
+
+
+then we have
+\begin{eqnarray*}
+Pr\left(\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{2}m^{2}}{c^{2}K^{2}}\right)
+\end{eqnarray*}
+
+
+for some constant $c$.
+
+Furthermore, this completely removes the geometric term since we also
+have that 
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\ge\frac{\delta}{K}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & Pr\left(\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ & \le & c\exp\left(-\frac{n_{V}\delta^{2}m^{2}}{c^{2}K^{2}}\right)
+\end{eqnarray*}
+
+
+
+\subsubsection*{Proof}
+
+Let $\hat{\boldsymbol{\lambda}}$ be the global minimizer of the validation
+loss. Therefore
+\[
+\left\Vert y-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\le\left\Vert y-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}
+\]
+
+
+Recall the basic inequality
+\[
+L_{V}^{*}(\hat{\boldsymbol{\lambda}})-L_{V}^{*}(\tilde{\boldsymbol{\lambda}})=\left\Vert g^{*}-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2}-\left\Vert g^{*}-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
+\]
+
+
+Suppose that $\hat{\boldsymbol{\lambda}}\in N(\tilde{\boldsymbol{\lambda}}_{gen})$.
+Using the mean value theorem and the local strong convexity assumption,
+there is some $\alpha\in(0,1)$ such that
+\begin{eqnarray*}
+L_{V}^{*}(\boldsymbol{\lambda})-L_{V}^{*}(\tilde{\boldsymbol{\lambda}}) & = & \left(\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\right)^{\top}\left.\nabla_{\lambda}^{2}L_{V}^{*}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\alpha\tilde{\boldsymbol{\lambda}}+(1-\alpha)\boldsymbol{\hat{\lambda}}}\left(\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\right)\\
+ & \ge & \left(\min_{\alpha}\left.\nabla_{\lambda}^{2}L_{V}^{*}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\alpha\tilde{\boldsymbol{\lambda}}+(1-\alpha)\hat{\boldsymbol{\lambda}}}\right)\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|_{2}^{2}\\
+ & \ge & m\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|_{2}^{2}
+\end{eqnarray*}
+
+
+Therefore we get 
+\[
+m\|\boldsymbol{\lambda}-\tilde{\boldsymbol{\lambda}}\|_{2}^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
+\]
+
+
+Anyhow, if we assume local strong convexity and the Lipschitz condition,
+we can proceed with a peeling argument
+\begin{eqnarray*}
+Pr\left(\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|\ge\delta\right) & = & \sum_{s=0}^{\infty}Pr\left(2^{s}\delta\le\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|\le2^{s+1}\delta\right)\\
+ & = & \sum_{s=0}^{\infty}Pr\left(\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|^{2}\ge2^{2s}\delta^{2}\wedge\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|\le2^{s+1}\delta\right)\\
+ & = & \sum_{s=0}^{\infty}Pr\left(2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\ge m2^{2s}\delta^{2}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2^{s+1}\delta K\right)\\
+ & \le & \sum_{s=0}^{\infty}Pr\left(\sup_{\boldsymbol{\lambda,\lambda^{'}}\in N(\tilde{\boldsymbol{\lambda}}_{gen}):\left\Vert \hat{g}(\cdot|\lambda)-\hat{g}(\cdot|\lambda')\right\Vert _{V}\le2^{s+1}\delta K}\left\langle \epsilon,\hat{g}(\cdot|\boldsymbol{\lambda})-\hat{g}(\cdot|\boldsymbol{\lambda}')\right\rangle _{V}\ge m2^{2s-1}\delta^{2}\right)
+\end{eqnarray*}
+
+
+To apply the lemma based on vandegeer corollary 8.3 (see below), we
+must check all the conditions are satisfied. 
+
+We choose $\delta$ such that 
+\begin{eqnarray*}
+\frac{\sqrt{n_{V}}}{8} & \ge & \frac{C}{4\delta^{2}}\left[\psi_{T}\left(2\delta\right)\vee\left(2\delta\right)\right]\\
+ & \ge & \frac{C}{2^{2s+2}\delta^{2}}\left[\psi_{T}\left(2^{s+1}\delta\right)\vee\left(2^{s+1}\delta\right)\right]
+\end{eqnarray*}
+
+
+where the second line follows from the assumption that $\psi_{T}(u)/u^{2}$
+is nonincreasing wrt $u$. Hence we have satisfied the condition in
+corollary 8.3. So for all $s=0,1,...$ since
+
+\[
+\sqrt{n_{V}}2^{2s-1}\delta^{2}\ge C\left[\psi_{T}\left(2^{s+1}\delta\right)\vee\left(2^{s+1}\delta\right)\right]
+\]
+
+
+we have
+\[
+Pr\left(\sup_{\boldsymbol{\lambda,\lambda^{'}}\in N(\tilde{\boldsymbol{\lambda}}_{gen}):\left\Vert \hat{g}(\cdot|\lambda)-\hat{g}(\cdot|\lambda')\right\Vert _{V}\le2^{s+1}\delta K}\left\langle \epsilon,\hat{g}(\cdot|\boldsymbol{\lambda})-\hat{g}(\cdot|\boldsymbol{\lambda}')\right\rangle _{V}\ge m2^{2s-1}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\le\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}m^{2}}{4C^{2}\left(2^{s+1}\delta\right)^{2}K^{2}}\right)
+\]
+
+
+Hence we have
+\begin{eqnarray*}
+Pr\left(\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & C\sum_{s=0}^{\infty}\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}m^{2}}{4C^{2}\left(2^{s+1}\delta\right)^{2}K^{2}}\right)\\
+ & \le & c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
+\end{eqnarray*}
+
+
+for some constant $c$.
+
+
+\subsubsection*{Example}
+
+If $\mathcal{G}$ is a parametric family, we must choose
+\[
+\delta\ge R\left(n_{V}^{-1/2}\right)
+\]
+for some constant $R$, so we have an asymptotic convergence rate
+for 
+\begin{eqnarray*}
+Pr\left(\|\hat{\boldsymbol{\lambda}}-\tilde{\boldsymbol{\lambda}}\|\ge Rn_{V}^{-1/2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{R^{2}m^{2}}{c^{2}K^{2}}\right)
+\end{eqnarray*}
+
+
+
+\subsubsection*{Jean's questions}
+\begin{itemize}
+\item Locally $m$-strongly convex where $m$ doesn't shrink with $n_{T}$
+or $n_{V}$ seems like a strong assumption. 
+\item Fitted functions are locally $K$-Lipschitz where $K$ doesn't change
+with $n_{T}$ seems like a strong assumption too.
+
+\begin{itemize}
+\item Counterexample: In ridge regression, if $p$ grows with $n$, I believe
+the Lipschitz constant is on the order of $\lambda_{min}^{-2}$. But
+if $\lambda_{min}$ is shrinking with $n$, then $K$ is changing
+with $n$.
+\end{itemize}
+\item We need to ensure that $N(\tilde{\boldsymbol{\lambda}}_{gen})$ contains
+$\tilde{\boldsymbol{\lambda}}$ and $\hat{\boldsymbol{\lambda}}$
+with high probability - can we ensure this? Thoughts:
+
+\begin{itemize}
+\item We might be able to bootstrap results to show that $N(\tilde{\boldsymbol{\lambda}}_{gen})$
+contains $\tilde{\boldsymbol{\lambda}}$ and $\hat{\boldsymbol{\lambda}}$
+with high probability. 
+\item We know that the difference 
+\[
+\|\hat{g}_{\hat{\lambda}}-g^{*}\|_{V}-\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}\le\delta
+\]
+with ``high probability''. So if the global minimizer of $\|\hat{g}_{\tilde{\lambda}}-g^{*}\|_{V}$
+is more than $\delta$ smaller than all other local minimas of $L_{V}^{*}(\boldsymbol{\lambda})$,
+then $\hat{\lambda}$ will be located in the same region as $\tilde{\lambda}$.
+By definition, this region must be quasi-convex. 
+\item If we can show that this region is $N(\tilde{\boldsymbol{\lambda}}_{gen})$
+and it is strongly convex, we'd be done. The problem is if this region
+has crazy behavior (e.g. the loss is very flat wrt $\lambda$)\end{itemize}
+\end{itemize}
+
+\end{document}
