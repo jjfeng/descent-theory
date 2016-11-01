@@ -67,33 +67,34 @@ are Lipschitz in the penalty parameters
 
 \section{Theorem 3}
 
-Suppose that if $\|\epsilon\|_{T}\le2\sigma$, then $\mathcal{G}(T)$
+Let $r>0$. Suppose that if $\|\epsilon\|_{T}\le2\sigma$, then $\mathcal{G}(T)$
 satisfies the entropy condition 
 \[
-\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi_{T}(R)
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\min\left\{ \tilde{\psi_{T}}(R),\psi_{T}(R)\right\} 
 \]
 
+
+for all $R>r$.
 
 Furthermore, suppose that
 
 \[
-\frac{\psi_{T}\left(a+u\right)}{u^{2}}
+\frac{\psi_{T}\left(u\right)}{u^{2}}
 \]
 
 
-is nonincreasing wrt to $u$ for all $u,a>0$ such that $a+u>\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$.
+is nonincreasing wrt to $u$ for all $u>r$.
 
 Then there is some constant $C$ (only dependent on the characteristics
-of the sub-gassian errors) such that for all $\delta>0$ such that
+of the sub-gassian errors) such that for all $\delta>r$ with
 \[
-\sqrt{n_{V}}\delta^{2}\ge2C\left[\psi_{T}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\vee\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\right]
+\sqrt{n_{V}}\delta^{2}\ge C\left(\psi_{T}\left(\delta\right)\vee\delta\vee\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
-then
-
+we have
 \begin{eqnarray*}
-Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)+Pr\left(\|\epsilon\|_{T}\le2\sigma\right)
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
 
 
@@ -102,97 +103,137 @@ for a constant $c>0$.
 
 \subsubsection*{Proof}
 
-The basic inequality gives us 
+We use the usual peeling argument
+\begin{eqnarray*}
+ &  & Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ & = & \sum_{s=0}^{\infty}Pr\left(2^{2s}\delta^{2}\le\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\le2^{2s+2}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ & \le & \sum_{s=0}^{\infty}Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\le2^{2s+2}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ & = & \sum_{s=0}^{\infty}Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}+2\left\langle \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}}),\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\le2^{2s+2}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ & \le & \sum_{s=0}^{\infty}Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\le2^{2s+2}\delta^{2}+2\left|\left\langle \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}}),\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right|\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)
+\end{eqnarray*}
 
+
+We can split each probability into the case where $2^{2s+2}\delta^{2}$
+or $2\left|\left\langle \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}}),\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right|$
+is bigger: 
+\begin{eqnarray*}
+ &  & Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\le2^{2s+2}\delta^{2}+2\left|\left\langle \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}}),\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right|\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ & \le & Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ &  & +Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\le2^{2s+3}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ & \le & Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ &  & +Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2^{s+3/2}\delta}2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)
+\end{eqnarray*}
+
+
+Hence 
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ &  & +\sum_{s=0}^{\infty}Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2^{s+3/2}\delta}2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)
+\end{eqnarray*}
+
+
+If $\|\epsilon\|_{T}\le2\sigma$, then we have the entropy condition
+that 
 \[
-\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}+2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\tilde{\psi_{T}}(R)
 \]
 
 
-Note that since $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$,
-then 
-\begin{eqnarray*}
-\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)^{2} & \le & \left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}
-\end{eqnarray*}
-
-
-By a peeling argument, we have
-\begin{eqnarray*}
-Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\right) & = & \sum_{s=0}^{\infty}Pr\left(2^{s}\delta\le\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le2^{s+1}\delta\right)\\
- & \le & \sum_{s=0}^{\infty}Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge2^{s}\delta\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\\
- & = & \sum_{s=0}^{\infty}Pr\left(\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)^{2}\ge2^{2s}\delta^{2}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\\
- & \le & \sum_{s=0}^{\infty}Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge2^{2s}\delta^{2}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\\
- & \le & \sum_{s=0}^{\infty}Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta}\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\ge2^{2s-1}\delta^{2}\right)
-\end{eqnarray*}
-
-
-To apply the lemma based on vandegeer corollary 8.3 (see below), we
-must check all the conditions are satisfied. 
-
-We choose $\delta$ such that 
-\begin{eqnarray*}
-\frac{\sqrt{n_{V}}}{8} & \ge & \frac{C}{4\delta^{2}}\left[\psi_{T}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\vee\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\right]\\
- & \ge & \frac{C}{2^{2s+2}\delta^{2}}\left[\psi_{T}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\vee\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\right]
-\end{eqnarray*}
-
-
-where the second line follows from the assumption that $\psi_{T}(a+u)/u^{2}$
-is nonincreasing wrt $u$. Hence we have satisfied the condition in
-corollary 8.3. So for all $s=0,1,...$ since
+Vandegeer Corollary 8.3 bounds the first probability by
 
 \[
-\sqrt{n_{V}}2^{2s-1}\delta^{2}\ge C\left[\psi_{T}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\vee\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\right]
+Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\le c\exp\left(-\frac{n_{V}\delta^{4}}{4c^{2}\left(16\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right)
 \]
 
 
-we have
+for some $c>0$ if $\delta>0$ satisfies
+
 \[
-Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta}\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\ge2^{2s-1}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\le\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4C^{2}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)^{2}}\right)
+\sqrt{n_{V}}\delta^{2}\ge C\left(\tilde{\psi_{T}}(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V})\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
-Hence we have
+We also bound the summation using Vandegeer Corollary 8.3. Recall
+that if $\|\epsilon\|_{T}\le2\sigma$, then we have the entropy condition
+that 
+\[
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi_{T}(R)
+\]
+
+
+So we will apply Vandegeer Corollary 8.3 to bound the empirical process
+assuming that $\|\epsilon\|_{T}\le2\sigma$. First we check the condition
+for Corollary 8.3 is satisfied. In particular, we need to show that
+for all $s=0,1,2,...$ 
 \begin{eqnarray*}
-Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & C\sum_{s=0}^{\infty}\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4C^{2}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)^{2}}\right)\\
- & \le & C\sum_{s=0}^{\infty}\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{64C^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)\vee\exp\left(-n_{V}\frac{2^{2s}\delta^{2}}{196C^{2}}\right)\\
- & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
+\sqrt{n_{V}}2^{2s+2}\delta^{2} & \ge & C\left(\psi_{T}\left(2^{s+1}\delta\right)\vee\delta\right)
 \end{eqnarray*}
 
 
-for some constant $c$.
-
-Hence we have found for the given $\delta$ choice, we have
-
+This is true since we chose $\delta$ such that 
 \begin{eqnarray*}
-Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)+Pr\left(\|\epsilon\|_{T}\le2\sigma\right)
+\sqrt{n_{V}}\delta^{2} & \ge & C\left(\psi_{T}\left(\delta\right)\vee\delta\right)
+\end{eqnarray*}
+
+
+and we assumed that $\psi_{T}(u)/u^{2}$ is nonincreasing for all
+$u$.
+
+So Corollary 8.3 states that for all $s=0,1,...$
+\[
+Pr\left(\sup_{\lambda,\lambda':\left\Vert \hat{g}(\cdot|\lambda)-\hat{g}(\cdot|\lambda')\right\Vert _{V}\le2^{s+3/2}\delta}\left\langle \epsilon,\hat{g}(\cdot|\boldsymbol{\lambda})-\hat{g}(\cdot|\boldsymbol{\lambda}')\right\rangle _{V}\ge2^{2s-1}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\le\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4C^{2}2^{2s+3}\delta^{2}}\right)
+\]
+
+
+Putting this together, for all 
+\[
+\sqrt{n_{V}}\delta^{2}\ge C\left(\psi_{T}\left(\delta\right)\vee\delta\vee\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\]
+ exists some constant $c$ such that
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
 
 
 
 \section{Theorem 1}
 
-Let $\Lambda=[n_{V}^{-t_{min}},n_{V}^{t_{max}}]^{J}$.
+Let $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$.
 
-Suppose that if $\|\epsilon\|_{T}\le2\sigma$, there are constants
-$C,\kappa$ such that for any $u>0$, we have for all $\lambda\in\Lambda$
+Suppose that if $\|\epsilon\|_{T}\le2\sigma$, there is a constant
+$C>0$ such that for all $\boldsymbol{\lambda}_{1},\boldsymbol{\lambda}_{2}\in\Lambda$
 \[
-\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})-\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})\right\Vert _{V}\le Cn^{\kappa}\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
+\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})-\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})\right\Vert _{V}\le C\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
 \]
 
 
-Then there are universal constants $c_{1},c_{2}>0$ and constants
-$c_{3},c_{4}>0$ such that
+Then for any $\delta>1/n_{V}$ such that
 
-\begin{eqnarray*}
-Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right) & \le & c_{3}\exp\left(-\frac{n_{V}\delta^{4}}{c_{3}^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c_{3}\exp\left(-\frac{n_{V}\delta^{2}}{c_{3}^{2}}\right)+Pr\left(\|\epsilon\|_{T}\le2\sigma\right)
-\end{eqnarray*}
+\[
+\delta\ge\alpha_{1}\frac{1}{\sqrt{n_{V}}}\vee\alpha_{2}\sqrt{\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}
+\]
 
 
 where 
 \[
-\delta=c_{1}\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}+c_{4}}{n_{V}}\right)^{1/2}+c_{2}\sqrt{\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}+c_{4}}{n_{V}}\right)^{1/2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}
+\alpha_{1}=2C_{0}\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log n_{V}\right]^{1/2}\vee1\right]
 \]
 
+
+and 
+\[
+\alpha_{2}^{2}=8C_{0}\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)-J\log\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}\right]^{1/2}\vee1\right]
+\]
+
+
+and $C_{J}$ is a universal constant, we have
+
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
+\end{eqnarray*}
+
+
+for some constant $c>0$.
 
 
 \subsubsection*{Proof}
@@ -200,36 +241,36 @@ where
 \textbf{1. Determine entropy bound and properties}
 
 Under the given Lipschitz condition, a $\delta$-cover for $\Lambda$
-is a $Cn^{\kappa}\delta$-cover for $\mathcal{G}(T)$. We can therefore
-calculate a covering number for $\mathcal{G}(T)$ wrt $\|\cdot\|_{V}$
-by using the covering number for $\Lambda$. 
+is a $C\delta$-cover for $\mathcal{G}(T)$. We can therefore calculate
+a covering number for $\mathcal{G}(T)$ wrt $\|\cdot\|_{V}$ by using
+the covering number for $\Lambda$. 
 \[
-N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right)\le N\left(\frac{u}{Cn^{\kappa}},\Lambda,\|\cdot\|_{2}\right)
+N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right)\le N\left(\frac{u}{C},\Lambda,\|\cdot\|_{2}\right)
 \]
 
 
 By Lemma param\_covering\_cube (See Appendix), we know that
 \begin{eqnarray*}
-N\left(u,\Lambda,\|\cdot\|_{2}\right) & \le & \frac{1}{C_{J}}\left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2\frac{u}{Cn^{\kappa}}}{\frac{u}{Cn^{\kappa}}}\right)^{J}\\
- & = & \frac{1}{C_{J}}\left(\frac{4\left(n_{V}^{t_{max}}-n_{V}^{-t_{min}}\right)Cn^{\kappa}+2u}{u}\right)^{J}\\
- & \le & \frac{1}{C_{J}}\left(\frac{4Cn_{V}^{t_{\max}+\kappa}+2u}{u}\right)^{J}
+N\left(u,\Lambda,\|\cdot\|_{2}\right) & \le & \frac{1}{C_{J}}\left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2\frac{u}{C}}{\frac{u}{C}}\right)^{J}\\
+ & = & \frac{1}{C_{J}}\left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)C+2u}{u}\right)^{J}\\
+ & \le & \frac{1}{C_{J}}\left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)^{J}
 \end{eqnarray*}
 
 
 Hence
 \[
-H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\left[\frac{1}{C_{J}}\left(\frac{4Cn_{V}^{t_{\max}+\kappa}+2u}{u}\right)^{J}\right]
+H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\left[\frac{1}{C_{J}}\left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)^{J}\right]
 \]
 
 
 Then
 
 \begin{eqnarray*}
-\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du & \le & \int_{0}^{R}\left[\log\frac{1}{C_{J}}+J\log\left(\frac{4Cn_{V}^{t_{\max}+\kappa}+2u}{u}\right)\right]^{1/2}du\\
- & \le & \int_{0}^{R}\left[\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{8Cn_{V}^{t_{max}+\kappa}}{u}\right)\right]^{1/2}du\\
- & = & R\int_{0}^{1}\left[\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{8Cn_{V}^{t_{max}+\kappa}}{Rv}\right)\right]^{1/2}dv\\
- & \le & R\left[\int_{0}^{1}\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{8Cn_{V}^{t_{max}+\kappa}}{R}\right)+J\log\frac{1}{v}dv\right]^{1/2}\\
- & = & R\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(n_{V}^{t_{max}+\kappa}\right)+J\log\frac{1}{R}\right]^{1/2}
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du & \le & \int_{0}^{R}\left[\log\frac{1}{C_{J}}+J\log\left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)\right]^{1/2}du\\
+ & \le & \int_{0}^{R}\left[\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{8C\left(\lambda_{max}-\lambda_{min}\right)}{u}\right)\right]^{1/2}du\\
+ & = & R\int_{0}^{1}\left[\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{8C\left(\lambda_{max}-\lambda_{min}\right)}{Rv}\right)\right]^{1/2}dv\\
+ & \le & R\left[\int_{0}^{1}\log\frac{1}{C_{J}}+J\log4+J\log\left(\frac{8C\left(\lambda_{max}-\lambda_{min}\right)}{R}\right)+J\log\frac{1}{v}dv\right]^{1/2}\\
+ & = & R\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log\frac{1}{R}\right]^{1/2}
 \end{eqnarray*}
 
 
@@ -242,94 +283,105 @@ the fact that
 
 The third inequality follows from concavity of the square root.
 
+We will consider the following two bounds for $\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du$:
+
+\[
+\tilde{\psi_{T}}(R)=R\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log\frac{1}{R}\right]^{1/2}\mbox{ for all }R\ge0
+\]
+
+
+and
+\[
+\psi_{T}(R)=R\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log n_{V}\right]^{1/2}\mbox{ for all }R\ge n_{V}^{-1}
+\]
+
+
+The second bound replaces the last term $\log\frac{1}{R}$ was replaced
+with $\log n_{V}$, which is valid over the given range. We will see
+this is useful since solving for $\delta$ is hard with the $\log\frac{1}{R}$
+term.
+
 \textbf{2. Apply Theorem 3}
 
 By Theorem 3, there is a constant $C_{0}>0$ such that the oracle
 inequality 
 \[
-\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta
+\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}
 \]
 
 
 holds with probability $p(\delta)$ for all $\delta>0$ such that
-\begin{equation}
-\sqrt{n_{V}}\delta^{2}\ge2CR\left(\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(n_{V}^{t_{max}+\kappa}\right)+J\log\frac{1}{R}\right]^{1/2}\vee1\right)
-\end{equation}
-
-
-where $R=2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta$.
-
-Solving for $\delta$ is hard because of the $\log\frac{1}{R}$ term.
-Suppose we constrain ourselves to a choice of $\delta>1/n_{V}$ (which
-is true for sufficiently large sample sizes since $\delta$ is on
-the order of $n_{V}^{-1/2}$ for parametric problems). Then 
 \[
-R=2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\ge2/n_{V}
+\sqrt{n_{V}}\delta^{2}\ge C\left(\psi_{T}\left(\delta\right)\vee\delta\vee\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
-Therefore $\log\frac{1}{R}<\log n_{V}$. This allows us to replace
-the term $\log\frac{1}{R}$ with $\log n_{V}$.
+We will solve this by splitting into cases.
+
+\textbf{Case 1: }Suppose that 
+\[
+\psi_{T}\left(\delta\right)\vee\delta\ge\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
+\]
+
+
+Then Theorem 3 holds for any $\delta>1/n_{V}$ such that
+
+\[
+\delta\ge\frac{1}{\sqrt{n_{V}}}\alpha_{1}
+\]
+
+
+where 
+\[
+\alpha_{1}=2C_{0}\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log n_{V}\right]^{1/2}\vee1\right]
+\]
+
+
+\textbf{Case 2:}
+
+Suppose that 
+\[
+\psi_{T}\left(\delta\right)\vee\delta\le\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
+\]
+
 
 Then we need to find a $\delta>1/n_{V}$ such that
 
-\begin{equation}
-\sqrt{n_{V}}\delta^{2}\ge2C_{0}\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(n_{V}^{t_{max}+\kappa}\right)+J\log n_{V}\right]^{1/2}\vee1\right]
-\end{equation}
-
-
-Now we can solve for $\delta$. Let
-\begin{eqnarray*}
-K & = & 2C_{0}\left(\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(n_{V}^{t_{max}+\kappa}\right)+J\log n_{V}\right]^{1/2}\right)\vee1\\
- & = & 2C_{0}\left(\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\left(1+t_{max}+\kappa\right)\log n_{V}\right]^{1/2}\right)\vee1
-\end{eqnarray*}
-
-
-and 
 \[
-\omega=\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
+\delta^{2}\ge\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}\alpha_{2}^{2}
 \]
 
 
-(2) can be expressed as
-
+where 
 \[
-\sqrt{n_{V}}\delta^{2}-K\delta-K\omega\ge0
+\alpha_{2}^{2}=8C_{0}\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)-J\log\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}\right]^{1/2}\vee1\right]
 \]
 
 
-We notice that (2) is precisely the quadratic inequality and is satisfied
-for $\delta$ such that
+Putting these two inequalities together, we get that
+\[
+\delta\ge\alpha_{1}\frac{1}{\sqrt{n_{V}}}\vee\alpha_{2}\sqrt{\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}
+\]
+
+
+
+\section{Lemma 1 with $\lambda$ changing with $n$}
+
+We will express this using asymptotic notation.
+
+Let $\Lambda=[n_{T}^{-t_{min}},n_{T}^{t_{max}}]^{J}$.
+
+Suppose that if $\|\epsilon\|_{T}\le2\sigma$, there are constants
+$C,\kappa$ such that for any $u>0$, we have for all $\lambda\in\Lambda$
+\[
+\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})-\hat{g}(\cdot|\boldsymbol{\lambda}^{(2)})\right\Vert _{V}\le Cn_{T}^{\kappa}\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
+\]
+
+
+Then
 
 \begin{eqnarray*}
-\delta & \ge & \frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}
-\end{eqnarray*}
-
-
-\textbf{3. Re-writing the condition on $\delta$ to be more intuitive}
-
-For a more intuitive understanding of this lower bound for $\delta$,
-we can apply Theorem 3 with a slightly bigger lower bound: 
-\begin{equation}
-\delta\ge c_{1}\frac{K}{\sqrt{n_{V}}}+c_{2}\sqrt{\frac{K}{n_{V}}\omega}
-\end{equation}
-
-
-for universal constants $c_{1}=1+\frac{1}{\sqrt{2}}$ and $c_{2}=2\sqrt{2}$.
-
-To see why this holds, note that there are two cases:
-
-Case 1. $K>4\omega\sqrt{n_{V}}$
-\begin{eqnarray*}
-\frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}} & \le & \frac{K+\sqrt{2K^{2}}}{2\sqrt{n_{V}}}\\
- & \le & \frac{\left(1+\sqrt{2}\right)K}{2\sqrt{n_{V}}}
-\end{eqnarray*}
-
-
-Case 2. $K<4\omega\sqrt{n_{V}}$
-\begin{eqnarray*}
-\frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}} & \le & \frac{K+\sqrt{8K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}\\
- & \le & \frac{K}{2\sqrt{n_{V}}}+\sqrt{\frac{8K}{\sqrt{n_{V}}}\omega}
+\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+O_{p}\left(\left[\frac{c_{J}+J(\kappa+t_{max})\log n_{T}+J\log n_{V}}{n_{V}}\right]^{1/2}\vee\sqrt{\left[\frac{c_{J}+J(\kappa+t_{max})\log n_{T}-J\log\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}{n_{V}}\right]^{1/2}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}\right)
 \end{eqnarray*}
 
 
@@ -367,7 +419,7 @@ K=\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\|_{\infty}
 Then by Theorem 2.1, for any $t>0$, we can bound the conditional
 probability (training set $T$ is given)
 \[
-Pr_{V}\left(\left.\frac{1}{C_{1}}\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert ^{2}\right|\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right|T\right)\le1-\exp(-t)
+Pr\left(\left.\frac{1}{C_{1}}\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert ^{2}\right|\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right|T\right)\le1-\exp(-t)
 \]
 
 
@@ -439,7 +491,7 @@ N(\delta,\Lambda,\|\cdot\|_{2})\le\frac{1}{C_{J}}\left(\frac{4(\lambda_{max}-\la
 \]
 
 
-where $C_{J}=\frac{\mbox{volume of ball of radius }\rho}{\rho^{J}}$.
+where $C_{J}=\frac{\mbox{volume of ball of radius }\rho}{\rho^{J}}=\frac{\pi^{J/2}}{\Gamma(\frac{J}{2}+1)}$.
 
 
 \subsubsection*{Proof}
@@ -465,5 +517,158 @@ Hence
 \[
 NC_{J}(\delta/4)^{J}\le(\lambda_{max}-\lambda_{min}+\delta/2)^{J}
 \]
+
+
+
+\subsection*{Lemma psuedo-basic inequality}
+
+Suppose 
+\[
+\left\Vert y-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\le\left\Vert y-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}
+\]
+
+
+Suppose for all samples $i$ in dataset $V$, we have 
+\[
+y_{i}=g^{*}(x_{i})+\epsilon_{i}
+\]
+
+
+then
+
+\[
+2\left\langle g^{*}-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}),\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\rangle _{V}+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
+\]
+
+
+
+\subsubsection*{Proof}
+
+From the definition, we have that
+
+
+\subsubsection*{
+\begin{eqnarray*}
+\left\Vert y-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2} & = & \left\Vert y-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})+\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2}\protect\\
+ & = & \left\Vert y-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2}+2\left\langle y-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}),\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\rangle _{V}\protect\\
+ & \le & \left\Vert y-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}^{2}
+\end{eqnarray*}
+}
+
+Then
+\[
+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2}+2\left\langle \epsilon+g^{*}-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}),\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\rangle _{V}\le0
+\]
+
+
+Rearranging, we get 
+\[
+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\Vert _{V}^{2}+2\left\langle g^{*}-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}),\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})\right\rangle _{V}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
+\]
+
+
+
+\section{Old Theorem 3}
+
+Suppose that if $\|\epsilon\|_{T}\le2\sigma$, then $\mathcal{G}(T)$
+satisfies the entropy condition 
+\[
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi_{T}(R)
+\]
+
+
+Furthermore, suppose that
+
+\[
+\frac{\psi_{T}\left(a+u\right)}{u^{2}}
+\]
+
+
+is nonincreasing wrt to $u$ for all $u,a>0$ such that $a+u>\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$.
+
+Then there is some constant $C$ (only dependent on the characteristics
+of the sub-gassian errors) such that for all $\delta>0$ such that
+
+\[
+\sqrt{n_{V}}\delta^{2}\ge2C\left[\psi_{T}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\vee\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\right]
+\]
+
+
+then
+
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)+Pr\left(\|\epsilon\|_{T}\ge2\sigma\right)
+\end{eqnarray*}
+
+
+for a constant $c>0$.
+
+
+\subsubsection*{Proof}
+
+The basic inequality gives us 
+
+\[
+\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}+2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
+\]
+
+
+Note that since $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$,
+then 
+\begin{eqnarray*}
+\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)^{2} & \le & \left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}
+\end{eqnarray*}
+
+
+By a peeling argument, we have
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\right) & = & \sum_{s=0}^{\infty}Pr\left(2^{s}\delta\le\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le2^{s+1}\delta\right)\\
+ & \le & \sum_{s=0}^{\infty}Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge2^{s}\delta\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\\
+ & = & \sum_{s=0}^{\infty}Pr\left(\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)^{2}\ge2^{2s}\delta^{2}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\\
+ & \le & \sum_{s=0}^{\infty}Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge2^{2s}\delta^{2}\wedge\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\\
+ & \le & \sum_{s=0}^{\infty}Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta}\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\ge2^{2s-1}\delta^{2}\right)
+\end{eqnarray*}
+
+
+To apply the lemma based on vandegeer corollary 8.3 (see below), we
+must check all the conditions are satisfied. 
+
+We choose $\delta$ such that 
+\begin{eqnarray*}
+\frac{\sqrt{n_{V}}}{8} & \ge & \frac{C}{4\delta^{2}}\left[\psi_{T}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\vee\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2\delta\right)\right]\\
+ & \ge & \frac{C}{2^{2s+2}\delta^{2}}\left[\psi_{T}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\vee\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\right]
+\end{eqnarray*}
+
+
+where the second line follows from the assumption that $\psi_{T}(a+u)/u^{2}$
+is nonincreasing wrt $u$. Hence we have satisfied the condition in
+corollary 8.3. So for all $s=0,1,...$ since
+
+\[
+\sqrt{n_{V}}2^{2s-1}\delta^{2}\ge C\left[\psi_{T}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\vee\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)\right]
+\]
+
+
+we have
+\[
+Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta}\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\ge2^{2s-1}\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\le\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4C^{2}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)^{2}}\right)
+\]
+
+
+Hence we have
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & C\sum_{s=0}^{\infty}\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4C^{2}\left(2\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+2^{s+1}\delta\right)^{2}}\right)\\
+ & \le & C\sum_{s=0}^{\infty}\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{64C^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)\vee\exp\left(-n_{V}\frac{2^{2s}\delta^{2}}{196C^{2}}\right)\\
+ & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
+\end{eqnarray*}
+
+
+for some constant $c$.
+
+Hence we have found for the given $\delta$ choice, we have
+
+\begin{eqnarray*}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)+Pr\left(\|\epsilon\|_{T}\ge2\sigma\right)
+\end{eqnarray*}
 
 \end{document}

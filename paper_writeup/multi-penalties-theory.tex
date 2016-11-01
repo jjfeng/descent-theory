@@ -206,24 +206,30 @@ We now present a sharp oracle inequality for the penalty parameters selected by 
 
 \begin{theorem}
 \label{train_val_thrm}
-Suppose that the error $\epsilon$ are sub-Gaussian random variables with expectation zero.
+Suppose that the error $\epsilon$ are independent sub-Gaussian random variables with expectation zero.
 
 Suppose $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$.
 
 Suppose that if $\|\epsilon\|_{T}\le 2\sigma$, then $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-smoothly-parameterized by $\boldsymbol{\lambda}$ over $\Lambda$ with respect to $\| \cdot \|_V$.
 
 
-Then there are universal constants $c_{1},c_{2}>0$ and constants
-$c_{3},c_{4}>0$ such that
+Then for all $\delta > 0$ such that
+\begin{equation}
+\delta^{2}\ge\alpha_{1}\frac{1}{n_{V}}\vee\alpha_{2}\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}\left (\cdot | \tilde{\boldsymbol{\lambda}} \right )-g^{*}\right\Vert _{V}
+\end{equation}
 
-$$
-	Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right)
-$$
-$$
-	\le c_{3}\exp\left(-\frac{n_{V}\delta^{4}}{c_{3}^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)
-	+c_{3}\exp\left(-\frac{n_{V}\delta^{2}}{c_{3}^{2}}\right)
-	+c_{3}\exp\left(-\frac{n_{T}\delta^{2}}{c_{3}^{2}}\right)
-$$
+\begin{eqnarray*}
+	Pr\left(
+	\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^2 -
+	\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^2
+	\ge\delta^2
+	\right )
+	&\le& c_{3}\exp\left(-\frac{n_{V}\delta^{4}}{c_{3}^{2}\left\Vert  \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right) \\
+	&& +c_{3}\exp\left(-\frac{n_{V}\delta^{2}}{c_{3}^{2}}\right) \\
+	&& +Pr \left (
+	\left \| \epsilon \right \|_V \ge 2\sigma
+	\right )
+\end{eqnarray*}
 
 
 where 
