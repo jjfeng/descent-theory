@@ -58,11 +58,16 @@ We will provide sharp oracle inequalities of the form
 
 The document is organized as follows
 \begin{enumerate}
-\item Theorem 3 proves the training/validation split under general entropy
-conditions. 
+\item Theorem 3 proves the convergence of the selected model to the best
+model under general entropy conditions for fixed training data.
 \item Theorem 1 applies Theorem 3 to the special case when the fitted functions
 are Lipschitz in the penalty parameters
+\item Lemma 1 applies Theorem 1 to the special case where $\lambda_{min}$
+and $\lambda_{max}$ are polynomial in the dataset size.
 \item Understand the behavior of the oracle error $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$
+\item We extend Theorem 3 to make a statement on the convergence of the
+selected model to the best model where the training data are also
+random variables.
 \end{enumerate}
 
 \section{Theorem 3}
@@ -70,7 +75,7 @@ are Lipschitz in the penalty parameters
 Let $r>0$. Suppose that if $\|\epsilon\|_{T}\le2\sigma$, then $\mathcal{G}(T)$
 satisfies the entropy condition 
 \[
-\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\min\left\{ \tilde{\psi_{T}}(R),\psi_{T}(R)\right\} 
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi_{T}(R)
 \]
 
 
@@ -85,16 +90,16 @@ Furthermore, suppose that
 
 is nonincreasing wrt to $u$ for all $u>r$.
 
-Then there is some constant $C$ (only dependent on the characteristics
+Then there is some constant $a>0$ (only dependent on the characteristics
 of the sub-gassian errors) such that for all $\delta>r$ with
 \[
-\sqrt{n_{V}}\delta^{2}\ge C\left(\psi_{T}\left(\delta\right)\vee\delta\vee\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\sqrt{n_{V}}\delta^{2}\ge a\left(\psi_{T}\left(\delta\right)\vee\delta\vee\psi_{T}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
 we have
 \begin{eqnarray*}
-Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
+Pr\left(\left.\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\right|\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
 
 
@@ -127,7 +132,8 @@ is bigger:
 
 Hence 
 \begin{eqnarray*}
-Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ &  & Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
+ & \le & Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\\
  &  & +\sum_{s=0}^{\infty}Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2^{s+3/2}\delta}2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)
 \end{eqnarray*}
 
@@ -135,23 +141,26 @@ Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{
 If $\|\epsilon\|_{T}\le2\sigma$, then we have the entropy condition
 that 
 \[
-\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\tilde{\psi_{T}}(R)
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi_{T}(R)
 \]
 
 
-Vandegeer Corollary 8.3 bounds the first probability by
+As long as $\delta>0$ satisfies
+
+\[
+\sqrt{n_{V}}\delta^{2}\ge a\left(\psi_{T}(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V})\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\]
+
+
+we can bound the first probability using Vandegeer Corollary 8.3 as
+follows
 
 \[
 Pr\left(\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right)\le c\exp\left(-\frac{n_{V}\delta^{4}}{4c^{2}\left(16\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right)
 \]
 
 
-for some $c>0$ if $\delta>0$ satisfies
-
-\[
-\sqrt{n_{V}}\delta^{2}\ge C\left(\tilde{\psi_{T}}(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V})\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
-\]
-
+for some $c>0$ .
 
 We also bound the summation using Vandegeer Corollary 8.3. Recall
 that if $\|\epsilon\|_{T}\le2\sigma$, then we have the entropy condition
@@ -166,13 +175,15 @@ assuming that $\|\epsilon\|_{T}\le2\sigma$. First we check the condition
 for Corollary 8.3 is satisfied. In particular, we need to show that
 for all $s=0,1,2,...$ 
 \begin{eqnarray*}
-\sqrt{n_{V}}2^{2s+2}\delta^{2} & \ge & C\left(\psi_{T}\left(2^{s+1}\delta\right)\vee\delta\right)
+\sqrt{n_{V}}2^{2s+2}\delta^{2} & \ge & a\left(\psi_{T}\left(2^{s+1}\delta\right)\vee\delta\right)
 \end{eqnarray*}
 
 
+where $a>0$ is a constant that only depends on the sub-gaussian errors.
+
 This is true since we chose $\delta$ such that 
 \begin{eqnarray*}
-\sqrt{n_{V}}\delta^{2} & \ge & C\left(\psi_{T}\left(\delta\right)\vee\delta\right)
+\sqrt{n_{V}}\delta^{2} & \ge & a\left(\psi_{T}\left(\delta\right)\vee\delta\right)
 \end{eqnarray*}
 
 
@@ -185,11 +196,13 @@ Pr\left(\sup_{\lambda,\lambda':\left\Vert \hat{g}(\cdot|\lambda)-\hat{g}(\cdot|\
 \]
 
 
-Putting this together, for all 
+Putting this together, for all $\delta>r$ satisfying 
 \[
-\sqrt{n_{V}}\delta^{2}\ge C\left(\psi_{T}\left(\delta\right)\vee\delta\vee\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\sqrt{n_{V}}\delta^{2}\ge a\left(\psi_{T}\left(\delta\right)\vee\delta\vee\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
- exists some constant $c$ such that
+
+
+there exists some constant $c$ such that
 \begin{eqnarray*}
 Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
@@ -207,29 +220,23 @@ $C>0$ such that for all $\boldsymbol{\lambda}_{1},\boldsymbol{\lambda}_{2}\in\La
 \]
 
 
-Then for any $\delta>1/n_{V}$ such that
+Then for any $\delta>n_{V}^{-1}\wedge n_{T}^{-1}$ such that
 
 \[
-\delta\ge\alpha_{1}\frac{1}{\sqrt{n_{V}}}\vee\alpha_{2}\sqrt{\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}
+\delta^{2}\ge\frac{\alpha^{2}}{n_{V}}\vee\alpha\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
 \]
 
 
 where 
 \[
-\alpha_{1}=2C_{0}\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log n_{V}\right]^{1/2}\vee1\right]
-\]
-
-
-and 
-\[
-\alpha_{2}^{2}=8C_{0}\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)-J\log\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}\right]^{1/2}\vee1\right]
+\alpha=a\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log\left(n_{V}\vee n_{T}\right)\right]^{1/2}\right]\vee1
 \]
 
 
 and $C_{J}$ is a universal constant, we have
 
 \begin{eqnarray*}
-Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
 
 
@@ -283,57 +290,43 @@ the fact that
 
 The third inequality follows from concavity of the square root.
 
-We will consider the following two bounds for $\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du$:
+We will consider the following bound for $\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du$
+for all $R\ge n_{V}^{-1}\wedge n_{T}^{-1}$
 
 \[
-\tilde{\psi_{T}}(R)=R\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log\frac{1}{R}\right]^{1/2}\mbox{ for all }R\ge0
+\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi_{T}(R)=R\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log\left(n_{V}\vee n_{T}\right)\right]^{1/2}
 \]
 
 
-and
-\[
-\psi_{T}(R)=R\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log n_{V}\right]^{1/2}\mbox{ for all }R\ge n_{V}^{-1}
-\]
-
-
-The second bound replaces the last term $\log\frac{1}{R}$ was replaced
-with $\log n_{V}$, which is valid over the given range. We will see
-this is useful since solving for $\delta$ is hard with the $\log\frac{1}{R}$
-term.
+Notice we've replaced the last term $\log\frac{1}{R}$ with $\log\left(n_{V}\vee n_{T}\right)$,
+which is valid over the given range. We will see this is useful since
+solving for $\delta$ is hard with the $\log\frac{1}{R}$ term.
 
 \textbf{2. Apply Theorem 3}
 
-By Theorem 3, there is a constant $C_{0}>0$ such that the oracle
-inequality 
+Now we apply Theorem 3 to the choice of $\delta>n_{V}^{-1}\wedge n_{T}^{-1}$
+that satisfies
 \[
-\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}
+\sqrt{n_{V}}\delta^{2}\ge a\left(\psi_{T}\left(\delta\right)\vee\delta\vee\psi_{T}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
-holds with probability $p(\delta)$ for all $\delta>0$ such that
+We will solve this by splitting into cases. Let 
 \[
-\sqrt{n_{V}}\delta^{2}\ge C\left(\psi_{T}\left(\delta\right)\vee\delta\vee\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\alpha=a\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log\left(n_{V}\vee n_{T}\right)\right]^{1/2}\right]\vee1
 \]
 
-
-We will solve this by splitting into cases.
 
 \textbf{Case 1: }Suppose that 
 \[
-\psi_{T}\left(\delta\right)\vee\delta\ge\tilde{\psi_{T}}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
+\psi_{T}\left(\delta\right)\vee\delta\ge\psi_{T}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
 \]
 
 
-Then Theorem 3 holds for any $\delta>1/n_{V}$ such that
+In this case, we must have
 
 \[
-\delta\ge\frac{1}{\sqrt{n_{V}}}\alpha_{1}
-\]
-
-
-where 
-\[
-\alpha_{1}=2C_{0}\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)+J\log n_{V}\right]^{1/2}\vee1\right]
+\delta\ge\frac{\alpha}{\sqrt{n_{V}}}
 \]
 
 
@@ -345,22 +338,17 @@ Suppose that
 \]
 
 
-Then we need to find a $\delta>1/n_{V}$ such that
+In this case, we must have
 
 \[
-\delta^{2}\ge\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}\alpha_{2}^{2}
+\delta^{2}\ge\frac{4}{\sqrt{n_{V}}}\left\Vert \hat{g}\left(\cdot|\tilde{\boldsymbol{\lambda}}\right)-g^{*}\right\Vert _{V}\alpha
 \]
 
 
-where 
+Putting these two inequalities together, we find that $\delta>n_{V}^{-1}\wedge n_{T}^{-1}$
+must satisfy
 \[
-\alpha_{2}^{2}=8C_{0}\left[\left[\log\frac{1}{C_{J}}+J(1+\log4+\log8C)+J\log\left(\lambda_{max}-\lambda_{min}\right)-J\log\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}\right]^{1/2}\vee1\right]
-\]
-
-
-Putting these two inequalities together, we get that
-\[
-\delta\ge\alpha_{1}\frac{1}{\sqrt{n_{V}}}\vee\alpha_{2}\sqrt{\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}
+\delta^{2}\ge\frac{\alpha^{2}}{n_{V}}\vee\alpha\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
 \]
 
 
@@ -381,7 +369,7 @@ $C,\kappa$ such that for any $u>0$, we have for all $\lambda\in\Lambda$
 Then
 
 \begin{eqnarray*}
-\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}+O_{p}\left(\left[\frac{c_{J}+J(\kappa+t_{max})\log n_{T}+J\log n_{V}}{n_{V}}\right]^{1/2}\vee\sqrt{\left[\frac{c_{J}+J(\kappa+t_{max})\log n_{T}-J\log\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}{n_{V}}\right]^{1/2}\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}}\right)
+\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}+O_{p}\left(\frac{1+J(\kappa+t_{max})\log n_{T}+J\log n_{V}}{n_{V}}\right)+O_{P}\left(\left[\frac{1+J(\kappa+t_{max})\log n_{T}+J\log n_{V}}{n_{V}}\right]^{1/2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \end{eqnarray*}
 
 
@@ -399,9 +387,15 @@ On the uniform convergence...). Note that$\left\Vert \hat{g}(\cdot|\tilde{\bolds
 is valid to use in the upper bound since Mitchell's paper also uses
 this value.
 
+Let 
+\[
+\tilde{\boldsymbol{\lambda}}_{gen}=\arg\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert ^{2}
+\]
+
+
 Consider the function class composed of just the single function:
 \[
-\mathcal{G}(T)=\left\{ \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\} 
+\mathcal{G}(T)=\left\{ \hat{g}\left(\cdot|\tilde{\boldsymbol{\lambda}}_{gen}\right)-g^{*}\right\} 
 \]
 
 
@@ -412,42 +406,181 @@ Since this class contains a single function, its entropy is zero.
 
 Suppose that 
 \[
-K=\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\|_{\infty}
+K_{gen}=\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|_{\infty}
 \]
 
 
 Then by Theorem 2.1, for any $t>0$, we can bound the conditional
 probability (training set $T$ is given)
 \[
-Pr\left(\left.\frac{1}{C_{1}}\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert ^{2}\right|\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right|T\right)\le1-\exp(-t)
+Pr\left(\left.\frac{1}{C_{1}}\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert ^{2}\right|\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert K_{gen}\sqrt{\frac{t}{n_{V}}}+\frac{K_{gen}^{2}t}{n_{V}}\right|T\right)\ge1-\exp(-t)
 \]
 
 
-where $C_{1}$ is a constant given in the theorem. Rearranging the
-inequality can give us a better understanding of $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$:
+where $C_{1}$ is a constant given in the theorem. 
+
+Furthermore, suppose we know that with high probability, for any training
+dataset, there is an oracle penalty parameter vector $\tilde{\boldsymbol{\lambda}}$
+such that the optimal convergence rate $O_{p}\left(n_{T}^{-2\omega}\right)$
+. That is, suppose there are constants $W,\omega>0$ only dependent
+on the model class $\mathcal{G}$ such that 
+\[
+Pr\left(\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{T}^{2}\le Wn_{T}^{-2\omega}\right)\ge1-p(n_{T})
+\]
+ where $p(n_{T})$ is some small probability tending to zero as $n_{T}\rightarrow\infty$.
+
+Suppose $\tilde{\boldsymbol{\lambda}}_{T}=\arg\min_{\lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{T}$.
+Let 
+\[
+K_{\Lambda}=\sup_{\lambda\in\Lambda}\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{\infty}
+\]
+
+
+Then if $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert _{T}^{2}\le Wn_{T}^{-2\omega}$,
+according to Theorem 2.1 in Vandegeer , we have for all $\delta_{t}>0$
+satisfying 
+\[
+\delta_{t}\ge\frac{2J_{\infty}\left(K_{\Lambda},\mathcal{G}\right)+K\sqrt{t}}{\sqrt{n_{T}}}+\frac{4J_{\infty}^{2}(K_{\Lambda},\mathcal{G})+K_{\Lambda}^{2}t}{n_{T}}
+\]
+
+
+the following inequality holds with probability at least $1-\exp(-t)$
 \begin{eqnarray*}
-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert ^{2}+C_{1}\left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right)\\
- & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert ^{2}+2C_{1,m}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+C_{1,m}^{2}\frac{K^{2}t}{n_{V}}\\
- & = & \left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert +C_{1,m}K\sqrt{\frac{t}{n_{V}}}\right)^{2}
+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert ^{2} & = & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert ^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert _{T}^{2}+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert _{T}^{2}\\
+ & \le & \delta_{t}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert ^{2}+Wn_{T}^{-2\omega}
 \end{eqnarray*}
 
 
-where $C_{1,m}=\max\left(C_{1},0\right)$. Then 
+which is equivalent to saying that for all $0<\delta_{t}<1/2$ satisfying
+\[
+\delta_{t}\ge\frac{2J_{\infty}\left(K,\mathcal{G}\right)+K_{\Lambda}\sqrt{t}}{\sqrt{n_{T}}}+\frac{4J_{\infty}^{2}(K_{\Lambda},\mathcal{G})+K_{\Lambda}^{2}t}{n}
+\]
+
+
+we have
+\[
+Pr\left(\left.\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert ^{2}\le2Wn_{T}^{-2\omega}\right|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert _{T}^{2}\le Wn_{T}^{-2\omega}\right)\ge1-\exp(-t)
+\]
+
+
+Note that for the models of interest, $J_{\infty}\left(K_{\Lambda}^{2},\mathcal{G}\right)$
+usually contains at most $\log n_{T}$ but not a polynomial term in
+$n_{T}$.
+
+Now we can extend \textbf{Theorem 3} further.
+
+
+\section{Extended Theorem 3}
+
+Let 
+\[
+K=\sup_{\lambda\in\Lambda}\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{\infty}
+\]
+
+
+Suppose that there are constants $W,\omega>0$ only dependent on the
+model class $\mathcal{G}$ such that 
+\[
+Pr\left(\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{T}^{2}\le Wn_{T}^{-2\omega}\right)\ge1-p(n_{T})
+\]
+
+
+where $p(n_{T})$ tends to zero as $n_{T}\rightarrow\infty$.
+
+Choose $t,\tilde{\delta_{t}}>0$ such that
+
+\[
+\tilde{\delta}_{t}^{2}\ge C_{1}\left(\sqrt{2W}Kn_{T}^{-\omega}n_{V}^{-1/2}\sqrt{t}+\frac{K^{2}t}{n_{V}}\right)+2Wn_{T}^{-2\omega}
+\]
+
+
+and $t_{1}>0$ such that 
+\[
+\frac{1}{2}\ge\frac{2J_{\infty}\left(K,\mathcal{G}\right)+K\sqrt{t_{1}}}{\sqrt{n_{T}}}+\frac{4J_{\infty}^{2}(K,\mathcal{G})+K^{2}t_{1}}{n_{T}}
+\]
+
+
+where $C_{1}>0$ is a constant given in Vandegeer Theorem 2.1.
+
+Then for all $\delta>n_{V}^{-1}\wedge n_{T}^{-1}$ such that 
+\[
+\sqrt{n_{V}}\delta^{2}\ge\alpha\left(\psi_{T}(\delta)\vee\delta\vee\psi_{T}(\tilde{\delta}_{t})\vee\tilde{\delta}_{t}\right)
+\]
+
+
+we have
+\[
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left[\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{V}^{2}\right]\ge\delta^{2}\right)\le c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\tilde{\delta}_{t}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)+\exp(-t_{1})+p(n_{T})+\exp(-t)+c\exp\left(-\frac{n_{T}\sigma^{2}}{c^{2}}\right)+c\exp\left(-\frac{n_{V}\sigma^{2}}{c^{2}}\right)
+\]
+
+
+
+\subsubsection*{Proof}
+
+We break up the probability of interest into the following components
+
 \begin{eqnarray*}
-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert +C_{1,m}K\sqrt{\frac{t}{n_{V}}}
+ &  & Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left[\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{V}^{2}\right]\ge\delta^{2}\right)\\
+ & \le & Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left[\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{V}^{2}\right]\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\wedge\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{V}^{2}\le\tilde{\delta}^{2}\right)\\
+ &  & +Pr\left(\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{V}^{2}\ge\tilde{\delta}_{t}^{2}\right)\\
+ &  & +Pr\left(\|\epsilon\|_{T}\ge2\sigma\right)\\
+ &  & +Pr\left(\|\epsilon\|_{V}\ge2\sigma\right)
 \end{eqnarray*}
 
 
-So we have indeed shown that $\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}$
-is small when $\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert $
-is small.
-
-Combining this result with our inequality bounds from Sections 1 and
-2, we get that with high probability 
+We bound the first probability term using Theorem 3: For our choice
+of $\delta$, we have that
 \begin{eqnarray*}
-\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V} & \le & \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert +C_{1,m}K\sqrt{\frac{t}{n_{V}}}+\mbox{additional error}
+Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left[\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{V}^{2}\right]\ge\delta^{2}\wedge\|\epsilon\|_{V}\le2\sigma\wedge\|\epsilon\|_{T}\le2\sigma\wedge\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{V}^{2}\le\tilde{\delta}^{2}\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\tilde{\delta}_{t}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
 
+
+To bound the second probability term, we use the results just established
+
+\begin{eqnarray*}
+ &  & Pr\left(\min_{\lambda\in\Lambda}\left\Vert \hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{V}^{2}\ge\tilde{\delta}_{t}^{2}\right)\\
+ & \le & Pr\left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert _{V}^{2}\ge\tilde{\delta}_{t}^{2}\right)\\
+ & \le & Pr\left(\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert ^{2}\right|+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert ^{2}\ge\tilde{\delta}_{t}^{2}\right)\\
+ & \le & Pr\left(\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert ^{2}\right|+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert ^{2}\ge\tilde{\delta}_{t}^{2}\wedge\frac{1}{C_{1}}\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert ^{2}\right|\le\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right)\\
+ &  & +Pr\left(\frac{1}{C_{1}}\left|\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert ^{2}\right|\ge\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right)\\
+ & \le & Pr\left(C_{1}\left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right)+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\right\Vert ^{2}\ge\tilde{\delta}_{t}^{2}\right)\\
+ &  & +\exp(-t)\\
+ & \le & Pr\left(C_{1}\left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right)+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert ^{2}\ge\tilde{\delta}_{t}^{2}\right)+\exp(-t)\\
+ & \le & Pr\left(C_{1}\left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right)+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert ^{2}\ge\tilde{\delta}_{t}^{2}\wedge\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert ^{2}\le2Wn_{T}^{-2\omega}\wedge\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert _{T}^{2}\le Wn_{T}^{-2\omega}\right)\\
+ &  & +Pr\left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert ^{2}\ge2Wn_{T}^{-2\omega}\wedge\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert _{T}^{2}\le Wn_{T}^{-2\omega}\right)\\
+ &  & +Pr\left(\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{T})-g^{*}\right\Vert _{T}^{2}\ge Wn_{T}^{-2\omega}\right)\\
+ &  & +\exp(-t)\\
+ & \le & 0+\exp(-t_{1})+p(n_{T})+\exp(-t)
+\end{eqnarray*}
+
+
+The last line follows as long as we choose $t$ and $\tilde{\delta}_{t}$
+such that 
+\[
+\tilde{\delta}_{t}^{2}\ge C_{1}\left(\sqrt{2W}n_{T}^{-\omega}K\sqrt{\frac{t}{n_{V}}}+\frac{K^{2}t}{n_{V}}\right)+2Wn_{T}^{-2\omega}
+\]
+
+
+and $t_{1}>0$ such that 
+\[
+\frac{1}{2}\ge\frac{2J_{\infty}\left(K,\mathcal{G}\right)+K\sqrt{t_{1}}}{\sqrt{n_{T}}}+\frac{4J_{\infty}^{2}(K,\mathcal{G})+K^{2}t_{1}}{n_{T}}
+\]
+
+
+Finally, we bound the last two terms using Bernstein's inequality
+since $\epsilon$ are independent sub-gaussian random variables
+\[
+Pr\left(\|\epsilon\|_{V}^{2}\ge4\sigma^{2}\right)\le c\left(-\frac{n_{V}\sigma^{2}}{c^{2}}\right)
+\]
+
+
+and
+\[
+Pr\left(\|\epsilon\|_{T}^{2}\ge4\sigma^{2}\right)\le c\left(-\frac{n_{T}\sigma^{2}}{c^{2}}\right)
+\]
+
+
+for some constant $c>0$.
 
 
 \section{Appendix}
@@ -468,10 +601,10 @@ and satisfies
 \]
 
 
-There is $C$ dependent only on the sub-gaussian constants such that
+There is $a$ dependent only on the sub-gaussian constants such that
 for all $\delta>0$ such that
 \[
-\sqrt{m}\delta\ge C(\psi_{T}(R)\vee R)
+\sqrt{m}\delta\ge a(\psi_{T}(R)\vee R)
 \]
 
 
@@ -671,4 +804,57 @@ Hence we have found for the given $\delta$ choice, we have
 Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\ge\delta\wedge\|\epsilon\|_{V}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)+Pr\left(\|\epsilon\|_{T}\ge2\sigma\right)
 \end{eqnarray*}
 
+
+
+\section{Random Thoughts}
+
+What is wrong with the following logic?
+
+\begin{eqnarray*}
+\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2} & = & \|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}-\left(\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|_{V}^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|_{V}^{2}\right)\\
+ &  & +\left(\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|_{V}^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|_{V}^{2}\right)\\
+ & \le & \left|\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|^{2}-\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|_{V}^{2}\right|+\left|\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|_{V}^{2}\right|
+\end{eqnarray*}
+
+
+For the first inequality, note that by definition, we have 
+\[
+\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|_{V}^{2}\le\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|_{V}^{2}
+\]
+
+
+Using Theorem 2.1, we have that for all $\delta_{n},t>0$ such that
+
+\[
+\delta_{n}\ge\frac{2J_{\infty}\left(K_{\Lambda},\mathcal{G}\right)+K_{\Lambda}\sqrt{t}}{\sqrt{n_{T}}}+\frac{4J_{\infty}^{2}(K_{\Lambda},\mathcal{G})+K_{\Lambda}^{2}t}{n_{T}}
+\]
+
+
+we have
+\[
+Pr\left(\sup_{\lambda\in\Lambda}\left|\frac{\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|^{2}-\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{V}^{2}}{\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|^{2}}\right|\le\delta_{n}\right)\ge1-\exp(-t)
+\]
+
+
+Under the condition that $\sup_{\lambda}\left|\frac{\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|^{2}-\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{V}^{2}}{\|\hat{g}(\cdot|\boldsymbol{\lambda})-g^{*}\|^{2}}\right|\le\delta_{n}$,
+we have
+\begin{eqnarray*}
+\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2} & \le & \delta_{n}\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|^{2}+\delta_{n}\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}\\
+ & = & \delta_{n}\left(\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}\right)+2\delta_{n}\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}
+\end{eqnarray*}
+
+
+So we have that
+\begin{eqnarray*}
+Pr\left(\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}\le\frac{2\delta_{n}}{1-\delta_{n}}\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}\right) & \ge & 1-\exp(-t)
+\end{eqnarray*}
+
+
+If we can choose $\delta_{n}\le1/2$, then
+\begin{eqnarray*}
+Pr\left(\|\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\|^{2}-\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}\le4\delta_{n}\|\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}}_{gen})-g^{*}\|^{2}\right) & \ge & 1-\exp(-t)
+\end{eqnarray*}
+
+
+This is a really really fast rate!
 \end{document}
