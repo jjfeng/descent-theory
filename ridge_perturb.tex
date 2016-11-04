@@ -34,7 +34,13 @@ it is cute.
 We will consider the case of $p$-dimensional parametric models. Let
 
 \[
-\hat{\boldsymbol{\theta}}_{w}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+w\|\boldsymbol{\theta}\|^{2}\right)
+\hat{\boldsymbol{\theta}}_{w}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)
+\]
+
+
+Let 
+\[
+L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})=\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})
 \]
 
 
@@ -48,15 +54,17 @@ continuous mapping from $[0,W)$ into some open neighborhood $B\subseteq\mathbb{R
 
 Consider the function 
 \[
-L_{T}(w,\boldsymbol{\theta})=\nabla_{\theta}\left[\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+w\|\boldsymbol{\theta}\|^{2}\right)\right]
+D(w,\boldsymbol{\theta})=\nabla_{\theta}\left[L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right]
 \]
 
 
-Since $L_{T}(\cdot,\boldsymbol{\theta}):\mathbb{R}\mapsto\mathbb{R}$
+Since $D(\cdot,\boldsymbol{\theta}):\mathbb{R}\mapsto\mathbb{R}$
 is one-to-one, then by the Implicit Function Theorem (Kumagai 1980),
-$\hat{\boldsymbol{\theta}}_{w}$ is the unique solution to $L_{T}\left(w,\cdot\right)=0$.
-Furthermore, there is some $W>0$ such that $\hat{\boldsymbol{\theta}}_{w}$
-is a continuous mapping from $[0,W)$ to some open subset in $\mathbb{R}^{p}$.
+there is a unique solution to $D\left(w,\cdot\right)=0$. By the gradient
+optimality conditions, we know that the solution must be $\hat{\boldsymbol{\theta}}_{w}$.
+Moreover, the Implicit Function Theorem states that there is some
+$W>0$ such that $\hat{\boldsymbol{\theta}}_{w}$ is a continuous
+mapping from $[0,W)$ to some open subset in $\mathbb{R}^{p}$.
 
 Source: Kumagai, 1980. An Implicit Function Theorem: Comment 
 
