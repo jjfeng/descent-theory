@@ -105,15 +105,18 @@ $\boldsymbol{\theta,\beta},m'$, we have
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have
 \[
-\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C_{J}}\right)
 \]
 
 
 where 
 \[
-C=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
+C_{J}=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
 \]
 
+
+(Still thinking about how to make $C_{J}$ more clear. Perhaps I can
+find a nicer bound for the Lipschitz constant)
 
 
 \subsubsection*{Proof}
@@ -347,6 +350,12 @@ or
 (These conditions bound the spectrum of the penalty function or the
 function itself.)
 
+Let 
+\[
+C=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j}^{*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}_{j}^{*})+\frac{w}{2}\|\boldsymbol{\theta}_{j}^{*}\|_{2}^{2}\right)
+\]
+
+
 For $j=1,..,J$, let 
 
 \[
@@ -354,12 +363,6 @@ d_{j}=\begin{cases}
 \left(K_{j}+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right) & \mbox{if assumption (5) holds for }P_{j}\\
 \frac{1}{\lambda_{min}}K_{j}\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C} & \mbox{if assumption (6) holds for }g_{j}
 \end{cases}
-\]
-
-
-Let 
-\[
-C=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j}^{*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}_{j}^{*})+\frac{w}{2}\|\boldsymbol{\theta}_{j}^{*}\|_{2}^{2}\right)
 \]
 
 
