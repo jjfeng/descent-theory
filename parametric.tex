@@ -22,9 +22,13 @@ In this document, we consider parametric regression models $g(\cdot|\boldsymbol{
 where $\boldsymbol{\theta}\in\mathbb{R}^{p}$. Throughout, we will
 suppose $\boldsymbol{\theta}^{*}$ is the model such that 
 \[
-\boldsymbol{\theta}^{*}=\arg\min_{\theta}E_{x,y}\left[\left(y-g(x|\boldsymbol{\theta})\right)^{2}\right]
+\boldsymbol{\theta}^{*}=\arg\min_{\theta\in\Theta}E_{x,y}\left[\left(y-g(x|\boldsymbol{\theta})\right)^{2}\right]
 \]
 
+
+Technically, all the proofs require is that $\boldsymbol{\theta}^{*}\in\Theta$
+is fixed. In the convergence rate proofs, we will need $\boldsymbol{\theta}^{*}$
+to satisfy $E[y|x]=g(x|\boldsymbol{\theta}^{*})$.
 
 We are interested in establishing inequalities of the form 
 \[
@@ -83,25 +87,20 @@ where $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$ and $w>0$ is a
 fixed constant.
 
 Suppose that the penalties and the function $g(x|\boldsymbol{\theta})$
-are smooth and convex wrt $\boldsymbol{\theta}$: 
+are twice-differentiable and convex wrt $\boldsymbol{\theta}$: 
 \begin{itemize}
 \item Suppose that $\nabla_{\theta}^{2}P_{j}(\boldsymbol{\theta})$ are
 PSD matrices for all $j=1,...,J$. 
-\item Suppose that $\nabla_{\theta}^{2}g(x|\boldsymbol{\theta})$ are PSD
-matrices for all $x$.
+\item Suppose that $\nabla_{\theta}^{2}\|y-g(x|\boldsymbol{\theta})\|_{T}^{2}$
+is a PSD matrix.
 \end{itemize}
-\textbf{Primary Assumption} (rephrase?) : Suppose there is some $K>0$
-such that for all $j=1,...,J$ and any $\boldsymbol{\theta,\beta},m$,
-we have
+Suppose there is some $K>0$ such that for all $j=1,...,J$ and any
+$\boldsymbol{\theta,\beta},m'$, we have
 
 \[
-\left|\frac{\partial}{\partial m}P_{j}\left(\boldsymbol{\theta}+m\boldsymbol{\beta}\right)\right|\le K\|\boldsymbol{\beta}\|_{2}
+\left|\left.\frac{\partial}{\partial m}P_{j}\left(\boldsymbol{\theta}+m\boldsymbol{\beta}\right)\right|_{m=m'}\right|\le K\|\boldsymbol{\beta}\|_{2}
 \]
 
-
-(This is essentially bounding the spectrum of the penalty function)
-
-\textbf{Result}
 
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have
@@ -323,29 +322,40 @@ least squares criterion:
 where $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$.
 
 Suppose that the penalties and the mean squared error $\|y-\sum_{j=1}^{J}g_{j}(x|\boldsymbol{\theta}_{j})\|_{T}^{2}$
-are twice-differentiable and convex wrt $\boldsymbol{\theta}$: $\nabla_{\boldsymbol{\theta}_{j}}^{2}P_{j}(\boldsymbol{\theta}_{j})$
-for all $j=1,...,J$ and $\nabla_{\boldsymbol{\theta}}^{2}\|y-\sum_{j=1}^{J}g_{j}(x|\boldsymbol{\theta}_{j})\|_{T}^{2}$
-are PSD matrices.
-
+are twice-differentiable and convex wrt $\boldsymbol{\theta}$
+\begin{itemize}
+\item $\nabla_{\boldsymbol{\theta}_{j}}^{2}P_{j}(\boldsymbol{\theta}_{j})$
+are PSD matrices for all $j=1,...,J$ 
+\item $\nabla_{\boldsymbol{\theta}}^{2}\|y-\sum_{j=1}^{J}g_{j}(x|\boldsymbol{\theta}_{j})\|_{T}^{2}$
+is a PSD matrix.
+\end{itemize}
 Suppose for each $j=1,...,J$, there is a constant $K_{j}\ge0$ such
-that for all $\boldsymbol{\beta},\boldsymbol{\theta}$, we either
+that for all $\boldsymbol{\beta},\boldsymbol{\theta},m'$, we either
 have
 
-\[
-\left|\frac{\partial}{\partial m}P_{j}(\boldsymbol{\theta}+m\boldsymbol{\beta})\right|\le K_{j}\|\boldsymbol{\beta}\|_{2}
-\]
+\begin{equation}
+\left|\frac{\partial}{\partial m}P_{j}(\boldsymbol{\theta}+m\boldsymbol{\beta})\right|_{m=m'}\le K_{j}\|\boldsymbol{\beta}\|_{2}
+\end{equation}
 
-
-(This is essentially bounding the spectrum of the penalty function)
 
 or 
+\begin{equation}
+\left\Vert \left.\frac{\partial}{\partial m}g_{j}(X_{T,j}|\boldsymbol{\theta}+m\boldsymbol{\beta})\right|_{m=m'}\right\Vert =\sqrt{\sum_{i=1}^{n}\left(\left.\frac{\partial}{\partial m}g_{j}(x_{T,j}|\boldsymbol{\theta}+m\boldsymbol{\beta})\right|_{m=m'}\right)^{2}}\le K_{j}\|\boldsymbol{\beta}\|_{2}
+\end{equation}
+
+
+(These conditions bound the spectrum of the penalty function or the
+function itself.)
+
+For $j=1,..,J$, let 
+
 \[
-\left\Vert \nabla_{\theta}g_{j}(X_{T,j}|\boldsymbol{\theta})\right\Vert \le K_{j}
+d_{j}=\begin{cases}
+\left(K_{j}+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right) & \mbox{if assumption (5) holds for }P_{j}\\
+\frac{1}{\lambda_{min}}K_{j}\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C} & \mbox{if assumption (6) holds for }g_{j}
+\end{cases}
 \]
 
-
-(We are bounding the spectral norm of $\nabla_{\theta}g_{j}(X_{T,j}|\boldsymbol{\theta})$.
-This case is most relevant to linear models I believe.)
 
 Let 
 \[
@@ -353,25 +363,10 @@ C=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j}^{*})
 \]
 
 
-and 
-\[
-d_{max}=\max_{k=1,...,J}d_{k}
-\]
-
-
-where
-\[
-d_{k}=\begin{cases}
-\left(K+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right) & \mbox{if }\left|\frac{\partial}{\partial m}P_{k}(\boldsymbol{\theta}+m\boldsymbol{\beta})\right|\le K\|\boldsymbol{\beta}\|\\
-\frac{1}{\lambda_{min}}K\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}} & \mbox{if }\left\Vert \nabla_{\boldsymbol{\theta}_{k}}g_{k}\left(X_{T,k}|\boldsymbol{\theta}_{k}\right)\right\Vert \le K
-\end{cases}
-\]
-
-
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have for all $j=1,...,J$
 \[
-\|\boldsymbol{\theta}_{\lambda^{(1)},j}-\boldsymbol{\theta}_{\lambda^{(2)},j}\|\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \lambda_{min}^{-1}w^{-1}d_{max}
+\|\boldsymbol{\theta}_{\lambda^{(1)},j}-\boldsymbol{\theta}_{\lambda^{(2)},j}\|\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \lambda_{min}^{-1}w^{-1}\left(\max_{j=1,..,J}d_{j}\right)
 \]
 
 
@@ -418,7 +413,7 @@ By the product rule and chain rule, we have
 
 Define the following matrices 
 \begin{eqnarray*}
-S:S_{jk} & = & \left.\frac{\partial^{2}}{\partial m_{k}\partial m_{j}}\frac{1}{2}\|y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\|_{T}^{2}\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}
+S:S_{jk} & = & \left.\frac{\partial^{2}}{\partial m_{k}\partial m_{j}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}
 \end{eqnarray*}
 
 
@@ -450,9 +445,8 @@ M=-D_{3}\left(S+D_{1}+D_{2}\right)^{-1}
 \]
 
 
-$S$ is a PSD matrix since the sum of convex functions is convex (so
-sum of $g_{j}$ is convex) and the composition of a convex function
-with an affine function is convex.
+$S$ is a PSD matrix since the composition of a convex function with
+an affine function is convex.
 
 $D_{1}$ is a PSD matrix since the penalty functions are convex.
 
@@ -496,7 +490,7 @@ then we have that
 
 Therefore
 \[
-\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\right)+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\|^{2}\right)\le\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C
+\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\right)+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\|^{2}\right)\le\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C
 \]
 
 
@@ -508,60 +502,43 @@ This implies that
 
 and
 \begin{equation}
-\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j})\right\Vert _{T}\le\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}
+\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j})\right\Vert _{T}\le\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C}
 \end{equation}
 
 
-If combine the assumption 
+If combine the assumption (5) with (8), we get 
 \[
-\left|\frac{\partial}{\partial m}P_{k}(\boldsymbol{\theta}+m\boldsymbol{\beta})\right|\le K\|\boldsymbol{\beta}\|
+\left|\frac{\partial}{\partial m}_{k}P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\le\|\boldsymbol{\beta}_{k}\|\left(K_{k}+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
 \]
 
 
-with (6), we get 
-\[
-\left|\frac{\partial}{\partial m}_{k}P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\le\|\boldsymbol{\beta}_{k}\|\left(K+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
-\]
-
-
-On the other hand, suppose the other assumption is satisfied: 
-\[
-\left\Vert \nabla_{\boldsymbol{\theta}_{k}}g_{k}\left(X_{T,k}|\boldsymbol{\theta}_{k}\right)\right\Vert \le K
-\]
-
-
-Then we will need to use the implicit differentiation equation (5).
+On the other hand, suppose the other assumption (6) is satisfied.
+Then we will need to use the implicit differentiation equation (7).
 Rearranging, we get
 
 \begin{eqnarray*}
-\left.\frac{\partial}{\partial m_{k}}\left(P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})\right)\right|_{\boldsymbol{m}=\boldsymbol{\hat{m}}(\boldsymbol{\lambda})}+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle & = & \frac{1}{\lambda_{k}}\left\langle \left.\nabla_{\boldsymbol{\theta}_{k}}g_{k}\left(\cdot|\boldsymbol{\theta}_{k}\right)\right|_{\boldsymbol{\theta}_{k}=\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}}\boldsymbol{\beta}_{k},y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\rangle _{T}\\
- & \le & \frac{1}{\lambda_{min}}\|\boldsymbol{\beta}_{k}\|\left\Vert \left.\nabla_{\boldsymbol{\theta}_{k}}g_{k}\left(X_{T,k}|\boldsymbol{\theta}_{k}\right)\right|_{\boldsymbol{\theta}_{k}=\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}}\right\Vert \left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j})\right\Vert _{T}
+\left.\frac{\partial}{\partial m_{k}}\left(P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})\right)\right|_{\boldsymbol{m}=\boldsymbol{\hat{m}}(\boldsymbol{\lambda})}+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle & = & \frac{1}{\lambda_{k}}\left\langle \left.\frac{\partial}{\partial m}g_{k}\left(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\right)\right|_{m=\hat{m}(\lambda)},y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\rangle _{T}\\
+ & \le & \frac{1}{\lambda_{min}}K_{k}\|\boldsymbol{\beta}_{k}\|\left\Vert y-\sum_{j=1}^{J}g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j}\right)\right\Vert _{T}
 \end{eqnarray*}
 
 
-Plugging in (7), we get 
+Plugging in (9), we get 
 \[
-\left|\frac{\partial}{\partial m}_{k}P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\le\|\boldsymbol{\beta}_{k}\|\frac{1}{\lambda_{min}}K\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}
+\left|\frac{\partial}{\partial m}_{k}P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\le\|\boldsymbol{\beta}_{k}\|\frac{1}{\lambda_{min}}K_{k}\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C}
 \]
 
 
 Using these upper bounds, we can bound $D_{3}$ by the diagonal matrix
 \[
-d_{max}diag\left(\left\{ \|\beta\|_{k}\right\} _{k=1}^{J}\right)\succeq D_{3}
+\left\{ \max_{k=1,...,J}d_{k}\right\} diag\left(\left\{ \|\beta_{k}\|\right\} _{k=1}^{J}\right)\succeq D_{3}
 \]
  
 
-where
-\[
-d_{max}=\max_{k=1,...,J}d_{k}
-\]
-
-
-and
+where for $k=1,...,J$
 \[
 d_{k}=\begin{cases}
-\left(K+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right) & \mbox{if }\left|\frac{\partial}{\partial m}P_{k}(\boldsymbol{\theta}+m\boldsymbol{\beta})\right|\le K\|\boldsymbol{\beta}\|\\
-\frac{1}{\lambda_{min}}K\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}} & \mbox{if }\left\Vert \nabla_{\boldsymbol{\theta}_{k}}g_{k}\left(X_{T,k}|\boldsymbol{\theta}_{k}\right)\right\Vert \le K
+\left(K_{k}+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right) & \mbox{if assumption (5) holds for }k\\
+\frac{1}{\lambda_{min}}K_{k}\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C} & \mbox{if assumption (6) holds for }k
 \end{cases}
 \]
 
@@ -573,9 +550,9 @@ For every $k=1,...,J$, we have
 \begin{eqnarray}
 \|\nabla_{\lambda}\hat{m}_{k}(\lambda)\| & = & \|Me_{k}\|\nonumber \\
  & = & \|D_{3}\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\|\nonumber \\
- & \le & \left\Vert d_{max}diag\left(\left\{ \|\beta\|_{k}\right\} _{k=1}^{J}\right)\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \nonumber \\
- & \le & d_{max}\max_{\ell}\|\boldsymbol{\beta}_{\ell}\|\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \nonumber \\
- & \le & d_{max}\max_{\ell}\|\boldsymbol{\beta}_{\ell}\|\left\Vert D_{2}^{-1}e_{k}\right\Vert 
+ & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \left\Vert diag\left(\left\{ \|\beta\|_{k}\right\} _{k=1}^{J}\right)\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \nonumber \\
+ & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \max_{\ell}\|\boldsymbol{\beta}_{\ell}\|\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \nonumber \\
+ & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \max_{\ell}\|\boldsymbol{\beta}_{\ell}\|\left\Vert D_{2}^{-1}e_{k}\right\Vert 
 \end{eqnarray}
 
 
@@ -592,11 +569,15 @@ k\coloneqq\ell_{max}=\arg\max_{\ell}\|\boldsymbol{\beta}_{\ell}\|
 \]
 
 
+(Notice we can choose any $k$ in $1,...,J$. The inequality holds
+for all k so we just choose the $k$ that is most interesting for
+our problem.)
+
 We have 
 \begin{eqnarray*}
-\|\nabla_{\lambda}\hat{m}_{\ell_{max}}(\lambda)\| & \le & d_{max}\|\boldsymbol{\beta}_{\ell_{max}}\|\left\Vert D_{2}^{-1}e_{\ell_{max}}\right\Vert \\
- & = & d_{max}\|\boldsymbol{\beta}_{\ell_{max}}\|\lambda_{\ell_{max}}^{-1}w^{-1}\|\boldsymbol{\beta}_{\ell_{max}}\|_{2}^{-2}\\
- & \le & d_{max}\|\boldsymbol{\beta}_{\ell_{max}}\|^{-1}\lambda_{min}^{-1}w^{-1}
+\|\nabla_{\lambda}\hat{m}_{\ell_{max}}(\lambda)\| & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \|\boldsymbol{\beta}_{\ell_{max}}\|\left\Vert D_{2}^{-1}e_{\ell_{max}}\right\Vert \\
+ & = & \left\{ \max_{k=1,...,J}d_{k}\right\} \|\boldsymbol{\beta}_{\ell_{max}}\|\lambda_{\ell_{max}}^{-1}w^{-1}\|\boldsymbol{\beta}_{\ell_{max}}\|_{2}^{-2}\\
+ & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \|\boldsymbol{\beta}_{\ell_{max}}\|^{-1}\lambda_{min}^{-1}w^{-1}
 \end{eqnarray*}
 
 
@@ -608,14 +589,14 @@ is a continuous, differentiable function.
 By the MVT, we have that there exists an $\alpha\in(0,1)$ such that
 \begin{eqnarray*}
 \left|\hat{m}_{\ell_{max}}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{\ell_{max}}(\boldsymbol{\lambda}^{(1)})\right| & = & \left|\left\langle \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)},\nabla_{\lambda}\hat{m}_{\ell_{max}}(\boldsymbol{\lambda})\right\rangle _{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda}^{(1)}+(1-\alpha)\boldsymbol{\lambda}^{(2)}}\right|\\
- & \le & \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert d_{max}\lambda_{min}^{-1}w^{-1}\|\boldsymbol{\beta}_{\ell_{max}}\|^{-1}
+ & \le & \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left\{ \max_{k=1,...,J}d_{k}\right\} \lambda_{min}^{-1}w^{-1}\|\boldsymbol{\beta}_{\ell_{max}}\|^{-1}
 \end{eqnarray*}
 
 
 We know that $\hat{m}_{k}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{k}(\boldsymbol{\lambda}^{(1)})=\boldsymbol{1}$
 for all $k=1,..,J$. Rearranging the inequality above, we get
 \[
-\max_{k}\|\boldsymbol{\theta}_{\lambda^{(1)},k}-\boldsymbol{\theta}_{\lambda^{(2)},k}\|=\|\boldsymbol{\beta}_{\ell_{max}}\|\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert d_{max}\lambda_{min}^{-1}w^{-1}
+\max_{k}\|\boldsymbol{\theta}_{\lambda^{(1)},k}-\boldsymbol{\theta}_{\lambda^{(2)},k}\|=\|\boldsymbol{\beta}_{\ell_{max}}\|\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left\{ \max_{k=1,...,J}d_{k}\right\} \lambda_{min}^{-1}w^{-1}
 \]
 
 
@@ -623,40 +604,45 @@ for all $k=1,..,J$. Rearranging the inequality above, we get
 \section{Nonsmooth Penalties}
 
 Suppose we are dealing with parametric regression problems from Section
-1 or 2. We will suppose all the same assumptions, except those that
-concern the smoothness of the penalties. 
+1 or 2. We keep all the same assumptions, except those that concern
+the smoothness of the penalties. 
 
-Suppose $\Lambda\subseteq\mathbb{R}^{p}$. We suppose that for almost
-every dataset $\left(X,y\right)$, the following hold:
+Recall that $\Lambda\subseteq\mathbb{R}^{J}$. Consider the measure
+space over $\Lambda$ with respect to the Lebesgue measure $\mu$.
+We suppose that for a given dataset $\left(X,y\right)$, suppose the
+following three assumptions hold:
 
 \textbf{Assumption (1):} Let the penalized training criterion be denoted
-$L_{T}(\cdot,\boldsymbol{\lambda})$. Denote the differentiable space
-of $L_{T}(\cdot,\boldsymbol{\lambda})$ at any point $\boldsymbol{\theta}$
-as $\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\boldsymbol{\theta}\right)$.
-Suppose there is a set $\Lambda_{smooth}\subseteq\Lambda$ such that
-for every $\boldsymbol{\lambda}\in\Lambda_{smooth}$, the following
-conditions hold
-
-\textbf{Cond 1:} The differentiable space of the training criterion
-at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$, denoted $\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)$,
-is a local optimality space.
-
-\textbf{Cond 2:} The training criterion $L_{T}(\cdot,\cdot)$ restricted
-to $\Omega^{L_{T}(\cdot,\cdot)}\left(\hat{\boldsymbol{\theta}}_{\lambda},\boldsymbol{\lambda}\right)$
-is twice continuously differentiable within some ball centered $\boldsymbol{\lambda}$.
-Let ``ball of differentiability'' be denoted $B(\boldsymbol{\lambda})$.
-
-\textbf{Cond 3:} There is an orthonormal basis $U$ of the differentiable
-space directions such that the Hessian of the training criterion (taken
-along directions $U$) is invertible.
-
-Furthermore, suppose that 
+$L_{T}(\boldsymbol{\theta},\boldsymbol{\lambda})$. Denote the differentiable
+space of $L_{T}(\cdot,\boldsymbol{\lambda})$ at any point $\boldsymbol{\theta}$
+as 
 \[
-\mu\left(\Lambda\backslash\Lambda_{smooth}\right)=0
+\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\boldsymbol{\theta}\right)=\left\{ \boldsymbol{\eta}|\lim_{\epsilon\rightarrow0}\frac{L_{T}(\boldsymbol{\theta}+\epsilon\boldsymbol{\eta})-L_{T}(\boldsymbol{\theta})}{\epsilon}\mbox{ exists}\right\} 
 \]
 
 
-where $\mu$ is the Lebesgue measure in $p$-dimensions.
+Suppose there is a set $\Lambda_{smooth}\subseteq\Lambda$ such that
+$\mu\left(\Lambda_{smooth}^{C}\right)=0$ and for every $\boldsymbol{\lambda}\in\Lambda_{smooth}$,
+there exists a ball with nonzero radius centered at $\boldsymbol{\lambda}$,
+denoted $B(\boldsymbol{\lambda})$, such that the following conditions
+hold:
+
+\textbf{Cond 1:} For all $\boldsymbol{\lambda}'\in B(\boldsymbol{\lambda})$,
+the training criterion $L_{T}(\cdot,\cdot)$ is twice differentiable
+along directions in $\Omega^{L_{T}(\cdot,\cdot)}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)$.
+(So technically the twice-differentiable space is constant)
+
+\textbf{Cond 2:} $\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)$
+is a local optimality space of $B(\boldsymbol{\lambda})$:
+\[
+\arg\min_{\theta\in\Theta}L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}'\right)=\arg\min_{\theta\in\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)}L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}'\right)\mbox{ }\forall\boldsymbol{\lambda}'\in B(\boldsymbol{\lambda})
+\]
+
+
+\textbf{Cond 3: }(Not necessary if we keep the ridge penalty) There
+is an orthonormal basis $U_{\lambda}$ of $\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)$
+such that the Hessian of the training criterion taken along directions
+$U_{\lambda}$ is invertible.
 
 \textbf{Assumption (2):} For every $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$,
 let the line segment between the two points be denoted 
@@ -668,10 +654,10 @@ let the line segment between the two points be denoted
 Suppose the intersection $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap\Lambda_{smooth}^{C}$
 is countable.
 
-\textbf{Assumption} \textbf{(3):} All the conditions that bound the
-spectrum of $P_{j}$ or $g_{j}$ only need to apply when the directional
-derivatives exist. That is, the condition on the spectrum of the penalty
-derivative is now
+\textbf{Assumption} \textbf{(3):} All the conditions specified in
+Section 1 and 2 that bound the spectrum of $P_{j}$ or $g_{j}$ only
+need to apply when the directional derivatives exist. That is, the
+condition on the spectrum of the penalty derivative is now
 
 \[
 \left|\frac{\partial}{\partial m}P_{j}\left(\boldsymbol{\theta}+m\boldsymbol{\beta}\right)\right|\le K\|\boldsymbol{\beta}\|_{2}\mbox{ if }\frac{\partial}{\partial m}P_{j}\left(\boldsymbol{\theta}+m\boldsymbol{\beta}\right)\mbox{exists}
@@ -681,58 +667,64 @@ derivative is now
 Similarly, we would change the condition on the spectrum of the function
 derivative to
 \[
-\left\Vert \nabla_{\boldsymbol{\theta}}g_{j}\left(\boldsymbol{\theta}\right)\right\Vert \le K\mbox{ if }\nabla_{\boldsymbol{\theta}}g_{j}\left(\boldsymbol{\theta}\right)\mbox{exists}
+\left|\frac{\partial}{\partial m}g_{j}\left(\boldsymbol{\theta}+m\boldsymbol{\beta}\right)\right|\le K\|\boldsymbol{\beta}\|_{2}\mbox{ if }\frac{\partial}{\partial m}g_{j}\left(\boldsymbol{\theta}+m\boldsymbol{\beta}\right)\mbox{exists}
 \]
 
 
-Under these assumptions, the same Lipschitz conditions will hold.
+Under these assumptions, the same Lipschitz conditions hold for dataset
+$\left(X,y\right)$ and every $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$.
 
 
 \subsubsection*{Proof}
 
 Consider any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$.
-We define the length of $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
-covered by set $A$ as 
+The length of $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+covered by set $A$ can be expressed as 
 \[
-d_{\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}}\left(A\right)=\mu\left(A\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right)
+\mu_{1}\left(A\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right)
 \]
 
 
-where $\mu$ is the Lebesgue measure over the line segment $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$.
+where $\mu_{1}$ is the Lebesgue measure over the line segment $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$.
+(So if $A\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+is just a line segment, it is the length $\|A\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\|_{2}$)
 
 By the Differentiability Cover Lemma below, there exists a countable
 set of points $\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
 such that the union of their ``balls of differentiabilities'' entirely
 cover $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$:
 \[
-\max_{\{\boldsymbol{\ell}^{(i)}\}_{i=1}^{\infty}}d_{\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})\right)=\mu\left(\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)
+\max_{\{\boldsymbol{\ell}^{(i)}\}_{i=1}^{\infty}}\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)=\left\Vert \mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right\Vert _{2}
 \]
 
 
 Let 
 \[
-\left\{ \boldsymbol{\ell}_{max}^{(i)}\right\} _{i=1}^{\infty}=\arg\max_{\left\{ \boldsymbol{\ell}^{(i)}\right\} }d_{\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})\right)
+\left\{ \boldsymbol{\ell}_{max}^{(i)}\right\} _{i=1}^{\infty}=\left\{ \arg\max_{\left\{ \boldsymbol{\ell}^{(i)}\right\} }\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)\right\} \cup\left\{ \boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right\} 
 \]
 
 
-Let $P$ be the intersections of the boundary of $B(\boldsymbol{\ell}^{(i)})$
+Let $P$ be the intersections of the boundary of $B\left(\boldsymbol{\ell}_{max}^{(i)}\right)$
 with the line segment $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$:
 \[
-P=\left\{ \cup_{i=1}^{\infty}\mbox{bd}B(\boldsymbol{\ell}^{(i)})\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right\} \cup\{\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\}
+P=\cup_{i=1}^{\infty}\mbox{Bd}B\left(\boldsymbol{\ell}_{max}^{(i)}\right)\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})
 \]
 
 
-The point $p\in P$ can be expressed as $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
+Every point $p\in P$ can be expressed as $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
 for some $\alpha_{p}\in[0,1]$. This means we can order these points
 $\{\boldsymbol{p}^{(i)}\}_{i=1}^{\infty}$ by increasing $\alpha_{p}$.
 By our assumptions, the differentiable space of the training criterion
-over line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
-must be constant. 
+must be constant over the interior of line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
+(so there might be bad behavior at the endpoints). Let the differentiable
+space over the interior of line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
+be denoted $\Omega_{i}$. 
 
-Now we apply the smoothness result in Section 1 or 2 over every line
-segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$.
-We can come up with the following equivalent definition for $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$:
-There is an orthonormal matrix $U^{(i)}$ such that for all $\boldsymbol{\lambda}\in\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
+By our assumptions, the differentiable space is also a local optimality
+space. Let $U^{(i)}$ be an orthonormal basis of $\Omega_{i}$. For
+each $i$, we can express $\hat{\boldsymbol{\theta}}_{\lambda}$ for
+all $\boldsymbol{\lambda}\in\mbox{Int}\left\{ \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)\right\} $
+as
 \[
 \hat{\boldsymbol{\theta}}_{\lambda}=U^{(i)}\hat{\boldsymbol{\beta}}_{\lambda}
 \]
@@ -741,30 +733,20 @@ There is an orthonormal matrix $U^{(i)}$ such that for all $\boldsymbol{\lambda}
 \]
 
 
-where the training criterion is smooth over $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
-wrt to the directional derivatives along the columns of $U^{(i)}$.
-
-For example, in the case of Section 1, we would instead consider regression
-problems of the form 
-\begin{eqnarray*}
-\hat{\boldsymbol{\beta}}_{\lambda} & = & \arg\min_{\boldsymbol{\beta}}\frac{1}{2}\|y-g(\cdot|U\boldsymbol{\beta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(U\boldsymbol{\beta})+\frac{w}{2}\|U\boldsymbol{\beta}\|_{2}^{2}\right)\\
- & = & \arg\min_{\boldsymbol{\beta}}\frac{1}{2}\|y-g(\cdot|U\boldsymbol{\beta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(U\boldsymbol{\beta})+\frac{w}{2}\|\boldsymbol{\beta}\|_{2}^{2}\right)
-\end{eqnarray*}
-
-
-The proof from Sections 1 and 2 would need to be modified to take
-directional derivatives along the columns of $U$. We can establish
-that there is a constant $c>0$ such that for every tuple of points
-$\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$ from $i=1,2...$, we
-have 
+Now apply the result in Section 1 or 2 over every line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$.
+To do this, we must modify the proofs to take directional derivatives
+along the columns of $U^{(i)}$. We can establish that there is a
+constant $c>0$ independent of $i$ such that for all $i=1,2...$,
+we have 
 \[
-\|\boldsymbol{\hat{\beta}}_{p^{(i)}}-\boldsymbol{\hat{\beta}}_{p^{(i+1)}}\|_{2}\le c\|\boldsymbol{p^{(i)}}-\boldsymbol{p^{(i+1)}}\|_{2}
+\left\Vert \boldsymbol{\hat{\beta}}_{p^{(i)}}-\boldsymbol{\hat{\beta}}_{p^{(i+1)}}\right\Vert _{2}\le c\|\boldsymbol{p^{(i)}}-\boldsymbol{p^{(i+1)}}\|_{2}
 \]
 
 
-Finally, we can sum up these inequalities. By the triangle inequality,
+Finally, we can sum these inequalities. By the triangle inequality,
 \begin{eqnarray*}
-\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2} & \le & \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
+\left\Vert \boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\right\Vert _{2} & \le & \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
+ & = & \sum_{i=1}^{\infty}\|U^{(i)}\boldsymbol{\hat{\beta}}_{p^{(i)}}-U^{(i)}\boldsymbol{\hat{\beta}}_{p^{(i+1)}}\|_{2}\\
  & = & \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\beta}}_{p^{(i)}}-\boldsymbol{\hat{\beta}}_{p^{(i+1)}}\|_{2}\\
  & \le & \sum_{i=1}^{\infty}c\|\boldsymbol{p^{(i)}}-\boldsymbol{p^{(i+1)}}\|_{2}\\
  & = & c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
@@ -907,7 +889,7 @@ in this manner.
 
 Consider the class of smoothing splines 
 \[
-\left\{ \hat{g}(\cdot|\lambda)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\|y-\sum_{j=1}^{J}g_{j}(x_{j})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P(g_{j}):\lambda\in\Lambda\right\} 
+\left\{ \hat{g}(\cdot|\lambda)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(x_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P(g_{j}):\lambda\in\Lambda\right\} 
 \]
 
 
@@ -926,20 +908,20 @@ that B-splines are non-negative.
 Therefore we can re-express the class of smoothing splines as a set
 of function parameters
 \[
-\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}_{j}):\lambda\in\Lambda\right\} 
+\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}_{j}):\lambda\in\Lambda\right\} 
 \]
-where $N_{T,j}$ is the normalized B-spline basis for the given set
-of knots evaluated at the observed $x_{j}$ in the training set. $P_{j}(\boldsymbol{\theta_{j}})$
-is the Sobolev penalty and can be written as $\boldsymbol{\theta}_{j}^{T}\Omega_{j}\boldsymbol{\theta}_{j}$
-for an appropriate penalty matrix $\Omega_{j}$. We will not need
-to express anything in terms of $\Omega_{j}$ so the penalty will
-be just written as $P_{j}(\boldsymbol{\theta}_{j})$.
+where $N_{T,j}$ is a matrix of the evaluations of the normalized
+B-spline basis at $x_{j}$. $P_{j}(\boldsymbol{\theta_{j}})$ is the
+Sobolev penalty and can be written as $\boldsymbol{\theta}_{j}^{T}V_{j}\boldsymbol{\theta}_{j}$
+for an appropriate penalty matrix $V_{j}$. We will not need to express
+anything in terms of $V_{j}$ so the penalty will be just written
+as $P_{j}(\boldsymbol{\theta}_{j})$.
 
 Instead of considering the original smoothing spline problem with
 the roughness penalty, we will add a ridge penalty on the function
 parameters
 \[
-\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\|y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}_{j})+\frac{w}{2}\|\boldsymbol{\theta}_{j}\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
+\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}_{j})+\frac{w}{2}\|\boldsymbol{\theta}_{j}\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
 \]
 
 
@@ -959,7 +941,7 @@ we have for all $j=1,...,J$
 Moreover,
 
 \[
-\left\Vert \sum_{j=1}^{J}\hat{g}_{j}(x_{j}|\lambda^{(1)})-\hat{g}_{j}(x_{j}|\lambda^{(2)})\right\Vert _{\infty}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert _{2}J\sqrt{B}\lambda_{min}^{-1}w^{-1}\left(\frac{1}{\lambda_{min}}B\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
+\left\Vert \sum_{j=1}^{J}\hat{g}_{j}(x_{j}|\boldsymbol{\lambda}^{(1)})-\hat{g}_{j}(x_{j}|\boldsymbol{\lambda}^{(2)})\right\Vert _{\infty}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert _{2}J\sqrt{B}\lambda_{min}^{-1}w^{-1}\left(\frac{1}{\lambda_{min}}B\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
 \]
 
 
@@ -981,9 +963,15 @@ That is, we have for all $j=1,...,J$
 \]
 
 
+Hence for all $\boldsymbol{\theta,\beta},m'$, we have
+\[
+\left\Vert \left.\frac{\partial}{\partial m}g_{j}(X_{T,j}|\boldsymbol{\theta}+m\boldsymbol{\beta})\right|_{m=m'}\right\Vert \le B\|\boldsymbol{\beta}\|
+\]
+
+
 Apply the result from Section 2 to get the result
 \[
-\|\boldsymbol{\theta}_{\lambda^{(1)},j}-\boldsymbol{\theta}_{\lambda^{(2)},j}\|_{2}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert _{2}\lambda_{min}^{-1}w^{-1}\left(\frac{1}{\lambda_{min}}B\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
+\left\Vert \boldsymbol{\theta}_{\lambda^{(1)},j}-\boldsymbol{\theta}_{\lambda^{(2)},j}\right\Vert _{2}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert _{2}\lambda_{min}^{-1}w^{-1}\left(\frac{1}{\lambda_{min}}B\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
 \]
 
 
@@ -1002,7 +990,7 @@ where the second inequality uses the fact that normalized B-splines
 have value at most 1. Therefore
 
 \begin{eqnarray*}
-\left\Vert \sum_{j=1}^{J}\hat{g}_{j}(x_{j}|\lambda^{(1)})-\hat{g}_{j}(x_{j}|\lambda^{(2)})\right\Vert _{\infty} & \le & \sqrt{B}\sum_{j=1}^{J}\left\Vert \hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}-\hat{\boldsymbol{\theta}}_{\lambda^{(2)},j}\right\Vert 
+\left\Vert \sum_{j=1}^{J}\hat{g}_{j}(x_{j}|\lambda^{(1)})-\hat{g}_{j}(x_{j}|\lambda^{(2)})\right\Vert _{\infty} & \le & \sqrt{B}\sum_{j=1}^{J}\left\Vert \hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}-\hat{\boldsymbol{\theta}}_{\lambda^{(2)},j}\right\Vert _{2}
 \end{eqnarray*}
 
 \end{document}
