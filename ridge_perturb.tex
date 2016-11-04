@@ -6,6 +6,7 @@
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \usepackage{amsbsy}
+\usepackage{amssymb}
 \usepackage{babel}
 \begin{document}
 
@@ -13,15 +14,76 @@
 
 \maketitle
 We will show that adding a small ridge penalty scaled by some constant
-$w$ does not change the fitted model by very much.
+$w$ does not change the fitted model by very much. 
+\begin{enumerate}
+\item We show that as $w\rightarrow0$, the fitted model to the perturbed
+training criterion converges to the fitted model for the original
+training criterion. This uses the implicit function theorem. The result
+applies to parametric models where the training criterion can contain
+smooth or nonsmooth penalties. The proof technique can probably be
+extended to (certain) nonparametric models (using an implicit function
+theorem for banach spaces).
+\item This older proof shows that the fitted model is actually Lipschitz
+in $w$. However, it requires the strong assumption that the training
+criterion was strongly convex. The proof is still here because...
+it is cute.
+\end{enumerate}
 
-The proof will presume a parametric model space and that the training
-criterion is strongly convex. 
+\section{Continuity of ridge perturbation}
 
-Unfortunately, it is unclear how to extend this proof technique to
-the non-smooth case. In addition, showing this result for non-parametric
-regression models is quite difficult. More assumptions are probably
-needed. It may be easier to consider specific regression problem examples.
+We will consider the case of $p$-dimensional parametric models. Let
+
+\[
+\hat{\boldsymbol{\theta}}_{w}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+w\|\boldsymbol{\theta}\|^{2}\right)
+\]
+
+
+Suppose that $P_{j}(\boldsymbol{\theta})$ and $f(\cdot|\boldsymbol{\theta})$
+are continuously differentiable for all $\boldsymbol{\theta}$. Then
+there is a $W>0$ such that $\hat{\boldsymbol{\theta}}_{w}$ is a
+continuous mapping from $[0,W)$ into some open neighborhood $B\subseteq\mathbb{R}^{p}$.
+
+
+\subsubsection*{Proof}
+
+Consider the function 
+\[
+L_{T}(w,\boldsymbol{\theta})=\nabla_{\theta}\left[\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+w\|\boldsymbol{\theta}\|^{2}\right)\right]
+\]
+
+
+Since $L_{T}(\cdot,\boldsymbol{\theta}):\mathbb{R}\mapsto\mathbb{R}$
+is one-to-one, then by the Implicit Function Theorem (Kumagai 1980),
+$\hat{\boldsymbol{\theta}}_{w}$ is the unique solution to $L_{T}\left(w,\cdot\right)=0$.
+Furthermore, there is some $W>0$ such that $\hat{\boldsymbol{\theta}}_{w}$
+is a continuous mapping from $[0,W)$ to some open subset in $\mathbb{R}^{p}$.
+
+Source: Kumagai, 1980. An Implicit Function Theorem: Comment 
+
+
+\subsubsection*{Extension to Nonsmooth case}
+
+Let the differentiable space at $\hat{\boldsymbol{\theta}}_{0}$ be
+defined as 
+\[
+\Omega=\left\{ \left.\boldsymbol{\eta}\right|\lim_{\epsilon\rightarrow0}\frac{L_{T}(0,\hat{\boldsymbol{\theta}}_{0}+\epsilon\boldsymbol{\eta})-L_{T}(0,\hat{\boldsymbol{\theta}}_{0})}{\epsilon}\mbox{ exists}\right\} 
+\]
+
+
+Let $U$ be an orthonormal basis of $\Omega$ where $U$ has rank
+$q\le p$.
+
+Suppose that for all $w<W'$, we have that
+\[
+\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+w\|\boldsymbol{\theta}\|^{2}\right)=\min_{\beta\in\mathbb{R}^{q}}\frac{1}{2}\|y-f\left(\cdot|U\boldsymbol{\beta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(U\boldsymbol{\beta})+w\|U\boldsymbol{\beta}\|^{2}\right)
+\]
+
+
+Suppose that $P_{j}(U\boldsymbol{\beta})$ and $f(\cdot|U\boldsymbol{\beta})$
+are continuously differentiable along the directions in $U$. Then
+there is a $0<W<W'$ such that $\hat{\boldsymbol{\theta}}_{w}=U\hat{\boldsymbol{\beta}}_{w}$
+is a continuous mapping from $[0,W)$ into some open neighborhood
+$B\subseteq\mathbb{R}^{p}$.
 
 
 \section{Parametric Models: Strongly Convex Penalized Objective}
