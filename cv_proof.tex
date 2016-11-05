@@ -78,7 +78,7 @@ we have
 Then there is a constant $c>0$ such that for all $a>0$
 
 \[
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+(1+a)\frac{cJ}{n_{V}}\left(\frac{(1+a)}{a}\left(C_{\Lambda}+\frac{1}{2}\log n_{V}\right)+4GC_{\Lambda}\left(\log n_{V}\right)\right)
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{(1+a)^{2}}{a}\frac{cJ}{n_{V}}\left(C_{\Lambda}+\frac{1}{2}\log n_{V}+4GC_{\Lambda}\log n_{V}\right)
 \]
 
 
@@ -309,14 +309,36 @@ We calculate $\epsilon_{q}\left(\frac{1}{q}\right)$:
 
 Finally, we get
 \begin{eqnarray*}
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right] & \le & (1+a)E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+ac\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\frac{1}{\sqrt{n_{V}}}\left(\frac{2q^{2}(1+a)}{a\sqrt{n_{V}}}\right)\right)\\
- & = & (1+a)E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c}{n_{V}}\left(K_{n,1}^{2}q^{5}\frac{(1+a)^{2}}{a}+2K_{n,2}q^{2}(1+a)\right)
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right] & \le & (1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+ac\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\frac{1}{\sqrt{n_{V}}}\left(\frac{2q^{2}(1+a)}{a\sqrt{n_{V}}}\right)\right)\\
+ & = & (1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c}{n_{V}}\left(K_{n,1}^{2}q^{5}\frac{(1+a)^{2}}{a}+2K_{n,2}q^{2}(1+a)\right)
 \end{eqnarray*}
 
 
 As $q\rightarrow1$, we get 
 \[
 E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\left[E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c}{n_{V}}\left(K_{n,1}^{2}\frac{(1+a)}{a}+2K_{n,2}\right)\right]
+\]
+
+
+\textbf{4. Massaging to make a pretty theorem}
+
+We can write the above as
+
+\[
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+(1+a)\frac{cJ}{n_{V}}\left(\frac{(1+a)}{a}\left(C_{\Lambda}+\frac{1}{2}\log n_{V}\right)+4GC_{\Lambda}\left(\log n_{V}\right)\right)
+\]
+
+
+where
+\[
+C_{\Lambda}=1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)
+\]
+
+
+Moreover, since $(1+a)/a>1$, we can write
+
+\[
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{(1+a)^{2}}{a}\frac{cJ}{n_{V}}\left(C_{\Lambda}+\frac{1}{2}\log n_{V}+4GC_{\Lambda}\log n_{V}\right)
 \]
 
 
