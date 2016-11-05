@@ -6,6 +6,7 @@
 \usepackage[landscape]{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \usepackage{amsbsy}
+\usepackage{amssymb}
 \usepackage{esint}
 \usepackage{babel}
 \begin{document}
@@ -89,10 +90,10 @@ and
 
 is nonincreasing wrt to $u$ for all $u>r$.
 
-Then there is some constant $a>0$ (only dependent on the characteristics
-of the sub-gassian errors) such that for all $\delta>r$ satisfying
+Then there is some constant $c>0$ (only dependent on the sub-gassian
+param) such that for all $\delta>r$ satisfying
 \[
-\sqrt{n_{V}}\delta^{2}\ge a\left(\psi_{\sigma}\left(\delta\right)\vee\delta\vee\psi_{\sigma}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\sqrt{n_{V}}\delta^{2}\ge c\left(\psi_{\sigma}\left(\delta\right)\vee\delta\vee\psi_{\sigma}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
@@ -101,8 +102,6 @@ we have
 Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)+c\exp\left(-\frac{n_{T}\sigma^{2}}{c^{2}}\right)
 \end{eqnarray}
 
-
-for a constant $c>0$.
 
 
 \subsubsection*{Proof}
@@ -130,11 +129,11 @@ is bigger:
 
 
 Hence 
-\begin{eqnarray*}
- &  & Pr\left(\left.\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right|T,\|\epsilon\|_{T}\le2\sigma\right)\\
+\begin{eqnarray}
+ &  & Pr\left(\left.\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right|T,\|\epsilon\|_{T}\le2\sigma\right)\nonumber \\
  & \le & Pr\left(\left.\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\right|T,\|\epsilon\|_{T}\le2\sigma\right)\\
  &  & +\sum_{s=0}^{\infty}Pr\left(\left.\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le2^{s+3/2}\delta}2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\right|T,\|\epsilon\|_{T}\le2\sigma\right)
-\end{eqnarray*}
+\end{eqnarray}
 
 
 We have the entropy condition that 
@@ -143,36 +142,31 @@ We have the entropy condition that
 \]
 
 
-So as long as $\delta>0$ satisfies
+By Vandegeer Corollary 8.3, for all $\delta>0$ with
 
 \[
-\sqrt{n_{V}}\delta^{2}\ge a\left(\psi_{\sigma}(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V})\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\sqrt{n_{V}}\delta^{2}\ge c\left(\psi_{\sigma}(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V})\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
-we can bound the first probability using Vandegeer Corollary 8.3 as
-follows
+we can bound (2) as follows
 
 \[
 Pr\left(\left.\sup_{\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}\le4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\right|T,\|\epsilon\|_{T}\le2\sigma\right)\le c\exp\left(-\frac{n_{V}\delta^{4}}{4c^{2}\left(16\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right)
 \]
 
 
-for some $c>0$ .
-
-We can also bound the summation using Vandegeer Corollary 8.3. First
-we check the condition for Corollary 8.3 is satisfied. In particular,
-we need to show that for all $s=0,1,2,...$ 
+We can also bound (3) using Vandegeer Corollary 8.3. First we check
+the condition for Corollary 8.3 is satisfied. In particular, we need
+to show that for all $s=0,1,2,...$ 
 \begin{eqnarray*}
-\sqrt{n_{V}}2^{2s+2}\delta^{2} & \ge & a\left(\psi_{\sigma}\left(2^{s+1}\delta\right)\vee\delta\right)
+\sqrt{n_{V}}2^{2s+2}\delta^{2} & \ge & c\left(\psi_{\sigma}\left(2^{s+1}\delta\right)\vee\delta\right)
 \end{eqnarray*}
 
 
-where $a>0$ is a constant that only depends on the sub-gaussian errors.
-
 This is true since we chose $\delta$ such that 
 \begin{eqnarray*}
-\sqrt{n_{V}}\delta^{2} & \ge & a\left(\psi_{\sigma}\left(\delta\right)\vee\delta\right)
+\sqrt{n_{V}}\delta^{2} & \ge & c\left(\psi_{\sigma}\left(\delta\right)\vee\delta\right)
 \end{eqnarray*}
 
 
@@ -181,7 +175,7 @@ all $u$.
 
 So Corollary 8.3 states that for all $s=0,1,...$
 \[
-Pr\left(\left.\sup_{\lambda,\lambda':\left\Vert \hat{g}(\cdot|\lambda)-\hat{g}(\cdot|\lambda')\right\Vert _{V}\le2^{s+3/2}\delta}\left\langle \epsilon,\hat{g}(\cdot|\boldsymbol{\lambda})-\hat{g}(\cdot|\boldsymbol{\lambda}')\right\rangle _{V}\ge2^{2s-1}\delta^{2}\right|T,\|\epsilon\|_{T}\le2\sigma\right)\le\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4C^{2}2^{2s+3}\delta^{2}}\right)
+Pr\left(\left.\sup_{\lambda,\lambda':\left\Vert \hat{g}(\cdot|\lambda)-\hat{g}(\cdot|\lambda')\right\Vert _{V}\le2^{s+3/2}\delta}\left\langle \epsilon,\hat{g}(\cdot|\boldsymbol{\lambda})-\hat{g}(\cdot|\boldsymbol{\lambda}')\right\rangle _{V}\ge2^{2s-1}\delta^{2}\right|T,\|\epsilon\|_{T}\le2\sigma\right)\le c\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4c^{2}2^{2s+3}\delta^{2}}\right)
 \]
 
 
@@ -191,7 +185,7 @@ Putting this together, for all $\delta>r$ satisfying
 \]
 
 
-there exists some constant $c$ such that
+we have
 \begin{eqnarray*}
 Pr\left(\left.\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right|T,\|\epsilon\|_{T}\le2\sigma\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
 \end{eqnarray*}
@@ -206,13 +200,11 @@ Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{
 
 
 The last term can easily be bounded using Bernstein's inequality since
-$\epsilon$ are independent sub-gaussian random variables
+$\epsilon$ are uniformly sub-gaussian random variables
 \[
 Pr\left(\|\epsilon\|_{T}^{2}\ge4\sigma^{2}\right)\le c\exp\left(-\frac{n_{T}\sigma^{2}}{c^{2}}\right)
 \]
 
-
-for some constant $c>0$.
 
 
 \section{Theorem 1}
@@ -225,24 +217,20 @@ Suppose there is a constant $C>0$ such that for all $\boldsymbol{\lambda}_{1},\b
 \]
 
 
-Then there is a constant $a>0$ only depends on the characteristics
-of the sub-gassian errors.
-
-For any $\delta>0$ such that
+Then there is a constant $c>0$ only depends on the characteristics
+of the sub-gassian errors such that for any $\delta>0$ satisfying
 
 \[
-\delta^{2}\ge a\max\left\{ \frac{\alpha_{n}^{2}}{n_{V}},\frac{\alpha_{n}}{\sqrt{n_{V}}}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V},\frac{1}{n^{2}}\right\} 
+\delta^{2}\ge c\max\left\{ \frac{\alpha_{n}^{2}}{n_{V}},\frac{\alpha_{n}}{\sqrt{n_{V}}}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right\} 
 \]
 
 
 where
 
 \[
-\alpha_{n}=\sqrt{J}\left(1+\log\left(32Cn\left(\lambda_{max}-\lambda_{min}\right)\right)\right)^{1/2}
+\alpha_{n}=\sqrt{J\left(1+\log\left(32Cn\left(\lambda_{max}-\lambda_{min}\right)\right)\right)}\vee1
 \]
 
-
-where $C_{J}$ is a universal constant.
 
 we have
 
@@ -250,8 +238,6 @@ we have
 Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right) & \le & c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right)+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)+c\exp\left(-\frac{n_{T}\sigma^{2}}{c^{2}}\right)
 \end{eqnarray*}
 
-
-for some constant $c>0$.
 
 
 \subsubsection*{Proof}
@@ -321,7 +307,7 @@ for all $J=1,2,...$
 Now we apply Theorem 3 to determine $\delta$ such that (1) holds.
 Theorem 3 states that we need $\delta>n^{-1}$ to satisfy 
 \[
-\sqrt{n_{V}}\delta^{2}\ge a\left(\psi_{\sigma}\left(\delta\right)\vee\delta\vee\psi_{\sigma}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\sqrt{n_{V}}\delta^{2}\ge c\left(\psi_{\sigma}\left(\delta\right)\vee\delta\vee\psi_{\sigma}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
@@ -338,14 +324,14 @@ We will solve this by splitting into cases.
 
 In this case, we must have
 \[
-\sqrt{n_{V}}\delta^{2}\ge a\delta\left(\left(J\left(1+\log\left(32C\left(\lambda_{max}-\lambda_{min}\right)n\right)\right)\right)^{1/2}\vee1\right)
+\sqrt{n_{V}}\delta^{2}\ge c\delta\left(\left(J\left(1+\log\left(32C\left(\lambda_{max}-\lambda_{min}\right)n\right)\right)\right)^{1/2}\vee1\right)
 \]
 
 
 So
 
 \[
-\delta\ge a\frac{1}{\sqrt{n_{V}}}\left(\left(J\left(1+\log\left(32C\left(\lambda_{max}-\lambda_{min}\right)n\right)\right)\right)^{1/2}\vee1\right)
+\delta\ge c\frac{1}{\sqrt{n_{V}}}\left(\left(J\left(1+\log\left(32C\left(\lambda_{max}-\lambda_{min}\right)n\right)\right)\right)^{1/2}\vee1\right)
 \]
 
 
@@ -360,14 +346,14 @@ Suppose that
 In this case, we must have
 
 \[
-\sqrt{n_{V}}\delta^{2}\ge4a\left\Vert \hat{g}\left(\cdot|\tilde{\boldsymbol{\lambda}}\right)-g^{*}\right\Vert _{V}\left(\left(J\left(1+\log\left(32C\left(\lambda_{max}-\lambda_{min}\right)n\right)\right)\right)^{1/2}\vee1\right)
+\sqrt{n_{V}}\delta^{2}\ge4c\left\Vert \hat{g}\left(\cdot|\tilde{\boldsymbol{\lambda}}\right)-g^{*}\right\Vert _{V}\left(\left(J\left(1+\log\left(32C\left(\lambda_{max}-\lambda_{min}\right)n\right)\right)\right)^{1/2}\vee1\right)
 \]
 
 
 Putting these two inequalities together, we find that $\delta>0$
 must satisfy
 \[
-\delta^{2}\ge a\max\left(\frac{\alpha_{n}^{2}}{n_{V}},\frac{\alpha_{n}}{\sqrt{n_{V}}}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V},\frac{1}{n^{2}}\right)
+\delta^{2}\ge c\max\left(\frac{\alpha_{n}^{2}}{n_{V}},\frac{\alpha_{n}}{\sqrt{n_{V}}}\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V},\frac{1}{n^{2}}\right)
 \]
 
 
@@ -537,13 +523,13 @@ Choose $t,\tilde{\delta_{t}}>0$ such that
 \]
 
 
-and $t_{1}>0$ such that 
+where $C_{1}>0$ is a constant given in Vandegeer Theorem 2.1.
+
+Choose $t_{1}>0$ such that 
 \[
 \frac{1}{2}\ge\frac{2J_{\infty}\left(K,\mathcal{G}\right)+K\sqrt{t_{1}}}{\sqrt{n_{T}}}+\frac{4J_{\infty}^{2}(K,\mathcal{G})+K^{2}t_{1}}{n_{T}}
 \]
 
-
-where $C_{1}>0$ is a constant given in Vandegeer Theorem 2.1.
 
 Suppose there is an $r>0$ such that for all $R>r$, we have 
 \[
@@ -551,9 +537,10 @@ Suppose there is an $r>0$ such that for all $R>r$, we have
 \]
 
 
-Then for all $\delta>r$ such that 
+Then there is a constant $c>0$ only dependent on the sub-gaussian
+parameters such that for all $\delta>r$ satisfying 
 \[
-\sqrt{n_{V}}\delta^{2}\ge\alpha\left(\psi_{\sigma}(\delta)\vee\delta\vee\psi_{\sigma}(\tilde{\delta}_{t})\vee\tilde{\delta}_{t}\right)
+\sqrt{n_{V}}\delta^{2}\ge c\left(\psi_{\sigma}(\delta)\vee\delta\vee\psi_{\sigma}(\tilde{\delta}_{t})\vee\tilde{\delta}_{t}\right)
 \]
 
 
@@ -643,7 +630,7 @@ for all $\delta>0$ such that
 
 we have 
 \[
-Pr\left(\left.\sup_{f\in\mathcal{F}(T)}\left|\frac{1}{m}\sum_{i=1}^{m}\epsilon_{i}f(x_{i})\right|\ge\delta\right|T\right)\le C\exp\left(-\frac{m\delta^{2}}{4C^{2}R^{2}}\right)
+Pr\left(\left.\sup_{f\in\mathcal{F}(T)}\left|\frac{1}{m}\sum_{i=1}^{m}\epsilon_{i}f(x_{i})\right|\ge\delta\right|T\right)\le a\exp\left(-\frac{m\delta^{2}}{4a^{2}R^{2}}\right)
 \]
 
 
@@ -686,6 +673,47 @@ the volume of $\Lambda_{bigger}$.
 Hence
 \[
 NC_{J}(\delta/4)^{J}\le(\lambda_{max}-\lambda_{min}+\delta/2)^{J}
+\]
+
+
+
+\subsection*{Lemma Sub-gaussian RV Bounds}
+
+RVs $\epsilon_{1},...,\epsilon_{n}$ that are uniformly $b$-subgaussian
+\[
+\max_{i=1,...,n}\mathbb{E}e^{t\epsilon_{i}}\le e^{b^{2}t^{2}/2}
+\]
+
+
+then there is a constant $c$ only dependent on $b$ such that 
+\[
+Pr\left(\|\epsilon\|_{n}^{2}\ge\delta^{2}\right)\le c\exp\left(-\frac{n\delta^{2}}{c^{2}}\right)
+\]
+
+
+
+\subsubsection*{Proof}
+
+We note that by Appendix A of http://www.stat.berkeley.edu/\textasciitilde{}mjwain/stat210b/Chap2\_TailBounds\_Jan22\_2015.pdf,
+we have
+\[
+\mathbb{E}e^{t\epsilon_{i}}\le e^{b^{2}t^{2}/2}\mbox{ }\forall t\iff\mathbb{E}e^{t\epsilon_{i}^{2}/2b^{2}}\le\frac{1}{\sqrt{1-t}}\mbox{ }\forall t
+\]
+
+
+Then we can use a Berstein bound/Chernoff bound:
+
+\begin{eqnarray*}
+Pr\left(\frac{1}{n}\sum_{i=1}^{n}\epsilon_{i}^{2}\ge\delta^{2}\right) & = & Pr\left(\sum_{i=1}^{n}\epsilon_{i}^{2}\ge n\delta^{2}\right)\\
+ & \le & Pr\left(\exp\left[\frac{t}{2b^{2}}\sum_{i=1}^{n}\epsilon_{i}^{2}\right]\ge\exp\left[\frac{t}{2b^{2}}n\delta^{2}\right]\right)\\
+ & \le & \exp\left[-\frac{t}{2b^{2}}n\delta^{2}\right]\mathbb{E}\left[\frac{t}{2b^{2}}\sum_{i=1}^{n}\epsilon_{i}^{2}\right]\\
+ & \le & \exp\left[-\frac{t}{2b^{2}}n\delta^{2}\right]\frac{1}{\sqrt{1-t}}
+\end{eqnarray*}
+
+
+We can choose any $t>0$. Suppose $t=1/2$. Then
+\[
+Pr\left(\frac{1}{n}\sum_{i=1}^{n}\epsilon_{i}^{2}\ge\delta^{2}\right)\le2\exp\left[-\frac{n\delta^{2}}{4b^{2}}\right]
 \]
 
 \end{document}
