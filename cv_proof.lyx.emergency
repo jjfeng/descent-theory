@@ -1,0 +1,609 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3cm
+\topmargin 3cm
+\rightmargin 3cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Almost-Cross-Validation Theorem
+\end_layout
+
+\begin_layout Standard
+We are interested in bounding the error of the selected model when tuning
+ penalty parameters by a 
+\begin_inset Quotes eld
+\end_inset
+
+modified averaged version of cross-validation
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Our result is an application of Mitchell's result to penalized regression
+ problems where the fitted functions are smooth with respect to the penalty
+ parameters.
+\end_layout
+
+\begin_layout Standard
+Suppose that the data is generated from the model
+\begin_inset Formula 
+\[
+y=g^{*}(x)+\epsilon
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose the errors are independent and bounded (
+\begin_inset Formula $\|\epsilon\|_{\infty}<\infty$
+\end_inset
+
+ ).
+\end_layout
+
+\begin_layout Standard
+The penalized regression model fitted on dataset 
+\begin_inset Formula $D$
+\end_inset
+
+ is denoted
+\begin_inset Formula 
+\[
+\hat{g}_{D}(\cdot|\boldsymbol{\lambda})=\arg\min_{g\in\mathcal{G}}L_{D}(g|\boldsymbol{\lambda})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Split data 
+\begin_inset Formula $D$
+\end_inset
+
+ into 
+\begin_inset Formula $K$
+\end_inset
+
+ folds, where each fold is 
+\begin_inset Formula $D_{k}$
+\end_inset
+
+ and 
+\begin_inset Formula $D_{-k}=D\backslash D_{k}$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $D$
+\end_inset
+
+ has size 
+\begin_inset Formula $n$
+\end_inset
+
+, 
+\begin_inset Formula $D_{k}$
+\end_inset
+
+ all have size 
+\begin_inset Formula $n_{V}$
+\end_inset
+
+, and 
+\begin_inset Formula $D_{-k}$
+\end_inset
+
+ all have size 
+\begin_inset Formula $n_{T}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We select penalty parameters such that 
+\begin_inset Formula 
+\[
+\hat{\boldsymbol{\lambda}}=\arg\min_{\lambda}\sum_{k=1}^{K}\|y-\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda})\|_{k}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We consider the behavior of the 
+\begin_inset Quotes eld
+\end_inset
+
+modified averaged version of cross-validation
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\hat{g}_{MCV}(\cdot|D)=\frac{1}{K}\sum_{k=1}^{K}\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under sufficient entropy conditions, the error of the selected model will
+ converge to the error of the oracle.
+ 
+\end_layout
+
+\begin_layout Standard
+We are interested in bounding its generalization error 
+\begin_inset Formula 
+\[
+E_{D}\|\hat{g}_{MCV}(\cdot|D)-g^{*}\|^{2}=E_{D}\left[\int\left(\hat{g}_{MCV}(x|D)-g^{*}(x)\right)^{2}d\mu(x)\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Theorem 2
+\end_layout
+
+\begin_layout Standard
+We will assume that 
+\begin_inset Formula $\sup_{g\in\mathcal{G}}\|g\|_{\infty}\le G$
+\end_inset
+
+, so Assumption A.1 and A.2 are satisfied.
+\end_layout
+
+\begin_layout Standard
+Suppose that for all 
+\begin_inset Formula $k=1,...,K$
+\end_inset
+
+, the following smoothness condition holds: 
+\begin_inset Formula 
+\[
+\|\hat{g}_{-k}(\cdot|\boldsymbol{\lambda})-\hat{g}_{-k}(\cdot|\boldsymbol{\lambda})\|_{\infty}\le Cn^{\kappa}\left|\lambda_{1}-\lambda_{2}\right|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then for all 
+\begin_inset Formula $a>0$
+\end_inset
+
+,
+\begin_inset Formula 
+\[
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+c_{a}J^{2}\max_{k=1:K}\frac{\left(\log n\right)^{2}}{n_{k}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $c_{a}$
+\end_inset
+
+ is a constant given in Theorem 3.5 of Mitchell's paper.
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+We apply Theorem 3.5 in Mitchell's paper.
+ We consider the loss function 
+\begin_inset Formula $Q(f)=\|f-f^{*}\|^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+1.
+ Establish Assumptions A.1 and A.2 are satisfied:
+\end_layout
+
+\begin_layout Standard
+Theorem 3.5 relies on assumption A.1 and A.2 to be satisfied.
+ 
+\end_layout
+
+\begin_layout Standard
+Assumption A.1 states that the Orlicz norm with 
+\begin_inset Formula $\psi_{1}=\exp(x)-1$
+\end_inset
+
+ is bounded for some constant 
+\begin_inset Formula $K_{0}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{\psi_{1}}}\le K_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula 
+\[
+\|f\|_{\psi_{1}}=\inf\left\{ C>0:E\psi(|f|/C)\le1\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since we have assumed that 
+\begin_inset Formula $\|g\|_{\infty}\le G$
+\end_inset
+
+, then
+\begin_inset Formula 
+\[
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{\psi_{1}}}\le2\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{\infty}\le8G^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To see the first inequality, note that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E\left[\exp\left(\frac{\left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}}{2\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{\infty}}\right)-1\right]\le\exp\frac{1}{2}-1<1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Assumption A.2 states that
+\begin_inset Formula 
+\[
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{2}}\le K_{1}\|\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{L_{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To see that this is satisfied, note that 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{2}}^{2} & = & \int\left(g^{*}(x)-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{4}d\mu(x)\\
+ & \le & \left\Vert \left(g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{2}\right\Vert _{L_{1}}\left\Vert \left(g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{2}\right\Vert _{\infty}\\
+ & \le & 4G^{2}\left\Vert g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right\Vert _{L_{2}}^{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+2.
+ Calculate the 
+\begin_inset Formula $L_{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $\psi_{1}$
+\end_inset
+
+ entropies
+\end_layout
+
+\begin_layout Standard
+Theorem 3.5 requires calculating the entropies of the excess loss functions
+ 
+\begin_inset Formula 
+\[
+\mathcal{Q}(T)=\left\{ q(x|\boldsymbol{\lambda})=\left(g^{*}(x)-\hat{g}_{T}(x|\boldsymbol{\lambda})\right)^{2}:\lambda\in\Lambda\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We are interested in calculating the 
+\begin_inset Formula $\|\cdot\|_{\psi_{1}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\|\cdot\|_{L_{2}}$
+\end_inset
+
+ entropy of the function class 
+\begin_inset Formula 
+\[
+\mathcal{Q}_{d}^{L_{2}}(T)=\left\{ q\in\mathcal{Q}(T):\|Q(Z)\|_{L_{2}}\le\sqrt{d}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We note that 
+\begin_inset Formula 
+\begin{eqnarray*}
+\|q_{\lambda_{1}}-q_{\lambda_{2}}\|_{\psi_{1}} & = & \|(g^{*}-g_{\lambda_{1}})^{2}-(g^{*}-g_{\lambda_{2}})^{2}\|_{\psi_{1}}\\
+ & = & \|(g_{\lambda_{1}}-g_{\lambda_{2}})(2g^{*}-g_{\lambda_{1}}-g_{\lambda_{2}})\|_{\psi_{1}}\\
+ & \le & \|g_{\lambda_{1}}-g_{\lambda_{2}}\|_{\infty}\|2g^{*}-g_{\lambda_{1}}-g_{\lambda_{2}}\|_{\infty}\\
+ & \le & \left|\lambda_{1}-\lambda_{2}\right|4Cn^{\kappa}G
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and similarly for 
+\begin_inset Formula $\|\cdot\|_{L_{2}}$
+\end_inset
+
+ (we're using a loose bound for 
+\begin_inset Formula $\|\cdot\|_{L_{2}}$
+\end_inset
+
+ since calculating its inverse/convex conjugate is difficult).
+\end_layout
+
+\begin_layout Standard
+Hence (for a different constant 
+\begin_inset Formula $\kappa$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We calculate each component of the complexity term 
+\begin_inset Formula $J(d)$
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{eqnarray*}
+\gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}}) & = & \int_{0}^{G}H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})du\\
+ & = & JG\left(1+\log(4Cn^{\kappa}G)\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}}) & = & \int_{0}^{\sqrt{d}}\left[H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\right]^{1/2}du\\
+ & = & \sqrt{d}\int_{0}^{1}\left[J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)\right]^{1/2}du\\
+ & \le & \sqrt{d}\left[\int_{0}^{1}J\left(\log\frac{1}{u}+\log(4Cn^{\kappa}G)\right)du\right]^{1/2}\\
+ & = & \sqrt{d}\left[J\left(1+\log(4Cn^{\kappa}G)\right)\right]^{1/2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So we can define 
+\begin_inset Formula 
+\begin{eqnarray*}
+J(d) & \equiv & J\left(1+\log(4Cn^{\kappa}G)\right)\left[\sqrt{d}+\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\right]\\
+ & \ge & \sqrt{d}\left[J\left(1+\log(4Cn^{\kappa}G)\right)\right]^{1/2}+\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)JG\left(1+\log(4Cn^{\kappa}G)\right)
+\end{eqnarray*}
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Then
+\begin_inset Formula $J^{-1}(b)$
+\end_inset
+
+ is
+\begin_inset Formula 
+\[
+J^{-1}(b)=\left(\frac{b}{J\left(1+\log(4Cn^{\kappa}G)\right)}-\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\right)^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The convex conjugate of 
+\begin_inset Formula $J^{-1}(b)$
+\end_inset
+
+ is
+\begin_inset Formula 
+\[
+\psi(v)=\frac{1}{2}\left(vJ\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}+J\left(1+\log(4Cn^{\kappa}G)\right)\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)v
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore
+\begin_inset Formula 
+\begin{eqnarray*}
+\epsilon_{q}(1/q) & = & \psi\left(\max_{k=1:K}\frac{2q(1+a)}{a\sqrt{n_{k}}}\right)\\
+ & = & \frac{1}{2}\left(\frac{2q(1+a)}{a\sqrt{n_{k}}}J\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}+J\left(1+\log(4Cn^{\kappa}G)\right)\left(\max_{k=1:K}\frac{\log n_{k}}{\sqrt{n_{k}}}\right)\frac{2q(1+a)}{a\sqrt{n_{k}}}\\
+ & \le & \max_{k=1:K}\left(\frac{2q(1+a)}{a\sqrt{n_{k}}}J\left(1+\log(4Cn^{\kappa}G)\right)\right)^{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally, we get
+\begin_inset Formula 
+\[
+E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right]\le(1+a)E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\tilde{\lambda}}(\cdot|D_{-k})\|^{2}\right]+\frac{c(1+a)^{2}}{a}\frac{J^{2}\left(1+\log(4Cn^{\kappa}G)\right)^{2}}{\min_{k=1:K}n_{k}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

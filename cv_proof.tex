@@ -65,20 +65,28 @@ E_{D}\|\hat{g}_{MCV}(\cdot|D)-g^{*}\|^{2}=E_{D}\left[\int\left(\hat{g}_{MCV}(x|D
 
 We will assume that $\sup_{g\in\mathcal{G}}\|g\|_{\infty}\le G$.
 
+Let $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$.
+
 Suppose that for all $k=1,...,K$, the following smoothness condition
-holds: 
+holds: For some constant $C>0$ , for all $\boldsymbol{\lambda}_{1},\boldsymbol{\lambda}_{2}\in\Lambda$,
+we have 
 \[
-\|\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda}_{1})-\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda}_{2})\|_{\infty}\le Cn^{\kappa}\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
+\|\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda}_{1})-\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda}_{2})\|_{\infty}\le C\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
 \]
 
 
-Then for all $a>0$,
+Then there is a constant $c>0$ such that for all $a>0$
+
 \[
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c_{a}}{n_{V}}\left[c_{1}\log n_{T}+c_{2}J\log n_{V}+c_{3}\right]
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+(1+a)\frac{cJ}{n_{V}}\left(\frac{(1+a)}{a}\left(C_{\Lambda}+\frac{1}{2}\log n_{V}\right)+4GC_{\Lambda}\left(\log n_{V}\right)\right)
 \]
 
 
-where $c_{1},c_{2},c_{3},c_{a}$ are constants.
+where
+\[
+C_{\Lambda}=1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)
+\]
+
 
 
 \subsubsection*{Proof}
@@ -174,109 +182,115 @@ are smoothly parametric in $\boldsymbol{\lambda}$:
 
 Under the assumption that
 \[
-\left\Vert \hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\le Cn^{\kappa}\left\Vert \boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\right\Vert 
+\left\Vert \hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\le C\left\Vert \boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\right\Vert 
 \]
 
 
 then
 \[
-\left\Vert Q(x|\boldsymbol{\lambda}_{1})-Q(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\le4GCn^{\kappa}\left\Vert \boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\right\Vert 
+\left\Vert Q(x|\boldsymbol{\lambda}_{1})-Q(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\le4GC\left\Vert \boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\right\Vert 
 \]
 
 
-Hence
+Hence by lemma param covering cube
 
 \begin{eqnarray*}
-H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\infty}) & \le & H\left(\frac{u}{4GCn^{\kappa}},\Lambda,\|\cdot\|_{2}\right)\\
- & \le & \log\left[\frac{1}{C_{J}}\left(\frac{16GCn^{\kappa}\lambda_{max}+2u}{u}\right)^{J}\right]
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\infty}) & \le & H\left(\frac{u}{4GC},\Lambda,\|\cdot\|_{2}\right)\\
+ & \le & \log\left[\frac{1}{C_{J}}\left(\frac{16GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
 \end{eqnarray*}
 
 
 Hence
 
 \[
-H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le\log\left[\frac{1}{C_{J}}\left(\frac{32GCn^{\kappa}\lambda_{max}+2u}{u}\right)^{J}\right]
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le\log\left[\frac{1}{C_{J}}\left(\frac{32GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
 \]
 
 
 and
 
 \[
-H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le\log\left[\frac{1}{C_{J}}\left(\frac{16GCn^{\kappa}\lambda_{max}+2u}{u}\right)^{J}\right]
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le\log\left[\frac{1}{C_{J}}\left(\frac{16GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
 \]
 
 
 We calculate each component of the complexity term $J(d)$: 
 \begin{eqnarray*}
 \gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}}) & \le & \int_{0}^{2G}H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})du\\
- & = & \int_{0}^{2G}\log\left[\frac{1}{C_{J}}\left(\frac{32GCn^{\kappa}\lambda_{max}+2u}{u}\right)^{J}\right]du\\
- & = & 2G\int_{0}^{1}\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GCn^{\kappa}\lambda_{max}+4Gv}{2Gv}\right)dv\\
- & \le & 2G\left[\int_{0}^{1}\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32Cn^{\kappa}\lambda_{max}}{v}\right)+J\log4dv\right]\\
- & \le & 2G\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32Cn^{\kappa}\lambda_{max}\right)\right)\right]
+ & = & \int_{0}^{2G}\log\left[\frac{1}{C_{J}}\left(\frac{32GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]du\\
+ & = & 2G\int_{0}^{1}\left[\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})+4Gv}{2Gv}\right)\right]dv\\
+ & \le & 2G\int_{0}^{1}\left[\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})}{v}\right)+J\log4\right]dv\\
+ & = & 2G\left[\log\left(\frac{1}{C_{J}}\right)+J+J\log\left(32GC(\lambda_{max}-\lambda_{min})\right)+J\log4\right]\\
+ & < & 2GJ\left(1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)\right)
 \end{eqnarray*}
 
+
+(since $C_{J}>1$ for all $J$)
 
 and
 
 \begin{eqnarray*}
 \gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}}) & = & \int_{0}^{\sqrt{d}}\left[H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\right]^{1/2}du\\
- & = & \sqrt{d}\int_{0}^{1}\left(\log\left[\frac{1}{C_{J}}\left(\frac{16GCn^{\kappa}\lambda_{max}+2\sqrt{d}v}{\sqrt{d}v}\right)^{J}\right]\right)^{1/2}dv\\
- & \le & \sqrt{d}\left[\int_{0}^{1}\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GCn^{\kappa}\lambda_{max}}{\sqrt{d}}\right)+J\log\frac{1}{u}+J\log4du\right]^{1/2}\\
- & = & \sqrt{d}\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(\frac{32GCn^{\kappa}\lambda_{max}}{\sqrt{d}}\right)\right)\right]^{1/2}
+ & = & \sqrt{d}\int_{0}^{1}\left(\log\left[\frac{1}{C_{J}}\left(\frac{16GC(\lambda_{max}-\lambda_{min})+2\sqrt{d}v}{\sqrt{d}v}\right)^{J}\right]\right)^{1/2}dv\\
+ & \le & \sqrt{d}\left[\int_{0}^{1}\left(\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}v}\right)+J\log4\right)dv\right]^{1/2}\\
+ & = & \sqrt{d}\left[\int_{0}^{1}\left(\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)+J\log\frac{1}{v}+J\log4\right)dv\right]^{1/2}\\
+ & = & \sqrt{d}\left[\log\left(\frac{1}{C_{J}}\right)+J+J\log4+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)\right]^{1/2}\\
+ & < & \sqrt{d}\left[J\left(1+\log\left(\frac{128GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)\right)\right]^{1/2}
 \end{eqnarray*}
 
 
 \textbf{3. Apply Theorem 3.5}
 
-Now we must select an increasing function $J$ such that $J^{-1}$
-is strictly convex and
+Now we must select an increasing function $\mathcal{J}$ such that
+$\mathcal{J}^{-1}$ is strictly convex and
 
 \[
-J(d)\ge\gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})+\frac{\left(\log n_{T}\right)\gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})}{\sqrt{n_{V}}}\forall d\ge d_{min}
+\mathcal{J}(d)\ge\gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})+\frac{\left(\log n_{V}\right)\gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})}{\sqrt{n_{V}}},\forall d\ge d_{min}
 \]
 
 
-Let us choose $d_{min}=1/n_{V}$. Then note that 
-\[
-\gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le\sqrt{d}\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32GCn^{\kappa}\sqrt{n_{V}}\lambda_{max}\right)\right)\right]^{1/2}
-\]
+Let us choose $d_{min}=1/n_{V}$. Then 
+\begin{eqnarray*}
+\gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}}) & \le & \sqrt{d}\left[J\left(1+\log\left(\frac{128GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)\right)\right]^{1/2}\\
+ & \le & \sqrt{d}\left[J\left(1+\log\left(128GC(\lambda_{max}-\lambda_{min})\sqrt{n_{V}}\right)\right)\right]^{1/2}
+\end{eqnarray*}
 
 
-Then let 
+Let 
 \[
-K_{n,1}=\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32GCn^{\kappa}\sqrt{n_{V}}\lambda_{max}\right)\right)\right]^{1/2}
+K_{n,1}=\left[J\left(1+\log\left(128GC(\lambda_{max}-\lambda_{min})\sqrt{n_{V}}\right)\right)\right]^{1/2}
 \]
 
 
 and
 \[
-K_{n,2}=\frac{\left(\log n_{T}\right)2G\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32Cn^{\kappa}\lambda_{max}\right)\right)\right]}{\sqrt{n_{V}}}
+K_{n,2}=2GJ\left(1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)\right)\left(\log n_{V}\right)
 \]
 
 
 We define
 
 \[
-J(d)\coloneqq\sqrt{d}K_{n,1}+K_{n,2}
+Q(d)\coloneqq\sqrt{d}K_{n,1}+\frac{1}{\sqrt{n_{V}}}K_{n,2}
 \]
  
 
-Then$J^{-1}(b)$ is
+Then $\mathcal{J}^{-1}(b)$ is the strictly convex function
 \[
-J^{-1}(b)=\left(\frac{b-K_{n,2}}{K_{n,1}}\right)^{2}
+\mathcal{J}^{-1}(b)=\left(\frac{b-\frac{1}{\sqrt{n_{V}}}K_{n,2}}{K_{n,1}}\right)^{2}
 \]
 
 
-The convex conjugate of $J^{-1}(b)$ is
+The convex conjugate of $\mathcal{J}^{-1}(b)$ is
 \begin{eqnarray*}
-\psi(z) & = & \sup_{x}xz-J^{-1}(x)\\
- & = & \sup_{x}xz-\left(\frac{x-K_{n,2}}{K_{n,1}}\right)^{2}\\
- & = & \frac{K_{n,1}^{2}z^{2}}{4}+K_{n,2}z
+\psi(z) & = & \sup_{x}xz-\mathcal{J}^{-1}(x)\\
+ & = & \sup_{x}xz-\left(\frac{x-\frac{1}{\sqrt{n_{V}}}K_{n,2}}{K_{n,1}}\right)^{2}\\
+ & = & \frac{K_{n,1}^{2}z^{2}}{4}+\frac{1}{\sqrt{n_{V}}}K_{n,2}z
 \end{eqnarray*}
 
 
-Note that $\psi(z)/z^{r}$ is a decreasing function in $z$ for all
-$r>2$. Also $\lim_{z\rightarrow\infty}\psi(z)=\infty$.
+We check the condition that Then $\psi(z)/z^{r}$ is a decreasing
+function in $z$ for $r=3\ge1$. Also $\lim_{z\rightarrow\infty}\psi(z)=\infty$.
 
 Theorem 3.5 states that for all $a>0,q>1$, we have
 
@@ -287,38 +301,47 @@ E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambd
 
 where $\epsilon_{q}(u)=\psi\left(\frac{2q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\forall u>0$.
 
-To calculate $\epsilon_{q}(1/q)$ (with $r=3)$, note that 
+We calculate $\epsilon_{q}\left(\frac{1}{q}\right)$: 
 \begin{eqnarray*}
-\psi\left(\frac{2q^{4}(1+a)\frac{1}{q}}{a\sqrt{n_{V}}}\right) & = & \frac{K_{n,1}^{2}}{4}\left(\frac{2q^{3}(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\left(\frac{2q^{3}(1+a)}{a\sqrt{n_{V}}}\right)
+\epsilon_{q}\left(\frac{1}{q}\right)=\psi\left(\frac{2q^{4}(1+a)\frac{1}{q}}{a\sqrt{n_{V}}}\right) & = & \frac{K_{n,1}^{2}}{4}\left(\frac{2q^{3}(1+a)}{a\sqrt{n_{V}}}\right)^{2}+\frac{1}{\sqrt{n_{V}}}K_{n,2}\left(\frac{2q^{3}(1+a)}{a\sqrt{n_{V}}}\right)
 \end{eqnarray*}
 
 
 Finally, we get
+\begin{eqnarray*}
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right] & \le & (1+a)E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+ac\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\frac{1}{\sqrt{n_{V}}}\left(\frac{2q^{2}(1+a)}{a\sqrt{n_{V}}}\right)\right)\\
+ & = & (1+a)E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c}{n_{V}}\left(K_{n,1}^{2}q^{5}\frac{(1+a)^{2}}{a}+2K_{n,2}q^{2}(1+a)\right)
+\end{eqnarray*}
+
+
+As $q\rightarrow1$, we get 
 \[
-E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\hat{\lambda}}(\cdot|D_{-k})\|^{2}\right]\le(1+a)E\left[\|g^{*}-\frac{1}{k}\sum_{k=1}^{K}g_{\tilde{\lambda}}(\cdot|D_{-k})\|^{2}\right]+ac\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\left(\frac{2q^{2}(1+a)}{a\sqrt{n_{V}}}\right)\right)
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\left[E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c}{n_{V}}\left(K_{n,1}^{2}\frac{(1+a)}{a}+2K_{n,2}\right)\right]
 \]
 
 
-where 
+
+\section{Lemma 2 for $\lambda$ that changes with $n$}
+
+We will assume that $\sup_{g\in\mathcal{G}}\|g\|_{\infty}\le G$.
+
+Suppose $\Lambda=\left[n_{T}^{-t_{min}},n_{T}^{t_{max}}\right]^{J}.$
+
+Suppose that for all $k=1,...,K$, the following smoothness condition
+holds: For some constant $C,\kappa>0$ , for all $\boldsymbol{\lambda}_{1},\boldsymbol{\lambda}_{2}\in\Lambda$,
+we have 
 \[
-K_{n,1}=\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32GCn^{\kappa}\sqrt{n_{V}}\lambda_{max}\right)\right)\right]^{1/2}
+\|\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda}_{1})-\hat{g}_{D_{-k}}(\cdot|\boldsymbol{\lambda}_{2})\|_{\infty}\le Cn_{T}^{\kappa}\|\boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\|
 \]
 
 
-and
+Then for all $a>0$,
 \[
-K_{n,2}=\frac{\left(\log n_{T}\right)2G\left[\log\left(\frac{1}{C_{J}}\right)+J\left(1+\log4+\log\left(32Cn^{\kappa}\lambda_{max}\right)\right)\right]}{\sqrt{n_{V}}}
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+c_{a}\frac{J}{n_{V}}c_{1}\left(\left(t_{max}+\kappa\right)\log(n_{T})+\log G+c_{2}\right)\left(\log n_{V}+c_{3}\right)
 \]
 
 
-The last term is $1/n_{V}$. We can just swap out constants to see
-this: 
-\[
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{ac}{n_{V}}\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a}\right)^{2}+C_{n,2}\left(\frac{2q^{2}(1+a)}{a}\right)\right)
-\]
-
-
-where $C_{n,2}$ is the numerator of $K_{n,2}$.
+where $c_{1},c_{2},c_{a}$ are constants.
 
 
 \section{Appendix}
