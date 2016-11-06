@@ -74,7 +74,7 @@ not have a random lower bound.
 \section{Theorem 3}
 
 Suppose there exists some $r>0$ such that the entropy of $\mathcal{G}(T)$
-for any training dataset $T$ such that $\|\epsilon\|_{T}\le2\sigma$
+for any training dataset $T$ such that $\|\epsilon\|_{T}\le\sigma$
 satisfies 
 \[
 \sup_{T:\|\epsilon\|_{T}\le2\sigma}\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi_{\sigma}(R)\mbox{ }\forall R>r
@@ -181,7 +181,7 @@ Pr\left(\left.\sup_{\lambda,\lambda':\left\Vert \hat{g}(\cdot|\lambda)-\hat{g}(\
 
 Putting this together, for all $\delta>r$ satisfying 
 \[
-\sqrt{n_{V}}\delta^{2}\ge a\left(\psi_{\sigma}\left(\delta\right)\vee\delta\vee\psi_{\sigma}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
+\sqrt{n_{V}}\delta^{2}\ge c\left(\psi_{\sigma}\left(\delta\right)\vee\delta\vee\psi_{\sigma}\left(4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)\vee4\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\right)
 \]
 
 
@@ -202,7 +202,7 @@ Pr\left(\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{
 The last term can easily be bounded using Bernstein's inequality since
 $\epsilon$ are uniformly sub-gaussian random variables
 \[
-Pr\left(\|\epsilon\|_{T}^{2}\ge4\sigma^{2}\right)\le c\exp\left(-\frac{n_{T}\sigma^{2}}{c^{2}}\right)
+Pr\left(\|\epsilon\|_{T}^{2}\ge\sigma^{2}\right)\le c\exp\left(-\frac{n_{T}\sigma^{2}}{c^{2}}\right)
 \]
 
 
@@ -679,13 +679,14 @@ NC_{J}(\delta/4)^{J}\le(\lambda_{max}-\lambda_{min}+\delta/2)^{J}
 
 \subsection*{Lemma Sub-gaussian RV Bounds}
 
-RVs $\epsilon_{1},...,\epsilon_{n}$ that are uniformly $b$-subgaussian
+Suppose RVs $\epsilon_{1},...,\epsilon_{n}$ are uniformly $b$-subgaussian
 \[
 \max_{i=1,...,n}\mathbb{E}e^{t\epsilon_{i}}\le e^{b^{2}t^{2}/2}
 \]
 
 
-then there is a constant $c$ only dependent on $b$ such that 
+Then there is a constant $c$ only dependent on $b$ such that for
+all $\delta$, we have 
 \[
 Pr\left(\|\epsilon\|_{n}^{2}\ge\delta^{2}\right)\le c\exp\left(-\frac{n\delta^{2}}{c^{2}}\right)
 \]

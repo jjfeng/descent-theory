@@ -75,7 +75,7 @@ we have
 \]
 
 
-Then there is a constant $c>0$ such that for all $a>0$
+Then there is an absolute constant $c>0$ such that for all $a>0$
 
 \[
 E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{(1+a)^{2}}{a}\frac{cJ}{n_{V}}\left(C_{\Lambda}+\frac{1}{2}\log n_{V}+4GC_{\Lambda}\log n_{V}\right)
@@ -357,13 +357,13 @@ we have
 \]
 
 
-Then for all $a>0$,
+Then there is an absolute constant $c>0$ and a constant $c_{G}$
+that only depends on $G$ such that for all $a>0$
+
 \[
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+c_{a}\frac{J}{n_{V}}c_{1}\left(\left(t_{max}+\kappa\right)\log(n_{T})+\log G+c_{2}\right)\left(\log n_{V}+c_{3}\right)
+E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{(1+a)^{2}}{a}\frac{c^{2}J}{n_{V}}\left[\left(c_{G}\log n_{V}+1\right)\left(\left(\kappa+t_{max}\right)\log n_{T}+1\right)+c_{G}\right]
 \]
 
-
-where $c_{1},c_{2},c_{a}$ are constants.
 
 
 \section{Appendix}

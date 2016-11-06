@@ -143,9 +143,22 @@ Section \ref{sec:proofs} contains the proofs and other technical details.
 
 \section{Main Result} \label{sec:main_results}
 
+Suppose we have observations $D = \left \{ (\boldsymbol{x}_i, y_i) \right \}_{i=1}^n$ generated from the model
+\begin{equation}
+y_i = g^*(\boldsymbol x_i) + \epsilon_i \quad i=1,...,n
+\end{equation}
+where $g^*$ is from our model class $\mathcal{G}$ and $\epsilon_i$ are random variables with expectation zero. In the simple setting, one may assume that $\epsilon_i$ are normally distributed. Here we consider a more general situation where $\epsilon_1,...,\epsilon_n$ are uniformly sub-Gaussian random variables. We use the definition from \citep{Buldygin1980}:
+\begin{definition}
+	$\epsilon_1, ..., \epsilon_n$ are uniformly sub-Gaussian with parameter $b>0$ if for all $t \in \mathbb{R}$
+	\begin{equation}
+	\max_{i=1,...,n} \mathbb{E} e^{t \epsilon_i} \le e^{b^2t^2/2}
+	\end{equation}
+\end{definition}
+Note that it is possible to show that if $\epsilon_1,...,\epsilon_n$ are uniformly sub-Gaussian, then they must have expectation zero \citep{stromberg1994probability}.
+
 \subsection{Training/Validation Split}
 
-Given the total observed dataset $D$ of size $n$, suppose it is randomly split into a training set $T$ of size $n_T$ and validation set $V$ of size $n_V$. For a function $h$, define $\| h \|_V^2 = \frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ and similarly for $T$. Using this notation, the fitted model defined in  \eqref{intro_train_criterion} can be written as
+Suppose dataset $D$ is randomly split into a training set $T$ of size $n_T$ and validation set $V$ of size $n_V$. For a function $h$, define $\| h \|_V^2 = \frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ and similarly for $T$. Using this notation, the fitted model defined in  \eqref{intro_train_criterion} can be written as
 \begin{equation}
 \hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{2} \left \|y -  g \right \|_T^2 + \sum_{j=1}^J \lambda_j P_j(g)
 \end{equation}
@@ -179,102 +192,91 @@ From the definition of $\hat{\boldsymbol \lambda}$, we have
 \end{eqnarray}
 where $\langle h, \ell \rangle_V = \frac{1}{n_V}\sum_{i\in V} h(x_i) \ell(x_i)$. The first term in the upper bound is the best error achievable in the model class $\mathcal{G}(T)$. In this paper, the model class is pre-defined so this term can be treated as fixed. Our primary interest is bounding the second term, which is the supremum of empirical processes.
 
-The supremum of empirical processes can be bounded using the complexity of the model class $\mathcal{G}(T)$. Complexity can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. In this section, we only concern ourselves with smoothly-parameterized functions. We define this more formally as follows:
-
+The supremum of empirical processes can be bounded using the complexity of the model class $\mathcal{G}(T)$. Complexity can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. For this paper, we mostly concern ourselves with Lipschitz functions.
 \begin{definition}
 \label{def:smooth_funcs}
-A function $f(\cdot | \boldsymbol{\lambda})$ is $C$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to norm $\| \cdot \|$ if
+A function $f(\cdot | \boldsymbol{\lambda})$ is $C$-Lipschitz with respect to norm $\| \cdot \|$ over $\Lambda$ if
 \begin{equation}
 \left \| f(\cdot | \boldsymbol \lambda_1) - f(\cdot | \boldsymbol \lambda_2) \right \|
 \le
 C \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \|_2 
+\quad
 \forall \boldsymbol \lambda_1,\boldsymbol \lambda_2 \in \Lambda
 \label{eq:smooth_funcs}
 \end{equation}
 \end{definition}
-\eqref{eq:smooth_funcs} can also be viewed as a generalized Lipschitz condition for the functional case. Function classes that satisfy \eqref{eq:smooth_funcs} have low metric entropy. Hence their empirical process terms are small with high probability.
+Function classes that satisfy \eqref{eq:smooth_funcs} have low metric entropy. Hence their empirical process terms are small with high probability.
 
-In the penalized regression setting, we are interested in bounding the metric entropy of $\mathcal{G}(T)$. It is clear that the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are parameterized by $\boldsymbol \lambda$, but more work is required to show that they are \textit{smoothly}-parameterized. We defer that discussion to Section \ref{sec:entropy}, where we provide examples of penalized regression problems that satisfy \ref{eq:smooth_funcs}.
+In the penalized regression setting, we are interested in bounding the metric entropy of $\mathcal{G}(T)$. It is clear that the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are parameterized by $\boldsymbol \lambda$, but more work is required to show that they are $C$-Lipschitz. We defer that discussion to Section \ref{sec:entropy}, where we provide examples of penalized regression problems that satisfy \ref{eq:smooth_funcs}.
 
 We now present a sharp oracle inequality for the penalty parameters selected by a training/validation split. The result is a special case of Theorem \ref{train_val_thrm_complicated}.
-
-%Theorem \ref{train_val_thrm} assumes that the range of the penalty parameters grows at a polynomial rate in the sample size.
-
-%Note that the oracle penalty parameter usually shrinks at some polynomial rate in the sample size (CITE?). Therefore we are interested in the case where the lower limit of possible penalty parameter values shrinks at a polynomial rate in the sample size. In Section \ref{sec:entropy}, we find that when the range of penalty parameters grow at a polynomial rate, the fitted functions will be $Cn^\kappa$-smoothly parameterized for constants $C, \kappa \ge 0$. Theorem \ref{train_val_thrm} bounds the model error under these conditions.
-
 
 
 \begin{theorem}
 \label{train_val_thrm}
-Suppose that the error $\epsilon$ are independent sub-Gaussian random variables with expectation zero.
+Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ are uniformly sub-Gaussian with parameter $b$. 
 
-Suppose $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$.
+Suppose there is a constant $C>0$ such that for any dataset with $\|\boldsymbol{\epsilon}\|_T \le \sigma$, $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
 
-Suppose that if $\|\epsilon\|_{T}\le 2\sigma$, then $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-smoothly-parameterized by $\boldsymbol{\lambda}$ over $\Lambda$ with respect to $\| \cdot \|_V$.
-
-
-Then for all $\delta > 0$ such that
+There is a constant $c>0$ only depending on $b$ such that for all $\delta$ such that
 \begin{equation}
-\delta^{2}\ge\alpha_{1}\frac{1}{n_{V}}\vee\alpha_{2}\frac{1}{\sqrt{n_{V}}}\left\Vert \hat{g}\left (\cdot | \tilde{\boldsymbol{\lambda}} \right )-g^{*}\right\Vert _{V}
+\delta^{2}
+\ge
+c \left ( 
+\frac{\alpha_{n}^2}{n_{V}}
+\vee 
+\frac{\alpha_{n}}{\sqrt{n_{V}}}\left\Vert \hat{g}\left (\cdot | \tilde{\boldsymbol{\lambda}} \right )-g^{*}\right\Vert _{V}
+\right )
 \end{equation}
-
+where
+\begin{equation}
+\alpha_n = \sqrt{J \left (1 + \log\left ( 32Cn(\lambda_{\max} - \lambda_{\min}) \right ) \right )} \vee 1
+\end{equation}
+we have
 \begin{eqnarray*}
 	Pr\left(
 	\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^2 -
 	\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^2
 	\ge\delta^2
 	\right )
-	&\le& c_{3}\exp\left(-\frac{n_{V}\delta^{4}}{c_{3}^{2}\left\Vert  \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right) \\
-	&& +c_{3}\exp\left(-\frac{n_{V}\delta^{2}}{c_{3}^{2}}\right) \\
-	&& +Pr \left (
-	\left \| \epsilon \right \|_V \ge 2\sigma
+	&\le& c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2}\left\Vert  \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}}\right) \\
+	&& +c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right) \\
+	&& +c\exp\left (
+	-\frac{n_T \sigma^2}{c^2}
 	\right )
 \end{eqnarray*}
 
-
-where 
-\[
-\delta = c_1 \left(
-	\frac{
-		J \log (\lambda_{\max}C)+c_{4}
-	}{n_V}
-\right)^{1/2}+c_{2}
-\sqrt{\left(
-	\frac{
-		J\log(\lambda_{\max}C)+c_{4}
-	}{n_{V}}
-\right)^{1/2}
-\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}
-\] (Check this formula!)
 \end{theorem}
 
+\textcolor{red}{This paragraph is confusing}
 Technically we would like to tune the penalty parameters over the entire range $\Lambda = \mathbb{R}^J_+$, but $\hat g(\cdot | \boldsymbol{\lambda})$ can be very ill-behaved under such general conditions. We can instead ensure that $\Lambda$ includes the penalty parameter
 \begin{equation}
 \label{eq:true_oracle}
 \tilde{\boldsymbol{\lambda}}_{\mathbb{R}_+}
 = \argmin_{\boldsymbol{\lambda} \in \mathbb{R}^J_+}\left \| g^* - \hat{g}(\cdot | \boldsymbol \lambda) \right \|^2_V
 \end{equation}
-As shown in \citet{van2000empirical}, $\tilde{\boldsymbol{\lambda}}_{\mathbb{R}_+}$ shrinks at polynomial rate $O_p(n^{-\omega})$ for some $\omega>0$, so the lower limit of $\Lambda$ just needs to shrink at a faster polynomial rate.
+As shown in \citet{van2000empirical}, $\tilde{\boldsymbol{\lambda}}_{\mathbb{R}_+}$ shrinks at polynomial rate $O_p(n_T^{-\omega})$ for some $\omega>0$, so the lower limit of $\Lambda$ just needs to shrink at a faster polynomial rate.
 
-We will therefore apply Theorem \ref{train_val_thrm} the special case where $\Lambda = [n^{-t_{min}},n^{t_{max}}]^{J}$. 
-\textcolor{red}{$n$ or $n_V$? Technically we should use $n$ but it's ugly?}
-When the range of $\Lambda$ grows at a polynomial rate, we find that the $\hat g(\cdot | \boldsymbol{\lambda})$ from our examples in Section \ref{sec:entropy} are actually $Cn^\kappa$-smoothly-parameterized for some $\kappa \ge 0$. For ease of interpretation, we present the results in asymptotic notation this time:
+We will therefore apply Theorem \ref{train_val_thrm} the special case where the range of $\Lambda$ grows at a polynomial rate. Suppose $\Lambda = [n_T^{-t_{\min}},n^{t_{\max}}]^{J}$ for $t_{\min}, t_{\max} > 0$. In addition, we allow $\hat g(\cdot | \boldsymbol{\lambda})$ to be  $Cn^\kappa$-Lipschitz for some $\kappa \ge 0$, to cover the examples in Section \ref{sec:entropy}. For ease of interpretation, we present the results in asymptotic notation this time:
 
 \begin{lemma}
 	\label{lemma:train_val_special}
-	$\Lambda=[n_{V}^{-t_{min}},n_{V}^{t_{max}}]^{J}$.
-	
-	Suppose that if $\|\epsilon\|_{T}\le2\sigma$, there are constants
-	$C,\kappa$ such that $\hat{g}(\cdot|\boldsymbol{\lambda}^{(1)})$ is $Cn^\kappa$-smoothly-parameterized by $\boldsymbol{\lambda}$ over $\Lambda$ with respect to $\|\cdot \|_V$.
-	
+	Let $\Lambda=[n_{V}^{-t_{min}},n_{V}^{t_{max}}]^{J}$. Suppose there is a constant $C>0$ such that for any dataset with $\|\boldsymbol{\epsilon}\|_T \le \sigma$, $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
 	Then
 	\begin{eqnarray}
-	\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}\le 
-	&& \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V} \label{eq:asym_train_val_theorem1} \\
-	&& + O_p \left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}}{n_{V}}\right)^{1/2} \label{eq:asym_train_val_theorem2} \\
-	&& + O_p \left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}}{n_{V}}\right)^{1/4} \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{1/2} \label{eq:asym_train_val_theorem3}
+	\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^2 \le 
+	&& \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert^2_{V} \label{eq:asym_train_val_theorem1} \\
+	&& + O_p \left(\frac{J\left (\left(t_{\max}+\kappa\right)\log n_T + \log (Cn) \right )}{n_{V}}\right) \label{eq:asym_train_val_theorem2} \\
+	&& + O_p \left(
+	\left (
+	\frac{J\left (\left(t_{\max}+\kappa\right)\log n_T + \log (Cn) \right )}{n_{V}}
+	\right )^{1/2}
+	 \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
+	 \right )
+	  \label{eq:asym_train_val_theorem3}
 	\end{eqnarray}
 \end{lemma}
+(Explain where $t_{\min}$ went)
 
 From Lemma \ref{lemma:train_val_special}, we see that the model error is upper bounded by the oracle error and a two-part remainder term: a near-parametric term in \ref{eq:asym_train_val_theorem2} and a geometric mean of the oracle error and \ref{eq:asym_train_val_theorem2}.
 
@@ -295,6 +297,7 @@ J = O_p\left (
 {\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}}{n_{V}}\right)^{1/2}}
 \right)
 \end{equation}
+\textcolor{red}{fix me}
 On the other hand, if the oracle error converges at a parametric rate, we have to keep the number of penalty parameters fixed.
 
 \subsection{Cross-Validation}
@@ -310,101 +313,65 @@ We will generalize the notation from the previous section. Let a dataset with $n
 \hat{g}_{D^{(n)}}(\cdot | \boldsymbol \lambda)= \arg\min_{g\in\mathcal{G}} \frac{1}{2} \| y-g \|_{D^{(n)}}^{2} + \sum_{j=1}^J \lambda_j P_j(g)
 \end{equation}
 
-For $K$-fold cross-validation, the problem setup is as follows. As before, let $D^{(n)}$ be the entire dataset. For simplicity, suppose the dataset can be partitioned into $K$ sets of equal size $n_V$. Let $n_T = n - n_V$. Then partition $k$ will be denoted $D_k^{(n_V)}$ and its complement will be denoted $D_{-k}^{(n_T)} = D \setminus D_k^{(n_V)}$. The selected penalty parameters is
+For $K$-fold cross-validation, the problem setup is as follows. As before, let $D^{(n)}$ be the entire dataset. For simplicity, suppose the dataset can be partitioned into $K$ sets of equal size $n_V$. Let $n_T = n - n_V$. Then partition $k$ will be denoted $D_k^{(n_V)}$ and its complement will be denoted $D_{-k}^{(n_T)} = D \setminus D_k^{(n_V)}$. The selected penalty parameter vector is
 \begin{eqnarray}
 \label{kfold_opt}
 \hat{\boldsymbol \lambda} &=& \arg\min_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2K} \sum_{k=1}^K  \left \| y-\hat{g}_{D_{-k}^{n_T}}(\cdot | \boldsymbol \lambda) \right \|_{D_k}^{2}
 \end{eqnarray}
 
-In traditional cross-validation, the final model is retrained on all the data with $\hat{\boldsymbol{\lambda}}$. However, bounding its generalization error requires additional regularity assumptions \citep{lecue2012oracle}. We consider the following ``averaged version of cross-validation" instead
+In traditional cross-validation, the final model is retrained on all the data with $\hat{\boldsymbol{\lambda}}$. However, bounding the generalization error of the retrained model requires additional regularity assumptions \citep{lecue2012oracle}. We consider the following ``averaged version of cross-validation" instead
 \begin{equation}
 \bar{g}_{D^{n}}(x) = \frac{1}{K} \sum_{k=1}^K \hat{g}_{D^{(n_T)}_{-k}}
 (x | \hat{\boldsymbol \lambda})
 \end{equation}
 
+The following theorem bounds the generalization error of $\bar{g}_{D^{n}}$. We note that the generalization error of the the oracle inequality is no longer sharp; the oracle rate is scaled by a constant $1+a$ for any $a > 0$. This is a consequence of trying to characterize the behavior of the selected model based on its validation error. One could try to shrink $a$ towards zero, but the additional error term grows as $a$ decreases.
 
-The following theorem bounds the generalization error of $\bar{g}_{D^{n}}$.
 \begin{theorem}
 \label{thrm:kfold}
-Suppose the error $\epsilon$ are sub-Gaussian random variables with expectation zero.
+Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. 
+Suppose independent random variables $\epsilon_1, ... \epsilon_n$ are uniformly sub-Gaussian with parameter $b$. 
 Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
 
-Suppose $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$.
+Suppose there is a constant $C>0$ such that for any dataset $D^{(n_T)}$ with $\|\boldsymbol{\epsilon}\|_{D^{(n_T)}} \le \sigma$, $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-Lipschitz with respect to $\| \cdot \|_\infty$ over $\Lambda$.
 
-Suppose that if $\|\epsilon\|_{T}\le 2\sigma$, there exist constants $C$ such that for any dataset $D^{n_T}$, $\hat{g}_{D^{n_T}}(\cdot | \boldsymbol \lambda)$ is $C$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to $\| \cdot \|_\infty$.
-
-For all $a > 0$,
-\begin{equation}
-E_{D^{(n)}} \left \| \bar{g}_{D^{n}} - g^* \right \|^2 \le
-(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}_{D^{(n_T)}}(\cdot |\boldsymbol \lambda) - g^* \right \|^2
-+  \frac{c_a}{n_V} \left (complicated \log n term \right )
-\end{equation}
-where $c_a$ is some constant.
+Then there is an absolute constant $c > 0$ such that for all $a > 0$,
+\begin{eqnarray}
+E_{D^{(n)}} \left \| \bar{g}_{D^{n}} - g^* \right \|^2 &\le&
+(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}_{D^{(n_T)}}(\cdot |\boldsymbol \lambda) - g^* \right \|^2 \\
+&& +  c \frac{(1+a)^2}{a} \frac{J}{n_V} 
+\left (
+C_\Lambda + \frac{1}{2} \log n_V +  4G C_\Lambda \log n_V
+\right )
+\end{eqnarray}
+where 
+\begin{eqnarray}
+C_\Lambda = 1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)
+\end{eqnarray}
 \end{theorem}
 
-There are some clear differences between Theorems \ref{train_val_thrm} and \ref{thrm:kfold}. Theorem \ref{thrm:kfold} allows us to bound the generalization error, but it comes at a price. One, it requires that the fitted functions are smoothly parameterized by $\boldsymbol{\lambda}$ over the entire domain. In addition, Theorem \ref{thrm:kfold} is no longer a strict oracle inequality since the oracle error is scaled by the constant $1+a$.
+Notice that Theorem \ref{thrm:kfold} requires a stronger Lipschitz condition than that in Theorem \ref{train_val_thrm}. Here we require that the fitted functions are Lipschitz with respect to $\| \cdot \|_\infty$.
 
 Now we apply Theorem \ref{thrm:kfold} to the special case where $\Lambda$ grows at a polynomial rate with the sample size. We will use the same assumptions as we did in Lemma \ref{lemma:train_val_special}.
 
 \begin{lemma}
 	\label{lemma:kfold_special}
-Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
+Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$. Suppose $\Lambda = [n_T^{-t_{\min}}, n_T^{t_{\max}}]^J$.
 
-Suppose $\Lambda = [n^{-t_{\min}}, n^{t_{\max}}]^J$.
+Suppose that if $\|\epsilon\|_{T}\le \sigma$, there are constants $C,\kappa$ such that for any dataset $D^{(n_T)}$, $\hat{g}_{D^{(n_T)}}(\cdot | \boldsymbol \lambda)$ is $Cn^\kappa$-Lipschitz with respect to $\| \cdot \|_\infty$ over $\Lambda$.
 
-Suppose that if $\|\epsilon\|_{T}\le 2\sigma$, there are constants $C,\kappa$ such that for any dataset $D^{(n_T)}$, $\hat{g}_{D^{(n_T)}}(\cdot | \boldsymbol \lambda)$ is $Cn^\kappa$-smoothly-parameterized by $\boldsymbol \lambda$ over $\Lambda$ with respect to $\| \cdot \|_\infty$.
-
-For all $a > 0$,
-\begin{equation}
-E_{D^{(n)}} \left \| \bar{g}_{D^{(n)}} - g^* \right \|^2 \le
-(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}_{D^{(n_T)}}(\cdot |\boldsymbol \lambda) - g^* \right \|^2
-+  c_a \left (\frac{\log(n_V) + \log(n_T) + stuff}{n_V}\right )
-\end{equation}
+Then for any $a > 0$, there are positive constants $c_a$ and $c_G$ only dependent on $a$ and $G$, respectively, such that
+\begin{eqnarray}
+E_{D^{(n)}} \left \| \bar{g}_{D^{(n)}} - g^* \right \|^2 
+&\le&
+(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}_{D^{(n_T)}}(\cdot |\boldsymbol \lambda) - g^* \right \|^2 \\
+&& + c_a \frac{J}{n_{V}}\left( \left(c_{G}\log n_{V}+1\right)\left(\left(\kappa+t_{max}\right)\log n_{T}+1\right)+c_{G}\right )
+\end{eqnarray}
+(We have simplified the constants $c$ and $a$ in this expression for readibility. Refer to the original theorem for the actual constants)
 \end{lemma}
 Lemmas \ref{lemma:kfold_special} and \ref{lemma:train_val_special} are quite similar in that the upper bounds are functions of the oracle error and a near-parametric term. The asymptotic convergence rate of the selected model is determined by whichever term dominates. For both the training/validation split framework and cross-validation, we find that tuning penalty parameters is a relatively ``cheap" problem to solve. If the oracle error is sub-parametric, the cost of tuning penalty parameters is negligible asymptotically.
 
 The theorems and lemmas given in this section are all  finite-sample results. One could try to minimize the upper bound by increasing the number of penalty parameters or changing the ratio between the training and validation set sizes. Determining the optimal number of penalty parameters will unfortunately require knowing characteristics about the error variables $\epsilon$. (Perhaps you can use cross-validation to determine the number of penalty parameters to use. Ha! How meta!)
-
-
-%Theorem \ref{train_val_thrm} and \ref{thrm:kfold} imply that $\hat{g}(\cdot | \hat{\boldsymbol{\lambda}})$ has a semi-parametric convergence rate: the nonparametric (or potentially parametric) convergence rate of the oracle and the parametric convergence rate of the cross-validated model to the oracle. As long as the number of penalty parameters is finite, it does not affect the convergence rate of the model asymptotically.
-
-%We can minimize the prediction error by balancing the two terms in the upper bound. The inequalities suggest that there are many approaches. One could change increase the training to validation ratio as the sample size grows. Alternatively, one could increase the number of penalties and penalty parameters with the number of samples. Of course, finding the true minimizer of the upper bound will require knowing properties about the true model, so this would have to be done in some heuristic manner.
-
-
-%\subsubsection{Example}
-%
-%We present a nonparametric additive model as an example.
-%
-%Consider the training criterion with Sobolev penalties on each of the components
-%\begin{equation}
-%\hat{f}(\cdot | {\boldsymbol \lambda}), \hat{g}(\cdot | {\boldsymbol \lambda}) =
-%\argmin_{f,g \in \mathcal{G}}
-%\| y - (f + g) \|_n^2 +
-%\lambda_1 \int_0^1 |f^{(s)}(x)|^2 dx +
-%\lambda_2 \int_0^1 |g^{(t)}(x)|^2 dx
-%\end{equation}
-%where $\mathcal{G}$ are functions defined over the domain [0,1].
-%It can be shown that the estimate is a spline. According to \citet{van2014additive}, the oracle convergence rate is
-%\begin{equation}
-%\| \hat{f}(\cdot | \tilde{\boldsymbol{\lambda}}) - f^* \| = O_p(n^{-\frac{s}{2s+1}}),
-%\| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \| = O_p(n^{-\frac{t}{2t+1}})
-%\end{equation}
-%However, one would need to know the Sobolev penalties of $f^*$ and $g^*$ in order
-%to determine the oracle penalty parameters.
-%If the penalty parameters are chosen using the training/validation framework, Theorem \ref{train_val_thrm} gives us
-%\begin{eqnarray*}
-%\| \hat{f}(\cdot | \hat{\boldsymbol{\lambda}}) + \hat{g}(\cdot | \hat{\boldsymbol{\lambda}}) - (f^* + g^*) \|_V &=&
-%O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}})
-%+c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2} \\
-%&& +\sqrt{ c_{1} \left (\frac{J(\log n_{V}+c_{2})}{n_{V}} \right )^{1/2}  \left (O_p(n_T^{-\frac{s}{2s+1}}) + O_p(n_T^{-\frac{t}{2t+1}}) \right) }
-%\end{eqnarray*}
-%If the penalty parameters are chosen instead using a $K$-fold cross-validation framework, Theorem \ref{thrm:kfold} states that the
-%averaged version of cross-validation has a generalization error that is bounded as follows
-%\begin{eqnarray*}
-%E_D \| \hat{f}_{ACV} + \hat{g}_{ACV} - (f^* + g^*) \|^2 &=&
-%(1+a) E_D  \left (O_p(n_k^{-\frac{s}{2s+1}}) + O_p(n_k^{-\frac{t}{2t+1}})  \right )
-%+ c_a \max_{k=1:K} \frac{\log^2(n)}{n_k}
-%\end{eqnarray*}
 
 \section{Smoothness of $\hat{g}(\cdot | \boldsymbol{\lambda})$ in $\boldsymbol \lambda$}
 \label{sec:entropy}
