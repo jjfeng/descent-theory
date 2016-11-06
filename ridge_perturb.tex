@@ -16,17 +16,32 @@
 We will show that adding a small ridge penalty scaled by some constant
 $w$ does not change the fitted model by very much. 
 \begin{enumerate}
-\item We show that as $w\rightarrow0$, the fitted model to the perturbed
+\item We first show that as $w\rightarrow0$, the fitted model to the perturbed
 training criterion converges to the fitted model for the original
-training criterion. This uses the implicit function theorem. The result
-applies to parametric models where the training criterion can contain
-smooth or nonsmooth penalties. The proof technique can probably be
-extended to (certain) nonparametric models (using an implicit function
-theorem for banach spaces).
-\item This older proof shows that the fitted model is actually Lipschitz
-in $w$. However, it requires the strong assumption that the training
-criterion was strongly convex. The proof is still here because...
-it is cute.
+training criterion. This uses the implicit function theorem.
+
+\begin{enumerate}
+\item \textbf{Big caveat}: this result doesn't quantify how small $w$ needs
+to be to ensure fast convergence rates. If we use a Lipschitz implicit
+function theorem (as established in Robinson 1991 combined with the
+result stated in Kummer 1989), we will need a condition that the Hessian
+of the training criterion is bounded below by some matrix $mI$, which
+we have already assumed in Section 2. So unfortunately the Implicit
+Function Theorem doesn't actually allow us to relax our assumptions.
+\item Note: The result applies to parametric models where the training criterion
+can contain smooth or nonsmooth penalties. The proof technique can
+probably be extended to (certain) nonparametric models (using an implicit
+function theorem for banach spaces).
+\end{enumerate}
+\item We show the fitted model is Lipschitz in $w$. It requires the assumption
+that the training criterion is strongly convex. This can be extended
+to the case of non-smooth penalites if we include assumptions about
+the differentiable space/local optimality space. As long as the training
+criterion is $m$-strongly convex with $m$ polynomial in the number
+of observations, we only increase the convergence rate by a $\log n$
+factor.
+\item A comment on the convergence rate in the nonsmooth case. We clarify
+potential misinterpretations of our results.
 \end{enumerate}
 
 \section{Continuity of ridge perturbation}
@@ -172,5 +187,86 @@ Plugging in the inequality, we get
 \|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2} & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|\\
  & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|
 \end{eqnarray*}
+
+
+
+\subsubsection*{Extension to Nonsmooth case}
+
+Let the differentiable space at $\hat{\boldsymbol{\theta}}_{\lambda}(0)$
+be defined as 
+\[
+\Omega(\hat{\boldsymbol{\theta}}_{\lambda}(0))=\left\{ \left.\boldsymbol{\eta}\right|\lim_{\epsilon\rightarrow0}\frac{L_{T}(\hat{\boldsymbol{\theta}}_{\lambda}(0)+\epsilon\boldsymbol{\eta}|\boldsymbol{\lambda})-L_{T}(\hat{\boldsymbol{\theta}}_{\lambda}(0)|\boldsymbol{\lambda})}{\epsilon}\mbox{ exists}\right\} 
+\]
+
+
+Let $U(\hat{\boldsymbol{\theta}}_{\lambda}(0))$ be an orthonormal
+basis of $\Omega(\hat{\boldsymbol{\theta}}_{\lambda}(0))$ where $U(\hat{\boldsymbol{\theta}}_{\lambda}(0))$
+has rank $q\le p$.
+
+Suppose that for all $w\in[0,W)$, we have that
+\[
+\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+w\|\boldsymbol{\theta}\|^{2}\right)=\min_{\beta\in\mathbb{R}^{q}}\frac{1}{2}\|y-f\left(\cdot|U(\hat{\theta}_{0})\boldsymbol{\beta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})+w\|U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta}\|^{2}\right)
+\]
+
+
+Suppose that $P_{j}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})$
+and $f(\cdot|U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})$
+are continuously differentiable along the directions in $U(\hat{\boldsymbol{\theta}}_{\lambda}(0))$.
+
+Suppose $_{U(\hat{\boldsymbol{\theta}}_{\lambda}(0))}\nabla^{2}L_{T}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})$
+exists and the training criterion is $m$-strongly convex in $\boldsymbol{\beta}$.
+That is, there is some constant $m>0$ such that
+\[
+_{U(\hat{\boldsymbol{\theta}}_{\lambda}(0))}\nabla^{2}L_{T}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})\succeq mI
+\]
+
+
+Consider the minimizer of the perturbed problem
+
+\[
+\hat{\boldsymbol{\beta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\boldsymbol{\beta}}L_{T}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta}\|^{2}
+\]
+
+
+So $\hat{\boldsymbol{\beta}}_{\boldsymbol{\lambda}}(0)$ is the solution
+to the original penalized regression problem. 
+
+Then for any $w\in[0,W)$,
+\begin{eqnarray*}
+\|U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\hat{\boldsymbol{\beta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2} & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|
+\end{eqnarray*}
+
+
+
+\section{Convergence rate for penalized regression problems with nonsmooth
+penalties}
+
+One must take care in combining all the results regarding penalized
+regression problems with nonsmooth penalties. As stated in Section
+2, we have shown that the fitted function of the perturbed penalized
+regression problem is close to that of the original. However, note
+that the result does not say 
+\[
+\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2}\le(\mbox{constant})w
+\]
+
+
+This result is difficult to assert due to the nonsmooth nature of
+the training criterion; it is possible that $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)$
+are in different differentiable spaces. Therefore the result in Section
+2 means that we must the training criterion can only be stated if
+we fit the original regression problem and determine $\hat{\boldsymbol{\theta}}_{\lambda}(0)$.
+
+Therefore Theorem 3 in the nonsmooth case is actually bounding the
+probability
+\[
+Pr\left(\left\Vert g\left(\cdot|U\left(\hat{\boldsymbol{\theta}}_{\hat{\lambda}}(0)\right)\hat{\boldsymbol{\beta}}_{\hat{\lambda}}\left(w\right)\right)-g^{*}\right\Vert _{V}^{2}-\left\Vert g\left(\cdot|U\left(\hat{\boldsymbol{\theta}}_{\tilde{\lambda}}(0)\right)\hat{\boldsymbol{\beta}}_{\tilde{\lambda}}\left(w\right)\right)-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right)
+\]
+
+
+We are NOT bounding
+\[
+Pr\left(\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}_{\hat{\lambda}}(w)\right)-g^{*}\right\Vert _{V}^{2}-\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}_{\tilde{\lambda}}(w)\right)-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right)
+\]
 
 \end{document}
