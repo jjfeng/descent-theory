@@ -5,7 +5,6 @@
 \usepackage[latin9]{inputenc}
 \usepackage[landscape]{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
-\usepackage{mathtools}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{esint}
@@ -36,18 +35,17 @@ We are interested in establishing inequalities of the form
 \]
 
 
-If the functions are Lipschitz in their parameterization, we will
-also be able to bound the distance between the actual functions. That
-is, if there are constants $L>0$ and $r\in\mathbb{R}$, such that
-for all $\boldsymbol{\theta_{1},\theta_{2}}$ 
+If the functions are $L$-Lipschitz in their parameterization, we
+will also be able to bound the distance between the actual functions.
+That is, if there is a constant $L>0$ such that for all $\boldsymbol{\theta_{1},\theta_{2}}$
 \[
-\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le Lp^{r}\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\|_{2}
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\|_{2}
 \]
 
 
 Then
 \[
-\|g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(2)}}})\|_{\infty}\le Lp^{r}C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\|g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(2)}}})\|_{\infty}\le LC\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
 \]
 
 
@@ -105,210 +103,119 @@ $\boldsymbol{\theta,\beta},m'$, we have
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have
 \[
-\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C_{J}}\right)
+\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
 \]
 
 
 where 
 \[
-C_{J}=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
+C_{\theta^{*},\Lambda}=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
 \]
 
 
-(Still thinking about how to make $C_{J}$ more clear. Perhaps I can
-find a nicer bound for the Lipschitz constant)
+Moreover, if $g(\cdot|\boldsymbol{\theta})$ is $L$-Lipschitz 
+\[
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\|_{2}
+\]
+
+
+Then
+\[
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\]
+
 
 
 \subsubsection*{Proof}
 
-Consider any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$.
-Let $\boldsymbol{\beta}=\hat{\boldsymbol{\theta}}_{\lambda^{(2)}}-\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}$.
-
-Define 
-\[
-\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})=\arg\min_{m\in\mathbb{R}}\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})+\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta}\|_{2}^{2}\right)
-\]
-
-
-By definition, we know that $\hat{m}_{\beta}(\boldsymbol{\lambda^{(2)}})=1$
-and $\hat{m}_{\beta}(\boldsymbol{\lambda^{(1)}})=0$.
-
-\textbf{1. We calculate $\nabla_{\lambda}\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})$
+\textbf{1. We calculate $\nabla_{\lambda}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
 using the implicit differentiation trick.}
 
 By the KKT conditions, we have 
 \[
-\left.\frac{\partial}{\partial m}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right)+\sum_{j=1}^{J}\lambda_{j}w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta}\rangle\right|_{m=\hat{m}_{\beta}(\boldsymbol{\lambda})}=0
+\left.\nabla_{\boldsymbol{\theta}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})\right)+\sum_{j=1}^{J}\lambda_{j}w\boldsymbol{\theta}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}=0
 \]
 
 
-Now we implicitly differentiate with respect to $\lambda_{\ell}$
-for $\ell=1,2,...,J$
+Now we implicitly differentiate with respect to $\boldsymbol{\lambda}$
 
 \[
-\frac{\partial}{\partial\lambda_{\ell}}\left\{ \left.\left[\frac{\partial}{\partial m}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right)+\sum_{j=1}^{J}\lambda_{j}w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta}\rangle\right]\right|_{m=\hat{m}_{\beta}(\boldsymbol{\lambda})}\right\} =0
+\left.\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)\right)\nabla_{\lambda}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})+\nabla_{\theta}P(\boldsymbol{\theta})+w\boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right]\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}=0
 \]
 
 
-By the product rule and chain rule, we have 
-
+where 
 \[
-\left.\left\{ \left[\frac{\partial^{2}}{\partial m^{2}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right)+\sum_{j=1}^{J}\lambda_{j}w\|\boldsymbol{\beta}\|_{2}^{2}\right]\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\beta}(\boldsymbol{\lambda})+\frac{\partial}{\partial m}P_{\ell}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})+w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta}\rangle\right\} \right|_{m=\hat{m}_{\beta}(\boldsymbol{\lambda})}=0
+\nabla_{\theta}P(\boldsymbol{\theta})=\left\{ \begin{array}{ccc}
+\nabla_{\theta}P_{1}(\boldsymbol{\theta}) & ... & \nabla_{\theta}P_{J}(\boldsymbol{\theta})\end{array}\right\} 
 \]
 
 
-Rearranging, for every $\ell=1,...,J$, we get
-
+Rearranging, we have for all $\boldsymbol{\lambda}\in\Lambda$
 \[
-\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})=\left.-\left[\frac{\partial^{2}}{\partial m^{2}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right)+\sum_{j=1}^{J}\lambda_{j}w\|\boldsymbol{\beta}\|_{2}^{2}\right]^{-1}\left[\frac{\partial}{\partial m}P_{\ell}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})+w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta}\rangle\right]\right|_{m=\hat{m}_{\beta}(\boldsymbol{\lambda})}
+\nabla_{\lambda}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})=-\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right]^{-1}\left(\left.\nabla_{\theta}P(\boldsymbol{\theta})+w\boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right)
 \]
 
 
-In vector notation, we have 
-\[
-\nabla_{\lambda}\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})=\left.-\left[\frac{\partial^{2}}{\partial m^{2}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right)+\sum_{j=1}^{J}\lambda_{j}w\|\boldsymbol{\beta}\|_{2}^{2}\right]^{-1}\left[\nabla_{m}P(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})+w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta}\rangle\boldsymbol{1}\right]\right|_{m=\hat{m}_{\beta}(\boldsymbol{\lambda})}
-\]
+\textbf{2. Bound $\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\|$
+for $i=1,...,p$}
 
-
-where $\nabla_{m}P(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})$
-is the $J$-dimensional vector
-
-\[
-\nabla_{m}P(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})=\left[\begin{array}{c}
-\frac{\partial}{\partial m}P_{1}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\\
-...\\
-\frac{\partial}{\partial m}P_{J}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})
-\end{array}\right]
-\]
-
-
-\textbf{2. Bound $\|\nabla_{\lambda}\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})\|$}
-
-\textbf{Bounding the first multiplicand:}
-
-The first multiplicand is bounded by 
-\[
-\left|\frac{\partial^{2}}{\partial m^{2}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right)+\sum_{j=1}^{J}\lambda_{j}w\|\boldsymbol{\beta}\|_{2}^{2}\right|^{-1}\le\left(wJ\lambda_{min}\|\boldsymbol{\beta}\|_{2}^{2}\right)^{-1}
-\]
-
-
-since the mean squared error and the penalty functions are convex.
-
-\textbf{Bounding the second multiplicand:}
-
-The first summand in the second multiplicand is bounded by assumption
-\[
-\left|\frac{\partial}{\partial m}P_{\ell}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+m\boldsymbol{\beta})\right|\le K\|\boldsymbol{\beta}\|_{2}
-\]
-
-
-The second summand in the second multiplicand is bounded by
-\begin{eqnarray}
-\left|w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\rangle\right| & \le & w\|\boldsymbol{\beta}\|_{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}
-\end{eqnarray}
-
-
-We need to bound $\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}$.
-By definition of $\hat{m}_{\beta}(\boldsymbol{\lambda})$ , 
+We know that\textbf{
 \begin{eqnarray*}
-\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}^{2} & \le & \frac{1}{2}\|y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}\|_{2}^{2}\right)\\
- & = & \frac{1}{2}\|y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}\|_{2}^{2}\right)+\sum_{j=1}^{J}\left(\lambda_{j}-\lambda_{j}^{(1)}\right)\left(P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}\|_{2}^{2}\right)
+\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert  & = & \left\Vert e_{i}^{\top}\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right]^{-1}\left(\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}+w\boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right)\right\Vert \\
+ & = & \left\Vert e_{i}^{\top}\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right]^{-1}\left(\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}+w\boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right)\right\Vert \\
+ & \le & \left\Vert \left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}+\sum_{j=1}^{J}\lambda_{j}wI\right]^{-1}\right\Vert \left(\left\Vert \left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\Vert _{F}+w\left\Vert \boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right\Vert \right)\\
+ & \le & \left\Vert \left[\sum_{j=1}^{J}\lambda_{j}wI\right]^{-1}\right\Vert \left(\left\Vert \left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\Vert _{F}+w\sqrt{J}\|\boldsymbol{\theta}\|_{2}\right)\\
+ & \le & \frac{1}{J\lambda_{min}w}\left(\sqrt{J}K+w\sqrt{J}\right)\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}\\
+ & = & \frac{K+w}{\lambda_{min}w\sqrt{J}}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}
+\end{eqnarray*}
+}
+
+The second inequality follows from the assumption that $\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})$
+is convex in $\boldsymbol{\theta}$. The last inequality follows from
+the assumption $\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\le K\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}$.
+
+We can use the definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
+to bound $\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}$.
+By definition, 
+\begin{eqnarray*}
+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}^{2} & \le & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|^{2}\right)\\
+ & \le & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|^{2}\right)\\
+ & = & C_{\theta^{*},\Lambda}
 \end{eqnarray*}
 
 
-To bound the first part of the right hand side, use the definition
-of $\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}$: 
-\begin{eqnarray*}
-\frac{1}{2}\|y-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}\|_{2}^{2}\right) & \le & \frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)\\
- & \le & \frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)\\
- & = & C
-\end{eqnarray*}
-
-
-To bound the second part of the right hand side, note that 
-\begin{eqnarray*}
-\sum_{j=1}^{J}\left(\lambda_{j}-\lambda_{j}^{(1)}\right)\left(P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}\|_{2}^{2}\right) & \le & \sum_{j=1}^{J}\left(\lambda_{j}-\lambda_{j}^{(1)}\right)\left[\max_{k=1:J}P_{k}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}\|_{2}^{2}\right]\\
- & \le & J\lambda_{max}\left[\max_{k=1:J}P_{k}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}\|_{2}^{2}\right]
-\end{eqnarray*}
-
-
-Combining the above three inequalities, we get
-\begin{equation}
-\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}^{2}\le C+J\lambda_{max}\left[\max_{k=1:J}P_{k}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}\|_{2}^{2}\right]
-\end{equation}
-
-
-To bound $\max_{k=1:J}P_{k}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}\|_{2}^{2}$,
-we note that by the definition of $\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}$,
-we have 
-
-\begin{eqnarray*}
-\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}\|_{2}^{2}\right) & \le & \frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)\\
- & \le & C
-\end{eqnarray*}
-
-
-Therefore
-\begin{equation}
-\max_{k=1:J}P_{k}(\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}\|_{2}^{2}\le\frac{C}{\lambda_{min}}
-\end{equation}
-
-
-Plugging (3) into (2) above, we get 
-\begin{eqnarray}
-\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}^{2} & \le & \left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C
-\end{eqnarray}
-
-
-We can combine (4) with the fact that 
+So 
 \[
-J\lambda_{min}\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}^{2}\le\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}^{2}
+\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}\le\sqrt{\frac{2}{J\lambda_{min}w}C_{\theta^{*},\Lambda}}
 \]
 
 
-to get
+Hence for all $\boldsymbol{\lambda}\in\Lambda$
 \[
-\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\|_{2}\le\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}
+\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert \le\frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}
 \]
 
 
-Plug the inequality above into (1) to get 
+\textbf{4. Put all the bounds together}
+
+By the mean value theorem, there is a $\alpha\in(0,1)$ such that\textbf{
+\begin{eqnarray*}
+\|\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda^{(2)}})\| & \le & \left\langle \left.\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}},\boldsymbol{\lambda^{(1)}}-\boldsymbol{\lambda^{(2)}}\right\rangle \\
+ & \le & \max_{\lambda\in\Lambda}\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert \left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert \\
+ & \le & \frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert 
+\end{eqnarray*}
+}
+
+Moreover, if $g(\cdot|\boldsymbol{\theta})$ is $L$-Lipschitz 
 \[
-w\langle\boldsymbol{\beta},\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}+\hat{m}_{\beta}(\boldsymbol{\lambda})\boldsymbol{\beta}\rangle\le w\|\boldsymbol{\beta}\|_{2}\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\|_{2}
 \]
 
 
-Finally we have bounded the derivative of $\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\beta}(\boldsymbol{\lambda})$.
-For every $\ell=1,...,J$, we have 
-\begin{eqnarray*}
-\left|\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\beta}(\boldsymbol{\lambda})\right| & \le & \left(wJ\lambda_{min}\|\boldsymbol{\beta}\|_{2}^{2}\right)^{-1}\left(K\|\boldsymbol{\beta}\|_{2}+w\|\boldsymbol{\beta}\|_{2}\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)\\
- & = & \left(wJ\lambda_{min}\|\boldsymbol{\beta}\|_{2}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
-\end{eqnarray*}
-
-
-We can sum up these bounds to bound the norm of the gradient $\nabla_{\lambda}\hat{m}_{\beta}(\boldsymbol{\lambda})$:
-\begin{eqnarray*}
-\left\Vert \nabla_{\lambda}\hat{m}_{\beta}(\boldsymbol{\lambda})\right\Vert  & = & \sqrt{\sum_{\ell=1}^{J}\left(\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{\beta}(\boldsymbol{\lambda})\right)^{2}}\\
- & \le & \left(w\lambda_{min}\sqrt{J}\|\boldsymbol{\beta}\|_{2}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
-\end{eqnarray*}
-
-
-\textbf{3. Apply Mean Value Theorem}
-
-Since the training criterion is smooth, then $\hat{m}_{\boldsymbol{\beta}}(\boldsymbol{\lambda})$
-is continuous and differentiable over the line segment $\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} $.
-Therefore by MVT, there is some $\alpha\in(0,1)$ such that 
-\begin{eqnarray*}
-\left|\hat{m}_{\beta}(\boldsymbol{\lambda^{(2)}})-\hat{m}_{\beta}(\boldsymbol{\lambda^{(1)}})\right| & = & \left|\left.\left\langle \boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}},\nabla_{\lambda}\hat{m}_{\beta}(\boldsymbol{\lambda})\right\rangle \right|_{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}}\right|\\
- & \le & \|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left\Vert \left.\nabla_{\lambda}\hat{m}_{\beta}(\boldsymbol{\lambda})\right|_{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}}\right\Vert \\
- & \le & \|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\|\boldsymbol{\beta}\|_{2}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
-\end{eqnarray*}
-
-
-Recall that $\hat{m}_{\beta}(\boldsymbol{\lambda^{(2)}})-\hat{m}_{\beta}(\boldsymbol{\lambda^{(1)}})=1$.
-Rearranging, we get
+Then
 \[
-\|\boldsymbol{\beta}\|_{2}=\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}\left(w\sqrt{J}\lambda_{min}\right)^{-1}\left(K+w\sqrt{\frac{2}{J\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C}\right)
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
 \]
 
 
@@ -318,289 +225,200 @@ Rearranging, we get
 The function class of interest are the minimizers of the penalized
 least squares criterion: 
 \[
-\mathcal{G}(T)=\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}_{j})+\frac{w}{2}\|\boldsymbol{\theta}_{j}\|_{2}^{2}\right):\boldsymbol{\lambda}\in\Lambda\right\} 
+\mathcal{G}(T)=\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}^{(j)})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}^{(j)})+\frac{w}{2}\|\boldsymbol{\theta}^{(j)}\|_{2}^{2}\right):\boldsymbol{\lambda}\in\Lambda\right\} 
 \]
 
 
 where $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$.
 
-Suppose that the penalties and the mean squared error $\|y-\sum_{j=1}^{J}g_{j}(x|\boldsymbol{\theta}_{j})\|_{T}^{2}$
-are twice-differentiable and convex wrt $\boldsymbol{\theta}$
+Suppose that the penalties, functions $g_{j}(x|\boldsymbol{\theta}^{(j)})$
+are twice-differentiable wrt $\boldsymbol{\theta}$ and for all $j=1,...,J$
 \begin{itemize}
-\item $\nabla_{\boldsymbol{\theta}_{j}}^{2}P_{j}(\boldsymbol{\theta}_{j})$
-are PSD matrices for all $j=1,...,J$ 
-\item $\nabla_{\boldsymbol{\theta}}^{2}\|y-\sum_{j=1}^{J}g_{j}(x|\boldsymbol{\theta}_{j})\|_{T}^{2}$
-is a PSD matrix.
+\item $\nabla_{\boldsymbol{\theta}^{(j)}}^{2}P_{j}(\boldsymbol{\theta}^{(j)})$
+are PSD matrices for all $j=1,...,J$ (so convex penalties)
+\item $g_{j}(x|\boldsymbol{\theta}^{(j)})$ is convex in $\boldsymbol{\theta}^{(j)}$
+\item $\nabla_{\boldsymbol{\theta}}^{2}\|y-\sum_{j=1}^{J}g_{j}(x|\boldsymbol{\theta}^{(j)})\|_{T}^{2}$
+is a PSD matrix
 \end{itemize}
-Suppose for each $j=1,...,J$, there is a constant $K_{j}\ge0$ such
-that for all $\boldsymbol{\beta},\boldsymbol{\theta},m'$, we either
-have
+Suppose there is a constant $L>0$ such that for all $\boldsymbol{\theta,\theta}'$
+and all $j=1,...,J$, we have 
+\[
+\|g_{j}(\cdot|\boldsymbol{\theta})-g_{j}(\cdot|\boldsymbol{\theta}')\|_{\infty}\le L\|\boldsymbol{\theta}-\boldsymbol{\theta}'\|_{2}
+\]
 
-\begin{equation}
-\left|\frac{\partial}{\partial m}P_{j}(\boldsymbol{\theta}+m\boldsymbol{\beta})\right|_{m=m'}\le K_{j}\|\boldsymbol{\beta}\|_{2}
-\end{equation}
-
-
-or 
-\begin{equation}
-\left\Vert \left.\frac{\partial}{\partial m}g_{j}(X_{T,j}|\boldsymbol{\theta}+m\boldsymbol{\beta})\right|_{m=m'}\right\Vert =\sqrt{\sum_{i=1}^{n}\left(\left.\frac{\partial}{\partial m}g_{j}(x_{T,j}|\boldsymbol{\theta}+m\boldsymbol{\beta})\right|_{m=m'}\right)^{2}}\le K_{j}\|\boldsymbol{\beta}\|_{2}
-\end{equation}
-
-
-(These conditions bound the spectrum of the penalty function or the
-function itself.)
 
 Let 
 \[
-C=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j}^{*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}_{j}^{*})+\frac{w}{2}\|\boldsymbol{\theta}_{j}^{*}\|_{2}^{2}\right)
+C_{\theta^{*},\Lambda}=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}^{(j),*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)
 \]
 
 
-For $j=1,..,J$, let 
+Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$ 
 
 \[
-d_{j}=\begin{cases}
-\left(K_{j}+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right) & \mbox{if assumption (5) holds for }P_{j}\\
-\frac{1}{\lambda_{min}}K_{j}\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C} & \mbox{if assumption (6) holds for }g_{j}
-\end{cases}
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right\Vert \le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
 \]
 
 
-Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
-we have for all $j=1,...,J$
-\[
-\|\boldsymbol{\theta}_{\lambda^{(1)},j}-\boldsymbol{\theta}_{\lambda^{(2)},j}\|\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \lambda_{min}^{-1}w^{-1}\left(\max_{j=1,..,J}d_{j}\right)
-\]
+and
+\begin{eqnarray*}
+\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \frac{L^{2}J^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
 
 
 
 \subsubsection*{Proof}
 
-Consider any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda$.
-Let $\boldsymbol{\beta}_{j}=\hat{\boldsymbol{\theta}}_{\lambda^{(2)},j}-\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}$
-for all $j=1,...,J$.
-
-Define 
+For simplicity, we write 
 \[
-\boldsymbol{\hat{m}}(\boldsymbol{\lambda})=\arg\min_{\boldsymbol{m}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\|_{2}^{2}\right)
+g(\cdot|\boldsymbol{\theta})=\sum_{i=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}^{(j)})
 \]
 
 
-By definition, we know that $\boldsymbol{\hat{m}}(\boldsymbol{\lambda}^{(2)})=\boldsymbol{1}$
-and $\boldsymbol{\hat{m}}(\boldsymbol{\lambda^{(1)}})=\boldsymbol{0}$.
+and
 
-\textbf{1. We calculate $\nabla_{\lambda}\boldsymbol{\hat{m}_{k}(\lambda)}$
+\[
+\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})=\left\{ \hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right\} _{j=1}^{J}
+\]
+
+
+\textbf{1. Calculate $\nabla_{\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})$
 using the implicit differentiation trick.}
 
 By the KKT conditions, we have for all $j=1:J$ 
-\begin{equation}
-\left.\frac{\partial}{\partial m_{j}}\left(\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+\lambda_{j}w\langle\boldsymbol{\beta}_{j},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\rangle\right|_{\boldsymbol{m}=\boldsymbol{\hat{m}}(\boldsymbol{\lambda})}=0
-\end{equation}
+\[
+\left.\nabla_{\theta^{(j)}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right)+\lambda_{j}w\boldsymbol{\theta}^{(j)}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}=0
+\]
 
 
-Now we implicitly differentiate with respect to $\lambda_{\ell}$
-for $\ell=1,2,...,J$
+Now we implicitly differentiate with respect to $\lambda$ 
 
 \[
-\frac{\partial}{\partial\lambda_{\ell}}\left\{ \left.\left[\frac{\partial}{\partial m_{j}}\left(\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+\lambda_{j}w\langle\boldsymbol{\beta}_{j},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j}\rangle\right]\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\right\} =0
+\nabla_{\lambda}\left\{ \left.\left[\nabla_{\theta^{(j)}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right)+\lambda_{j}w\boldsymbol{\theta}^{(j)}\right]\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0
 \]
 
 
 By the product rule and chain rule, we have 
 
 \begin{eqnarray*}
-\left.\left\{ \sum_{k=1}^{J}\left[\frac{\partial^{2}}{\partial m_{k}\partial m_{j}}\left(\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+1[k=j]\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)+1[k=j]\lambda_{j}w\|\boldsymbol{\beta}_{j}\|_{2}^{2}\right]\frac{\partial}{\partial\lambda_{\ell}}\hat{m}_{k}(\boldsymbol{\lambda})\right\} \right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\\
-+1[j=\ell]\left.\left\{ \frac{\partial}{\partial m}_{\ell}P_{\ell}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},\ell}+m_{\ell}\boldsymbol{\beta}_{\ell})+w\langle\boldsymbol{\beta}_{\ell},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},\ell}+m_{\ell}\boldsymbol{\beta}_{\ell}\rangle\right\} \right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})} & = & 0
+\left.\left\{ \sum_{k=1}^{J}\left[\nabla_{\boldsymbol{\theta}^{(k)}}\nabla_{\boldsymbol{\theta}^{(j)}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+1[k=j]\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right)+1[k=j]\lambda_{j}wI\right]\nabla_{\lambda}\hat{\boldsymbol{\theta}}^{(k)}(\boldsymbol{\lambda})\right\} +\left\{ \begin{array}{ccccccc}
+\vec{0} & ... & \vec{0} & \nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})+w\hat{\boldsymbol{\theta}}^{(j)} & \vec{0} & ... & \vec{0}\end{array}\right\} \right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)} & = & 0
 \end{eqnarray*}
 
 
 Define the following matrices 
 \begin{eqnarray*}
-S:S_{jk} & = & \left.\frac{\partial^{2}}{\partial m_{k}\partial m_{j}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}
+S:S_{jk} & = & \left.\nabla_{\boldsymbol{\theta}}^{2}\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
 \end{eqnarray*}
 
 
 \[
-D_{1}=\left.diag\left(\frac{\partial^{2}}{\partial m_{j}^{2}}\lambda_{j}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right)\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}
+D_{1}=\left.diag\left(\left\{ \nabla_{\boldsymbol{\theta}^{(j)}}^{2}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right\} _{j=1}^{J}\right)\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
 \]
 
 
 \[
-D_{2}=diag\left(\lambda_{j}w\|\boldsymbol{\beta}_{j}\|_{2}^{2}\right)
+D_{2}=diag\left(w\lambda_{j}I^{p_{j}\times p_{j}}\right)\mbox{ where }\theta^{(j)}\in\mathbb{R}^{p_{j}}
 \]
 
 
 \[
-D_{3}=\left.diag\left(\frac{\partial}{\partial m}_{\ell}P_{\ell}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},\ell}+m_{\ell}\boldsymbol{\beta}_{\ell})+w\langle\boldsymbol{\beta}_{\ell},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},\ell}+m_{\ell}\boldsymbol{\beta}_{\ell}\rangle\right)\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}
-\]
-
-
-\[
-M=\left(\begin{array}{cccc}
-\nabla_{\lambda}\hat{m}_{1}(\lambda) & \nabla_{\lambda}\hat{m}_{2}(\lambda) & ... & \nabla_{\lambda}\hat{m}_{J}(\lambda)\end{array}\right)
+M=\left.\left\{ \left[\begin{array}{c}
+\vec{0}\\
+\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})+w\boldsymbol{\theta}^{(j)}\\
+\vec{0}
+\end{array}\right]\right\} _{j=1}^{J}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\mbox{(stack side by side)}
 \]
 
 
 We can then combine all the equations into the following system of
 equations:
 \[
-M=-D_{3}\left(S+D_{1}+D_{2}\right)^{-1}
+\left(\begin{array}{cccc}
+\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{1}(\boldsymbol{\lambda}) & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{2}(\boldsymbol{\lambda}) & ... & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{p}(\boldsymbol{\lambda})\end{array}\right)=-M^{\top}\left(S+D_{1}+D_{2}\right)^{-1}
 \]
 
 
 $S$ is a PSD matrix since the composition of a convex function with
-an affine function is convex.
+an affine function is convex. $D_{1}$ is a PSD matrix since the penalty
+functions are convex.
 
-$D_{1}$ is a PSD matrix since the penalty functions are convex.
+\textbf{2. We bound every column in $M$}:
 
-\textbf{2. We bound every diagonal element in $D_{3}$}:
-
-By Cauchy-Schwarz, 
-\[
-\left|w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\rangle\right|\le w\|\boldsymbol{\beta}_{k}\|\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\|
-\]
-
-
-To bound $\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\|$,
-we use the definition of $\hat{m}_{k}(\boldsymbol{\lambda})$:
+Rearranging the KKT conditions, we have 
 \begin{eqnarray*}
- &  & \left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\right)+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\|^{2}\right)\\
- & \le & \frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\right)\\
- & = & \frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\right)+\sum_{j=1}^{J}(\lambda_{j}-\lambda_{j}^{(1)})\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\right)\\
- & \le & C+J\lambda_{max}\max_{j=1:J}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\right)
+\left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})+w\boldsymbol{\theta}^{(j)}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)} & = & \frac{1}{2\lambda_{j}}\left.\nabla_{\theta^{(j)}}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\\
+ & = & \frac{1}{\lambda_{j}}\left.\left\langle \nabla_{\theta^{(j)}}g_{j}(\cdot|\boldsymbol{\theta}^{(j)}),y-g(\cdot|\boldsymbol{\theta})\right\rangle _{T}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
 \end{eqnarray*}
 
 
-To bound the term $\max_{j=1:J}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\right)$,
-we use the basic inequality for $\hat{\boldsymbol{\theta}}_{\lambda^{(1)}}$:
+By the definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$,
+we have
 \begin{eqnarray*}
-\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\right) & \le & \frac{1}{2}\|y-\sum_{j=1}^{J}g(\cdot|\hat{\boldsymbol{\theta}}_{j}^{*})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\hat{\boldsymbol{\theta}}_{j}^{*})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{j}^{*}\|_{2}^{2}\right)\\
- & \le & C
+\frac{1}{2}\left\Vert y-g(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}\left(\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right)+\frac{w}{2}\|\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\|^{2}\right) & \le & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)\\
+ & = & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)\\
+ & = & C_{\theta^{*},\Lambda}
 \end{eqnarray*}
 
 
-Since 
+Hence
 \[
-\lambda_{min}\left(\max_{j=1:J}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\right)\le\sum_{j=1}^{J}\lambda_{j}^{(1)}\left(P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\right)
+\left\Vert y-g(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\le\sqrt{2C_{\theta^{*},\Lambda}}\mbox{ }
 \]
 
 
-then we have that
-\[
-\max_{j=1:J}P_{j}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j})+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}\|_{2}^{2}\le\frac{C}{\lambda_{min}}
-\]
-
-
-Therefore
-\[
-\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}\left(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\right)+\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+\hat{m}_{k}(\boldsymbol{\lambda})\boldsymbol{\beta}_{k}\|^{2}\right)\le\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)C
-\]
-
-
-This implies that
-\begin{equation}
-\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{\ell}\boldsymbol{\beta}_{k}\|\le\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}
-\end{equation}
-
-
-and
-\begin{equation}
-\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j})\right\Vert _{T}\le\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C}
-\end{equation}
-
-
-If combine the assumption (5) with (8), we get 
-\[
-\left|\frac{\partial}{\partial m}_{k}P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\le\|\boldsymbol{\beta}_{k}\|\left(K_{k}+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
-\]
-
-
-On the other hand, suppose the other assumption (6) is satisfied.
-Then we will need to use the implicit differentiation equation (7).
-Rearranging, we get
-
+Hence
 \begin{eqnarray*}
-\left.\frac{\partial}{\partial m_{k}}\left(P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})\right)\right|_{\boldsymbol{m}=\boldsymbol{\hat{m}}(\boldsymbol{\lambda})}+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle & = & \frac{1}{\lambda_{k}}\left\langle \left.\frac{\partial}{\partial m}g_{k}\left(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\right)\right|_{m=\hat{m}(\lambda)},y-\sum_{j=1}^{J}g_{j}(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+m_{j}\boldsymbol{\beta}_{j})\right\rangle _{T}\\
- & \le & \frac{1}{\lambda_{min}}K_{k}\|\boldsymbol{\beta}_{k}\|\left\Vert y-\sum_{j=1}^{J}g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}+\hat{m}_{j}(\boldsymbol{\lambda})\boldsymbol{\beta}_{j}\right)\right\Vert _{T}
+\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})+w\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{\lambda})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le & \left\Vert \frac{1}{\lambda_{j}}\left.\left\langle \nabla_{\theta^{(j)}}g_{j}(\cdot|\boldsymbol{\theta}^{(j)}),y-g(\cdot|\boldsymbol{\theta})\right\rangle \right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert \\
+ & \le & \frac{1}{\lambda_{min}n_{T}}\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}\left|y-g(x_{i}|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right|\\
+ & \le & \frac{1}{\lambda_{min}\sqrt{n_{T}}}\left\Vert y-g(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}\\
+ & \le & \frac{1}{\lambda_{min}\sqrt{n_{T}}}\sqrt{2C_{\theta^{*},\Lambda}}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}
 \end{eqnarray*}
 
 
-Plugging in (9), we get 
+In addition, since $g_{j}(\cdot|\boldsymbol{\theta}^{(j)})$ is $L$-Lipschitz
+with respect to $\|\cdot\|_{\infty}$, we have that 
 \[
-\left|\frac{\partial}{\partial m}_{k}P_{k}(\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k})+w\langle\boldsymbol{\beta}_{k},\hat{\boldsymbol{\theta}}_{\lambda^{(1)},k}+m_{k}\boldsymbol{\beta}_{k}\rangle\right|_{\boldsymbol{m}=\hat{\boldsymbol{m}}(\boldsymbol{\lambda})}\le\|\boldsymbol{\beta}_{k}\|\frac{1}{\lambda_{min}}K_{k}\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C}
+\left\Vert \nabla_{\theta^{(j)}}g_{j}(x|\boldsymbol{\theta}^{(j)})\right\Vert _{2}\le L\mbox{ }\forall x
 \]
 
 
-Using these upper bounds, we can bound $D_{3}$ by the diagonal matrix
-\[
-\left\{ \max_{k=1,...,J}d_{k}\right\} diag\left(\left\{ \|\beta_{k}\|\right\} _{k=1}^{J}\right)\succeq D_{3}
-\]
- 
-
-where for $k=1,...,J$
-\[
-d_{k}=\begin{cases}
-\left(K_{k}+w\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right) & \mbox{if assumption (5) holds for }k\\
-\frac{1}{\lambda_{min}}K_{k}\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)2C} & \mbox{if assumption (6) holds for }k
-\end{cases}
-\]
+Putting all of this together, we get that for all $j=1,...,J$
+\begin{eqnarray*}
+\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}+w\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{\lambda})\right\Vert  & \le & \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}
+\end{eqnarray*}
 
 
-\textbf{3. We bound the norm of $\nabla_{\lambda}\hat{m}_{k}(\lambda)$
+\textbf{3. We bound the norm of $\nabla_{\lambda_{k}}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
 for all $k=1,...,J$.}
 
-For every $k=1,...,J$, we have
-\begin{eqnarray}
-\|\nabla_{\lambda}\hat{m}_{k}(\lambda)\| & = & \|Me_{k}\|\nonumber \\
- & = & \|D_{3}\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\|\nonumber \\
- & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \left\Vert diag\left(\left\{ \|\beta\|_{k}\right\} _{k=1}^{J}\right)\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \nonumber \\
- & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \max_{\ell}\|\boldsymbol{\beta}_{\ell}\|\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \nonumber \\
- & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \max_{\ell}\|\boldsymbol{\beta}_{\ell}\|\left\Vert D_{2}^{-1}e_{k}\right\Vert 
-\end{eqnarray}
-
-
-The last line follows from the matrix inverse lemma: Since $S+D_{1}$
-is a PSD matrix, then 
-\[
-\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \le\left\Vert D_{2}^{-1}e_{k}\right\Vert 
-\]
-
-
-Now consider (8) for 
-\[
-k\coloneqq\ell_{max}=\arg\max_{\ell}\|\boldsymbol{\beta}_{\ell}\|
-\]
-
-
-(Notice we can choose any $k$ in $1,...,J$. The inequality holds
-for all k so we just choose the $k$ that is most interesting for
-our problem.)
-
-We have 
+For every $i=1,...,p$, we have
 \begin{eqnarray*}
-\|\nabla_{\lambda}\hat{m}_{\ell_{max}}(\lambda)\| & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \|\boldsymbol{\beta}_{\ell_{max}}\|\left\Vert D_{2}^{-1}e_{\ell_{max}}\right\Vert \\
- & = & \left\{ \max_{k=1,...,J}d_{k}\right\} \|\boldsymbol{\beta}_{\ell_{max}}\|\lambda_{\ell_{max}}^{-1}w^{-1}\|\boldsymbol{\beta}_{\ell_{max}}\|_{2}^{-2}\\
- & \le & \left\{ \max_{k=1,...,J}d_{k}\right\} \|\boldsymbol{\beta}_{\ell_{max}}\|^{-1}\lambda_{min}^{-1}w^{-1}
+\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\| & = & \|M^{\top}\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\|\\
+ & \le & \sum_{j=1}^{J}\|M_{j}\|_{2}\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}\right\Vert _{2}\\
+ & = & \sum_{j=1}^{J}\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}+w\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{\lambda})\right\Vert _{2}\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}\right\Vert _{2}\\
+ & \le & J\left(\frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}\right)\left(\frac{1}{w\lambda_{min}}\right)
 \end{eqnarray*}
 
 
-\textbf{4. Apply the Mean Value Theorem}
-
-Since the training criterion is smooth, then $\hat{m}_{\ell_{max}}(\lambda)$
-is a continuous, differentiable function.
-
-By the MVT, we have that there exists an $\alpha\in(0,1)$ such that
-\begin{eqnarray*}
-\left|\hat{m}_{\ell_{max}}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{\ell_{max}}(\boldsymbol{\lambda}^{(1)})\right| & = & \left|\left\langle \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)},\nabla_{\lambda}\hat{m}_{\ell_{max}}(\boldsymbol{\lambda})\right\rangle _{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda}^{(1)}+(1-\alpha)\boldsymbol{\lambda}^{(2)}}\right|\\
- & \le & \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left\{ \max_{k=1,...,J}d_{k}\right\} \lambda_{min}^{-1}w^{-1}\|\boldsymbol{\beta}_{\ell_{max}}\|^{-1}
-\end{eqnarray*}
-
-
-We know that $\hat{m}_{k}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{k}(\boldsymbol{\lambda}^{(1)})=\boldsymbol{1}$
-for all $k=1,..,J$. Rearranging the inequality above, we get
+Since the derivative of $\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})$
+is bounded, then  by Lemma 2 below, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
+must be Lipschitz:
 \[
-\max_{k}\|\boldsymbol{\theta}_{\lambda^{(1)},k}-\boldsymbol{\theta}_{\lambda^{(2)},k}\|=\|\boldsymbol{\beta}_{\ell_{max}}\|\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left\{ \max_{k=1,...,J}d_{k}\right\} \lambda_{min}^{-1}w^{-1}
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}
 \]
+
+
+\textbf{4. Put all the bounds together}
+
+Since each $g_{j}(\cdot|\boldsymbol{\theta}^{(j)})$ is Lipschitz
+in $\boldsymbol{\theta}^{(j)}$, then 
+\begin{eqnarray*}
+\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \sum_{j=1}^{J}\left\Vert g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty}\\
+ & \le & \sum_{j=1}^{J}L\|\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda^{(2)}})\|_{2}\\
+ & \le & L\sqrt{J}\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right\Vert _{2}\\
+ & \le & \frac{L^{2}J^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
 
 
 
@@ -995,5 +813,67 @@ have value at most 1. Therefore
 \begin{eqnarray*}
 \left\Vert \sum_{j=1}^{J}\hat{g}_{j}(x_{j}|\lambda^{(1)})-\hat{g}_{j}(x_{j}|\lambda^{(2)})\right\Vert _{\infty} & \le & \sqrt{B}\sum_{j=1}^{J}\left\Vert \hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}-\hat{\boldsymbol{\theta}}_{\lambda^{(2)},j}\right\Vert _{2}
 \end{eqnarray*}
+
+
+
+\section{Appendix}
+
+
+\subsubsection*{Lemma lipschitz iff bounded gradient}
+
+Suppose $g$ is convex in $\boldsymbol{\theta}$. 
+\[
+g(x|\boldsymbol{\theta})\mbox{ is }L\mbox{-Lipschitz}\implies\left\Vert \nabla_{\theta}g(x|\boldsymbol{\theta})\right\Vert _{2}\le\sqrt{p}L
+\]
+
+
+(The other direction can also be proved. https://homes.cs.washington.edu/\textasciitilde{}marcotcr/blog/lipschitz/)
+
+
+\subsubsection*{Proof}
+
+Let $\boldsymbol{\theta}^{'}-\boldsymbol{\theta}=\arg\max_{\boldsymbol{\beta}}\left\langle \nabla_{\theta}g(x|\boldsymbol{\theta})|_{\theta=\theta'},\boldsymbol{\beta}\right\rangle =\left\Vert \nabla_{\theta}g(x|\boldsymbol{\theta})|_{\theta=\theta'}\right\Vert _{2}$.
+
+Since $g$ is convex in $\theta$, then
+
+\begin{eqnarray*}
+g(x|\boldsymbol{\theta})-g(x|\boldsymbol{\theta}^{'}) & \ge & \left\langle \nabla_{\theta}g(x|\boldsymbol{\theta})|_{\theta=\theta'},\boldsymbol{\theta}^{'}-\boldsymbol{\theta}\right\rangle \\
+ & = & \left\Vert \nabla_{\theta}g(x|\boldsymbol{\theta})|_{\theta=\theta'}\right\Vert _{2}
+\end{eqnarray*}
+
+
+Also, by the Lipschitz assumption,
+\[
+\left|g(x|\boldsymbol{\theta})-g(x|\boldsymbol{\theta}^{'})\right|\le L\|\boldsymbol{\theta}^{'}-\boldsymbol{\theta}\|
+\]
+
+
+
+\subsubsection*{Lemma 2: Bounded gradient implies lipschitz}
+
+Suppose $\Lambda$ is a convex set. If $\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})|_{\lambda=\lambda'}\|\le B$
+at all $\boldsymbol{\lambda}'$ for all $i=1,...,J$ 
+
+Then for all $\boldsymbol{\lambda}\in\Lambda$, we have 
+\[
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert \le\sqrt{J}B\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|
+\]
+
+
+
+\subsubsection*{Proof}
+
+By the mean value theorem, there is some $\alpha\in(0,1)$ such that
+\begin{eqnarray*}
+\left|\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda}')\right| & = & \left|\left\langle \left.\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right|_{\lambda=\alpha\lambda+(1-\alpha)\lambda'},\boldsymbol{\lambda}-\boldsymbol{\lambda}'\right\rangle \right|\\
+ & \le & \max_{\lambda\in\Lambda}\|\nabla_{\boldsymbol{\lambda}}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\|\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|\\
+ & \le & B\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|
+\end{eqnarray*}
+
+
+Hence
+\[
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert \le\sqrt{J}B\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|
+\]
 
 \end{document}

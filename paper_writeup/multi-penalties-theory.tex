@@ -6,7 +6,7 @@
 \usepackage{natbib}
 \usepackage{url} % not crucial - just used below for the URL
 \usepackage{color}
-
+\usepackage{mathtools}
 
 %\pdfminorversion=4
 % NOTE: To produce blinded version, replace "0" with "1" below.
@@ -386,32 +386,7 @@ L_T(\boldsymbol{\theta} | \boldsymbol{\lambda})
 + \sum_{j=1}^J \lambda_j \frac{w}{2} \| \boldsymbol{\theta} \|^2
 \end{equation}
 %\textcolor{red}{Should we use a nonparametric example here? The ridge penalty is given with the norm $\|\cdot\|$ instead of $\|\cdot\|_V$. This difference might be confusing.}
-The ridge penalty is used in our proofs to ensure that the fitted functions are ``well-conditioned.'' In practice, $w$ can be chosen small enough such that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. Moreover, we can quantify how small $w$ needs to be. The following lemma considers smooth penalized regression problems; Lemma \ref{lemma:ridge_perturb_nonsmooth} extends it to certain non-smooth problems. (And we don't have anything for nonparametric problems right now)
-\begin{lemma}
-	\label{lemma:ridge_perturb_smooth}
-Let $L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$ be a training criterion where $\nabla^{2}L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$
-exists. Suppose $L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$ is $m$-strongly convex in $\boldsymbol{\theta}$:
-$$
-\nabla^{2}L_{T}(\boldsymbol{\theta})\succeq mI
-$$
-
-Let
-\begin{equation}
-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\theta}L_{T}(\boldsymbol{\theta})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}
-\end{equation}
-
-For any $w>0$, we have
-\begin{equation}
-\left \|
-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)
-\right \|_{2}	
-\le	
-2 \frac{w}{m} \left(\sum_{j=1}^{J}\lambda_{j}\right)
-\left \|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0) \right \|
-\end{equation} 
-
-\end{lemma}
-Thus we just need $w/m$ to be small. For example, $w$ and $m$ can shrink at the same polynomial rate in $n$ and the asymptotic convergence rates in Lemmas \ref{lemma:train_val_special} and \ref{lemma:kfold_special} remains unchanged.
+The ridge penalty is used in our proofs to ensure that the fitted functions are ``well-conditioned.'' In practice, $w$ can be chosen small enough such that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. In Lemma \ref{lemma:ridge_perturb_smooth}, we quantify how small $w$ needs to be. We find that $w$ often just needs to be polynomial in $n$, which means that the order of the convergence rate in Theorem \ref{thrm:train_val} and \ref{thrm:kfold} is unchanged.
 
 Throughout we presume that $\mathcal{G}$ is a convex function class.
 
@@ -425,37 +400,27 @@ g(\cdot | \boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)}) = \sum_{j=1
 where $\boldsymbol{\theta}^{(j)} \in \mathbb{R}^{p_j}$. The number of dimensions $p_j$ is allowed to grow with $n$, as commonly done in sieve estimation. We focus on estimators of the form
 \begin{equation}
 \label{eq:param_add_models_ridge}
-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) = \argmin_{\boldsymbol{\theta }^{(j)}\in \mathbb{R}^{p_j}} 
+\left \{ \hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}) \right \}_{j=1}^J = \argmin_{\boldsymbol{\theta }^{(j)}\in \mathbb{R}^{p_j}} 
 \left  \| y -  \sum_{j=1}^J g_j(X| \boldsymbol{\theta}^{(j)}) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2_2 \right )
 \end{equation}
-
-
-We show that $g(\cdot | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz with respect to $\|\cdot\|_\infty$, thereby satisfying both Theorems \ref{thrm:train_val} and \ref{thrm:kfold}. We will need the following condition.
-\begin{condition}
-	\label{condn:param}
-	There exist constants $L \ge 0$ such that the functions are $L$-Lipschitz in the model parameters with respect to $\| \cdot \|_\infty$:
-	\begin{equation}
-	\left \|g(\cdot|\boldsymbol{\theta}^{(1)})-g(\cdot|\boldsymbol{\theta}^{(2)})\right \|_{\infty}
-	\le L
-	\left \|\boldsymbol{\theta}^{(1)}-\boldsymbol{\theta}^{(2)} \right \|_{2} 
-	\quad \forall \enskip \boldsymbol{\theta}^{(1)}, \boldsymbol{\theta}^{(2)} \in \mathbb{R}^p
-	\end{equation}
-\end{condition}
-Many models satisfy this condition, assuming they are parameterized appropriately. For example, Condition \ref{condn:param2} is satisfied by linear regression when the covariates are bounded.
+We will show that $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is Lipschitz with respect to $\|\cdot\|_2$. So if $g_j(\cdot| \boldsymbol{\theta}^{(j)})$ is Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$, then both Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are satisfied.\footnote{Many popular estimators are Lipschitz since we usually construct the model by taking a linear combination of some basis functions.}
 
 \subsubsection{Parametric regression with smooth penalties}
-We begin with considering the case where all the penalty functions are smooth. The following section will generalize these result to include non-smooth penalty functions like the lasso and group lasso.
+We begin with the simple case where all the penalty functions are smooth. We later generalize these result to include non-smooth penalty functions like the lasso and group lasso.
 
-The following lemma states that 
+The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
 \begin{lemma}
-	\label{lemma:parametric}
-	Suppose Condition \ref{condn:param2} and \ref{condn:param1} are satisfied.
-	Suppose $\hat{\boldsymbol{\theta}}$ is defined by \eqref{eq:param_ridge}.
-	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
+	\label{lemma:param_add}
+	Define $\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda}\right )$ as in \eqref{eq:param_add_models_ridge}.
+	Suppose that for all $j=1,..,J$, $g_j(\cdot| \boldsymbol{\theta}^{(j)})$ are $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$.
+	
+	Let $\lambda_{\max} > \lambda_{\min} > 0 $.
+	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have for all $j = 1,...,J$
 	\[
 	\left \|
-	g \left (\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}) \right ) - g \left ( \cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}) \right )
+	g_j\left (\cdot \middle | \hat{\boldsymbol{\theta}}^{(j)} \left (\boldsymbol{\lambda}^{(1)} \right ) \right ) - 
+	g_j \left ( \cdot \middle | \hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda}^{(2)} \right ) \right )
 	\right \|_{\infty}
 	\le
 	\left \|
@@ -960,6 +925,32 @@ Sobolev penalty has nice properties
 \paragraph{Proof of Lemma \ref{lemma:sobolev}}
 
 \paragraph{Ridge Perturbations don't change the solution very much - nonsmooth}
+ The following lemma considers smooth penalized regression problems; Lemma \ref{lemma:ridge_perturb_nonsmooth} extends it to certain non-smooth problems. (And we don't have anything for nonparametric problems right now)
+ \begin{lemma}
+ 	\label{lemma:ridge_perturb_smooth}
+ 	Let $L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$ be a training criterion where $\nabla^{2}L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$
+ 	exists. Suppose $L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$ is $m$-strongly convex in $\boldsymbol{\theta}$:
+ 	$$
+ 	\nabla^{2}L_{T}(\boldsymbol{\theta})\succeq mI
+ 	$$
+ 	
+ 	Let
+ 	\begin{equation}
+ 	\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\theta}L_{T}(\boldsymbol{\theta})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}
+ 	\end{equation}
+ 	
+ 	For any $w>0$, we have
+ 	\begin{equation}
+ 	\left \|
+ 	\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)
+ 	\right \|_{2}	
+ 	\le	
+ 	2 \frac{w}{m} \left(\sum_{j=1}^{J}\lambda_{j}\right)
+ 	\left \|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0) \right \|
+ 	\end{equation} 
+ 	
+ \end{lemma}
+
 \begin{lemma}
 	\label{lemma:ridge_perturb_nonsmooth}
 	Fitted models are continuous in $w$.
