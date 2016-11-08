@@ -242,10 +242,11 @@ lambda2_range <- c(-9, -2)
 coarse_grid_interval <- 0.1
 fine_grid_interval <- 0.05
 n_sizes <- 20 * 2^seq(5, 0, by=-1)
-n_reps <- 10
-snr <- 6
+n_sizes <- floor(20 * 2^seq(7, 0, by=-0.2))
+n_reps <- 20
+snr <- 2 # 6
 
-cv_to_oracle_all <- lapply(n_sizes[length(n_sizes)], function(n_val) {
+cv_to_oracle_all <- lapply(n_sizes, function(n_val) {
     cv_to_oracle_ntrains <- lapply(n_trains, function(n_train){
         print(paste("train", n_train, "val", n_val))
         cv_oracle <- Do_bspline_cv_oracle_repl(
@@ -269,19 +270,38 @@ cv_to_oracle_all <- lapply(n_sizes[length(n_sizes)], function(n_val) {
     do.call("rbind", cv_to_oracle_ntrains)
 })
 cv_to_oracle_all <- do.call("rbind", cv_to_oracle_all)
-save(cv_to_oracle_all, file = "cv_to_oracle_all.RData")
+cv_to_oracle_not_tiny <- cv_to_oracle_all[cv_to_oracle_all$loss_diff_sq > 1e-10,]
+#save(cv_to_oracle_all, file = "cv_to_oracle_all.RData")
 cv_to_oracle_compare_w <- aggregate(loss_diff_sq ~ n, cv_to_oracle_all, FUN = mean)
 
 pdf('figures/validation_size_loss_diff.pdf', width=10, height=6)
 par(mar=c(5,5,1,1), mfrow=c(1,1))
 plot(
-    cv_to_oracle_compare_w$n,
-    cv_to_oracle_compare_w$loss_diff_sq,
-    type = "b",
+    cv_to_oracle_not_tiny$n,
+    cv_to_oracle_not_tiny$loss_diff_sq,
+    # type = "b",
     ylab="Validation Loss Diff",
     xlab="Validation Set Size",
+    cex=0.3,
     cex.axis=1.25,
-    cex.lab=1.25
+    cex.lab=1.25,
+    log="xy"
+)
+lm_data <- cv_to_oracle_not_tiny
+fit <- lm(log(loss_diff_sq) ~ log(n), lm_data)
+fit_summ <- summary(fit)
+lines(
+    lm_data$n,
+    exp(negligible_fit$fitted.values)
+)
+legend(
+    "bottomleft", 
+    legend=paste(
+        "Exponent:", 
+        format(fit$coefficients[2], digits=4), 
+        "+/-", 
+        format(1.96 * fit_summ$coefficients[2,2], digits=4)
+    )
 )
 dev.off()
 
@@ -289,10 +309,30 @@ cv_to_oracle_all_pos <- cv_to_oracle_all[cv_to_oracle_all$loss_diff_sq > 0,]
 
 cv_to_oracle_some <- cv_to_oracle_all_pos
 cv_to_oracle_compare_w_pos <- aggregate(loss_diff_sq ~ n, cv_to_oracle_some, FUN = mean)
+cv_to_oracle_max <- aggregate(loss_diff_sq ~ n, cv_to_oracle_some, FUN = max)
 cv_to_oracle_some <- merge(cv_to_oracle_compare_w_pos, cv_to_oracle_some, by="n")
 
-negligible_fit <- lm(log(loss_diff_sq.y) ~ log(n), cv_to_oracle_some)
+negligible_fit <- lm(log(loss_diff_sq.y) ~ log(n), cv_to_oracle_some[cv_to_oracle_some$n > 1500,])
 summary(negligible_fit)
 
 negligible_fit_big_errs <- lm(log(loss_diff_sq.y) ~ log(n), cv_to_oracle_some[cv_to_oracle_some$loss_diff_sq.x < cv_to_oracle_some$loss_diff_sq.y,])
 summary(negligible_fit_big_errs)
+
+fit_max <- lm(log(loss_diff_sq) ~ log(n), cv_to_oracle_max)
+summary(fit_max)
+
+# lambda differences
+lambda_data <- lm_data[lm_data$oracle_lams.Var1 != lm_data$cv_lams.Var1 & lm_data$n > 300,]
+lambda_data$lambda_diff_Var1 <- abs(log(lambda_data$oracle_lams.Var1/lambda_data$cv_lams.Var1))
+lambda_data$lambda_diff_Var2 <- abs(log(lambda_data$oracle_lams.Var2/lambda_data$cv_lams.Var2))
+lambda_fit_Var1 <- lm(pmax(lambda_diff_Var1, lambda_diff_Var2) ~ log(n), lambda_data)
+summary(lambda_fit_Var1)
+plot(
+    lambda_data$n,
+    pmax(lambda_data$lambda_diff_Var1, lambda_data$lambda_diff_Var2),
+    log="x"
+)
+lines(
+    lambda_data$n,
+    lambda_fit_Var1$fitted.values
+)

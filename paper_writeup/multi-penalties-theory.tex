@@ -132,14 +132,14 @@ The performance of cross-validation-like procedures is typically characterized b
 
 Despite the wealth of literature on cross-validation, there is very little work on characterizing the prediction error when the regularization method has multiple penalty parameters. A potential reason is that tuning multiple penalty parameters is computationally difficult; most regularization methods only have one or two tuning parameters (e.g. the Elastic Net and Sparse Group Lasso \citep{zou2003regression, simon2013sparse}). This computational hurdle has been addressed recently by using continuous optimization methods. For many penalized regression problems, the gradient of the validation loss with respect to the penalty parameters can be calculated using an implicit differentiation trick \citep{bengio2000gradient, foo2008efficient}. Thus a gradient descent procedure can be used to tune the penalty parameters. For more general ``hyperparameter selection'' problems, one can use a gradient-free approach such as Bayesian optimization \citet{snoek2012practical} or Nelder-Mead (CITE).
 
-This paper provides a finite-sample upper bound on the prediction error when multiple penalty parameters are tuned via a training/validation split or cross-validation. We establish an upper bound on the model error that depends on the oracle error and a near-parametric term. Roughly speaking, the additional price for not knowing the oracle penalty parameters is a parametric term. For semi- and non-parametric regression problems, this term is generally much smaller than the oracle error and do not affect the asymptotic convergence rate. In fact, in these cases, the number of penalty parameters can grow with the sample size. Our oracle inequalities depend on the assumption that the fitted models are smoothly parameterized by the penalty parameters. We will show that this smoothness assumption can be easily satisfied if we add a ridge penalty to the training criterion. 
+This paper provides a finite-sample upper bound on the prediction error when multiple penalty parameters are tuned via a training/validation split or cross-validation. We establish an upper bound on the model error that depends on the oracle error and a near-parametric term. Roughly speaking, the additional price for not knowing the oracle penalty parameters is a parametric term. For semi- and non-parametric regression problems, this term is generally much smaller than the oracle error and do not affect the asymptotic convergence rate. In fact, in these cases, the number of penalty parameters can grow with the sample size. Our oracle inequalities depend on the assumption that the fitted models are Lipschitz in the penalty parameters. We show that by training criteria with additional ridge penalties readily satisfy this smoothness assumption. We present additive models as an example.
 %The proofs rely on empirical process theory and the implicit differentiation trick in \citet{bengio2000gradient} and \citet{foo2008efficient}.
 
 Section \ref{sec:main_results} provides bounds on the prediction error for a training/validation framework and cross-validation.
-Section \ref{sec:examples} gives examples of penalized regression problems where the fitted models are smoothly parameterized by the penalty parameters.
+Section \ref{sec:examples} presents additive models as an example where the fitted models are Lipschitz in the penalty parameters.
 Section \ref{sec:simulations} provides a simulation study to support our theoretical results.
 Section \ref{sec:discussion} discusses our findings and potential future work.
-Section \ref{sec:proofs} contains the proofs and other technical details.
+Proofs are in Section \ref{sec:proofs}.
 
 \section{Main Result} \label{sec:main_results}
 
@@ -168,7 +168,7 @@ In the training/validation framework, we minimize the validation error by tuning
 \label{cv_lambda}
 \hat{\boldsymbol \lambda} = \arg\min_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}(\cdot | \boldsymbol \lambda) \right \|_{V}^{2}
 \end{equation}
-We are interested in comparing its performance to the oracle penalty parameters $\tilde{\boldsymbol \lambda}$, which minimizes the model error as follows
+We are interested in comparing its performance to the oracle penalty parameters $\tilde{\boldsymbol \lambda}$, which minimize the model error
 \begin{equation}
 \tilde{\boldsymbol \lambda} = \argmin_{\boldsymbol{\lambda} \in \Lambda} \frac{1}{2} \left \| g^* - \hat{g}(\cdot | \boldsymbol \lambda) \right \|^2_V
 \end{equation}
@@ -178,21 +178,19 @@ We will establish a sharp oracle inequality for the model over the observed cova
 \label{function_class_GT}
 \mathcal{G}(T) = \left \{ \hat{g}(\cdot | \boldsymbol \lambda) : \lambda \in \Lambda  \right \}
 \end{equation}
-From the definition of $\hat{\boldsymbol \lambda}$, we have
+From the definition of $\hat{\boldsymbol \lambda}$, we can bound the difference of the validation losses
 \begin{eqnarray}
 \label{basic_ineq}
-\left \|\hat{g}(\cdot | \hat{\boldsymbol \lambda}) - g^* \right \|_V^2
+\left \|\hat{g}(\cdot | \hat{\boldsymbol \lambda}) - g^* \right \|_V^2 - \left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|_V^2
 & \le &
-\left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|_V^2 +
 2 \left \langle \epsilon, \hat{g}(\cdot | \hat{\boldsymbol \lambda}) - \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) \right \rangle_V \\
 & \le &
-\left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|_V^2 +
 \sup_{g \in \mathcal{G}(T)} 2 \left \langle \epsilon, g - \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) \right \rangle_V
 \label{eq:basic_ineq_emp_process}
 \end{eqnarray}
-where $\langle h, \ell \rangle_V = \frac{1}{n_V}\sum_{i\in V} h(x_i) \ell(x_i)$. The first term in the upper bound is the best error achievable in the model class $\mathcal{G}(T)$. In this paper, the model class is pre-defined so this term can be treated as fixed. Our primary interest is bounding the second term, which is the supremum of empirical processes.
+where $\langle h, \ell \rangle_V = \frac{1}{n_V}\sum_{i\in V} h(x_i) \ell(x_i)$. Our goal is to bound this empirical process term with high probability.
 
-The supremum of empirical processes can be bounded using the complexity of the model class $\mathcal{G}(T)$. Complexity can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs}. For this paper, we mostly concern ourselves with Lipschitz functions.
+The supremum of empirical processes can be bounded using the complexity of the model class $\mathcal{G}(T)$. Complexity can be measured in a number of ways; we will use metric entropy in this paper. A more thorough review of empirical process theory is presented in Section \ref{sec:proofs} \textcolor{red}{(ha! if we have space)}. For this paper, we mostly concern ourselves with Lipschitz functions.
 \begin{definition}
 \label{def:smooth_funcs}
 A function $f(\cdot | \boldsymbol{\lambda})$ is $C$-Lipschitz with respect to norm $\| \cdot \|$ over $\Lambda$ if
@@ -207,18 +205,16 @@ C \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \|_2
 \end{definition}
 Function classes that satisfy \eqref{eq:smooth_funcs} have low metric entropy. Hence their empirical process terms are small with high probability.
 
-In the penalized regression setting, we are interested in bounding the metric entropy of $\mathcal{G}(T)$. It is clear that the fitted functions $\hat{g}(\cdot | \boldsymbol \lambda)$ are parameterized by $\boldsymbol \lambda$, but more work is required to show that they are Lipschitz. We defer that discussion to Section \ref{sec:examples}, where we provide examples of penalized regression problems that satisfy \ref{eq:smooth_funcs}.
+We are interested in bounding the metric entropy of $\mathcal{G}(T)$ to bound \eqref{eq:basic_ineq_emp_process}. $\mathcal{G}(T)$ is clearly a smaller class than $\mathcal{G}$ that is parametric in $\boldsymbol{\lambda}$, but more work needs to be done to show that the functions are Lipschitz in the penalty parameters. In Section \ref{sec:examples}, we present  penalized regression problems for additive models as one such example.
 
-We now present a sharp oracle inequality for the penalty parameters selected by a training/validation split. The result is a special case of Theorem \ref{train_val_thrm_complicated}.
+We now present a sharp oracle inequality for the penalty parameters selected by a training/validation split.
 
 
 \begin{theorem}
 \label{thrm:train_val}
-Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ are uniformly sub-Gaussian with parameter $b$. 
+Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $0 < \lambda_{\min} < \lambda_{\max}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ are uniformly sub-Gaussian with parameter $b$. Suppose there is a constant $\sigma > 0$ such that for any dataset with $\|\boldsymbol{\epsilon}\|_T \le \sigma$, $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
 
-Suppose there is a constant $C>0$ such that for any dataset with $\|\boldsymbol{\epsilon}\|_T \le \sigma$, $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
-
-There is a constant $c>0$ only depending on $b$ such that for all $\delta$ such that
+Then there is a constant $c>0$ only depending on $b$ such that for all $\delta$ such that
 \begin{equation}
 \delta^{2}
 \ge
@@ -230,7 +226,7 @@ c \left (
 \end{equation}
 where
 \begin{equation}
-\alpha_n = \sqrt{J \left (1 + \log\left ( 32Cn(\lambda_{\max} - \lambda_{\min}) \right ) \right )} \vee 1
+\alpha_n = \sqrt{J \left (1 + \log\left ( 32 C n(\lambda_{\max} - \lambda_{\min}) \right ) \right )} \vee 1
 \end{equation}
 we have
 \begin{eqnarray*}
@@ -248,8 +244,18 @@ we have
 
 \end{theorem}
 
-\textcolor{red}{This paragraph is confusing}
-Technically we would like to tune the penalty parameters over the entire range $\Lambda = \mathbb{R}^J_+$, but $\hat g(\cdot | \boldsymbol{\lambda})$ can be very ill-behaved under such general conditions. We can instead ensure that $\Lambda$ includes the penalty parameter
+The result is a special case of Theorem \ref{train_val_thrm_complicated}, which applies to general function classes that are not Lipschitz. For example, in other penalized regression examples, we will find that the fitted functions satisfy
+\begin{equation}
+\left \| f(\cdot | \boldsymbol \lambda_1) - f(\cdot | \boldsymbol \lambda_2) \right \|
+\le
+C \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \|_2^2
+\quad
+\forall \boldsymbol \lambda_1,\boldsymbol \lambda_2 \in \Lambda
+\label{eq:lipschitz_squared}
+\end{equation}
+Theorem \ref{train_val_thrm_complicated} shows that the convergence rate in this case is very similar to that in Theorem \ref{thrm:train_val}.
+
+We see in Theorem \ref{thrm:train_val} that the choice of $\lambda_{\min}$ and $\lambda_{\max}$ are important contributors to the convergence rate. Ideally we would want to choose $\Lambda = \mathbb{R}_+^{J}$, but $\hat g(\cdot | \boldsymbol{\lambda})$ can be very ill-behaved under such general conditions. Therefore $\Lambda$ is usually chosen to be just large enough so that it contains
 \begin{equation}
 \label{eq:true_oracle}
 \tilde{\boldsymbol{\lambda}}_{\mathbb{R}_+}
@@ -257,48 +263,43 @@ Technically we would like to tune the penalty parameters over the entire range $
 \end{equation}
 As shown in \citet{van2000empirical}, $\tilde{\boldsymbol{\lambda}}_{\mathbb{R}_+}$ shrinks at polynomial rate $O_p(n_T^{-\omega})$ for some $\omega>0$, so the lower limit of $\Lambda$ just needs to shrink at a faster polynomial rate.
 
-We will therefore apply Theorem \ref{thrm:train_val} the special case where the range of $\Lambda$ grows at a polynomial rate. Suppose $\Lambda = [n_T^{-t_{\min}},n^{t_{\max}}]^{J}$ for $t_{\min}, t_{\max} > 0$. In addition, we allow $\hat g(\cdot | \boldsymbol{\lambda})$ to be  $Cn^\kappa$-Lipschitz for some $\kappa \ge 0$, to cover the examples in Section \ref{sec:examples}. For ease of interpretation, we present the results in asymptotic notation this time:
+We now apply Theorem \ref{thrm:train_val} to this special case where $\lambda_{\min} = n_T^{-t_{\min}}$ and $\lambda_{\max} = n^{t_{\max}}$ for $0 < t_{\min} < t_{\max}$. In the examples in Section \ref{sec:examples}, the Lipschitz constant for $\hat g(\cdot | \boldsymbol{\lambda})$ turns out to be proportional to $\lambda_{\min}^{-1}$. Hence we also allow for $\hat g(\cdot | \boldsymbol{\lambda})$ to be  $Cn^\kappa$-Lipschitz for some $\kappa \ge 0$. For ease of interpretation, we present the results in asymptotic notation this time:
 
 \begin{lemma}
 	\label{lemma:train_val_special}
-	Let $\Lambda=[n_{V}^{-t_{min}},n_{V}^{t_{max}}]^{J}$. Suppose there is a constant $C>0$ such that for any dataset with $\|\boldsymbol{\epsilon}\|_T \le \sigma$, $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
+	Let $\Lambda=[n_{V}^{-t_{min}},n_{V}^{t_{max}}]^{J}$ where $0 < t_{\min} < t_{\max}$. Suppose for $\sigma >0$ such that for any dataset with $\|\boldsymbol{\epsilon}\|_T \le \sigma$, $\hat g (\cdot |\boldsymbol{\lambda} )$ is $C  n^{\kappa}$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
 	Then
 	\begin{eqnarray}
-	\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^2 \le 
-	&& \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert^2_{V} \label{eq:asym_train_val_theorem1} \\
-	&& + O_p \left(\frac{J\left (\left(t_{\max}+\kappa\right)\log n_T + \log (Cn) \right )}{n_{V}}\right) \label{eq:asym_train_val_theorem2} \\
+	\left\Vert \hat{g}(\cdot|\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^2 &\le& \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert^2_{V}\\
+	&& + O_p \left(\frac{J\alpha_n}{n_{V}}\right) \label{eq:asym_train_val_theorem1} \\
 	&& + O_p \left(
-	\left (
-	\frac{J\left (\left(t_{\max}+\kappa\right)\log n_T + \log (Cn) \right )}{n_{V}}
-	\right )^{1/2}
-	 \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}
+	\sqrt{\frac{J\alpha_n}{n_{V}}	
+	 \left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^2
+	}
 	 \right )
-	  \label{eq:asym_train_val_theorem3}
+	  \label{eq:asym_train_val_theorem2}
 	\end{eqnarray}
+	where
+	$$
+	\alpha_n = \left(t_{\max}+\kappa\right)\log n_T + \log (Cn)
+	$$
 \end{lemma}
-(Explain where $t_{\min}$ went)
+We see that the validation loss of the selected model is upper bounded by the oracle error and two remainder terms: a near-parametric term in \eqref{eq:asym_train_val_theorem1} and a geometric mean of the oracle error in \eqref{eq:asym_train_val_theorem2}. sThe appearance of a near-parametric term makes intuitive sense. We are trying to estimate the oracle penalty parameters using the validation set, which roughly corresponds to solving a parametric regression problem. The reason we refer to \eqref{eq:asym_train_val_theorem1} as near-parametric is that the convergence rate of a $J$-dimensional parametric regression problem is usually $(J/n)^{1/2}$ but \eqref{eq:asym_train_val_theorem1} has a $\log n$ term in the numerator. The $\log n$ term was introduced when we allowed the range of $\Lambda$ to grow with the sample size.
 
-From Lemma \ref{lemma:train_val_special}, we see that the model error is upper bounded by the oracle error and a two-part remainder term: a near-parametric term in \ref{eq:asym_train_val_theorem2} and a geometric mean of the oracle error and \ref{eq:asym_train_val_theorem2}.
-
-The appearance of a near-parametric term makes intuitive sense. We are trying to estimate the oracle penalty parameters using the validation set, which roughly corresponds to solving a parametric regression problem. The reason we refer to \ref{eq:asym_train_val_theorem2} as near-parametric is that the convergence rate of a $J$-dimensional parametric regression problem is usually $(J/n)^{1/2}$ but \ref{eq:asym_train_val_theorem2} has a $\log n$ term in the numerator. The $\log n$ term was introduced when we allowed the range of $\Lambda$ to grow with the sample size.
-
-However, the appearance of the geometric mean suggests that treating the problem of tuning penalty parameters as a parametric regression problem is an oversimplification. \textcolor{red}{noah says fix me} We are truly solving the bi-level optimization problem:
-\begin{eqnarray}
-\label{eq:bilevel}
-&& \hat{\boldsymbol \lambda} = \arg\min_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}(\cdot | \boldsymbol \lambda) \right \|_{V}^{2}\\
-\text{s.t. } && \hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{2} \left \|y -  g \right \|_T^2 + \sum_{j=1}^J \lambda_j P_j(g)
-\end{eqnarray}
-For example, if the lower level optimization problem is non-parametric, the upper level optimization problem isn't truly parametric.
-
-Now we consider the asymptotic behavior of model error. As long as the oracle error converges at a sub-parametric rate, the oracle error will dominate and the other two terms will be negligible. Therefore in these settings, we can actually allow the number of penalty parameters to grow with the sample size without affecting the asymptotic convergence rate. That is, we can allow the number of penalty parameters $J$ grow at the rate
+However, the geometric mean in \eqref{eq:asym_train_val_theorem2} suggests that treating the problem of tuning penalty parameters as a parametric regression problem is an oversimplification. The issue is that the model class $\mathcal{G}(T)$ does not contain the true model $g^*$. The bias term 
 \begin{equation}
-J = O_p\left (
-\frac{\left \| g^*-\hat{g}(\cdot | \tilde{\boldsymbol {\lambda}}) \right \|_{V}^{2}}
-{\left(\frac{J\left(1+t_{max}+\kappa\right)\log n_{V}}{n_{V}}\right)^{1/2}}
+\left\Vert \hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert^2_{V}
+\end{equation}
+not only specifies the minimum validation loss achievable, but it also appears in the convergence rate.
+
+Lemma \ref{lemma:train_val_special} shows that if the oracle error converges at a sub-parametric rate, the oracle error will dominate asymptotically and the two remainder terms will be negligible. In these settings, we can actually allow the number of penalty parameters $J$ to grow with the sample size without affecting the asymptotic convergence rate. The maximum rate $J$ can grow without affecting the asymptotic convergence rate is of the form
+\begin{equation}
+O_p\left (
+\frac{n_{V}}{\alpha_n}
+\left \| g^*-\hat{g}(\cdot | \tilde{\boldsymbol {\lambda}}) \right \|_{V}^2
 \right)
 \end{equation}
-\textcolor{red}{fix me}
-On the other hand, if the oracle error converges at a parametric rate, we have to keep the number of penalty parameters fixed.
+Of course if the oracle error converges at a parametric rate, we need to keep the number of penalty parameters fixed.
 
 \subsection{Cross-Validation}
 
@@ -376,22 +377,9 @@ The theorems and lemmas given in this section are all  finite-sample results. On
 \section{Examples: Additive Models}
 \label{sec:examples}
 
-Theorems \ref{thrm:train_val} and \ref{thrm:kfold} require the fitted functions $\hat{g}(\cdot | \boldsymbol{\lambda})$ to be Lipschitz when the norm of the error terms is bounded. We now show that additive models, in both the parametric and nonparametric setting, are $C$-Lipschitz:
-\begin{equation}
-\label{eq:lipschitz}
-	\left \|
-	\hat{g}\left (\cdot \middle | \boldsymbol{\lambda}^{(1)} \right ) - 
-	\hat{g}\left (\cdot \middle | \boldsymbol{\lambda}^{(2)} \right ) 
-	\right \|
-	\le
-	C
-	\left \|
-	\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)} 
-	\right \|_{2}
-	\quad
-	\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda
-\end{equation}
-Recall  that in Theorems \ref{thrm:train_val} and \ref{thrm:kfold}, the Lipschitz constant $C$ contributes a $\log C$ term in the convergence rate. Therefore the convergence rate is unchanged as long as $C$ is polynomial in $n$.
+Theorems \ref{thrm:train_val} and \ref{thrm:kfold} require the fitted functions $\hat{g}(\cdot | \boldsymbol{\lambda})$ to be Lipschitz when the norm of the error terms is bounded. As an example, we show that additive models are $C$-Lipschitz in the penalty parameters. We will start from the simple example of parametric models fitted with smooth penalty functions, then consider nonsmooth penalty functions, and finally generalize the results to nonparametric additive models. 
+
+Recall that in many cases, we will want the range of $\Lambda$ to grow at some polynomial rate in $n$. The convergence rates given in Lemmas \ref{lemma:train_val_special} and \ref{lemma:kfold_special} hold if the Lipschitz constant is polynomial in $n$. The following results indeed show that the fitted models are $Cn^\kappa$-Lipschitz for some $\kappa > 0$.
 
 For all the examples, we add a small ridge penalty to the original penalized training criterion (if there isn't one already). In the parametric setting, the perturbed training criterion will have the form
 \begin{equation}
@@ -406,12 +394,12 @@ P_j(\boldsymbol{\theta})
 The ridge penalty is used in our proofs to ensure that the fitted functions are ``well-conditioned.''
 In practice, $w$ can be chosen small enough such that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. We quantify in Lemma \ref{lemma:ridge_perturb_smooth} how small $w$ needs to be. For many problems, $w$ just needs to be polynomial in $n$. Since the Lipschitz constant $C$ in \eqref{eq:lipschitz_form} is usually polynomial in $w$, then $w$ contributes at most a $\log n$ term to the convergence rate in Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
 
-Finally, we note that additive models are not the only problems where the estimators are Lipschitz. In the Appendix, we show that regression problems where we fit a single model $g(\cdot | \boldsymbol{\theta})$ with multiple, individually-scaled penalties $P_j(\boldsymbol{\theta})$ also satisfies \eqref{eq:lipschitz}.
+Finally, we note that additive models are not the only problems where the estimators are smoothly parameterized by the penalty functions. In the Appendix, we show that regression problems where we fit a single model $g(\cdot | \boldsymbol{\theta})$ with multiple, individually-scaled penalties $P_j(\boldsymbol{\theta})$ satisfies \eqref{eq:lipschitz_squared}.
 
 \subsection{Parametric additive models}
 \label{sec:param_add_models}
 
-Our first example is penalized regression for parametric additive models, which can be written as
+We first consider parametric additive models of the form
 \begin{equation}
 g(\cdot | \boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)}) = \sum_{j=1}^J g_j(\cdot | \boldsymbol{\theta}^{(j)})
 \end{equation}
@@ -435,9 +423,7 @@ We will show the fitted models are Lipschitz in the penalty parameters with resp
 %\footnote{Many popular estimators are Lipschitz since we usually construct the model by taking a linear combination of some basis functions.}
 
 \subsubsection{Parametric regression with smooth penalties}
-We begin with the simple case where all the penalty functions are smooth. We later generalize the result to include non-smooth penalty functions like the lasso and group lasso.
-
-The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
+Suppose all the penalty functions are smooth. The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
 \begin{lemma}
 	\label{lemma:param_add}
 	Let 
@@ -525,7 +511,7 @@ For illustration, we present the proof for Lemma \ref{lemma:param_add} in the ca
 
 \subsubsection{Parametric regression with non-smooth penalties}
 
-If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless, we find that for many popular non-smooth penalty functions, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
+If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless we find that for many popular non-smooth penalty functions, such as the lasso (CITE) and group lasso (CITE), the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
 
 \begin{definition}
 	The differentiable space of a real-valued function $f$ at $\boldsymbol{\theta}$ is
@@ -535,7 +521,7 @@ If the regression problem contains non-smooth penalty functions, similar results
 \end{definition}
 
 \begin{definition}
-	$S$ is a local optimality space for a convex function $f(\cdot, \boldsymbol \lambda)$ over the (\textcolor{red}{open? closed?}) $W \subseteq \Lambda$ if for every $\boldsymbol \lambda \in W$,
+	$S$ is a local optimality space for a convex function $f(\cdot, \boldsymbol \lambda)$ over the $W$ if for every $\boldsymbol \lambda \in W$,
 	\begin{equation}
 	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} f(\boldsymbol{\theta}, \boldsymbol \lambda) =
 	\argmin_{\boldsymbol{\theta} \in S} f(\boldsymbol{\theta}, \boldsymbol \lambda)
@@ -564,8 +550,7 @@ We can now characterize a set $\Lambda_{smooth} \subseteq \Lambda$ over which th
 	Suppose the intersection $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap\Lambda_{smooth}^{C}$
 	is countable.
 \end{condition}
-
-Equipped with the conditions above, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the result is exactly the same as Lemma \ref{lemma:param_add}.
+In lasso and group lasso problems, it is hypothesized that almost every penalty parameter satisfies these properties. (CITE?) Equipped with these conditions, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the Lipschitz constant is exactly the same as that in Lemma \ref{lemma:param_add}.
 
 \begin{lemma}
 	\label{lemma:nonsmooth}
@@ -689,7 +674,7 @@ Equipped with the conditions above, we can characterize the smoothness of the fi
 \subsection{Nonparametric additive models}
 \label{sec:smoothness_validation}
 
-We now generalize the previous section to nonparametric additive models. We consider estimators of the form
+We now generalize the results to nonparametric additive models. We consider estimators of the form
 \begin{equation}
 \label{eq:train_crit_ridge}
 \left\{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J = \argmin_{g\in \mathcal{G}} \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T + \sum_{j=1}^J \lambda_j \left ( P_j(g_j) + \frac{w}{2} \| g_j \|^2_D \right )
@@ -729,7 +714,7 @@ where $P_j$ are now penalty functionals. Notice that the additional ridge penalt
 \begin{lemma}
 \label{lemma:nonparam_smooth}
 Let $\mathcal{G}$ be a convex function class. $\hat{g}_{j}(\cdot| \boldsymbol \lambda)$ is defined in \ref{eq:train_crit_ridge}.
-Suppose the penalty functions $P_{j}$ is twice Gateaux differentiable and convex over $\mathcal{G}$.
+Suppose the penalty functions $P_{j}$ are twice Gateaux differentiable and convex over $\mathcal{G}$.
 
 Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
 \begin{equation}
@@ -822,24 +807,24 @@ We now provide a simulation study for the prediction error bound given in Theore
 
 Observations were generated from the model
 \begin{equation}
-y = sin(x_1) + \frac{1}{2} sin(2 x_2 + 1) + \sigma \epsilon
+y = \exp(x_1) + x_2^2 + \sigma \epsilon
 \end{equation}
 \textcolor{red}{update simulation study}
 where $\epsilon \sim N(0,1)$ and $\sigma$ scaled the error term such that the signal to noise ratio was 2.
-The covariates $x_1$ and $x_2$ were uniformly distributed over the interval $(0,6)$.
+The covariates $x_1$ and $x_2$ were uniformly distributed over the interval $(-1, 1)$.
 
 We fit a smoothing splines using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. The training criterion was
 \begin{equation}
 \| y - f_1(x_1) - f_2(x_2) \|_T^2 + \lambda_1 \int_0^6 (f_1^{(2)}(x))^2 dx + \lambda_2 \int_0^6 (f_2^{(2)}(x))^2 dx
 \end{equation}
-The training set contained 100 samples and models were fitted with 10 knots. A grid search was performed over the penalty parameter values $\{10^{-6 + 0.2i}: i = 0, ..., 25 \}$. We tested 26 validation set sizes $n_V = \lfloor 5 * 1.25^{i} \rfloor $ for $i = 0, ..., 20$. The oracle penalty parameters were chosen by minimizing the difference between the fitted model and the true model over a separate test set of 800 samples. A total of 30 simulations were run for each validation set size.
+The training set contained 100 samples and models were fitted with 10 knots. A grid search was performed over the penalty parameter values $\{10^{-9 + 0.05i}: i = 0, ..., 140 \}$. We tested 36 validation set sizes $n_V = \lfloor 20 * 2^{i} \rfloor$ for equally log-spaced intervals from $i = 0$ to $i = 7$. A total of 20 simulations were run for each validation set size.
 
 Figure \ref{fig:emp_v_theory} plots the difference of between the model loss and the oracle loss
 $$
 \left \| \hat{g}(\cdot | \hat{\boldsymbol{\lambda}}) - g^* \right \|_V^2 - 
 \left \| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \right \|_V^2
 $$
-as the validation set size increases. As expected, it drops quickly.
+as the validation set size increases. The difference of the validation losses drops at a rate of about $n^{-1}$. This rate is in fact faster than that in Theorem \ref{thrm:train_val} since the geometric term seems to play no role. We conjecture that there may be additional regularity conditions that allow the geometric term to be completely discarded.
 
 %As stated in Lemma \ref{lemma:train_val_special}, the validation loss difference should be bounded by the sum of a near-parametric term \eqref{eq:asym_train_val_theorem2} and the geometric mean of the oracle error and the near-parametric term \eqref{eq:asym_train_val_theorem3}. To determine if \eqref{eq:asym_train_val_theorem3} is truly necessary, we compared the two linear regression models:
 %\begin{eqnarray}
@@ -862,7 +847,6 @@ as the validation set size increases. As expected, it drops quickly.
 %\includegraphics[height=80mm]{../R/figures/qqplot.pdf}
 \end{figure}
 
-Interestingly, Theorem \ref{thrm:train_val} states that the convergence rate should be a geometric mean of the near-parametric rate and the oracle rate. Since the oracle rate here is constant, we should be observing a convergence rate of $n_V^{-1/2}$. We in fact observe a convergence rate of $n_V^{-1}$. Our hypothesis that our convergence rate bounds are not tight. It is possible that problems like the Sobolev are well-behaved enough that the geometric term can be completely dropped.
 
 \section{Discussion}\label{sec:discussion}
 
@@ -873,9 +857,7 @@ There is recent interest in combining regularization methods, but seems to be an
 
 One major caveat to our results is that we have assumed that the penalty parameters can be tuned such that the validation loss is minimized. However it is difficult to find the global minimizer since the validation loss is not convex in the penalty parameters. Optimization methods need to be developed to effectively solve the bilevel optimization problems in \eqref{eq:bilevel}. In addition, it would be worthwhile to understand the performance of models that are only local minimizers of the validation loss.
 
-Finally, there are still many open questions to explore. Our results assume that the fitted models are smoothly parameterized with respect to the penalty parameters and we provide a number of examples that satisfy these conditions. There are probably many more examples of regression problems that satisfy the smoothness condition and the smoothness condition itself can probably be generalized.
-
-In addition, it would be interesting to bound the distance between the selected and oracle penalty parameters
+Finally, there are still many open questions to explore. Our results assume that the fitted models are smoothly parameterized with respect to the penalty parameters and we provide a number of examples that satisfy these conditions. There are probably many more examples of regression problems that satisfy the smoothness condition and the smoothness condition itself can probably be generalized. In addition, it would be interesting to bound the distance between the selected and oracle penalty parameters
 \begin{equation}
 \label{penalty_diff}
 \left \| \hat{\boldsymbol \lambda} - \tilde{\boldsymbol \lambda} \right \|_2
@@ -929,100 +911,48 @@ Then with high probability, we have
 Chaining and peeling.
 \end{proof}
 
-%In the penalized regression setting, each function $\hat{g}(\cdot |\boldsymbol \lambda)$ in $\mathcal{G}(T)$ directly maps to a set of penalty parameters, so one would expect that the covering number of $\mathcal{G}(T)$ and $\Lambda$ to be related. In Section \ref{sec:examples}, we show that $\hat{g}(\cdot | \boldsymbol \lambda)$ is smoothly parameterized by $\boldsymbol \lambda$ in many penalized regression problems. Using this result, we apply Theorem \ref{train_val_thrm_complicated} to the specific case of penalized regression to get Theorem \ref{thrm:train_val}.
-%
-%Note that the complexity term in the upper bound contains a $\log n_V$ term. This is the result of allowing the range of $\Lambda$ to increase at a polynomial rate in the validation set size $n_V$. (Perhaps we should be more explicit and just have $\lambda_{\min} $ and $\lambda_{\max}$)
 
 \paragraph{Proof of Theorem \ref{thrm:train_val}}
 
 \begin{proof}
-%By Lemma param\_covering\_cube, we have
-%\[
-%H(u,\mathcal{G}(T),\|\cdot\|_{V})\le\log\frac{1}{C_{J}}+J\log\left(\frac{2n^{t_{max}-\kappa}+2Cu}{Cu}\right)
-%\]
-%
-%
-%Let $R_{1}=R\wedge\sqrt{n^{t_{max}-\kappa}/C}$.
-%
-%Then after immense algebraic massaging, we get
-%\begin{equation}
-%\int_{0}^{R}H{}^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
-%\le
-%R\left(\left[\log\frac{1}{C_{J}}+J(2+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{2J\log\frac{1}{R}\vee0}\right)
-%\end{equation}
-%
-%We note since $\delta > \frac{1}{n_{V}}$ (modulo a constant), it suffices to choose $\delta$ such that
-%\[
-%\sqrt{n_{V}}\delta^{2}\ge c\left(\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}+\delta\right)\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
-%\]
-%
-%Let
-%\[
-%K=c\left(\left[\log\frac{1}{C_{J}}+J(1+\log4)+J\log\left(\frac{4n^{t_{max}-\kappa}}{C}\right)\right]^{1/2}+\sqrt{J\log n_{V}}\right)
-%\]
-%and
-%\[
-%\omega=\left\Vert \hat{g}_{\tilde{\lambda}}-g^{*}\right\Vert _{V}
-%\]
-%
-%The quadratic formula gives us that
-%\[
-%\delta\ge\frac{K+\sqrt{K^{2}+4K\omega\sqrt{n_{V}}}}{2\sqrt{n_{V}}}
-%\]
+
 \end{proof}
-
-
 
 \paragraph{Proof of Theorem \ref{thrm:kfold}}
 
+\paragraph{Ridge Perturbations don't change the solution very much - nonsmooth}
+The following lemma considers smooth penalized regression problems; Lemma \ref{lemma:ridge_perturb_nonsmooth} extends it to certain non-smooth problems. (And we don't have anything for nonparametric problems right now)
 \begin{lemma}
-\label{oracle_maintained}
-The oracle rate isn't changed when we add the ridge penalty
+	\label{lemma:ridge_perturb_smooth}
+	Let $L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$ be a training criterion where $\nabla^{2}L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$
+	exists. Suppose $L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$ is $m$-strongly convex in $\boldsymbol{\theta}$:
+	$$
+	\nabla^{2}L_{T}(\boldsymbol{\theta})\succeq mI
+	$$
+	
+	Let
+	\begin{equation}
+	\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\theta}L_{T}(\boldsymbol{\theta})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}
+	\end{equation}
+	
+	For any $w>0$, we have
+	\begin{equation}
+	\left \|
+	\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)
+	\right \|_{2}	
+	\le	
+	2 \frac{w}{m} \left(\sum_{j=1}^{J}\lambda_{j}\right)
+	\left \|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0) \right \|
+	\end{equation} 
+	
 \end{lemma}
 
-\paragraph{Proof of Lemma \ref{lemma:nonparam_smooth}}
+\paragraph{Proof of Lemma \ref{lemma:param_add}}
+
 \paragraph{Proof of Lemma \ref{lemma:nonsmooth}}
 
-\paragraph{Proof of Lemma \ref{lemma:parametric}}
+\paragraph{Proof of Lemma \ref{lemma:nonparam_smooth}}
 
-\begin{lemma}
-\label{lemma:sobolev_prop}
-Sobolev penalty has nice properties
-\end{lemma}
-
-\paragraph{Proof of Lemma \ref{lemma:sobolev}}
-
-\paragraph{Ridge Perturbations don't change the solution very much - nonsmooth}
- The following lemma considers smooth penalized regression problems; Lemma \ref{lemma:ridge_perturb_nonsmooth} extends it to certain non-smooth problems. (And we don't have anything for nonparametric problems right now)
- \begin{lemma}
- 	\label{lemma:ridge_perturb_smooth}
- 	Let $L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$ be a training criterion where $\nabla^{2}L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$
- 	exists. Suppose $L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$ is $m$-strongly convex in $\boldsymbol{\theta}$:
- 	$$
- 	\nabla^{2}L_{T}(\boldsymbol{\theta})\succeq mI
- 	$$
- 	
- 	Let
- 	\begin{equation}
- 	\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\theta}L_{T}(\boldsymbol{\theta})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}
- 	\end{equation}
- 	
- 	For any $w>0$, we have
- 	\begin{equation}
- 	\left \|
- 	\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)
- 	\right \|_{2}	
- 	\le	
- 	2 \frac{w}{m} \left(\sum_{j=1}^{J}\lambda_{j}\right)
- 	\left \|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0) \right \|
- 	\end{equation} 
- 	
- \end{lemma}
-
-\begin{lemma}
-	\label{lemma:ridge_perturb_nonsmooth}
-	Fitted models are continuous in $w$.
-\end{lemma}
 
 \bigskip
 
