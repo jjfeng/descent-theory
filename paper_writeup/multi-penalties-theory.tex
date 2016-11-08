@@ -373,405 +373,471 @@ Lemmas \ref{lemma:kfold_special} and \ref{lemma:train_val_special} are quite sim
 
 The theorems and lemmas given in this section are all  finite-sample results. One could try to minimize the upper bound by increasing the number of penalty parameters or changing the ratio between the training and validation set sizes. Determining the optimal number of penalty parameters will unfortunately require knowing characteristics about the error variables $\epsilon$. (Perhaps you can use cross-validation to determine the number of penalty parameters to use. Ha! How meta!)
 
-\section{Satisfying the Lipschitz condition}
+\section{Examples: Additive Models}
 \label{sec:examples}
 
-Theorems \ref{thrm:train_val} and \ref{thrm:kfold} require the fitted functions $\hat{g}(\cdot | \boldsymbol{\lambda})$ to be Lipschitz when the norm of the error terms is bounded. We now present examples of penalized regression problems that satisfy these conditions.
-%Since Theorem \ref{thrm:kfold} has a stricter Lipschitz condition, any example satisfying the Lipschitz condition for Theorem \ref{thrm:kfold} will also satisfy that for Theorem \ref{thrm:train_val}.
-
-In all the examples, we add a small ridge penalty to the original penalized training criterion (if there isn't one already). For instance, if $L_T(\boldsymbol{\theta} | \boldsymbol{\lambda})$ is the original parametric training criterion, we consider models of the form
+Theorems \ref{thrm:train_val} and \ref{thrm:kfold} require the fitted functions $\hat{g}(\cdot | \boldsymbol{\lambda})$ to be Lipschitz when the norm of the error terms is bounded. We now show that additive models, in both the parametric and nonparametric setting, are $C$-Lipschitz:
 \begin{equation}
-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | w) = \argmin_{\theta \in \mathbb{R}^p} 
-L_T(\boldsymbol{\theta} | \boldsymbol{\lambda})
-+ \sum_{j=1}^J \lambda_j \frac{w}{2} \| \boldsymbol{\theta} \|^2
+\label{eq:lipschitz}
+	\left \|
+	\hat{g}\left (\cdot \middle | \boldsymbol{\lambda}^{(1)} \right ) - 
+	\hat{g}\left (\cdot \middle | \boldsymbol{\lambda}^{(2)} \right ) 
+	\right \|
+	\le
+	C
+	\left \|
+	\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)} 
+	\right \|_{2}
+	\quad
+	\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda
 \end{equation}
-%\textcolor{red}{Should we use a nonparametric example here? The ridge penalty is given with the norm $\|\cdot\|$ instead of $\|\cdot\|_V$. This difference might be confusing.}
-The ridge penalty is used in our proofs to ensure that the fitted functions are ``well-conditioned.'' In practice, $w$ can be chosen small enough such that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. In Lemma \ref{lemma:ridge_perturb_smooth}, we quantify how small $w$ needs to be. We find that $w$ often just needs to be polynomial in $n$, which means that the order of the convergence rate in Theorem \ref{thrm:train_val} and \ref{thrm:kfold} is unchanged.
+Recall  that in Theorems \ref{thrm:train_val} and \ref{thrm:kfold}, the Lipschitz constant $C$ contributes a $\log C$ term in the convergence rate. Therefore the convergence rate is unchanged as long as $C$ is polynomial in $n$.
 
-Throughout we presume that $\mathcal{G}$ is a convex function class.
+For all the examples, we add a small ridge penalty to the original penalized training criterion (if there isn't one already). In the parametric setting, the perturbed training criterion will have the form
+\begin{equation}
+\label{eq:lipschitz_form}
+\| y - \sum_{j=1}^J g_j(\cdot | \boldsymbol{\theta}^{(j)}) \|_T^2
++ \sum_{j=1}^J 
+\lambda_j 
+P_j(\boldsymbol{\theta})
++ 
+\underbrace{\sum_{j=1}^J  \lambda_j  \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2}_{\text{Ridge Penalty}}
+\end{equation}
+The ridge penalty is used in our proofs to ensure that the fitted functions are ``well-conditioned.''
+In practice, $w$ can be chosen small enough such that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. We quantify in Lemma \ref{lemma:ridge_perturb_smooth} how small $w$ needs to be. For many problems, $w$ just needs to be polynomial in $n$. Since the Lipschitz constant $C$ in \eqref{eq:lipschitz_form} is usually polynomial in $w$, then $w$ contributes at most a $\log n$ term to the convergence rate in Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
+
+Finally, we note that additive models are not the only problems where the estimators are Lipschitz. In the Appendix, we show that regression problems where we fit a single model $g(\cdot | \boldsymbol{\theta})$ with multiple, individually-scaled penalties $P_j(\boldsymbol{\theta})$ also satisfies \eqref{eq:lipschitz}.
 
 \subsection{Parametric additive models}
 \label{sec:param_add_models}
 
-Our first example is penalized regression for parametric additive models
+Our first example is penalized regression for parametric additive models, which can be written as
 \begin{equation}
 g(\cdot | \boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)}) = \sum_{j=1}^J g_j(\cdot | \boldsymbol{\theta}^{(j)})
 \end{equation}
-where $\boldsymbol{\theta}^{(j)} \in \mathbb{R}^{p_j}$. The number of dimensions $p_j$ is allowed to grow with $n$, as commonly done in sieve estimation. We focus on estimators of the form
+where $\boldsymbol{\theta}^{(j)} \in \mathbb{R}^{p_j}$ and $p = \sum_{j=1}^J p_j$. For simplicity, let $\boldsymbol{\theta} = \left (\boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)} \right )^\top$. Let $\boldsymbol{\theta}^*$ be the true model parameter. The number of dimensions $p_j$ is allowed to grow with $n$, as commonly done in sieve estimation. 
+
+We consider training criteria of the form
 \begin{equation}
-\label{eq:param_add_models_ridge}
-\left \{ \hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}) \right \}_{j=1}^J = \argmin_{\boldsymbol{\theta }^{(j)}\in \mathbb{R}^{p_j}} 
-\left  \| y -  \sum_{j=1}^J g_j(X| \boldsymbol{\theta}^{(j)}) \right \|^2_T 
+\label{eq:param_add}
+L_T \left (y, \boldsymbol{\theta} | \boldsymbol{\lambda} \right) 
+\coloneqq \frac{1}{2} \left  \| y -  \sum_{j=1}^J g_j(X| \boldsymbol{\theta}^{(j)}) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2_2 \right )
 \end{equation}
-We will show that $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is Lipschitz with respect to $\|\cdot\|_2$. So if $g_j(\cdot| \boldsymbol{\theta}^{(j)})$ is Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$, then both Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are satisfied.\footnote{Many popular estimators are Lipschitz since we usually construct the model by taking a linear combination of some basis functions.}
+%\begin{equation}
+%\label{eq:param_add_models_ridge}
+%\left \{ \hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}) \right \}_{j=1}^J = \argmin_{\boldsymbol{\theta }^{(j)}\in \mathbb{R}^{p_j}} 
+%\frac{1}{2} \left  \| y -  \sum_{j=1}^J g_j(X| \boldsymbol{\theta}^{(j)}) \right \|^2_T 
+%+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2_2 \right )
+%\end{equation}
+We will show the fitted models are Lipschitz in the penalty parameters with respect to $\| \cdot \|_\infty$, which satisfies the condition in both Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
+
+%\footnote{Many popular estimators are Lipschitz since we usually construct the model by taking a linear combination of some basis functions.}
 
 \subsubsection{Parametric regression with smooth penalties}
-We begin with the simple case where all the penalty functions are smooth. We later generalize these result to include non-smooth penalty functions like the lasso and group lasso.
+We begin with the simple case where all the penalty functions are smooth. We later generalize the result to include non-smooth penalty functions like the lasso and group lasso.
 
 The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
 \begin{lemma}
 	\label{lemma:param_add}
-	Define $\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda}\right )$ as in \eqref{eq:param_add_models_ridge}.
-	Suppose that for all $j=1,..,J$, $g_j(\cdot| \boldsymbol{\theta}^{(j)})$ are $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$.
+	Let 
+	\begin{equation}
+	\label{eq:param_add_estimator}
+	\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda}\right )  = 
+	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} L_T \left (y, \boldsymbol{\theta} | \boldsymbol{\lambda} \right )
+	\end{equation}
+	where $L_T$ is defined in \eqref{eq:param_add}
 	
-	Let $\lambda_{\max} > \lambda_{\min} > 0 $.
-	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have for all $j = 1,...,J$
-	\[
-	\left \|
-	g_j\left (\cdot \middle | \hat{\boldsymbol{\theta}}^{(j)} \left (\boldsymbol{\lambda}^{(1)} \right ) \right ) - 
-	g_j \left ( \cdot \middle | \hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda}^{(2)} \right ) \right )
-	\right \|_{\infty}
+	Suppose that $g_j(\cdot| \boldsymbol{\theta}^{(j)})$ are $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
+	
+	Suppose $P_j(\boldsymbol{\theta})$ and $g_j(\cdot| \boldsymbol{\theta})$ are twice-differentiable and convex with respect to $\boldsymbol{\theta}^{(j)}$ for all $j=1,..,J$. Suppose $L_T\left (y, \boldsymbol{\theta} | \boldsymbol{\lambda} \right )$ is twice-differentiable and convex with respect to $\boldsymbol{\theta}$.
+	
+	Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
+	\begin{equation}
+	C_{\theta^{*},\Lambda}=
+	\frac{1}{2}\left\Vert y- g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}
+	+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)
+	\end{equation}
+	
+	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have
+	\begin{equation}
+	\label{eq:param_add_lipschitz}
+	\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty}
 	\le
-	\left \|
-	\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)} 
-	\right \|_{2}
-	stuff
-	\]
+	\frac{L^{2}J^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}
+	\left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|
+	\end{equation}
 \end{lemma}
 
-Now we provide an outline of the proof.
+The proofs for all the examples follow a similar recipe. We determine the gradient of the fitted model with respect to the penalty parameter vector by implicitly differentiating the KKT conditions. We can then bound the norm of the gradient to get the Lipschitz constant.
 
-\subsection{Parametric models general}
-\label{sec:smoothness_domain}
+% In the case of the parametric setting, we are interested in  $\nabla_{\boldsymbol{\lambda}} \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$. In the nonparametric setting, we determine the gradient of the fitted values at the observed covariates with respect to $\boldsymbol{\lambda}$. 
+% By implicit differentiation of the KKT conditions, we can then determine how the fitted models change with respect to the penalty parameters. Finally, the difference $\| \hat{g}(\cdot | \boldsymbol \lambda^{(1)}) -  \hat{g}(\cdot | \boldsymbol \lambda^{(2)}) \|$ is bounded using the mean value theorem.
 
-Our first example is penalized regression for parametric models $g(\cdot | \boldsymbol{\theta})$ where $\boldsymbol{\theta} \in \mathbb{R}^p$. The number of dimensions $p$ is allowed to grow with $n$, as commonly done in sieve estimation. We focus on estimators of the form
-\begin{equation}
-\label{eq:param_ridge}
-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) = \argmin_{\boldsymbol{\theta }\in \mathbb{R}^p} 
-\left  \| y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
-+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}) + \frac{w}{2} \| \boldsymbol{\theta} \|^2_2 \right )
-\end{equation}
-We show that $g(\cdot | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz with respect to $\|\cdot\|_\infty$, thereby satisfying both Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
+For illustration, we present the proof for Lemma \ref{lemma:param_add} in the case where there is only one penalty parameter. The case with multiple penalty parameters is given in Section \ref{sec:proofs}.
 
-\subsubsection{Parametric regression with smooth penalties}
-We begin with considering the case where all the penalty functions are smooth. The following section will generalize these result to include non-smooth penalty functions like the lasso and group lasso.
-
-To show that $g(\cdot | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz, we will need the model class and the penalty functions to be well-behaved. Our results rely on the following two conditions.
-\begin{condition}
-	\label{condn:param2}
-	There exist constants $L, r \ge 0$ such that the functions are $Lp^r$-Lipschitz in the model parameters with respect to $\| \cdot \|_\infty$:
-	\begin{equation}
-	\left \|g(\cdot|\boldsymbol{\theta}^{(1)})-g(\cdot|\boldsymbol{\theta}^{(2)})\right \|_{\infty}
-	\le Lp^{r}
-	\left \|\boldsymbol{\theta}^{(1)}-\boldsymbol{\theta}^{(2)} \right \|_{2} 
-	\quad \forall \enskip \boldsymbol{\theta}^{(1)}, \boldsymbol{\theta}^{(2)} \in \mathbb{R}^p
-	\end{equation}
-\end{condition}
-
-\begin{condition}
-	\label{condn:param1}
-	There exists some constant $K$ such that for penalty function $P_j$ for all $j=1,...,j$,
-	\begin{equation}
-	\left | \frac{d}{d m}P_j(\boldsymbol{\theta} + m \boldsymbol{\beta}) \right |_{m = m'} \le K \|\boldsymbol{\beta}\|_{2}
-	\end{equation}
-	for any $\boldsymbol{\theta}, \boldsymbol{\beta} \in \mathbb{R}^p$ and $m' \in \mathbb{R}$.
-\end{condition}
-
-Condition \ref{condn:param2} requires that the Lipschitz constant grows no faster than a polynomial rate in the number of features. Many models satisfy this condition, assuming they are parameterized appropriately. For example, Condition \ref{condn:param2} is satisfied by linear regression when the covariates are bounded.
-
-It is easy to show that Condition \ref{condn:param1} is satisfied by many popular parametric penalties, such as the ridge penalty $\| \cdot \|_2^2$, lasso $\| \cdot \|_1$, and group lasso $\| \cdot \|_2$. (Proofs are given in Section \ref{sec:proofs}, if you insist.) 
-
-The following lemma states that the fitted models are Lipschitz by the penalty parameters.
-\begin{lemma}
-	\label{lemma:parametric}
-	Suppose Condition \ref{condn:param2} and \ref{condn:param1} are satisfied.
-	Suppose $\hat{\boldsymbol{\theta}}$ is defined by \eqref{eq:param_ridge}.
-	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
+\begin{proof}[Proof of Lemma \ref{lemma:param_add}]
+	\textcolor{red}{fix me if we still want this here}
+	
+	By the KKT conditions, we have
 	\[
-	\left \|
-	g \left (\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}) \right ) - g \left ( \cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}) \right )
-	\right \|_{\infty}
-	\le
-	\left \|
-	\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)} 
-	\right \|_{2}
-	stuff
+	\langle y-g\left( \boldsymbol{\theta} \right ),\nabla_{\boldsymbol{\theta}} g\left( \boldsymbol{\theta} \right ) \rangle_{T}
+	+ \lambda \nabla_{\boldsymbol{\theta}} P(\boldsymbol{\theta})
+	+\lambda w \boldsymbol{\theta} =\boldsymbol{0}
 	\]
-\end{lemma}
+	
+	
+	Its implicit derivative with respect to $\lambda$ is
+	\begin{equation}
+	\nabla_{\lambda} \boldsymbol{\theta}  =
+	\left ( 
+	\| h\|_{T}^2 +\lambda\frac{\partial^{2}}{\partial m^{2}}P(g+mh) +\lambda w\|h\|_{D}^{2} 
+	\right )^{-1}
+	\left ( \frac{\partial}{\partial m}P(g+mh)+w\langle h,g+mh\rangle_{D} \right )
+	\end{equation}
+	
+%	By the KKT conditions and the definitions of $\hat{m}(\lambda)$, e can show
+%	\[
+%	\left | \frac{\partial}{\partial m}P(g+mh) \right |_{m = \hat{m}(\lambda)}  \le
+%	C \|h\|_{D}
+%	\]
+%	and
+%	$$
+%	\left . w\langle h,g+mh\rangle_{D} \right |_{m = \hat{m}(\lambda)} \le C \|h\|_{D}
+%	$$
+%	for some constant $C$.
+%	Hence
+%	\[
+%	\left|\frac{\partial}{\partial\lambda}\hat{m}(\lambda)\right| \le
+%	2C (\lambda_{\min}w)^{-1}\|h\|_{D}^{-1}
+%	\]
+%	
+%	By the MVT, there is some $\alpha\in (\lambda^{(1)},\lambda^{(2)})$ such that
+%	\begin{eqnarray*}
+%		\left|\hat{m}(\lambda^{(2)})-\hat{m}(\lambda^{(1)})\right| & = &
+%		\left|\left ( \lambda^{(2)}-\lambda^{(1)} \right )
+%		\left . \frac{\partial \hat{m}(\lambda) }{\partial\lambda}\right |_{\lambda=\alpha} \right|\\
+%		& \le & |\lambda^{(2)}-\lambda^{(1)}|
+%		2C (\lambda_{\min}w)^{-1}\|h\|_{D}^{-1}
+%	\end{eqnarray*}
+\textcolor{red}{finish proof}
+\end{proof}
 
-Now we provide an outline of the proof.
-
-\subsubsection{Nonsmooth penalties}\label{sec:nonsmooth}
+\subsubsection{Parametric regression with non-smooth penalties}
 
 If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless, we find that for many popular non-smooth penalty functions, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
 
 \begin{definition}
-	The differentiable space of a real-valued function $L$ at $\boldsymbol{\theta}$ is the set of functions
+	The differentiable space of a real-valued function $f$ at $\boldsymbol{\theta}$ is
 	\begin{equation}
-	\Omega^{L}(\boldsymbol{\theta}) = \left \{ \boldsymbol{\beta} \middle | \lim_{\epsilon \rightarrow 0} \frac{L(\boldsymbol{\theta} + \epsilon \boldsymbol{\beta}) - L(\boldsymbol{\theta})}{\epsilon} \text{ exists } \right \}
+	\Omega^{f}(\boldsymbol{\theta}) = \left \{ \boldsymbol{\beta} \middle | \lim_{\epsilon \rightarrow 0} \frac{f(\boldsymbol{\theta} + \epsilon \boldsymbol{\beta}) - f(\boldsymbol{\theta})}{\epsilon} \text{ exists } \right \}
 	\end{equation}
 \end{definition}
 
 \begin{definition}
-	$S$ is a local optimality space for a convex function $L(\cdot, \boldsymbol \lambda_0)$ if there exists a neighborhood $W$ containing $\boldsymbol \lambda_0$ such that for every $\boldsymbol \lambda \in W$,
+	$S$ is a local optimality space for a convex function $f(\cdot, \boldsymbol \lambda)$ over the (\textcolor{red}{open? closed?}) $W \subseteq \Lambda$ if for every $\boldsymbol \lambda \in W$,
 	\begin{equation}
-	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} L(\boldsymbol{\theta}, \boldsymbol \lambda) =
-	\argmin_{\boldsymbol{\theta} \in S} L(\boldsymbol{\theta}, \boldsymbol \lambda)
+	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} f(\boldsymbol{\theta}, \boldsymbol \lambda) =
+	\argmin_{\boldsymbol{\theta} \in S} f(\boldsymbol{\theta}, \boldsymbol \lambda)
 	\end{equation}
 \end{definition}
 
-We now use these definitions to state the conditions that guarantee that the fitted functions are still smoothly parameterized by the penalty parameters.
-Let the training criterion be denoted
-\begin{eqnarray*}
-	L_T(\boldsymbol{\theta}, \boldsymbol{\lambda}) &=& \argmin_{g\in \mathcal{G}} 
-	\left \| \boldsymbol y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
-	+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}) + \frac{w}{2} \| \boldsymbol{\theta} \|^2_D \right )
-\end{eqnarray*}
+We can now characterize a set $\Lambda_{smooth} \subseteq \Lambda$ over which the fitted functions are well-behaved. $\Lambda_{smooth}$ must satisfy the following conditions:
 
-We will need following conditions to hold for almost every $\boldsymbol{\lambda} \in \Lambda$:
+%There must exist a set $\Lambda_{smooth} \subseteq \Lambda$ where $\mu(\Lambda \setminus \Lambda_C) = 0$ \textcolor{red}{what is the english phrase to describe this} that satisfies the following conditions:
 \begin{condition}
 	\label{condn:nonsmooth1}
-	The differentiable space $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\boldsymbol{\theta})$ at $\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right)$ is a local optimality space for $L_T\left(\cdot,\boldsymbol{\lambda}\right)$.
+	For every $\boldsymbol{\lambda} \in \Lambda_{smooth}$, there exists a ball $B(\boldsymbol{\lambda})$ with nonzero radius centered at $\boldsymbol{\lambda}$ such that
+	\begin{itemize}
+		\item For all $\boldsymbol{\lambda}'\in B(\boldsymbol{\lambda})$, the training criterion $L_{T}(\cdot,\cdot)$
+		is twice differentiable along directions in $\Omega^{L_{T}(\cdot,\cdot)}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)$.
+		\item The differentiable space $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\boldsymbol{\theta})$ at $\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right)$ is a local optimality space for $L_T\left(\cdot,\boldsymbol{\lambda}\right)$ over $B(\boldsymbol{\lambda})$.
+	\end{itemize}
 \end{condition}
 \begin{condition}
 	\label{condn:nonsmooth2}
-	$L_T(\cdot, \boldsymbol{\lambda})$ is twice continuously differentiable along directions in $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right))$.
+	For every $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$
+	, let the line segment between the two points be denoted 
+	$$
+	\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})=\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} 
+	$$
+	Suppose the intersection $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap\Lambda_{smooth}^{C}$
+	is countable.
 \end{condition}
 
-Equipped with the conditions above, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the result is exactly the same as Lemma \ref{lemma:nonparam_smooth}.
+Equipped with the conditions above, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the result is exactly the same as Lemma \ref{lemma:param_add}.
 
 \begin{lemma}
 	\label{lemma:nonsmooth}
-	Suppose that $\sup_{g\in\mathcal{G}}\|g\|_{D}\le G$.
-	Suppose $\lambda_j \ge \lambda_{\min}$ for all $j$.
-	Suppose the penalty functions are convex.
-	Suppose Conditions \ref{condn:param1} and \ref{condn:param2} hold for almost every $\boldsymbol{\lambda}$.
-	Suppose Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2} are satisfied for almost every $\boldsymbol{\lambda} \in \Lambda$.
-	
-	For any $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)} \in \Lambda$, we have
-	\[
-	\left \| g \left(\cdot| \hat{\boldsymbol{\theta}}(\boldsymbol \lambda^{(1)}) \right )
-	-g \left (\cdot| \hat{\boldsymbol{\theta}}(\boldsymbol \lambda^{(2)}) \right ) \right \|_V
-	\le
-	\left \|\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)} \right \|
-	stuff
-	\]
+		Define $\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda}\right )$ as in \eqref{eq:param_add_estimator}.
+		
+		Suppose $g_j(\cdot| \boldsymbol{\theta}^{(j)})$ are $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
+		
+		Suppose $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(\cdot| \boldsymbol{\theta}^{(j)})$ are convex with respect to $\boldsymbol{\theta}^{(j)}$ for all $j=1,..,J$ and $L_T\left (y, \boldsymbol{\theta} | \boldsymbol{\lambda} \right )$ is convex with respect to $\boldsymbol{\theta}$.
+		
+		Suppose $\Lambda_{smooth} \subseteq \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ satisfies Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2}.
+		
+		Then any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda_{smooth}$ satisfies  \eqref{eq:param_add_lipschitz}.
 \end{lemma}
+
+%
+%\subsection{Parametric models general}
+%\label{sec:smoothness_domain}
+%
+%Our first example is penalized regression for parametric models $g(\cdot | \boldsymbol{\theta})$ where $\boldsymbol{\theta} \in \mathbb{R}^p$. The number of dimensions $p$ is allowed to grow with $n$, as commonly done in sieve estimation. We focus on estimators of the form
+%\begin{equation}
+%\label{eq:param_ridge}
+%\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) = \argmin_{\boldsymbol{\theta }\in \mathbb{R}^p} 
+%\left  \| y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
+%+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}) + \frac{w}{2} \| \boldsymbol{\theta} \|^2_2 \right )
+%\end{equation}
+%We show that $g(\cdot | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz with respect to $\|\cdot\|_\infty$, thereby satisfying both Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
+%
+%\subsubsection{Parametric regression with smooth penalties}
+%We begin with considering the case where all the penalty functions are smooth. The following section will generalize these result to include non-smooth penalty functions like the lasso and group lasso.
+%
+%To show that $g(\cdot | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz, we will need the model class and the penalty functions to be well-behaved. Our results rely on the following two conditions.
+%\begin{condition}
+%	\label{condn:param2}
+%	There exist constants $L, r \ge 0$ such that the functions are $Lp^r$-Lipschitz in the model parameters with respect to $\| \cdot \|_\infty$:
+%	\begin{equation}
+%	\left \|g(\cdot|\boldsymbol{\theta}^{(1)})-g(\cdot|\boldsymbol{\theta}^{(2)})\right \|_{\infty}
+%	\le Lp^{r}
+%	\left \|\boldsymbol{\theta}^{(1)}-\boldsymbol{\theta}^{(2)} \right \|_{2} 
+%	\quad \forall \enskip \boldsymbol{\theta}^{(1)}, \boldsymbol{\theta}^{(2)} \in \mathbb{R}^p
+%	\end{equation}
+%\end{condition}
+%
+%\begin{condition}
+%	\label{condn:param1}
+%	There exists some constant $K$ such that for penalty function $P_j$ for all $j=1,...,j$,
+%	\begin{equation}
+%	\left | \frac{d}{d m}P_j(\boldsymbol{\theta} + m \boldsymbol{\beta}) \right |_{m = m'} \le K \|\boldsymbol{\beta}\|_{2}
+%	\end{equation}
+%	for any $\boldsymbol{\theta}, \boldsymbol{\beta} \in \mathbb{R}^p$ and $m' \in \mathbb{R}$.
+%\end{condition}
+%
+%Condition \ref{condn:param2} requires that the Lipschitz constant grows no faster than a polynomial rate in the number of features. Many models satisfy this condition, assuming they are parameterized appropriately. For example, Condition \ref{condn:param2} is satisfied by linear regression when the covariates are bounded.
+%
+%It is easy to show that Condition \ref{condn:param1} is satisfied by many popular parametric penalties, such as the ridge penalty $\| \cdot \|_2^2$, lasso $\| \cdot \|_1$, and group lasso $\| \cdot \|_2$. (Proofs are given in Section \ref{sec:proofs}, if you insist.) 
+%
+%The following lemma states that the fitted models are Lipschitz by the penalty parameters.
+%\begin{lemma}
+%	\label{lemma:parametric}
+%	Suppose Condition \ref{condn:param2} and \ref{condn:param1} are satisfied.
+%	Suppose $\hat{\boldsymbol{\theta}}$ is defined by \eqref{eq:param_ridge}.
+%	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
+%	\[
+%	\left \|
+%	g \left (\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}) \right ) - g \left ( \cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}) \right )
+%	\right \|_{\infty}
+%	\le
+%	\left \|
+%	\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)} 
+%	\right \|_{2}
+%	stuff
+%	\]
+%\end{lemma}
+%
+%Now we provide an outline of the proof.
+
+%\subsubsection{Nonsmooth penalties}\label{sec:nonsmooth}
+%
+%If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless, we find that for many popular non-smooth penalty functions, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
+%
+%\begin{definition}
+%	The differentiable space of a real-valued function $L$ at $\boldsymbol{\theta}$ is the set of functions
+%	\begin{equation}
+%	\Omega^{L}(\boldsymbol{\theta}) = \left \{ \boldsymbol{\beta} \middle | \lim_{\epsilon \rightarrow 0} \frac{L(\boldsymbol{\theta} + \epsilon \boldsymbol{\beta}) - L(\boldsymbol{\theta})}{\epsilon} \text{ exists } \right \}
+%	\end{equation}
+%\end{definition}
+%
+%\begin{definition}
+%	$S$ is a local optimality space for a convex function $L(\cdot, \boldsymbol \lambda_0)$ if there exists a neighborhood $W$ containing $\boldsymbol \lambda_0$ such that for every $\boldsymbol \lambda \in W$,
+%	\begin{equation}
+%	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} L(\boldsymbol{\theta}, \boldsymbol \lambda) =
+%	\argmin_{\boldsymbol{\theta} \in S} L(\boldsymbol{\theta}, \boldsymbol \lambda)
+%	\end{equation}
+%\end{definition}
+%
+%We now use these definitions to state the conditions that guarantee that the fitted functions are still smoothly parameterized by the penalty parameters.
+%Let the training criterion be denoted
+%\begin{eqnarray*}
+%	L_T(\boldsymbol{\theta}, \boldsymbol{\lambda}) &=& \argmin_{g\in \mathcal{G}} 
+%	\left \| \boldsymbol y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
+%	+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}) + \frac{w}{2} \| \boldsymbol{\theta} \|^2_D \right )
+%\end{eqnarray*}
+%
+%We will need following conditions to hold for almost every $\boldsymbol{\lambda} \in \Lambda$:
+%\begin{condition}
+%	\label{condn:nonsmooth1}
+%	The differentiable space $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\boldsymbol{\theta})$ at $\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right)$ is a local optimality space for $L_T\left(\cdot,\boldsymbol{\lambda}\right)$.
+%\end{condition}
+%\begin{condition}
+%	\label{condn:nonsmooth2}
+%	$L_T(\cdot, \boldsymbol{\lambda})$ is twice continuously differentiable along directions in $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right))$.
+%\end{condition}
+%
+%Equipped with the conditions above, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the result is exactly the same as Lemma \ref{lemma:nonparam_smooth}.
+%
+%\begin{lemma}
+%	\label{lemma:nonsmooth}
+%
+%\end{lemma}
 
 
 \subsection{Nonparametric additive models}
 \label{sec:smoothness_validation}
 
-Consider penalized regression problems with nonparametric additive models. Fitted models usually minimize of the training criterion of the form
-\begin{equation}
-\label{orig_train_criterion}
-\left\{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J = 
-\argmin_{g\in \mathcal{G}} \frac{1}{2} \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T +
-\sum_{j=1}^J \lambda_j P_j(g_j)
-\end{equation}
-We show that $\hat{g}(\cdot | \boldsymbol \lambda)$ are Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
-
-Instead of dealing with \eqref{orig_train_criterion} directly, we consider minimizers of the perturbed training criterion
+We now generalize the previous section to nonparametric additive models. We consider estimators of the form
 \begin{equation}
 \label{eq:train_crit_ridge}
 \left\{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J = \argmin_{g\in \mathcal{G}} \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T + \sum_{j=1}^J \lambda_j \left ( P_j(g_j) + \frac{w}{2} \| g_j \|^2_D \right )
 \end{equation}
-\eqref{eq:train_crit_ridge} has an additional ridge penalty for each of the additive components, where each of the ridge penalties is scaled by a fixed constant $w > 0$. 
+where $P_j$ are now penalty functionals. Notice that the additional ridge penalty is now over the fitted values at the observed covariates. This ensures that the fitted values at the observed covariates is well-behaved. The following lemma states that the fitted functions are Lipschitz with respect to $\| \cdot \|_D$, which satisfies the Lipschitz condition in Theorem \ref{thrm:train_val}.
+%\begin{definition}
+%	Let $\mathcal{G}$ be a function class.
+%	Let $P:\mathcal{G} \mapsto \mathbb{R}$ be a functional and $g$ and $h$ be functions in $\mathcal{G}$.
+%	The pathwise derivative of $P$ at $g$ with respect to $h$ is defined as
+%	$$
+%	\frac{d}{d m} P(g + mh) = \lim_{m \rightarrow 0} \frac{P(g + mh) - P(g)}{m}
+%	$$
+%	if the limit exists.
+%	The pathwise second derivative of $P$ at $g$ with respect to $h$ is defined as
+%	$$
+%	\frac{d^2}{d m^2} P(g + mh) = \lim_{m \rightarrow 0} \frac{\frac{d}{d t} P(g + th) - \frac{d}{d m} P(g)}{m}
+%	$$	
+%	if the pathwise derivative of $P$ and the limit exists.
+%	$P$ is twice-differentiable if the pathwise second derivative of $P$ at any $g \in \mathcal{G}$ with respect to any $h \in \mathcal{G}$ exists.
+%\end{definition}
+%Furthermore, one can show that the functional $P$ is convex if the pathwise second derivative of a penalty function is always positive as follows
+%\begin{equation}
+%\frac{d^2}{d m^2} P_j(f + mh) \ge 0 \forall j= 1,...,J \text{ and } \forall h \in \mathcal{G}
+%\end{equation}
+%\textcolor{red}{(Do I need to prove or define this? Has someone done this already?)}. 
 
-For both this example and the one in Section \ref{sec:smoothness_domain}, we perturb the penalized regression problems with additional ridge penalties scaled by a constant $w$. The ridge penalty is primarily for the proofs to carry through; it ensures that the fitted functions are ``well-conditioned.'' In practice, $w$ can be chosen small enough that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. In addition, we show in Lemma \ref{oracle_maintained} that for parametric regression problems that are strongly convex, the effect of the ridge penalty is negligible. Of course we would like to do without the ridge penalty, but one will probably need more assumptions about the penalized regression problem.
-
-We will consider the case where the penalty functions $P_j$ are convex and twice-differentiable. In the nonparametric setting, we will need the concept of pathwise differentiability:
-\begin{definition}
-	Let $\mathcal{G}$ be a function class.
-	Let $P:\mathcal{G} \mapsto \mathbb{R}$ be a functional and $g$ and $h$ be functions in $\mathcal{G}$.
-	The pathwise derivative of $P$ at $g$ with respect to $h$ is defined as
-	$$
-	\frac{d}{d m} P(g + mh) = \lim_{m \rightarrow 0} \frac{P(g + mh) - P(g)}{m}
-	$$
-	if the limit exists.
-	The pathwise second derivative of $P$ at $g$ with respect to $h$ is defined as
-	$$
-	\frac{d^2}{d m^2} P(g + mh) = \lim_{m \rightarrow 0} \frac{\frac{d}{d t} P(g + th) - \frac{d}{d m} P(g)}{m}
-	$$	
-	if the pathwise derivative of $P$ and the limit exists.
-	$P$ is twice-differentiable if the pathwise second derivative of $P$ at any $g \in \mathcal{G}$ with respect to any $h \in \mathcal{G}$ exists.
-\end{definition}
-Furthermore, one can show that the functional $P$ is convex if the pathwise second derivative of a penalty function is always positive as follows
-\begin{equation}
-\frac{d^2}{d m^2} P_j(f + mh) \ge 0 \forall j= 1,...,J \text{ and } \forall h \in \mathcal{G}
-\end{equation}
-\textcolor{red}{(Do I need to prove or define this? Has someone done this already?)}. 
-
-As an example, consider the $r$-th degree Sobolev penalty
-\begin{equation}
-P(g) = \int \left(g^{(r)}(x) \right)^2 dx
-\end{equation}
-Its pathwise second derivative at $g$ with respect to $h$ is
-\begin{eqnarray}
-\frac{d^2}{dm^2} P(g) &=& \frac{d^2}{dm^2} \int \left((g + mh)^{(r)}(x) \right)^2 dx\\
-&=& 2 \int \left(h^{(r)}(x) \right)^2 dx
-\end{eqnarray}
-
-The following lemma states that the fitted functions from \ref{eq:train_crit_ridge} are smoothly parameterized by the penalty parameters.
+%As an example, consider the $r$-th degree Sobolev penalty
+%\begin{equation}
+%P(g) = \int \left(g^{(r)}(x) \right)^2 dx
+%\end{equation}
+%Its pathwise second derivative at $g$ with respect to $h$ is
+%\begin{eqnarray}
+%\frac{d^2}{dm^2} P(g) &=& \frac{d^2}{dm^2} \int \left((g + mh)^{(r)}(x) \right)^2 dx\\
+%&=& 2 \int \left(h^{(r)}(x) \right)^2 dx
+%\end{eqnarray}
 
 \begin{lemma}
 \label{lemma:nonparam_smooth}
-Consider $\hat{g}_{j}(\cdot| \boldsymbol \lambda)$ as defined in \ref{eq:train_crit_ridge}.
-Suppose the penalty functions $P_{j}$ is twice-differentiable and convex.
+Let $\mathcal{G}$ be a convex function class. $\hat{g}_{j}(\cdot| \boldsymbol \lambda)$ is defined in \ref{eq:train_crit_ridge}.
+Suppose the penalty functions $P_{j}$ is twice Gateaux differentiable and convex over $\mathcal{G}$.
 
-Suppose $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$.
+Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
+\begin{equation}
+C_{\theta^{*},\Lambda}=
+\frac{1}{2}\left\Vert y- g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}
++\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)
+\end{equation}
 
-For all $\boldsymbol \lambda^{(1)}, \boldsymbol \lambda^{(2)} \in \Lambda$, we have
-\[
-\left \|
-\sum_{j=1}^{J}\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(1)})-\hat{g}_{j}(\cdot| \boldsymbol \lambda^{(2)})
-\right \|_{V}
+For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have
+\begin{equation}
+\left\Vert 
+\sum_{j=1}^J \hat{g}_j\left(\cdot|\boldsymbol{\lambda}^{(1)} \right)-\hat{g}_j\left(\cdot|\boldsymbol{\lambda}^{(2)} \right)\right\Vert _{D}
 \le
-\left \|
-\boldsymbol \lambda^{(1)}- \boldsymbol \lambda^{(2)}
-\right \|
-stuff
-\]
-where $stuff$ depends on $\| \epsilon \|_T$.
+\frac{J}{w\lambda_{min}^{2}}\sqrt{2C_{\theta^{*},\Lambda}\frac{n}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|
+\end{equation}
 \end{lemma}
 
-All of the proofs on the smoothness of $\hat{g}(\cdot | \boldsymbol \lambda)$ follow the same recipe. The first step is to consider the optimization problem \eqref{orig_train_criterion} restricted to models on the line
-\begin{equation}
-\left \{ \hat{g}(\cdot |\boldsymbol \lambda^{(1)}) + m \left (\hat{g}(\cdot |\boldsymbol \lambda^{(2)})  - \hat{g}(\cdot |\boldsymbol \lambda^{(1)}) \right ) : m \in [0,1] \right \}
-\end{equation}
-By implicit differentiation of the KKT conditions, we can then determine how the fitted models change with respect to the penalty parameters. Finally, the difference $\| \hat{g}(\cdot | \boldsymbol \lambda^{(1)}) -  \hat{g}(\cdot | \boldsymbol \lambda^{(2)}) \|$ is bounded using the mean value theorem.
-
-For illustration, we present the proof for Lemma \ref{lemma:nonparam_smooth} in the case where there is only one penalty parameter. The case with multiple penalty parameters is given in Section \ref{sec:proofs}.
-
-\begin{proof}[Proof of Lemma \ref{lemma:nonparam_smooth}]
-
-Let $h=\hat{g}(\cdot|\lambda^{(1)})-\hat{g}(\cdot|\lambda^{(2)})$.
-Consider the one-dimensional optimization problem
-\[
-\hat{m}(\lambda) = \arg\min_{m}\frac{1}{2}\|y- \left(g +mh\right)\|_{T}^{2}+\lambda\left(P(g+mh)+\frac{w}{2}\|g+mh\|_{D}^{2}\right)
-\]
-
-Now by the KKT conditions, we have
-\[
-\langle y-\left(g+mh\right),h\rangle_{T}+\lambda\frac{\partial}{\partial m}P(g+mh)+\lambda w \langle h,g+mh\rangle_{D}=0
-\]
-
-
-It's implicit derivative with respect to $\lambda$ is
-\begin{equation}
- \frac{\partial\hat{m}(\lambda)}{\partial\lambda}  =
-\left ( \| h\|_{T}^2 +\lambda\frac{\partial^{2}}{\partial m^{2}}P(g+mh) +\lambda w\|h\|_{D}^{2} \right )^{-1}
-\left ( \frac{\partial}{\partial m}P(g+mh)+w\langle h,g+mh\rangle_{D} \right )
-\end{equation}
-
-By the KKT conditions and the definitions of $\hat{m}(\lambda)$, e can show
-\[
-\left | \frac{\partial}{\partial m}P(g+mh) \right |_{m = \hat{m}(\lambda)}  \le
-C \|h\|_{D}
-\]
-and
-$$
-\left . w\langle h,g+mh\rangle_{D} \right |_{m = \hat{m}(\lambda)} \le C \|h\|_{D}
-$$
-for some constant $C$.
-Hence
-\[
-\left|\frac{\partial}{\partial\lambda}\hat{m}(\lambda)\right| \le
-2C (\lambda_{\min}w)^{-1}\|h\|_{D}^{-1}
-\]
-
-By the MVT, there is some $\alpha\in (\lambda^{(1)},\lambda^{(2)})$ such that
-\begin{eqnarray*}
-\left|\hat{m}(\lambda^{(2)})-\hat{m}(\lambda^{(1)})\right| & = &
-\left|\left ( \lambda^{(2)}-\lambda^{(1)} \right )
-\left . \frac{\partial \hat{m}(\lambda) }{\partial\lambda}\right |_{\lambda=\alpha} \right|\\
- & \le & |\lambda^{(2)}-\lambda^{(1)}|
-2C (\lambda_{\min}w)^{-1}\|h\|_{D}^{-1}
-\end{eqnarray*}
-Since we know that $\hat{m}(\lambda^{(2)})=1$
-and $\hat{m}_{\tilde{k}}(\lambda^{(1)})=0$, we can rearrange the inequality to get our final result.
-\end{proof}
-
-
-\subsection{Example: Smoothing Splines with a Sobolev Penalty}
-
-Finally, we consider the example of smoothing splines fitted using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. For a given set of penalty parameters, the smoothing spline estimate is
-\begin{equation}
-\label{ex:sobolev}
-\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
-\arg\min_{g_j\in\mathcal{G}}
-\frac{1}{2} \left \|y- \sum_{j=1}^J g_j \right \|_{T}^{2}
-+ \sum_{j=1}^J \lambda_j 
-\int \left (g_j^{(r_j)}(x) \right )^2 dx
-\end{equation}
-where $g^{(r)}$ is the derivative of $g$ of order $r \ge 2$.
-
-We can show that smoothing splines are smoothly-parameterized by the penalty parameters with respect to $\|\cdot\|_V$ using the approach in Section \ref{sec:smoothness_validation}. As done in the nonparametric additive model example, we can perturb \eqref{ex:sobolev} with an additional ridge penalty as follows
-\begin{equation}
-\label{eq:sobolev_nonparam_ridge}
-\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
-\arg\min_{g_j\in\mathcal{G}}
-\frac{1}{2} \left \|y- \sum_{j=1}^J g_j \right \|_{T}^{2}
-+ \sum_{j=1}^J \lambda_j 
-\left (
-\int \left (g_j^{(r_j)}(x) \right )^2 dx
-+ \frac{w}{2} \|g_j\|^2_D
-\right )
-\end{equation}
-
-Moreover, solutions to \eqref{ex:sobolev} have the property that the fitted functions $\hat{g}_j(\cdot | \boldsymbol \lambda)$ can be expressed as the weighted sum of normalized B-splines: (CITE for proof) 
-\begin{equation}
-\hat{g}_j(x | \boldsymbol \lambda) = \sum_{i=1}^{p} \theta_i N_{ij}(x)
-\end{equation}
-where $N_{ij}$ is a normalized B-spline. The degree of B-spline depends on the degree of the Sobolev penalty and the number of B-splines $p$ is determined by the number of knots and the degree of the B-spline.
-Since smoothing splines are parametric, we can then apply the same logic in Section \ref{sec:smoothness_domain} to show that smoothing splines are smoothly-parameterized by the penalty parameters with respect to $\|\cdot\|_\infty$. Again, we perturb \eqref{ex:sobolev} with an additional ridge penalty as follows
-\begin{equation}
-\label{eq:sobolev_param_ridge}
-\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
-\arg\min_{g_j\in\mathcal{G}}
-\frac{1}{2} \left \|y- \sum_{j=1}^J N_j \boldsymbol{\theta}_j \right \|_{T}^{2}
-+ \sum_{j=1}^J \lambda_j 
-\left (
-P_j(\boldsymbol{\theta}_j)
-+ \frac{w}{2} \| \boldsymbol{\theta}_j \|^2_D
-\right )
-\end{equation}
-The key is to show that Condition \ref{condn:nonsmooth1} is satisfied. 
-
-The following lemma states that smoothing splines are indeed smoothly-parameterized by the penalty parameters.
-\begin{lemma}
-\label{lemma:sobolev}
-Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
-
-Suppose $\lambda_j \in [\lambda_{\min}, \lambda_{\max}]^J$ for all $j=1,...,j$.
-
-In the setting of \eqref{eq:sobolev_nonparam_ridge}, the fitted functions satisfy
-\begin{equation}
-\left\Vert \sum_{j=1}^J \hat{g}_j(\cdot|\lambda^{(1)}) - \hat{g}_j(\cdot|\lambda^{(2)}) \right\Vert _V
-\le
-\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert
-stuff
-\end{equation}
-In the setting of \eqref{eq:sobolev_param_ridge}, the fitted functions satisfy
-\begin{equation}
-\left\Vert \sum_{j=1}^J \hat{g}_j(\cdot|\lambda^{(1)}) - \hat{g}_j(\cdot|\lambda^{(2)}) \right\Vert _\infty
-\le
-\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert
-stuff
-\end{equation}
-\end{lemma}
+%\subsection{Example: Smoothing Splines with a Sobolev Penalty}
+%
+%Finally, we consider the example of smoothing splines fitted using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. For a given set of penalty parameters, the smoothing spline estimate is
+%\begin{equation}
+%\label{ex:sobolev}
+%\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
+%\arg\min_{g_j\in\mathcal{G}}
+%\frac{1}{2} \left \|y- \sum_{j=1}^J g_j \right \|_{T}^{2}
+%+ \sum_{j=1}^J \lambda_j 
+%\int \left (g_j^{(r_j)}(x) \right )^2 dx
+%\end{equation}
+%where $g^{(r)}$ is the derivative of $g$ of order $r \ge 2$.
+%
+%We can show that smoothing splines are smoothly-parameterized by the penalty parameters with respect to $\|\cdot\|_V$ using the approach in Section \ref{sec:smoothness_validation}. As done in the nonparametric additive model example, we can perturb \eqref{ex:sobolev} with an additional ridge penalty as follows
+%\begin{equation}
+%\label{eq:sobolev_nonparam_ridge}
+%\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
+%\arg\min_{g_j\in\mathcal{G}}
+%\frac{1}{2} \left \|y- \sum_{j=1}^J g_j \right \|_{T}^{2}
+%+ \sum_{j=1}^J \lambda_j 
+%\left (
+%\int \left (g_j^{(r_j)}(x) \right )^2 dx
+%+ \frac{w}{2} \|g_j\|^2_D
+%\right )
+%\end{equation}
+%
+%Moreover, solutions to \eqref{ex:sobolev} have the property that the fitted functions $\hat{g}_j(\cdot | \boldsymbol \lambda)$ can be expressed as the weighted sum of normalized B-splines: (CITE for proof) 
+%\begin{equation}
+%\hat{g}_j(x | \boldsymbol \lambda) = \sum_{i=1}^{p} \theta_i N_{ij}(x)
+%\end{equation}
+%where $N_{ij}$ is a normalized B-spline. The degree of B-spline depends on the degree of the Sobolev penalty and the number of B-splines $p$ is determined by the number of knots and the degree of the B-spline.
+%Since smoothing splines are parametric, we can then apply the same logic in Section \ref{sec:smoothness_domain} to show that smoothing splines are smoothly-parameterized by the penalty parameters with respect to $\|\cdot\|_\infty$. Again, we perturb \eqref{ex:sobolev} with an additional ridge penalty as follows
+%\begin{equation}
+%\label{eq:sobolev_param_ridge}
+%\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
+%\arg\min_{g_j\in\mathcal{G}}
+%\frac{1}{2} \left \|y- \sum_{j=1}^J N_j \boldsymbol{\theta}_j \right \|_{T}^{2}
+%+ \sum_{j=1}^J \lambda_j 
+%\left (
+%P_j(\boldsymbol{\theta}_j)
+%+ \frac{w}{2} \| \boldsymbol{\theta}_j \|^2_D
+%\right )
+%\end{equation}
+%The key is to show that Condition \ref{condn:nonsmooth1} is satisfied. 
+%
+%The following lemma states that smoothing splines are indeed smoothly-parameterized by the penalty parameters.
+%\begin{lemma}
+%\label{lemma:sobolev}
+%Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
+%
+%Suppose $\lambda_j \in [\lambda_{\min}, \lambda_{\max}]^J$ for all $j=1,...,j$.
+%
+%In the setting of \eqref{eq:sobolev_nonparam_ridge}, the fitted functions satisfy
+%\begin{equation}
+%\left\Vert \sum_{j=1}^J \hat{g}_j(\cdot|\lambda^{(1)}) - \hat{g}_j(\cdot|\lambda^{(2)}) \right\Vert _V
+%\le
+%\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert
+%stuff
+%\end{equation}
+%In the setting of \eqref{eq:sobolev_param_ridge}, the fitted functions satisfy
+%\begin{equation}
+%\left\Vert \sum_{j=1}^J \hat{g}_j(\cdot|\lambda^{(1)}) - \hat{g}_j(\cdot|\lambda^{(2)}) \right\Vert _\infty
+%\le
+%\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert
+%stuff
+%\end{equation}
+%\end{lemma}
 
 \section{Simulations}\label{sec:simulations}
 
-We now provide a simulation study for the prediction error bound given in Theorem \ref{thrm:train_val}. The penalty parameters are chosen by a training/validation split. We show that the error of the select model converges to that of the oracle model at the expected $(\log(n_V)/n_V)^{1/2}$ rate.
+We now provide a simulation study for the prediction error bound given in Theorem \ref{thrm:train_val}. The penalty parameters are chosen by a training/validation split. We show that the error of the selected model converges to that of the oracle model at the near-parametric rate.
 
 Observations were generated from the model
 \begin{equation}
 y = sin(x_1) + \frac{1}{2} sin(2 x_2 + 1) + \sigma \epsilon
 \end{equation}
+\textcolor{red}{update simulation study}
 where $\epsilon \sim N(0,1)$ and $\sigma$ scaled the error term such that the signal to noise ratio was 2.
 The covariates $x_1$ and $x_2$ were uniformly distributed over the interval $(0,6)$.
-Smoothing splines were fit with a Sobolev penalty
+
+We fit a smoothing splines using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. The training criterion was
 \begin{equation}
-\hat{g}_{1, \lambda}, \hat{g}_{2, \lambda} = \argmin_{g_1, g_2} \| y - f_1(x_1) - f_2(x_2) \|_T^2 + \int_0^6 (f_1^{(2)}(x))^2 dx + \int_0^6 (f_2^{(2)}(x))^2 dx
+\| y - f_1(x_1) - f_2(x_2) \|_T^2 + \lambda_1 \int_0^6 (f_1^{(2)}(x))^2 dx + \lambda_2 \int_0^6 (f_2^{(2)}(x))^2 dx
 \end{equation}
 The training set contained 100 samples and models were fitted with 10 knots. A grid search was performed over the penalty parameter values $\{10^{-6 + 0.2i}: i = 0, ..., 25 \}$. We tested 26 validation set sizes $n_V = \lfloor 5 * 1.25^{i} \rfloor $ for $i = 0, ..., 20$. The oracle penalty parameters were chosen by minimizing the difference between the fitted model and the true model over a separate test set of 800 samples. A total of 30 simulations were run for each validation set size.
 
 Figure \ref{fig:emp_v_theory} plots the difference of between the model loss and the oracle loss
 $$
-\left \| \hat{g}(\cdot | \hat{\boldsymbol{\lambda}}) - g^* \right \|_V - 
-\left \| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \right \|_V
+\left \| \hat{g}(\cdot | \hat{\boldsymbol{\lambda}}) - g^* \right \|_V^2 - 
+\left \| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \right \|_V^2
 $$
 as the validation set size increases. As expected, it drops quickly.
 
@@ -795,6 +861,8 @@ as the validation set size increases. As expected, it drops quickly.
 \includegraphics[height=80mm]{../R/figures/validation_size_loss_diff.pdf}
 %\includegraphics[height=80mm]{../R/figures/qqplot.pdf}
 \end{figure}
+
+Interestingly, Theorem \ref{thrm:train_val} states that the convergence rate should be a geometric mean of the near-parametric rate and the oracle rate. Since the oracle rate here is constant, we should be observing a convergence rate of $n_V^{-1/2}$. We in fact observe a convergence rate of $n_V^{-1}$. Our hypothesis that our convergence rate bounds are not tight. It is possible that problems like the Sobolev are well-behaved enough that the geometric term can be completely dropped.
 
 \section{Discussion}\label{sec:discussion}
 

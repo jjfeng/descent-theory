@@ -92,36 +92,31 @@ PSD matrices for all $j=1,...,J$.
 \item Suppose that $\nabla_{\theta}^{2}\|y-g(x|\boldsymbol{\theta})\|_{T}^{2}$
 is a PSD matrix.
 \end{itemize}
-Suppose there is some $K>0$ such that for all $j=1,...,J$ and any
-$\boldsymbol{\theta,\beta},m'$, we have
+Suppose there is some constants $K_{1},K_{0}>0$ such that for all
+$j=1,...,J$ and any $\boldsymbol{\theta}'$, we have
 
 \[
-\left|\left.\frac{\partial}{\partial m}P_{j}\left(\boldsymbol{\theta}+m\boldsymbol{\beta}\right)\right|_{m=m'}\right|\le K\|\boldsymbol{\beta}\|_{2}
+\left|\left.\nabla_{\theta}P_{j}\left(\boldsymbol{\theta}\right)\right|_{\boldsymbol{\theta}=\boldsymbol{\theta}'}\right|\le K_{1}\|\boldsymbol{\theta}'\|_{2}+K_{0}
+\]
+
+
+Let 
+\[
+C_{\theta^{*},\Lambda}=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
 \]
 
 
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have
 \[
-\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\frac{1}{\lambda_{min}wJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
 \]
 
 
-where 
+Moreover, if $g(\cdot|\boldsymbol{\theta})$ is $L$-Lipschitz wrt
+$\|\cdot\|_{\infty}$, then
 \[
-C_{\theta^{*},\Lambda}=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|_{2}^{2}\right)
-\]
-
-
-Moreover, if $g(\cdot|\boldsymbol{\theta})$ is $L$-Lipschitz 
-\[
-\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\|_{2}
-\]
-
-
-Then
-\[
-\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\frac{1}{\lambda_{min}wJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
 \]
 
 
@@ -165,9 +160,9 @@ We know that\textbf{
 \left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert  & = & \left\Vert e_{i}^{\top}\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right]^{-1}\left(\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}+w\boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right)\right\Vert \\
  & = & \left\Vert e_{i}^{\top}\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right]^{-1}\left(\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}+w\boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right)\right\Vert \\
  & \le & \left\Vert \left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}+\sum_{j=1}^{J}\lambda_{j}wI\right]^{-1}\right\Vert \left(\left\Vert \left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\Vert _{F}+w\left\Vert \boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right\Vert \right)\\
- & \le & \left\Vert \left[\sum_{j=1}^{J}\lambda_{j}wI\right]^{-1}\right\Vert \left(\left\Vert \left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\Vert _{F}+w\sqrt{J}\|\boldsymbol{\theta}\|_{2}\right)\\
- & \le & \frac{1}{J\lambda_{min}w}\left(\sqrt{J}K+w\sqrt{J}\right)\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}\\
- & = & \frac{K+w}{\lambda_{min}w\sqrt{J}}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}
+ & \le & \left\Vert \left[\sum_{j=1}^{J}\lambda_{j}wI\right]^{-1}\right\Vert \left(\left\Vert \left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\Vert _{F}+w\sqrt{J}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}\right)\\
+ & \le & \frac{1}{J\lambda_{min}w}\left(\sqrt{J}\left(K_{1}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}+K_{0}\right)+w\sqrt{J}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}\right)\\
+ & = & \frac{\left(K_{1}+w\right)\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}+K_{0}}{\lambda_{min}w\sqrt{J}}
 \end{eqnarray*}
 }
 
@@ -193,7 +188,7 @@ So
 
 Hence for all $\boldsymbol{\lambda}\in\Lambda$
 \[
-\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert \le\frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}
+\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert \le\frac{1}{\lambda_{min}wJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)
 \]
 
 
@@ -203,20 +198,20 @@ By the mean value theorem, there is a $\alpha\in(0,1)$ such that\textbf{
 \begin{eqnarray*}
 \|\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda^{(2)}})\| & \le & \left\langle \left.\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}},\boldsymbol{\lambda^{(1)}}-\boldsymbol{\lambda^{(2)}}\right\rangle \\
  & \le & \max_{\lambda\in\Lambda}\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert \left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert \\
- & \le & \frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert 
+ & \le & \frac{1}{\lambda_{min}wJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert 
 \end{eqnarray*}
 }
 
-Moreover, if $g(\cdot|\boldsymbol{\theta})$ is $L$-Lipschitz 
+Moreover, if $g(\cdot|\boldsymbol{\theta})$ is $L$-Lipschitz, then
 \[
 \|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\|_{2}
 \]
 
 
-Then
-\[
-\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\frac{K+w}{\lambda_{min}wJ}\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
-\]
+So
+\begin{eqnarray*}
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty} & \le & L\frac{1}{\lambda_{min}wJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\end{eqnarray*}
 
 
 
@@ -624,11 +619,11 @@ with ``balls of differentiability.''
 
 We will show penalties that satisfy the condition
 \[
-\frac{\partial}{\partial m}P(\boldsymbol{\theta}+m\boldsymbol{\beta})\le K\|\boldsymbol{\beta}\|_{2}
+\left\Vert \nabla_{\theta}P(\boldsymbol{\theta})\right\Vert \le K_{1}\|\boldsymbol{\theta}\|_{2}+K_{0}
 \]
 
 
-for some constant $K>0$.
+for constants $K_{0},K_{1}>0$.
 
 \textbf{Ridge:}
 
@@ -639,59 +634,49 @@ $P_{j}(\boldsymbol{\theta})\equiv0$ and fix $w=2$.
 \textbf{Lasso:}
 
 \begin{eqnarray*}
-\frac{\partial}{\partial m}\|\theta+m\beta\|_{1} & = & \langle sgn(\theta+m\beta),\beta\rangle\\
- & \le & \|sgn(\theta+m\beta)\|_{2}\|\beta\|_{2}\\
- & \le & p\|\beta\|_{2}
+\left\Vert \nabla_{\boldsymbol{\theta}}\|\boldsymbol{\theta}\|_{1}\right\Vert  & = & \left\Vert sgn\left(\boldsymbol{\theta}\right)\right\Vert \\
+ & \le & p
 \end{eqnarray*}
 
-
-so $K=p$ in this case.
 
 \textbf{Generalized Lasso:} let $G$ be the maximum eigenvalue of
 $D$.
 \begin{eqnarray*}
-\frac{\partial}{\partial m}\|D(\theta+m\beta)\|_{1} & = & \langle sgn(D(\theta+m\beta)),D\beta\rangle\\
- & \le & \|sgn(D(\theta+m\beta))\|_{2}\|D\beta\|_{2}\\
- & \le & pG\|\beta\|_{2}
+\left\Vert \nabla_{\boldsymbol{\theta}}\|D\boldsymbol{\theta}\|_{1}\right\Vert  & = & \left\Vert D^{T}sgn(D\boldsymbol{\theta})\right\Vert \\
+ & \le & G\left\Vert sgn(D\boldsymbol{\theta})\right\Vert \\
+ & \le & pG
 \end{eqnarray*}
 
-
-so $K=pG$ in this case.
 
 \textbf{Group Lasso:}
 
 If we have un-pooled penalty parameters as follows 
 \[
-\sum_{j=1}^{J}\lambda_{j}\|\boldsymbol{\theta}^{(j)}+m^{(j)}\boldsymbol{\beta}^{(j)}\|_{2}
+\sum_{j=1}^{J}\lambda_{j}\|\boldsymbol{\theta}^{(j)}\|_{2}
 \]
 
 
-then we need the following bound for every $j=1,...,J$
+then we have the bound 
 
 \begin{eqnarray*}
-\frac{\partial}{\partial m^{(j)}}\|\boldsymbol{\theta}^{(j)}+m^{(j)}\boldsymbol{\beta}^{(j)}\|_{2} & = & \left\langle \frac{\boldsymbol{\theta}^{(j)}+m^{(j)}\boldsymbol{\beta}^{(j)}}{\|\boldsymbol{\theta}^{(j)}+m^{(j)}\boldsymbol{\beta}^{(j)}\|_{2}},\boldsymbol{\beta}^{(j)}\right\rangle \\
- & \le & \|\boldsymbol{\beta}^{(j)}\|_{2}
+\left\Vert \nabla_{\boldsymbol{\theta}^{(j)}}\|\boldsymbol{\theta}^{(j)}\|_{2}\right\Vert  & = & \frac{\|\boldsymbol{\theta}^{(j)}\|_{2}}{\|\boldsymbol{\theta}^{(j)}\|_{2}}=1
 \end{eqnarray*}
 
-
-So $K=1$ in this case. 
 
 If there is a single penalty parameter for the entire group laso penalty
 as follows 
 \[
-\lambda\sum_{j=1}^{J}\|\boldsymbol{\theta}^{(j)}+m\boldsymbol{\beta}^{(j)}\|_{2}
+\lambda\sum_{j=1}^{J}\|\boldsymbol{\theta}^{(j)}\|_{2}
 \]
 
 
-then 
+then we have the bound 
 \begin{eqnarray*}
-\frac{\partial}{\partial m}\sum_{j=1}^{J}\|\boldsymbol{\theta}^{(j)}+m\boldsymbol{\beta}^{(j)}\|_{2} & = & \sum_{j=1}^{J}\left\langle \frac{\boldsymbol{\theta}^{(j)}+m\boldsymbol{\beta}^{(j)}}{\|\boldsymbol{\theta}^{(j)}+m\boldsymbol{\beta}^{(j)}\|_{2}},\boldsymbol{\beta}^{(j)}\right\rangle \\
- & \le & \sum_{j=1}^{J}\|\boldsymbol{\beta}^{(j)}\|_{2}\\
- & \le & \sqrt{J}\|\boldsymbol{\beta}\|_{2}
+\left\Vert \nabla_{\boldsymbol{\theta}}\sum_{j=1}^{J}\|\boldsymbol{\theta}^{(j)}\|_{2}\right\Vert  & = & \sqrt{\sum_{j=1}^{J}\left\Vert \nabla_{\boldsymbol{\theta}^{(j)}}\|\boldsymbol{\theta}^{(j)}\|_{2}\right\Vert ^{2}}\\
+ & = & \sqrt{\sum_{j=1}^{J}\left(\frac{\|\boldsymbol{\theta}^{(j)}\|_{2}}{\|\boldsymbol{\theta}^{(j)}\|_{2}}\right)^{2}}\\
+ & = & J
 \end{eqnarray*}
 
-
-and $K=\sqrt{J}$.
 
 
 \subsection{Sobolev}
@@ -748,70 +733,46 @@ parameters
 
 Let 
 \[
-C=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}^{*}\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}_{j}^{*})+\frac{w}{2}\|\boldsymbol{\theta}_{j}^{*}\|_{2}^{2}\right)
+C_{\theta^{*},\Lambda}=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}^{*}\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}_{j}^{*})+\frac{w}{2}\|\boldsymbol{\theta}_{j}^{*}\|_{2}^{2}\right)
 \]
 
 
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
-we have for all $j=1,...,J$
-\[
-\|\boldsymbol{\theta}_{\lambda^{(1)},j}-\boldsymbol{\theta}_{\lambda^{(2)},j}\|_{2}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert _{2}\lambda_{min}^{-1}w^{-1}\left(\frac{1}{\lambda_{min}}B\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
-\]
-
-
-Moreover,
-
-\[
-\left\Vert \sum_{j=1}^{J}\hat{g}_{j}(x_{j}|\boldsymbol{\lambda}^{(1)})-\hat{g}_{j}(x_{j}|\boldsymbol{\lambda}^{(2)})\right\Vert _{\infty}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert _{2}J\sqrt{B}\lambda_{min}^{-1}w^{-1}\left(\frac{1}{\lambda_{min}}B\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
-\]
+we have 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \frac{BJ^{3}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
 
 
 
 \subsubsection*{Proof}
 
-To apply the result from Section 2, we just need to bound the spectral
-norm 
+To apply the result from Section 2, we just need note that the $\hat{g}_{j}(x|\boldsymbol{\theta})=\sum_{i=1}^{B}\theta_{i}N_{j,i}(x)$
+is $\sqrt{B}$-Lipschitz since $N_{T,j}$ is a normalized B-spline
+and 
 \[
-\left\Vert \nabla_{\theta}g_{j}(X_{T,j}|\boldsymbol{\theta})\right\Vert =\|N_{T,j}\|
+\sup_{x}N_{j,i}(x)=1
 \]
-Note that the eigenvalue of $N_{T,j}$ is bounded by $B$ since the
-maximum eigenvalue of a non-negative matrix is bounded by its maximum
-row sum. In the case of $N_{T,j}$, since it is the values of normalized
-B-splines, each row is at most the number of B-spline basis functions.
-That is, we have for all $j=1,...,J$
-\[
-\left\Vert \nabla_{\theta}g_{j}(X_{T,j}|\boldsymbol{\theta})\right\Vert =\|N_{T,j}\|\le B
-\]
-
-
-Hence for all $\boldsymbol{\theta,\beta},m'$, we have
-\[
-\left\Vert \left.\frac{\partial}{\partial m}g_{j}(X_{T,j}|\boldsymbol{\theta}+m\boldsymbol{\beta})\right|_{m=m'}\right\Vert \le B\|\boldsymbol{\beta}\|
-\]
-
-
-Apply the result from Section 2 to get the result
-\[
-\left\Vert \boldsymbol{\theta}_{\lambda^{(1)},j}-\boldsymbol{\theta}_{\lambda^{(2)},j}\right\Vert _{2}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert _{2}\lambda_{min}^{-1}w^{-1}\left(\frac{1}{\lambda_{min}}B\sqrt{\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\frac{2C}{\lambda_{min}w}}\right)
-\]
-
-
-The ``moreover'' statement follows from the fact that for any point
-$\boldsymbol{x}$, we have 
+Hence for all $j=1,..,J$
 \begin{eqnarray*}
-\left|\sum_{j=1}^{J}\hat{g}_{j}(x_{j}|\boldsymbol{\lambda}^{(1)})-\hat{g}_{j}(x_{j}|\boldsymbol{\lambda}^{(2)})\right| & = & \left|\sum_{j=1}^{J}\sum_{i=1}^{B}\left(\hat{\theta}_{\lambda^{(1)},j,i}-\hat{\theta}_{\lambda^{(2)},j,i}\right)N_{j,i}(x_{j})\right|\\
- & \le & \sum_{j=1}^{J}\sum_{i=1}^{B}\left|\left(\hat{\theta}_{\lambda^{(1)},j,i}-\hat{\theta}_{\lambda^{(2)},j,i}\right)N_{j,i}(x_{j})\right|\\
- & \le & \sum_{j=1}^{J}\sum_{i=1}^{B}\left|\hat{\theta}_{\lambda^{(1)},j,i}-\hat{\theta}_{\lambda^{(2)},j,i}\right|\\
- & \le & \sum_{j=1}^{J}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}-\hat{\boldsymbol{\theta}}_{\lambda^{(2)},j}\|_{1}\\
- & \le & \sqrt{B}\sum_{j=1}^{J}\|\hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}-\hat{\boldsymbol{\theta}}_{\lambda^{(2)},j}\|_{2}
+\|\hat{g}_{j}(\cdot|\boldsymbol{\theta})-\hat{g}_{j}(\cdot|\boldsymbol{\theta}^{'})\|_{\infty} & = & \sup_{x}\left|\sum_{i=1}^{B}\left(\theta_{i}-\theta_{i}'\right)N_{j,i}(x)\right|\\
+ & = & \left|\sum_{i=1}^{B}|\theta_{i}-\theta_{i}'|\right|\\
+ & \le & \sqrt{B}\left\Vert \boldsymbol{\theta}-\boldsymbol{\theta}'\right\Vert _{2}
 \end{eqnarray*}
 
 
-where the second inequality uses the fact that normalized B-splines
-have value at most 1. Therefore
+Apply the result from Section 2 to get the result for all $j=1,..,J$
+that
 
 \begin{eqnarray*}
-\left\Vert \sum_{j=1}^{J}\hat{g}_{j}(x_{j}|\lambda^{(1)})-\hat{g}_{j}(x_{j}|\lambda^{(2)})\right\Vert _{\infty} & \le & \sqrt{B}\sum_{j=1}^{J}\left\Vert \hat{\boldsymbol{\theta}}_{\lambda^{(1)},j}-\hat{\boldsymbol{\theta}}_{\lambda^{(2)},j}\right\Vert _{2}
+\left\Vert g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \frac{BJ^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
+
+
+The additive model then has the following Lipschitz bound 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \sum_{j=1}^{J}\left\Vert g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty}\\
+ & \le & \frac{BJ^{3}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
 \end{eqnarray*}
 
 
