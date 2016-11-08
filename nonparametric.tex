@@ -60,6 +60,10 @@ smoothness conditions
 We also note that Sobolev is an example of a non-parametric additive
 regression model that satisfies the theorem conditions.
 
+We note that there is a functional definition for convexity using
+Gateaux derivatives. Refer to Convex Functional Analysis Authors:
+Andrew J. Kurdila, Michael Zabarankin
+
 
 \section{Additive Model}
 
@@ -90,7 +94,7 @@ Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have for all $j=1,...,J$
 
 \[
-\|\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\|_{D}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\lambda_{min}^{-1}w^{-1}
+\|\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\|_{D}\le\frac{1}{w\lambda_{min}^{2}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert 
 \]
 
 
@@ -171,12 +175,13 @@ M=D_{3}\left(S+D_{1}+D_{2}\right)^{-1}
 We first bound $\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|$
 for all $k\in H_{nonzero}$.
 
-Note that from the gradient optimality conditions, we have that
+Note that from the gradient optimality conditions, we have that for
+all $k=1,...,J$
 
 \begin{eqnarray*}
-\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)} & = & \left|\frac{1}{\lambda_{k}}\left\langle y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right),h_{k}\right\rangle _{T}+w\langle h_{k},\hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\rangle_{D}\right|\\
- & \le & \frac{1}{\lambda_{min}}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}\|h_{k}\|_{T}+w\|h_{k}\|_{D}\left\Vert \hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\right\Vert _{D}\\
- & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}+w\left\Vert \hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\right\Vert _{D}\right)\|h_{k}\|_{D}
+\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})+w\langle h_{k},\hat{g}_{1,k}+m_{k}h_{k}\rangle_{D}\right|_{m=\hat{m}(\lambda)} & = & \left|\frac{1}{\lambda_{k}}\left\langle y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right),h_{k}\right\rangle _{T}\right|\\
+ & \le & \frac{1}{\lambda_{min}}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}\|h_{k}\|_{T}\\
+ & \le & \frac{1}{\lambda_{min}}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}\left(\sqrt{\frac{n_{D}}{n_{T}}}\|h_{k}\|_{D}\right)
 \end{eqnarray*}
 
 
@@ -211,30 +216,16 @@ Putting the two above inequalities together, we get
 \]
 
 
-and 
-\[
-\lambda_{min}\frac{w}{2}\left\Vert \hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\right\Vert _{D}^{2}\le C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)\implies\left\Vert \hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\right\Vert _{D}\le\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
-\]
-
-
 So 
 \begin{eqnarray*}
-\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)} & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{k}\|_{D}
-\end{eqnarray*}
-
-
-Next we bound $\left|w\langle h_{k},g_{k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\rangle_{D}\right|$
-for all $k\in H_{nonzero}$. By Cauchy Schwarz
-\begin{eqnarray*}
-\left|w\langle h_{k},g_{k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\rangle_{D}\right| & \le & w\|h_{k}\|_{D}\|g_{k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\|_{D}\\
- & \le & w\|h_{k}\|_{D}\sqrt{\frac{2C}{\lambda_{min}w}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})+w\langle h_{k},\hat{g}_{1,k}+\hat{m}_{k}(\boldsymbol{\lambda})h_{k}\rangle_{D}\right|_{m=\hat{m}(\lambda)} & \le & \frac{1}{\lambda_{min}}\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left(\sqrt{\frac{n_{D}}{n_{T}}}\|h_{k}\|_{D}\right)
 \end{eqnarray*}
 
 
 Define the matrix $D_{3,upper}$ which bounds the diagonal elements
 of $D_{3}$
 \[
-D_{3,upper}=\left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}diag\left(\|h_{k}\|_{D}\right)
+D_{3,upper}=\frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}diag\left(\|h_{k}\|_{D}\right)
 \]
 
 
@@ -248,8 +239,8 @@ Hence
 \|\nabla_{\lambda}\hat{m}_{k}(\lambda)\| & = & \|Me_{k}\|\\
  & = & \left\Vert D_{3}\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \\
  & \le & \left\Vert D_{3,upper}\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \\
- & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\max_{\ell=1:J}\|h_{\ell}\|_{D}\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \\
- & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\max_{\ell=1:J}\|h_{\ell}\|_{D}\left\Vert D_{2}^{-1}e_{k}\right\Vert 
+ & \le & \frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\max_{\ell=1:J}\|h_{\ell}\|_{D}\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}e_{k}\right\Vert \\
+ & \le & \frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\max_{\ell=1:J}\|h_{\ell}\|_{D}\left\Vert D_{2}^{-1}e_{k}\right\Vert 
 \end{eqnarray*}
 
 
@@ -261,9 +252,9 @@ Now let
 
 Then for $k=\ell_{max}$ in the inequality above, we get 
 \begin{eqnarray*}
-\|\nabla_{\lambda}\hat{m}_{\ell_{max}}(\lambda)\| & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{\ell_{max}}\|_{D}\left\Vert D_{2}^{-1}e_{k}\right\Vert \\
- & = & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{\ell_{max}}\|_{D}\lambda_{\ell_{max}}^{-1}w^{-1}\|h_{\ell_{max}}\|_{D}^{-2}\\
- & \le & \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\lambda_{min}^{-1}w^{-1}\|h_{\ell_{max}}\|_{D}^{-1}
+\|\nabla_{\lambda}\hat{m}_{\ell_{max}}(\lambda)\| & \le & \frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{\ell_{max}}\|_{D}\left\Vert D_{2}^{-1}e_{k}\right\Vert \\
+ & = & \frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{\ell_{max}}\|_{D}\lambda_{\ell_{max}}^{-1}w^{-1}\|h_{\ell_{max}}\|_{D}^{-2}\\
+ & \le & \frac{1}{w\lambda_{min}^{2}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{\ell_{max}}\|_{D}^{-1}
 \end{eqnarray*}
 
 
@@ -275,14 +266,14 @@ is a continuous, differentiable function.
 By the MVT, we have that there exists an $\alpha\in(0,1)$ such that
 \begin{eqnarray*}
 \left|\hat{m}_{\ell_{max}}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{\ell_{max}}(\boldsymbol{\lambda}^{(1)})\right| & = & \left|\left\langle \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)},\nabla_{\lambda}\hat{m}_{\ell_{max}}(\boldsymbol{\lambda})\right\rangle _{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda}^{(1)}+(1-\alpha)\boldsymbol{\lambda}^{(2)}}\right|\\
- & \le & \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\lambda_{min}^{-1}w^{-1}\|h_{\ell_{max}}\|_{D}^{-1}
+ & \le & \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{w\lambda_{min}^{2}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\|h_{\ell_{max}}\|_{D}^{-1}
 \end{eqnarray*}
 
 
 We know that $\hat{m}_{k}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{k}(\boldsymbol{\lambda}^{(1)})=\boldsymbol{1}$
 for all $k=1,..,J$. Rearranging the inequality above, we get
 \[
-\max_{j}\|\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\|_{D}=\|h_{\ell_{max}}\|_{D}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \left(\frac{1}{\lambda_{min}}\sqrt{\frac{n_{D}}{n_{T}}}+2\sqrt{\frac{w}{\lambda_{min}}}\right)\sqrt{2C\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\lambda_{min}^{-1}w^{-1}
+\max_{j}\|\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\|_{D}=\|h_{\ell_{max}}\|_{D}\le\frac{1}{w\lambda_{min}^{2}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert 
 \]
 
 
@@ -566,4 +557,44 @@ Therefore as we take $m\rightarrow0$, we have
 \left|\frac{\partial}{\partial m}P(a+mb)\right|\le P(b)
 \]
 
+
+
+\subsubsection*{Lemma: second gateaux differential}
+
+Suppose 
+\[
+D_{v,w}^{2}F(g)=\lim_{\epsilon\rightarrow0}\frac{D_{v}F(g+\epsilon w)-D_{v}F(g)}{\epsilon}\ge0
+\]
+
+
+where 
+\[
+D_{v}F(g)=\lim_{\epsilon\rightarrow0}\frac{F(g+\epsilon v)-F(g)}{\epsilon}
+\]
+Then 
+\[
+\frac{\partial^{2}}{\partial m^{2}}F\left(g+mh\right)\ge0
+\]
+
+
+
+\subsubsection*{Proof}
+
+\begin{eqnarray*}
+\frac{\partial}{\partial m}F\left(g+mv\right)|_{m=m} & = & \lim_{\epsilon\rightarrow0}\frac{F(g+\left(m+\epsilon\right)v)-F(g+mv)}{\epsilon}\\
+ & = & \lim_{\epsilon\rightarrow0}\frac{F(g+mv+\epsilon v)-F(g+mv)}{\epsilon}\\
+ & = & D_{v}F(g+mv)
+\end{eqnarray*}
+
+
+
+\subsubsection*{
+\begin{eqnarray*}
+\frac{\partial^{2}}{\partial m^{2}}F\left(g+mv\right) & = & \lim_{\epsilon\rightarrow0}\frac{\frac{\partial}{\partial m}F\left(g+mv\right)|_{m=m+\epsilon}-\frac{\partial}{\partial m}F\left(g+mv\right)|_{m=m}}{\epsilon}\protect\\
+ & = & \lim_{e\rightarrow0}\frac{D_{v}F(g+\left(m+\epsilon\right)v)-D_{v}F(g+mv)}{\epsilon}\protect\\
+ & = & \lim_{e\rightarrow0}\frac{D_{v}F(g+mv+\epsilon v)-D_{v}F(g+mv)}{\epsilon}\protect\\
+ & = & D_{v,v}^{2}F(g+mv)\protect\\
+ & \ge & 0
+\end{eqnarray*}
+}
 \end{document}

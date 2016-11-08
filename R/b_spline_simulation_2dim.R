@@ -270,8 +270,8 @@ cv_to_oracle_all <- lapply(n_sizes, function(n_val) {
     do.call("rbind", cv_to_oracle_ntrains)
 })
 cv_to_oracle_all <- do.call("rbind", cv_to_oracle_all)
+save(cv_to_oracle_all, file = "cv_to_oracle_all.RData")
 cv_to_oracle_not_tiny <- cv_to_oracle_all[cv_to_oracle_all$loss_diff_sq > 1e-10,]
-#save(cv_to_oracle_all, file = "cv_to_oracle_all.RData")
 cv_to_oracle_compare_w <- aggregate(loss_diff_sq ~ n, cv_to_oracle_all, FUN = mean)
 
 pdf('figures/validation_size_loss_diff.pdf', width=10, height=6)
