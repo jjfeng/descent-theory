@@ -13,11 +13,8 @@
 \title{The effect of adding a small ridge penalty}
 
 \maketitle
-\textbf{UPDATE: The current approaches all require the assumption
-that the original training criterion is strongly convex in $\boldsymbol{\theta}$,
-which is very silly since we only need to add a ridge penalty when
-the training criterion is not strongly convex. These proofs need more
-thinking through!}
+\textbf{Update: It seems that both approaches to showing the effect
+of the ridge penalty is incomplete.}
 
 We will show that adding a small ridge penalty scaled by some constant
 $w$ does not change the fitted model by very much. 
@@ -27,13 +24,9 @@ training criterion converges to the fitted model for the original
 training criterion. This uses the implicit function theorem.
 
 \begin{enumerate}
-\item \textbf{Big caveat}: this result doesn't quantify how small $w$ needs
-to be to ensure fast convergence rates. If we use a Lipschitz implicit
-function theorem (as established in Robinson 1991 combined with the
-result stated in Kummer 1989), we will need a condition that the Hessian
-of the training criterion is bounded below by some matrix $mI$, which
-we have already assumed in Section 2. So unfortunately the Implicit
-Function Theorem doesn't actually allow us to relax our assumptions.
+\item \textbf{Big caveat}: This result doesn't quantify how small $w$ needs
+to be to ensure fast convergence rates. Maybe we can use some sort
+of Lipschitz implicit function theorem ( Robinson 1991, Kummer 1989)?
 \item Note: The result applies to parametric models where the training criterion
 can contain smooth or nonsmooth penalties. The proof technique can
 probably be extended to (certain) nonparametric models (using an implicit
@@ -46,6 +39,13 @@ the differentiable space/local optimality space. As long as the training
 criterion is $m$-strongly convex with $m$ polynomial in the number
 of observations, we only increase the convergence rate by a $\log n$
 factor.
+
+\begin{enumerate}
+\item \textbf{Big caveat:} The current approach assumes the original training
+criterion is strongly convex in $\boldsymbol{\theta}$, which is very
+silly since we only need the additional ridge penalty when the training
+criterion is not strongly convex.
+\end{enumerate}
 \item A comment on the convergence rate in the nonsmooth case. We clarify
 potential misinterpretations of our results.
 \end{enumerate}
