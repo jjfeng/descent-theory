@@ -13,170 +13,81 @@
 \title{The effect of adding a small ridge penalty}
 
 \maketitle
-\textbf{Update: It seems that both approaches to showing the effect
-of the ridge penalty is incomplete.}
-
-We will show that adding a small ridge penalty scaled by some constant
-$w$ does not change the fitted model by very much. 
-\begin{enumerate}
-\item We first show that as $w\rightarrow0$, the fitted model to the perturbed
-training criterion converges to the fitted model for the original
-training criterion. This uses the implicit function theorem.
-
-\begin{enumerate}
-\item \textbf{Big caveat}: This result doesn't quantify how small $w$ needs
-to be to ensure fast convergence rates. Maybe we can use some sort
-of Lipschitz implicit function theorem ( Robinson 1991, Kummer 1989)?
-\item Note: The result applies to parametric models where the training criterion
-can contain smooth or nonsmooth penalties. The proof technique can
-probably be extended to (certain) nonparametric models (using an implicit
-function theorem for banach spaces).
-\end{enumerate}
-\item We show the fitted model is Lipschitz in $w$. It requires the assumption
-that the training criterion is strongly convex. This can be extended
-to the case of non-smooth penalites if we include assumptions about
-the differentiable space/local optimality space. As long as the training
-criterion is $m$-strongly convex with $m$ polynomial in the number
-of observations, we only increase the convergence rate by a $\log n$
-factor.
-
-\begin{enumerate}
-\item \textbf{Big caveat:} The current approach assumes the original training
-criterion is strongly convex in $\boldsymbol{\theta}$, which is very
-silly since we only need the additional ridge penalty when the training
-criterion is not strongly convex.
-\end{enumerate}
-\item A comment on the convergence rate in the nonsmooth case. We clarify
-potential misinterpretations of our results.
-\end{enumerate}
-
-\section{Continuity of ridge perturbation}
-
-We will consider the case of $p$-dimensional parametric models. Let
-
-\[
-\hat{\boldsymbol{\theta}}_{w}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)
-\]
-
-
-Let 
+We consider the case of $p$-dimensional parametric models. Let the
+original training criterion be denoted 
 \[
 L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})=\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})
 \]
 
 
-Suppose that $P_{j}(\boldsymbol{\theta})$ and $f(\cdot|\boldsymbol{\theta})$
-are continuously differentiable for all $\boldsymbol{\theta}$. Then
-there is a $W>0$ such that $\hat{\boldsymbol{\theta}}_{w}$ is a
-continuous mapping from $[0,W)$ into some open neighborhood $B\subseteq\mathbb{R}^{p}$.
+Let the minimizer to the perturbed training criterion be denoted for
+any $w\ge0$,
+
+\[
+\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\theta\in\mathbb{R}^{p}}L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}
+\]
 
 
-\subsubsection*{Proof}
+We show that adding a small ridge penalty scaled by some constant
+$w$ does not change the fitted model by very much. 
 
-Consider the function 
+This document is organized as follows
+\begin{enumerate}
+\item We quantify the effect of the ridge penalty for $w$ that are small
+enough. The proof uses the implicit function theorem and the mean
+value theorem. We assume that the original training criterion is locally
+strongly convex around its minimizer. 
+\item We extend the result to parametric models where the training criterion
+has nonsmooth penalties.
+\end{enumerate}
+
+\section{Result}
+
+Let 
 \[
 D(w,\boldsymbol{\theta})=\nabla_{\theta}\left[L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right]
 \]
 
 
-Since $D(\cdot,\boldsymbol{\theta}):\mathbb{R}\mapsto\mathbb{R}$
-is one-to-one, then by the Implicit Function Theorem (Kumagai 1980),
-there is a unique solution to $D\left(w,\cdot\right)=0$. By the gradient
-optimality conditions, we know that the solution must be $\hat{\boldsymbol{\theta}}_{w}$.
-Moreover, the Implicit Function Theorem states that there is some
-$W>0$ such that $\hat{\boldsymbol{\theta}}_{w}$ is a continuous
-mapping from $[0,W)$ to some open subset in $\mathbb{R}^{p}$.
+and suppose $D(w,\boldsymbol{\theta})$ is continuously differentiable
+in a neighborhood $\Theta_{0}$ containing $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)$.
 
-Source: Kumagai, 1980. An Implicit Function Theorem: Comment 
-
-
-\subsubsection*{Extension to Nonsmooth case}
-
-Let the differentiable space at $\hat{\boldsymbol{\theta}}_{0}$ be
-defined as 
+Suppose that there is an $m>0$ such that 
 \[
-\Omega=\left\{ \left.\boldsymbol{\eta}\right|\lim_{\epsilon\rightarrow0}\frac{L_{T}(\hat{\boldsymbol{\theta}}_{0}+\epsilon\boldsymbol{\eta}|\boldsymbol{\lambda})-L_{T}(\hat{\boldsymbol{\theta}}_{0}|\boldsymbol{\lambda})}{\epsilon}\mbox{ exists}\right\} 
+\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta})|_{\theta=\hat{\theta}_{\lambda}(0)}\succeq mI\mbox{ }
 \]
 
 
-Let $U$ be an orthonormal basis of $\Omega$ where $U$ has rank
-$q\le p$.
-
-Suppose that for all $w<W'$, we have that
-\[
-\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+w\|\boldsymbol{\theta}\|^{2}\right)=\min_{\beta\in\mathbb{R}^{q}}\frac{1}{2}\|y-f\left(\cdot|U\boldsymbol{\beta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(U\boldsymbol{\beta})+w\|U\boldsymbol{\beta}\|^{2}\right)
-\]
-
-
-Suppose that $P_{j}(U\boldsymbol{\beta})$ and $f(\cdot|U\boldsymbol{\beta})$
-are continuously differentiable along the directions in $U$. Then
-there is a $W>0$ such that $\hat{\boldsymbol{\theta}}_{w}=U\hat{\boldsymbol{\beta}}_{w}$
-is a continuous mapping from $[0,W)$ into some open neighborhood
-$B\subseteq\mathbb{R}^{p}$.
-
-
-\section{Parametric Models: Strongly Convex Penalized Objective}
-
-Let the training criterion be denoted $L_{T}$
-\[
-L_{T}(\boldsymbol{\theta})=\frac{1}{2}\|y-f(\cdot|\boldsymbol{\theta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})
-\]
-
-
-Suppose $\nabla^{2}L_{T}(\theta)$ exists and the training criterion
-is $m$-strongly convex in $\boldsymbol{\theta}$. That is, there
-is some constant $m>0$ such that
-\[
-\nabla^{2}L_{T}(\boldsymbol{\theta})\succeq mI
-\]
-
-
-Consider the minimizer of the perturbed problem
-
-\[
-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\theta}L_{T}(\boldsymbol{\theta})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}
-\]
-
-
-So $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)$ is the solution
-to the original penalized regression problem. 
-
-Then for any $w$, we have 
+There exists a $W>0$ such that for all $w\in[0,W)$ 
 \begin{eqnarray*}
-\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2} & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|
+\left\Vert \hat{\boldsymbol{\theta}}_{\lambda}(0)-\hat{\boldsymbol{\theta}}_{\lambda}(w)\right\Vert  & \le & \frac{w}{m}\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\lambda}(0)\|
 \end{eqnarray*}
 
 
 
 \subsubsection*{Proof}
 
-By page 460 of Boyd, we know that for strongly convex loss functions,
-we have that 
+By the implicit function, since $D(w,\boldsymbol{\theta})$ is continuously
+differentiable in a neighborhood $\Theta_{0}$ containing $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)$
+and $\nabla_{\theta}D(w,\boldsymbol{\theta})=\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})$
+is nonsingular at $\hat{\boldsymbol{\theta}}_{\lambda}(0)$, $\hat{\boldsymbol{\theta}}_{\lambda}(w)$
+is continuously differentiable over $[0,W)$ for some $W>0$. Furthermore,
+the implicit function theorem states that for all $w\in[0,W)$ 
+\begin{eqnarray*}
+\nabla_{w}\hat{\boldsymbol{\theta}}_{\lambda}(w) & = & -\left(\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta})|_{\theta=\hat{\theta}_{\lambda}(0)}\right)^{-1}\nabla_{w}D\left(w,\hat{\boldsymbol{\theta}}_{\lambda}(w)\right)\\
+ & = & -\left(\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta})|_{\theta=\hat{\theta}_{\lambda}(0)}\right)^{-1}\left(\sum_{j=1}^{J}\lambda_{j}\right)\hat{\boldsymbol{\theta}}_{\lambda}(w)
+\end{eqnarray*}
+
+
+Since $\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta})|_{\theta=\hat{\theta}_{\lambda}(0)}\succeq mI\mbox{ }$,
+then for all $w\in[0,W)$
 \[
-\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2}\le\frac{2}{m}\|\nabla L_{T}(\boldsymbol{\theta})\|_{\theta=\hat{\theta}_{\lambda}(w)}
+\left\Vert \nabla_{w}\hat{\boldsymbol{\theta}}_{\lambda}(w)\right\Vert \le m^{-1}\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\lambda}(w)\|
 \]
 
 
-By the gradient optimality conditions, we have that
-\[
-\nabla L_{T}(\boldsymbol{\theta})|_{\theta=\hat{\theta}_{\lambda}(w)}+\sum_{j=1}^{J}\lambda_{j}w\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)=0
-\]
-
-
-So 
-\[
-\|\nabla L_{T}(\boldsymbol{\theta})\|_{\theta=\hat{\theta}_{\lambda}(w)}=\left(\sum_{j=1}^{J}\lambda_{j}\right)w\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|
-\]
-
-
-We can show that 
-\[
-\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|^{2}\le\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|^{2}
-\]
-
-
-To see this, use the definitions of $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)$
-and $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)$: 
+We bound $\|\hat{\boldsymbol{\theta}}_{\lambda}(w)\|$ using the definitions
+of $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)$ and $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)$:
 \[
 L_{T}(\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w))+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|^{2}\le L_{T}(\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0))+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|^{2}
 \]
@@ -188,91 +99,68 @@ L_{T}(\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0))\le L_{T}(\hat{\boldsy
 \]
 
 
-Plugging in the inequality, we get
+Adding these two inequalities, we get that for all $w\in[0,W)$
+\[
+\|\hat{\boldsymbol{\theta}}_{\lambda}(w)\|^{2}\le\|\hat{\boldsymbol{\theta}}_{\lambda}(0)\|^{2}
+\]
+
+
+By the Mean Value Inequality, for all $w\in[0,W)$, there is a $w'\in(0,w)$
+such that 
 \begin{eqnarray*}
-\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2} & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)\|\\
- & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|
+\left\Vert \hat{\boldsymbol{\theta}}_{\lambda}(0)-\hat{\boldsymbol{\theta}}_{\lambda}(w)\right\Vert  & \le & w\left\Vert \left.\nabla_{w}\hat{\boldsymbol{\theta}}_{\lambda}(w)\right|_{w=w'}\right\Vert \\
+ & \le & \frac{w}{m}\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\lambda}(w')\|\\
+ & \le & \frac{w}{m}\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\lambda}(0)\|
 \end{eqnarray*}
 
 
 
-\subsubsection*{Extension to Nonsmooth case}
+\section{Nonsmooth Case}
 
-Let the differentiable space at $\hat{\boldsymbol{\theta}}_{\lambda}(0)$
-be defined as 
+Let the differentiable space at $\hat{\boldsymbol{\theta}}_{0}$ be
+defined as 
 \[
-\Omega(\hat{\boldsymbol{\theta}}_{\lambda}(0))=\left\{ \left.\boldsymbol{\eta}\right|\lim_{\epsilon\rightarrow0}\frac{L_{T}(\hat{\boldsymbol{\theta}}_{\lambda}(0)+\epsilon\boldsymbol{\eta}|\boldsymbol{\lambda})-L_{T}(\hat{\boldsymbol{\theta}}_{\lambda}(0)|\boldsymbol{\lambda})}{\epsilon}\mbox{ exists}\right\} 
+\Omega_{\lambda}=\left\{ \left.\boldsymbol{\eta}\right|\lim_{\epsilon\rightarrow0}\frac{L_{T}\left(\hat{\boldsymbol{\theta}}_{\lambda}(0)+\epsilon\boldsymbol{\eta}|\boldsymbol{\lambda}\right)-L_{T}\left(\hat{\boldsymbol{\theta}}_{\lambda}(0)|\boldsymbol{\lambda}\right)}{\epsilon}\mbox{ exists}\right\} 
 \]
 
 
-Let $U(\hat{\boldsymbol{\theta}}_{\lambda}(0))$ be an orthonormal
-basis of $\Omega(\hat{\boldsymbol{\theta}}_{\lambda}(0))$ where $U(\hat{\boldsymbol{\theta}}_{\lambda}(0))$
-has rank $q\le p$.
+Let $U_{\lambda}$ be an orthonormal basis of $\Omega$.
 
-Suppose that for all $w\in[0,W)$, we have that
+Suppose that for all $w<W'$, we have that
 \[
-\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-f\left(\cdot|\boldsymbol{\theta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+w\|\boldsymbol{\theta}\|^{2}\right)=\min_{\beta\in\mathbb{R}^{q}}\frac{1}{2}\|y-f\left(\cdot|U(\hat{\theta}_{0})\boldsymbol{\beta}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})+w\|U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta}\|^{2}\right)
+\min_{\theta\in\mathbb{R}^{p}}L_{T}(\boldsymbol{\theta}|\boldsymbol{\lambda})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\boldsymbol{\theta}\|^{2}=\min_{\beta\in\mathbb{R}^{q}}L_{T}(U_{\lambda}\boldsymbol{\beta}|\boldsymbol{\lambda})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|U_{\lambda}\boldsymbol{\beta}\|^{2}
 \]
 
 
-Suppose that $P_{j}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})$
-and $f(\cdot|U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})$
-are continuously differentiable along the directions in $U(\hat{\boldsymbol{\theta}}_{\lambda}(0))$.
-
-Suppose $_{U(\hat{\boldsymbol{\theta}}_{\lambda}(0))}\nabla^{2}L_{T}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})$
-exists and the training criterion is $m$-strongly convex in $\boldsymbol{\beta}$.
-That is, there is some constant $m>0$ such that
+Let 
 \[
-_{U(\hat{\boldsymbol{\theta}}_{\lambda}(0))}\nabla^{2}L_{T}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})\succeq mI
+\hat{\boldsymbol{\beta}}_{\lambda}(w)=\arg\min_{\beta\in\mathbb{R}^{q}}L_{T}(U_{\lambda}\boldsymbol{\beta}|\boldsymbol{\lambda})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|U_{\lambda}\boldsymbol{\beta}\|^{2}
 \]
 
 
-Consider the minimizer of the perturbed problem
-
+Suppose $_{U}\nabla_{\beta}^{2}L_{T}(U\boldsymbol{\beta}|\boldsymbol{\lambda})$
+is exists and is continuous in a neighborhood of $\hat{\boldsymbol{\beta}}_{\lambda}(w)$.
+Furthermore suppose there is a $m>0$ such that 
 \[
-\hat{\boldsymbol{\beta}}_{\boldsymbol{\lambda}}(w)=\arg\min_{\boldsymbol{\beta}}L_{T}(U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta})+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\boldsymbol{\beta}\|^{2}
+\left._{U}\nabla_{\beta}^{2}L_{T}(U\boldsymbol{\beta}|\boldsymbol{\lambda})\right|_{\beta=\hat{\boldsymbol{\beta}}_{\lambda}(w)}\succeq mI
 \]
 
 
-So $\hat{\boldsymbol{\beta}}_{\boldsymbol{\lambda}}(0)$ is the solution
-to the original penalized regression problem. 
+Then there is a $W>0$ such that for all $w\in[0,W)$, we have
 
-Then for any $w\in[0,W)$,
+
+\subsubsection*{
 \begin{eqnarray*}
-\|U(\hat{\boldsymbol{\theta}}_{\lambda}(0))\hat{\boldsymbol{\beta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2} & \le & \frac{2}{m}w\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|
+\left\Vert \hat{\boldsymbol{\theta}}_{\lambda}(0)-\hat{\boldsymbol{\theta}}_{\lambda}(w)\right\Vert _{2} & \le & \frac{w}{m}\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\theta}}_{\lambda}(0)\|_{2}
+\end{eqnarray*}
+Proof}
+
+By the result in Section 1, we know that
+\begin{eqnarray*}
+\left\Vert \hat{\boldsymbol{\beta}}_{\lambda}(0)-\hat{\boldsymbol{\beta}}_{\lambda}(w)\right\Vert _{2} & \le & \frac{w}{m}\left(\sum_{j=1}^{J}\lambda_{j}\right)\|\hat{\boldsymbol{\beta}}_{\lambda}(0)\|_{2}
 \end{eqnarray*}
 
 
-
-\section{Convergence rate for penalized regression problems with nonsmooth
-penalties}
-
-One must take care in combining all the results regarding penalized
-regression problems with nonsmooth penalties. As stated in Section
-2, we have shown that the fitted function of the perturbed penalized
-regression problem is close to that of the original. However, note
-that the result does not say 
-\[
-\|\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)-\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(0)\|_{2}\le(\mbox{constant})w
-\]
-
-
-This result is difficult to assert due to the nonsmooth nature of
-the training criterion; it is possible that $\hat{\boldsymbol{\theta}}_{\boldsymbol{\lambda}}(w)$
-are in different differentiable spaces. Therefore the result in Section
-2 means that we must the training criterion can only be stated if
-we fit the original regression problem and determine $\hat{\boldsymbol{\theta}}_{\lambda}(0)$.
-
-Therefore Theorem 3 in the nonsmooth case is actually bounding the
-probability
-\[
-Pr\left(\left\Vert g\left(\cdot|U\left(\hat{\boldsymbol{\theta}}_{\hat{\lambda}}(0)\right)\hat{\boldsymbol{\beta}}_{\hat{\lambda}}\left(w\right)\right)-g^{*}\right\Vert _{V}^{2}-\left\Vert g\left(\cdot|U\left(\hat{\boldsymbol{\theta}}_{\tilde{\lambda}}(0)\right)\hat{\boldsymbol{\beta}}_{\tilde{\lambda}}\left(w\right)\right)-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right)
-\]
-
-
-We are NOT bounding
-\[
-Pr\left(\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}_{\hat{\lambda}}(w)\right)-g^{*}\right\Vert _{V}^{2}-\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}_{\tilde{\lambda}}(w)\right)-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right)
-\]
-
+Since $\hat{\boldsymbol{\theta}}_{w}=U_{\lambda}\hat{\boldsymbol{\beta}}_{w}$
+and $U$ is an orthonormal matrix, the result follows.
 \end{document}
