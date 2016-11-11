@@ -35,10 +35,19 @@ This document is organized as follows
 \begin{enumerate}
 \item We quantify the effect of the ridge penalty for $w$ that are small
 enough. The proof uses the implicit function theorem and the mean
-value theorem. We assume that the original training criterion is locally
-strongly convex around its minimizer. 
-\item We extend the result to parametric models where the training criterion
-has nonsmooth penalties.
+value inequality. We assume that the original training criterion is
+strongly convex in some neighborhood around its minimizer. 
+
+\begin{enumerate}
+\item Caveat: To ensure our near-parametric convergence rates in Theorem
+1, the results depend on this neighborhood around the minimizer not
+to shrink in $n$ so quickly  that $w$ needs to be exponential in
+$n$. It also depends on the strong convexity constant $m$ not to
+be shrinking at some exponential rate in $m$. I think these are okay
+assumptions?
+\end{enumerate}
+\item We extend the result to penalized regression problems with nonsmooth
+penalties.
 \end{enumerate}
 
 \section{Result}
@@ -124,7 +133,8 @@ defined as
 \]
 
 
-Let $U_{\lambda}$ be an orthonormal basis of $\Omega$.
+Let $U_{\lambda}$ be an orthonormal basis of $\Omega_{\lambda}$.
+Suppose $U_{\lambda}$ has rank $q\le p$.
 
 Suppose that for all $w<W'$, we have that
 \[
@@ -138,11 +148,11 @@ Let
 \]
 
 
-Suppose $_{U}\nabla_{\beta}^{2}L_{T}(U\boldsymbol{\beta}|\boldsymbol{\lambda})$
+Suppose $_{U_{\lambda}}\nabla_{\beta}^{2}L_{T}(U_{\lambda}\boldsymbol{\beta}|\boldsymbol{\lambda})$
 is exists and is continuous in a neighborhood of $\hat{\boldsymbol{\beta}}_{\lambda}(w)$.
 Furthermore suppose there is a $m>0$ such that 
 \[
-\left._{U}\nabla_{\beta}^{2}L_{T}(U\boldsymbol{\beta}|\boldsymbol{\lambda})\right|_{\beta=\hat{\boldsymbol{\beta}}_{\lambda}(w)}\succeq mI
+\left._{U_{\lambda}}\nabla_{\beta}^{2}L_{T}(U_{\lambda}\boldsymbol{\beta}|\boldsymbol{\lambda})\right|_{\beta=\hat{\boldsymbol{\beta}}_{\lambda}(w)}\succeq mI
 \]
 
 
@@ -162,5 +172,5 @@ By the result in Section 1, we know that
 
 
 Since $\hat{\boldsymbol{\theta}}_{w}=U_{\lambda}\hat{\boldsymbol{\beta}}_{w}$
-and $U$ is an orthonormal matrix, the result follows.
+and $U_{\lambda}$ is an orthonormal matrix, the result follows.
 \end{document}
