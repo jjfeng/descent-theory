@@ -816,10 +816,10 @@ Then for all $\boldsymbol{\lambda}\in\Lambda$, we have
 
 \subsubsection*{Proof}
 
-By the mean value theorem, there is some $\alpha\in(0,1)$ such that
+By the mean value inequality, there is some $\alpha\in(0,1)$ such
+that
 \begin{eqnarray*}
-\left|\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda}')\right| & = & \left|\left\langle \left.\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right|_{\lambda=\alpha\lambda+(1-\alpha)\lambda'},\boldsymbol{\lambda}-\boldsymbol{\lambda}'\right\rangle \right|\\
- & \le & \max_{\lambda\in\Lambda}\|\nabla_{\boldsymbol{\lambda}}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\|\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|\\
+\left|\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda}')\right| & \le & \max_{\lambda\in\Lambda}\|\nabla_{\boldsymbol{\lambda}}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\|\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|\\
  & \le & B\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|
 \end{eqnarray*}
 
