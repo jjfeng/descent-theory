@@ -399,31 +399,25 @@ Finally, we note that additive models are not the only problems where the estima
 \subsection{Parametric additive models}
 \label{sec:param_add_models}
 
-We first consider parametric additive models of the form
+Here we consider parametric additive models of the form
 \begin{equation}
 g(\cdot | \boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)}) = \sum_{j=1}^J g_j(\cdot | \boldsymbol{\theta}^{(j)})
 \end{equation}
-where $\boldsymbol{\theta}^{(j)} \in \mathbb{R}^{p_j}$ and $p = \sum_{j=1}^J p_j$. For simplicity, let $\boldsymbol{\theta} = \left (\boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)} \right )^\top$. Let $\boldsymbol{\theta}^*$ be the true model parameter. The number of dimensions $p_j$ is allowed to grow with $n$, as commonly done in sieve estimation. 
+where $\boldsymbol{\theta}^{(j)} \in \mathbb{R}^{p_j}$ and $p = \sum_{j=1}^J p_j$. For simplicity, let $\boldsymbol{\theta} = \left (\boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)} \right )^\top$. Let $\boldsymbol{\theta}^*$ be the true model parameter. The number of dimensions $p_j$ is allowed to grow with $n$, as commonly done in sieve estimation. We will suppose that the functions $g_j$ are Lipschitz in $\boldsymbol{\theta}$ with respect to $\| \cdot \|_\infty$.
 
 We consider training criteria of the form
 \begin{equation}
 \label{eq:param_add}
 L_T \left (y, \boldsymbol{\theta} | \boldsymbol{\lambda} \right) 
-\coloneqq \frac{1}{2} \left  \| y -  \sum_{j=1}^J g_j(X| \boldsymbol{\theta}^{(j)}) \right \|^2_T 
+\coloneqq \frac{1}{2} \left  \| y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j P_j(\boldsymbol{\theta}^{(j)})
 \end{equation}
-%\begin{equation}
-%\label{eq:param_add_models_ridge}
-%\left \{ \hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}) \right \}_{j=1}^J = \argmin_{\boldsymbol{\theta }^{(j)}\in \mathbb{R}^{p_j}} 
-%\frac{1}{2} \left  \| y -  \sum_{j=1}^J g_j(X| \boldsymbol{\theta}^{(j)}) \right \|^2_T 
-%+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2_2 \right )
-%\end{equation}
-We will show the fitted models are Lipschitz in the penalty parameters with respect to $\| \cdot \|_\infty$, which satisfies the condition in both Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
+We show that the fitted models are indeed Lipschitz in the penalty parameters with respect to $\| \cdot \|_\infty$, which satisfies the condition in both Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
 
 %\footnote{Many popular estimators are Lipschitz since we usually construct the model by taking a linear combination of some basis functions.}
 
 \subsubsection{Parametric regression with smooth penalties}
-Suppose all the penalty functions are smooth. The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
+We first suppose the penalty functions are all smooth. In the following section, we will generalize the results to include certain nonsmooth penalty functions. The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
 \begin{lemma}
 	\label{lemma:param_add}
 	Let 
@@ -436,7 +430,9 @@ Suppose all the penalty functions are smooth. The following lemma states that th
 	
 	Suppose that $g_j(\cdot| \boldsymbol{\theta}^{(j)})$ are $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
 	
-	Suppose $P_j(\boldsymbol{\theta})$ and $g_j(\cdot| \boldsymbol{\theta})$ are twice-differentiable and convex with respect to $\boldsymbol{\theta}^{(j)}$ for all $j=1,..,J$. Suppose $L_T\left (y, \boldsymbol{\theta} | \boldsymbol{\lambda} \right )$ is twice-differentiable and convex with respect to $\boldsymbol{\theta}$. Suppose there is a $m > 0$ such that the Hessian of the penalized training criterion at the minimizer satisfies 
+	Suppose $P_j(\boldsymbol{\theta})$ and $g_j(\cdot| \boldsymbol{\theta})$ are twice-differentiable and convex with respect to $\boldsymbol{\theta}^{(j)}$ for all $j=1,..,J$. Suppose $L_T\left (y, \boldsymbol{\theta} | \boldsymbol{\lambda} \right )$ is twice-differentiable and convex with respect to $\boldsymbol{\theta}$.
+	
+	Suppose there is a $m > 0$ such that the Hessian of the penalized training criterion at the minimizer satisfies 
 	\begin{equation}
 	\left . \nabla_{\theta}^2 L_T(y, \boldsymbol{\theta} | \boldsymbol{\lambda}) \right |_{\theta = \hat{\theta}(\boldsymbol{\lambda})} \succeq mI
 	\end{equation}
@@ -457,6 +453,14 @@ Suppose all the penalty functions are smooth. The following lemma states that th
 	\left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|
 	\end{equation}
 \end{lemma}
+
+Notice that the result requires that the training criterion is strongly convex at its minimizer. If this is not true, one can add augment the penalty function $P_j(\boldsymbol{\theta}^{(j)})$ with a ridge penalty $\| \boldsymbol{\theta}^{(j)} \|_2^2$ so that the training criterion becomes
+\begin{equation}
+\label{eq:param_add_models_ridge}
+\frac{1}{2} \left  \| y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
++ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2_2 \right )
+\end{equation}
+
 
 The proofs for all the examples follow a similar recipe. We determine the gradient of the fitted model with respect to the penalty parameter vector by implicitly differentiating the KKT conditions. We can then bound the norm of the gradient to get the Lipschitz constant.
 
