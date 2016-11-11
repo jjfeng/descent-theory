@@ -1,0 +1,2215 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation landscape
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3cm
+\topmargin 3cm
+\rightmargin 3cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Proofs for Smoothness of Parametric Regression Models
+\end_layout
+
+\begin_layout Section*
+Intro
+\end_layout
+
+\begin_layout Standard
+In this document, we consider parametric regression models 
+\begin_inset Formula $g(\cdot|\boldsymbol{\theta})$
+\end_inset
+
+ where 
+\begin_inset Formula $\boldsymbol{\theta}\in\mathbb{R}^{p}$
+\end_inset
+
+.
+ Throughout, we will suppose 
+\begin_inset Formula $\boldsymbol{\theta}^{*}$
+\end_inset
+
+ is the model such that 
+\begin_inset Formula 
+\[
+\boldsymbol{\theta}^{*}=\arg\min_{\theta\in\Theta}E_{x,y}\left[\left(y-g(x|\boldsymbol{\theta})\right)^{2}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Technically, all the proofs require is that 
+\begin_inset Formula $\boldsymbol{\theta}^{*}\in\Theta$
+\end_inset
+
+ is fixed.
+ In the convergence rate proofs, we will need 
+\begin_inset Formula $\boldsymbol{\theta}^{*}$
+\end_inset
+
+ to satisfy 
+\begin_inset Formula $E[y|x]=g(x|\boldsymbol{\theta}^{*})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We are interested in establishing inequalities of the form 
+\begin_inset Formula 
+\[
+\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le C\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the functions are 
+\begin_inset Formula $L$
+\end_inset
+
+-Lipschitz in their parameterization, we will also be able to bound the
+ distance between the actual functions.
+ That is, if there is a constant 
+\begin_inset Formula $L>0$
+\end_inset
+
+ such that for all 
+\begin_inset Formula $\boldsymbol{\theta_{1},\theta_{2}}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then
+\begin_inset Formula 
+\[
+\|g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}})-g(\cdot|\boldsymbol{\hat{\theta}_{\lambda^{(2)}}})\|_{\infty}\le LC\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Document Outline
+\end_layout
+
+\begin_layout Standard
+First, we consider smooth training criteria and prove smoothness for two
+ parametric regression examples:
+\end_layout
+
+\begin_layout Enumerate
+Multiple penalties for a single model
+\begin_inset Formula 
+\[
+\hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Additive model
+\begin_inset Formula 
+\[
+\hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}_{j})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}_{j})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then we will extend these results to non-smooth penalty functions.
+\end_layout
+
+\begin_layout Standard
+Finally we will consider examples of parametric penalty functions.
+ This includes a deep dive into the Sobolev penalty.
+\end_layout
+
+\begin_layout Section
+Multiple smooth penalties for a single model
+\end_layout
+
+\begin_layout Standard
+The function class of interest are the minimizers of the penalized least
+ squares criterion: 
+\begin_inset Formula 
+\[
+\mathcal{G}(T)=\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}):\boldsymbol{\lambda}\in\Lambda\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Suppose that the penalties and the function 
+\begin_inset Formula $g(x|\boldsymbol{\theta})$
+\end_inset
+
+ are twice-differentiable and convex wrt 
+\begin_inset Formula $\boldsymbol{\theta}$
+\end_inset
+
+: 
+\end_layout
+
+\begin_layout Itemize
+Suppose that 
+\begin_inset Formula $\nabla_{\theta}^{2}P_{j}(\boldsymbol{\theta})$
+\end_inset
+
+ are PSD matrices for all 
+\begin_inset Formula $j=1,...,J$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+Suppose that 
+\begin_inset Formula $\nabla_{\theta}^{2}\|y-g(x|\boldsymbol{\theta})\|_{T}^{2}$
+\end_inset
+
+ is a PSD matrix.
+\end_layout
+
+\begin_layout Itemize
+Suppose that there is a 
+\begin_inset Formula $m>0$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+\left.\nabla_{\theta}^{2}\|y-g(x|\boldsymbol{\theta})\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\nabla_{\theta}^{2}P_{j}(\boldsymbol{\theta})\right|_{\theta=\hat{\theta}(\lambda)}\succeq mI
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Suppose there is some constants 
+\begin_inset Formula $K_{1},K_{0}>0$
+\end_inset
+
+ such that for all 
+\begin_inset Formula $j=1,...,J$
+\end_inset
+
+ and any 
+\begin_inset Formula $\boldsymbol{\theta}'$
+\end_inset
+
+, we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left|\left.\nabla_{\theta}P_{j}\left(\boldsymbol{\theta}\right)\right|_{\boldsymbol{\theta}=\boldsymbol{\theta}'}\right|\le K_{1}\|\boldsymbol{\theta}'\|_{2}+K_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula 
+\[
+C_{\theta^{*},\Lambda}=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}P_{j}(\boldsymbol{\theta}^{*})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then for any 
+\begin_inset Formula $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
+\end_inset
+
+ we have
+\begin_inset Formula 
+\[
+\|\boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\|_{2}\le\frac{1}{mJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Moreover, if 
+\begin_inset Formula $g(\cdot|\boldsymbol{\theta})$
+\end_inset
+
+ is 
+\begin_inset Formula $L$
+\end_inset
+
+-Lipschitz wrt 
+\begin_inset Formula $\|\cdot\|_{\infty}$
+\end_inset
+
+, then
+\begin_inset Formula 
+\[
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\frac{1}{mJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+1.
+ We calculate 
+\begin_inset Formula $\nabla_{\lambda}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
+\end_inset
+
+ using the implicit differentiation trick.
+\end_layout
+
+\begin_layout Standard
+By the KKT conditions, we have 
+\begin_inset Formula 
+\[
+\left.\nabla_{\boldsymbol{\theta}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})\right)\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we implicitly differentiate with respect to 
+\begin_inset Formula $\boldsymbol{\lambda}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left.\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})\right)\nabla_{\lambda}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})+\nabla_{\theta}P(\boldsymbol{\theta})\right]\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula 
+\[
+\nabla_{\theta}P(\boldsymbol{\theta})=\left\{ \begin{array}{ccc}
+\nabla_{\theta}P_{1}(\boldsymbol{\theta}) & ... & \nabla_{\theta}P_{J}(\boldsymbol{\theta})\end{array}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Rearranging, we have for all 
+\begin_inset Formula $\boldsymbol{\lambda}\in\Lambda$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\nabla_{\lambda}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})=-\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right]^{-1}\left(\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+2.
+ Bound 
+\begin_inset Formula $\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\|$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,...,p$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We know that
+\series bold
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert  & = & \left\Vert e_{i}^{\top}\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right]^{-1}\left(\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right)\right\Vert \\
+ & = & \left\Vert e_{i}^{\top}\left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}\right)\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right]^{-1}\left(\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right)\right\Vert \\
+ & \le & \left\Vert \left[\nabla_{\theta}^{2}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})\right)_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}+\sum_{j=1}^{J}\lambda_{j}wI\right]^{-1}\right\Vert \left(\left\Vert \left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\Vert _{F}+w\left\Vert \boldsymbol{\theta}\vec{\boldsymbol{1}}_{J}^{\top}\right\Vert \right)\\
+ & \le & \left\Vert \left[\sum_{j=1}^{J}\lambda_{j}wI\right]^{-1}\right\Vert \left(\left\Vert \left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\Vert _{F}+w\sqrt{J}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}\right)\\
+ & \le & \frac{1}{J\lambda_{min}w}\left(\sqrt{J}\left(K_{1}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}+K_{0}\right)+w\sqrt{J}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}\right)\\
+ & = & \frac{\left(K_{1}+w\right)\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}+K_{0}}{\lambda_{min}w\sqrt{J}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The second inequality follows from the assumption that 
+\begin_inset Formula $\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta})$
+\end_inset
+
+ is convex in 
+\begin_inset Formula $\boldsymbol{\theta}$
+\end_inset
+
+.
+ The last inequality follows from the assumption 
+\begin_inset Formula $\left.\nabla_{\theta}P(\boldsymbol{\theta})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\le K\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We can use the definition of 
+\begin_inset Formula $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
+\end_inset
+
+ to bound 
+\begin_inset Formula $\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}$
+\end_inset
+
+.
+ By definition, 
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{j=1}^{J}\lambda_{j}\frac{w}{2}\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}^{2} & \le & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|^{2}\right)\\
+ & \le & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}^{*}\|^{2}\right)\\
+ & = & C_{\theta^{*},\Lambda}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So 
+\begin_inset Formula 
+\[
+\|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})\|_{2}\le\sqrt{\frac{2}{J\lambda_{min}w}C_{\theta^{*},\Lambda}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence for all 
+\begin_inset Formula $\boldsymbol{\lambda}\in\Lambda$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert \le\frac{1}{\lambda_{min}wJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+4.
+ Put all the bounds together
+\end_layout
+
+\begin_layout Standard
+By the mean value theorem, there is a 
+\begin_inset Formula $\alpha\in(0,1)$
+\end_inset
+
+ such that
+\series bold
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda^{(2)}})\| & \le & \left\langle \left.\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right|_{\lambda=\alpha\lambda^{(1)}+(1-\alpha)\lambda^{(2)}},\boldsymbol{\lambda^{(1)}}-\boldsymbol{\lambda^{(2)}}\right\rangle \\
+ & \le & \max_{\lambda\in\Lambda}\left\Vert \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right\Vert \left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert \\
+ & \le & \frac{1}{\lambda_{min}wJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert 
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Moreover, if 
+\begin_inset Formula $g(\cdot|\boldsymbol{\theta})$
+\end_inset
+
+ is 
+\begin_inset Formula $L$
+\end_inset
+
+-Lipschitz, then 
+\begin_inset Formula 
+\[
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty}\le L\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So
+\begin_inset Formula 
+\begin{eqnarray*}
+\|g(\cdot|\boldsymbol{\theta}_{1})-g(\cdot|\boldsymbol{\theta}_{2})\|_{\infty} & \le & L\frac{1}{\lambda_{min}wJ}\left(\left(K_{1}+w\right)\sqrt{\frac{2}{\lambda_{min}w}C_{\theta^{*},\Lambda}}+K_{0}\right)\|\boldsymbol{\lambda^{(2)}}-\boldsymbol{\lambda^{(1)}}\|_{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Additive Model
+\end_layout
+
+\begin_layout Standard
+The function class of interest are the minimizers of the penalized least
+ squares criterion: 
+\begin_inset Formula 
+\[
+\mathcal{G}(T)=\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta\in\mathbb{R}^{p}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}^{(j)})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}^{(j)})+\frac{w}{2}\|\boldsymbol{\theta}^{(j)}\|_{2}^{2}\right):\boldsymbol{\lambda}\in\Lambda\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Suppose that the penalties, functions 
+\begin_inset Formula $g_{j}(x|\boldsymbol{\theta}^{(j)})$
+\end_inset
+
+ are twice-differentiable wrt 
+\begin_inset Formula $\boldsymbol{\theta}$
+\end_inset
+
+ and for all 
+\begin_inset Formula $j=1,...,J$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\nabla_{\boldsymbol{\theta}^{(j)}}^{2}P_{j}(\boldsymbol{\theta}^{(j)})$
+\end_inset
+
+ are PSD matrices for all 
+\begin_inset Formula $j=1,...,J$
+\end_inset
+
+ (so convex penalties)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $g_{j}(x|\boldsymbol{\theta}^{(j)})$
+\end_inset
+
+ is convex in 
+\begin_inset Formula $\boldsymbol{\theta}^{(j)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\nabla_{\boldsymbol{\theta}}^{2}\|y-\sum_{j=1}^{J}g_{j}(x|\boldsymbol{\theta}^{(j)})\|_{T}^{2}$
+\end_inset
+
+ is a PSD matrix
+\end_layout
+
+\begin_layout Standard
+Suppose there is a constant 
+\begin_inset Formula $L>0$
+\end_inset
+
+ such that for all 
+\begin_inset Formula $\boldsymbol{\theta,\theta}'$
+\end_inset
+
+ and all 
+\begin_inset Formula $j=1,...,J$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\|g_{j}(\cdot|\boldsymbol{\theta})-g_{j}(\cdot|\boldsymbol{\theta}')\|_{\infty}\le L\|\boldsymbol{\theta}-\boldsymbol{\theta}'\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula 
+\[
+C_{\theta^{*},\Lambda}=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}^{(j),*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then for any 
+\begin_inset Formula $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right\Vert \le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \frac{L^{2}J^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+For simplicity, we write 
+\begin_inset Formula 
+\[
+g(\cdot|\boldsymbol{\theta})=\sum_{i=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}^{(j)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})=\left\{ \hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right\} _{j=1}^{J}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+1.
+ Calculate 
+\begin_inset Formula $\nabla_{\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})$
+\end_inset
+
+ using the implicit differentiation trick.
+\end_layout
+
+\begin_layout Standard
+By the KKT conditions, we have for all 
+\begin_inset Formula $j=1:J$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\left.\nabla_{\theta^{(j)}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right)+\lambda_{j}w\boldsymbol{\theta}^{(j)}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we implicitly differentiate with respect to 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\lambda}\left\{ \left.\left[\nabla_{\theta^{(j)}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right)+\lambda_{j}w\boldsymbol{\theta}^{(j)}\right]\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By the product rule and chain rule, we have 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left.\left\{ \sum_{k=1}^{J}\left[\nabla_{\boldsymbol{\theta}^{(k)}}\nabla_{\boldsymbol{\theta}^{(j)}}\left(\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}+1[k=j]\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right)+1[k=j]\lambda_{j}wI\right]\nabla_{\lambda}\hat{\boldsymbol{\theta}}^{(k)}(\boldsymbol{\lambda})\right\} +\left\{ \begin{array}{ccccccc}
+\vec{0} & ... & \vec{0} & \nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})+w\hat{\boldsymbol{\theta}}^{(j)} & \vec{0} & ... & \vec{0}\end{array}\right\} \right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)} & = & 0
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Define the following matrices 
+\begin_inset Formula 
+\begin{eqnarray*}
+S:S_{jk} & = & \left.\nabla_{\boldsymbol{\theta}}^{2}\frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+D_{1}=\left.diag\left(\left\{ \nabla_{\boldsymbol{\theta}^{(j)}}^{2}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right\} _{j=1}^{J}\right)\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+D_{2}=diag\left(w\lambda_{j}I^{p_{j}\times p_{j}}\right)\mbox{ where }\theta^{(j)}\in\mathbb{R}^{p_{j}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+M=\left.\left\{ \left[\begin{array}{c}
+\vec{0}\\
+\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})+w\boldsymbol{\theta}^{(j)}\\
+\vec{0}
+\end{array}\right]\right\} _{j=1}^{J}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\mbox{(stack side by side)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can then combine all the equations into the following system of equations:
+\begin_inset Formula 
+\[
+\left(\begin{array}{cccc}
+\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{1}(\boldsymbol{\lambda}) & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{2}(\boldsymbol{\lambda}) & ... & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{p}(\boldsymbol{\lambda})\end{array}\right)=-M^{\top}\left(S+D_{1}+D_{2}\right)^{-1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $S$
+\end_inset
+
+ is a PSD matrix since the composition of a convex function with an affine
+ function is convex.
+ 
+\begin_inset Formula $D_{1}$
+\end_inset
+
+ is a PSD matrix since the penalty functions are convex.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+2.
+ We bound every column in 
+\begin_inset Formula $M$
+\end_inset
+
+
+\series default
+:
+\end_layout
+
+\begin_layout Standard
+Rearranging the KKT conditions, we have 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})+w\boldsymbol{\theta}^{(j)}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)} & = & \frac{1}{2\lambda_{j}}\left.\nabla_{\theta^{(j)}}\left\Vert y-g(\cdot|\boldsymbol{\theta})\right\Vert _{T}^{2}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\\
+ & = & \frac{1}{\lambda_{j}}\left.\left\langle \nabla_{\theta^{(j)}}g_{j}(\cdot|\boldsymbol{\theta}^{(j)}),y-g(\cdot|\boldsymbol{\theta})\right\rangle _{T}\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By the definition of 
+\begin_inset Formula $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
+\end_inset
+
+, we have
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{1}{2}\left\Vert y-g(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}\left(\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right)+\frac{w}{2}\|\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\|^{2}\right) & \le & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)\\
+ & = & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)\\
+ & = & C_{\theta^{*},\Lambda}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\begin_inset Formula 
+\[
+\left\Vert y-g(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\le\sqrt{2C_{\theta^{*},\Lambda}}\mbox{ }
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})+w\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{\lambda})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le & \left\Vert \frac{1}{\lambda_{j}}\left.\left\langle \nabla_{\theta^{(j)}}g_{j}(\cdot|\boldsymbol{\theta}^{(j)}),y-g(\cdot|\boldsymbol{\theta})\right\rangle \right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert \\
+ & \le & \frac{1}{\lambda_{min}n_{T}}\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}\left|y-g(x_{i}|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right|\\
+ & \le & \frac{1}{\lambda_{min}\sqrt{n_{T}}}\left\Vert y-g(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}\\
+ & \le & \frac{1}{\lambda_{min}\sqrt{n_{T}}}\sqrt{2C_{\theta^{*},\Lambda}}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition, since 
+\begin_inset Formula $g_{j}(\cdot|\boldsymbol{\theta}^{(j)})$
+\end_inset
+
+ is 
+\begin_inset Formula $L$
+\end_inset
+
+-Lipschitz with respect to 
+\begin_inset Formula $\|\cdot\|_{\infty}$
+\end_inset
+
+, we have that 
+\begin_inset Formula 
+\[
+\left\Vert \nabla_{\theta^{(j)}}g_{j}(x|\boldsymbol{\theta}^{(j)})\right\Vert _{2}\le L\mbox{ }\forall x
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Putting all of this together, we get that for all 
+\begin_inset Formula $j=1,...,J$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}+w\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{\lambda})\right\Vert  & \le & \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+3.
+ We bound the norm of 
+\begin_inset Formula $\nabla_{\lambda_{k}}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
+\end_inset
+
+ for all 
+\begin_inset Formula $k=1,...,J$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For every 
+\begin_inset Formula $i=1,...,p$
+\end_inset
+
+, we have
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\| & = & \|M^{\top}\left(S+D_{1}+D_{2}\right)^{-1}e_{k}\|\\
+ & \le & \sum_{j=1}^{J}\|M_{j}\|_{2}\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}\right\Vert _{2}\\
+ & = & \sum_{j=1}^{J}\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}+w\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{\lambda})\right\Vert _{2}\left\Vert \left(S+D_{1}+D_{2}\right)^{-1}\right\Vert _{2}\\
+ & \le & J\left(\frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}\right)\left(\frac{1}{w\lambda_{min}}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since the derivative of 
+\begin_inset Formula $\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})$
+\end_inset
+
+ is bounded, then  by Lemma 2 below, 
+\begin_inset Formula $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
+\end_inset
+
+ must be Lipschitz:
+\begin_inset Formula 
+\[
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+4.
+ Put all the bounds together
+\end_layout
+
+\begin_layout Standard
+Since each 
+\begin_inset Formula $g_{j}(\cdot|\boldsymbol{\theta}^{(j)})$
+\end_inset
+
+ is Lipschitz in 
+\begin_inset Formula $\boldsymbol{\theta}^{(j)}$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \sum_{j=1}^{J}\left\Vert g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty}\\
+ & \le & \sum_{j=1}^{J}L\|\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda^{(2)}})\|_{2}\\
+ & \le & L\sqrt{J}\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right\Vert _{2}\\
+ & \le & \frac{L^{2}J^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Nonsmooth Penalties
+\end_layout
+
+\begin_layout Standard
+Suppose we are dealing with parametric regression problems from Section
+ 1 or 2.
+ We keep all the same assumptions, except those that concern the smoothness
+ of the penalties.
+ 
+\end_layout
+
+\begin_layout Standard
+Recall that 
+\begin_inset Formula $\Lambda\subseteq\mathbb{R}^{J}$
+\end_inset
+
+.
+ Consider the measure space over 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ with respect to the Lebesgue measure 
+\begin_inset Formula $\mu$
+\end_inset
+
+.
+ We suppose that for a given dataset 
+\begin_inset Formula $\left(X,y\right)$
+\end_inset
+
+, suppose the following three assumptions hold:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Assumption (1):
+\series default
+ Let the penalized training criterion be denoted 
+\begin_inset Formula $L_{T}(\boldsymbol{\theta},\boldsymbol{\lambda})$
+\end_inset
+
+.
+ Denote the differentiable space of 
+\begin_inset Formula $L_{T}(\cdot,\boldsymbol{\lambda})$
+\end_inset
+
+ at any point 
+\begin_inset Formula $\boldsymbol{\theta}$
+\end_inset
+
+ as 
+\begin_inset Formula 
+\[
+\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\boldsymbol{\theta}\right)=\left\{ \boldsymbol{\eta}|\lim_{\epsilon\rightarrow0}\frac{L_{T}(\boldsymbol{\theta}+\epsilon\boldsymbol{\eta})-L_{T}(\boldsymbol{\theta})}{\epsilon}\mbox{ exists}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose there is a set 
+\begin_inset Formula $\Lambda_{smooth}\subseteq\Lambda$
+\end_inset
+
+ such that 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Cond 1:
+\series default
+ For every 
+\begin_inset Formula $\boldsymbol{\lambda}\in\Lambda_{smooth}$
+\end_inset
+
+, there exists a ball with nonzero radius centered at 
+\begin_inset Formula $\boldsymbol{\lambda}$
+\end_inset
+
+, denoted 
+\begin_inset Formula $B(\boldsymbol{\lambda})$
+\end_inset
+
+, such that
+\end_layout
+
+\begin_layout Itemize
+For all 
+\begin_inset Formula $\boldsymbol{\lambda}'\in B(\boldsymbol{\lambda})$
+\end_inset
+
+, the training criterion 
+\begin_inset Formula $L_{T}(\cdot,\cdot)$
+\end_inset
+
+ is twice differentiable along directions in 
+\begin_inset Formula $\Omega^{L_{T}(\cdot,\cdot)}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)$
+\end_inset
+
+.
+ (So technically the twice-differentiable space is constant)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)$
+\end_inset
+
+ is a local optimality space of 
+\begin_inset Formula $B(\boldsymbol{\lambda})$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\arg\min_{\theta\in\Theta}L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}'\right)=\arg\min_{\theta\in\Omega^{L_{T}(\cdot,\boldsymbol{\lambda})}\left(\hat{\boldsymbol{\theta}}_{\lambda}\right)}L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}'\right)\mbox{ }\forall\boldsymbol{\lambda}'\in B(\boldsymbol{\lambda})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Cond 2:
+\series default
+ For every 
+\begin_inset Formula $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$
+\end_inset
+
+, let the line segment between the two points be denoted 
+\begin_inset Formula 
+\[
+\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})=\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose the intersection 
+\begin_inset Formula $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap\Lambda_{smooth}^{C}$
+\end_inset
+
+ is countable.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Assumption
+\series default
+ 
+\series bold
+modifications:
+\series default
+ Previously we bounded the derivative of 
+\begin_inset Formula $P_{j}$
+\end_inset
+
+.
+ Now we only need the bound to apply when the directional derivative exists.
+ The condition on the derivative of the penalty is now
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left\Vert \nabla_{\boldsymbol{\theta}}P_{j}\left(\boldsymbol{\theta}\right)\right\Vert _{2}\le K_{1}\|\boldsymbol{\theta}\|_{2}+K_{0}\mbox{ if }\frac{\partial}{\partial m}P_{j}\left(\boldsymbol{\theta}+m\boldsymbol{\beta}\right)\mbox{exists}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under these assumptions, the same Lipschitz conditions hold for dataset
+ 
+\begin_inset Formula $\left(X,y\right)$
+\end_inset
+
+ and every 
+\begin_inset Formula $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+Consider any 
+\begin_inset Formula $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$
+\end_inset
+
+.
+ The length of 
+\begin_inset Formula $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+ covered by set 
+\begin_inset Formula $A$
+\end_inset
+
+ can be expressed as 
+\begin_inset Formula 
+\[
+\mu_{1}\left(A\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\mu_{1}$
+\end_inset
+
+ is the Lebesgue measure over the line segment 
+\begin_inset Formula $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+.
+ (So if 
+\begin_inset Formula $A\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+ is just a line segment, it is the length 
+\begin_inset Formula $\|A\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\|_{2}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+By the Differentiability Cover Lemma below, there exists a countable set
+ of points 
+\begin_inset Formula $\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+ such that the union of their 
+\begin_inset Quotes eld
+\end_inset
+
+balls of differentiabilities
+\begin_inset Quotes erd
+\end_inset
+
+ entirely cover 
+\begin_inset Formula $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+: 
+\begin_inset Formula 
+\[
+\max_{\{\boldsymbol{\ell}^{(i)}\}_{i=1}^{\infty}}\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)=\left\Vert \mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right\Vert _{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula 
+\[
+\left\{ \boldsymbol{\ell}_{max}^{(i)}\right\} _{i=1}^{\infty}=\left\{ \arg\max_{\left\{ \boldsymbol{\ell}^{(i)}\right\} }\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)\right\} \cup\left\{ \boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $P$
+\end_inset
+
+ be the intersections of the boundary of 
+\begin_inset Formula $B\left(\boldsymbol{\ell}_{max}^{(i)}\right)$
+\end_inset
+
+ with the line segment 
+\begin_inset Formula $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+P=\cup_{i=1}^{\infty}\mbox{Bd}B\left(\boldsymbol{\ell}_{max}^{(i)}\right)\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Every point 
+\begin_inset Formula $p\in P$
+\end_inset
+
+ can be expressed as 
+\begin_inset Formula $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
+\end_inset
+
+ for some 
+\begin_inset Formula $\alpha_{p}\in[0,1]$
+\end_inset
+
+.
+ This means we can order these points 
+\begin_inset Formula $\{\boldsymbol{p}^{(i)}\}_{i=1}^{\infty}$
+\end_inset
+
+ by increasing 
+\begin_inset Formula $\alpha_{p}$
+\end_inset
+
+.
+ By our assumptions, the differentiable space of the training criterion
+ must be constant over the interior of line segment 
+\begin_inset Formula $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
+\end_inset
+
+ (so there might be bad behavior at the endpoints).
+ Let the differentiable space over the interior of line segment 
+\begin_inset Formula $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
+\end_inset
+
+ be denoted 
+\begin_inset Formula $\Omega_{i}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+By our assumptions, the differentiable space is also a local optimality
+ space.
+ Let 
+\begin_inset Formula $U^{(i)}$
+\end_inset
+
+ be an orthonormal basis of 
+\begin_inset Formula $\Omega_{i}$
+\end_inset
+
+.
+ For each 
+\begin_inset Formula $i$
+\end_inset
+
+, we can express 
+\begin_inset Formula $\hat{\boldsymbol{\theta}}_{\lambda}$
+\end_inset
+
+ for all 
+\begin_inset Formula $\boldsymbol{\lambda}\in\mbox{Int}\left\{ \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)\right\} $
+\end_inset
+
+ as
+\begin_inset Formula 
+\[
+\hat{\boldsymbol{\theta}}_{\lambda}=U^{(i)}\hat{\boldsymbol{\beta}}_{\lambda}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\hat{\boldsymbol{\beta}}_{\lambda}=\arg\min_{\beta}L_{T}(U^{(i)}\boldsymbol{\beta},\boldsymbol{\lambda})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now apply the result in Section 1 or 2 over every line segment 
+\begin_inset Formula $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
+\end_inset
+
+.
+ To do this, we must modify the proofs to take directional derivatives along
+ the columns of 
+\begin_inset Formula $U^{(i)}$
+\end_inset
+
+.
+ We can establish that there is a constant 
+\begin_inset Formula $c>0$
+\end_inset
+
+ independent of 
+\begin_inset Formula $i$
+\end_inset
+
+ such that for all 
+\begin_inset Formula $i=1,2...$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\left\Vert \boldsymbol{\hat{\beta}}_{p^{(i)}}-\boldsymbol{\hat{\beta}}_{p^{(i+1)}}\right\Vert _{2}\le c\|\boldsymbol{p^{(i)}}-\boldsymbol{p^{(i+1)}}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally, we can sum these inequalities.
+ By the triangle inequality,
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \boldsymbol{\hat{\theta}_{\lambda^{(1)}}}-\boldsymbol{\hat{\theta}_{\lambda^{(2)}}}\right\Vert _{2} & \le & \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
+ & = & \sum_{i=1}^{\infty}\|U^{(i)}\boldsymbol{\hat{\beta}}_{p^{(i)}}-U^{(i)}\boldsymbol{\hat{\beta}}_{p^{(i+1)}}\|_{2}\\
+ & = & \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\beta}}_{p^{(i)}}-\boldsymbol{\hat{\beta}}_{p^{(i+1)}}\|_{2}\\
+ & \le & \sum_{i=1}^{\infty}c\|\boldsymbol{p^{(i)}}-\boldsymbol{p^{(i+1)}}\|_{2}\\
+ & = & c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Lemma - Differentiability Cover 
+\end_layout
+
+\begin_layout Standard
+For any 
+\begin_inset Formula $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$
+\end_inset
+
+, there exists a countable set of points 
+\begin_inset Formula $\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+ such that the union of their 
+\begin_inset Quotes eld
+\end_inset
+
+balls of differentiabilities
+\begin_inset Quotes erd
+\end_inset
+
+ entirely cover 
+\begin_inset Formula $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\max_{\{\boldsymbol{\ell}^{(i)}\}_{i=1}^{\infty}}d_{\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})\right)=\left\Vert \mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right\Vert 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+We prove this by contradiction.
+ Let 
+\begin_inset Formula 
+\[
+\left\{ \boldsymbol{\ell}_{max}^{(i)}\right\} _{i=1}^{\infty}=\arg\max_{\{\boldsymbol{\ell}^{(i)}\}_{i=1}^{\infty}}d_{\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and for contradiction, suppose that the covered length is less than the
+ length of the line segment:
+\begin_inset Formula 
+\[
+d_{\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}_{max}^{(i)})\right)<\left\Vert \mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\right\Vert 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By assumption (2), since 
+\begin_inset Formula $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap\Lambda_{smooth}^{C}$
+\end_inset
+
+ is countable, there must exist a point 
+\begin_inset Formula $p\in\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\backslash\left\{ \cup_{i=1}^{\infty}B(\boldsymbol{\ell}_{max}^{(i)})\right\} $
+\end_inset
+
+ such that 
+\begin_inset Formula $p\notin\Lambda_{smooth}^{C}$
+\end_inset
+
+.
+ However if we consider the set of points 
+\begin_inset Formula $\left\{ \boldsymbol{\ell}_{max}^{(i)}\right\} _{i=1}^{\infty}\cup\{p\}$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\[
+d_{\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}_{max}^{(i)})\right)<d_{\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}_{max}^{(i)})\cup B(p)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is a contradiction of the definition of 
+\begin_inset Formula $\{\boldsymbol{\ell}_{max}^{(i)}\}$
+\end_inset
+
+.
+ Therefore we should always be able to cover 
+\begin_inset Formula $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+\end_inset
+
+ with 
+\begin_inset Quotes eld
+\end_inset
+
+balls of differentiability.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Example
+\end_layout
+
+\begin_layout Subsection
+Penalties that satisfy the conditions
+\end_layout
+
+\begin_layout Standard
+We will show penalties that satisfy the condition
+\begin_inset Formula 
+\[
+\left\Vert \nabla_{\theta}P(\boldsymbol{\theta})\right\Vert \le K_{1}\|\boldsymbol{\theta}\|_{2}+K_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for constants 
+\begin_inset Formula $K_{0},K_{1}>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Ridge:
+\end_layout
+
+\begin_layout Standard
+The perturbation isn't necessary if there is already a ridge penalty in
+ the original penalized regression problem.
+ Just set the penalties 
+\begin_inset Formula $P_{j}(\boldsymbol{\theta})\equiv0$
+\end_inset
+
+ and fix 
+\begin_inset Formula $w=2$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Lasso:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \nabla_{\boldsymbol{\theta}}\|\boldsymbol{\theta}\|_{1}\right\Vert  & = & \left\Vert sgn\left(\boldsymbol{\theta}\right)\right\Vert \\
+ & \le & p
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Generalized Lasso:
+\series default
+ let 
+\begin_inset Formula $G$
+\end_inset
+
+ be the maximum eigenvalue of 
+\begin_inset Formula $D$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \nabla_{\boldsymbol{\theta}}\|D\boldsymbol{\theta}\|_{1}\right\Vert  & = & \left\Vert D^{T}sgn(D\boldsymbol{\theta})\right\Vert \\
+ & \le & G\left\Vert sgn(D\boldsymbol{\theta})\right\Vert \\
+ & \le & pG
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Group Lasso:
+\end_layout
+
+\begin_layout Standard
+If we have un-pooled penalty parameters as follows 
+\begin_inset Formula 
+\[
+\sum_{j=1}^{J}\lambda_{j}\|\boldsymbol{\theta}^{(j)}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then we have the bound 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \nabla_{\boldsymbol{\theta}^{(j)}}\|\boldsymbol{\theta}^{(j)}\|_{2}\right\Vert  & = & \frac{\|\boldsymbol{\theta}^{(j)}\|_{2}}{\|\boldsymbol{\theta}^{(j)}\|_{2}}=1
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If there is a single penalty parameter for the entire group laso penalty
+ as follows 
+\begin_inset Formula 
+\[
+\lambda\sum_{j=1}^{J}\|\boldsymbol{\theta}^{(j)}\|_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then we have the bound 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \nabla_{\boldsymbol{\theta}}\sum_{j=1}^{J}\|\boldsymbol{\theta}^{(j)}\|_{2}\right\Vert  & = & \sqrt{\sum_{j=1}^{J}\left\Vert \nabla_{\boldsymbol{\theta}^{(j)}}\|\boldsymbol{\theta}^{(j)}\|_{2}\right\Vert ^{2}}\\
+ & = & \sqrt{\sum_{j=1}^{J}\left(\frac{\|\boldsymbol{\theta}^{(j)}\|_{2}}{\|\boldsymbol{\theta}^{(j)}\|_{2}}\right)^{2}}\\
+ & = & J
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Sobolev
+\end_layout
+
+\begin_layout Standard
+Given a function 
+\begin_inset Formula $h$
+\end_inset
+
+, the Sobolev penalty for 
+\begin_inset Formula $h$
+\end_inset
+
+ is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(h)=\int(h^{(r)}(x))^{2}dx
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Sobolev penalty is used in nonparametric regression models, but such
+ nonparametric regression models can be re-expressed in parametric form.
+ We will use this to understand the smoothness of models fitted in this
+ manner.
+\end_layout
+
+\begin_layout Standard
+Consider the class of smoothing splines 
+\begin_inset Formula 
+\[
+\left\{ \hat{g}(\cdot|\lambda)=\arg\min_{g\in\mathcal{G}}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(x_{j})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P(g_{j}):\lambda\in\Lambda\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Each function 
+\begin_inset Formula $\hat{g}_{j}(\cdot|\lambda)$
+\end_inset
+
+ is a spline that can be expressed as the weighted sum of 
+\begin_inset Formula $B$
+\end_inset
+
+ normalized B-splines of degree 
+\begin_inset Formula $r+1$
+\end_inset
+
+ for a given set of knots:
+\begin_inset Formula 
+\[
+\hat{g}_{j}(x|\lambda)=\sum_{i=1}^{B}\theta_{i}N_{j,i}(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the normalized B-splines have the property that they sum up to
+ one at all points within the boundary of the knots.
+ Also recall that B-splines are non-negative.
+\end_layout
+
+\begin_layout Standard
+Therefore we can re-express the class of smoothing splines as a set of function
+ parameters
+\begin_inset Formula 
+\[
+\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}_{j}):\lambda\in\Lambda\right\} 
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $N_{T,j}$
+\end_inset
+
+ is a matrix of the evaluations of the normalized B-spline basis at 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $P_{j}(\boldsymbol{\theta_{j}})$
+\end_inset
+
+ is the Sobolev penalty and can be written as 
+\begin_inset Formula $\boldsymbol{\theta}_{j}^{T}V_{j}\boldsymbol{\theta}_{j}$
+\end_inset
+
+ for an appropriate penalty matrix 
+\begin_inset Formula $V_{j}$
+\end_inset
+
+.
+ We will not need to express anything in terms of 
+\begin_inset Formula $V_{j}$
+\end_inset
+
+ so the penalty will be just written as 
+\begin_inset Formula $P_{j}(\boldsymbol{\theta}_{j})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Instead of considering the original smoothing spline problem with the roughness
+ penalty, we will add a ridge penalty on the function parameters
+\begin_inset Formula 
+\[
+\left\{ \hat{\boldsymbol{\theta}}_{\lambda}=\arg\min_{\theta}\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}\left(P_{j}(\boldsymbol{\theta}_{j})+\frac{w}{2}\|\boldsymbol{\theta}_{j}\|_{2}^{2}\right):\lambda\in\Lambda\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula 
+\[
+C_{\theta^{*},\Lambda}=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}N_{T,j}\boldsymbol{\theta}_{j}^{*}\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}_{j}^{*})+\frac{w}{2}\|\boldsymbol{\theta}_{j}^{*}\|_{2}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then for any 
+\begin_inset Formula $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
+\end_inset
+
+ we have 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \frac{BJ^{3}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+To apply the result from Section 2, we just need note that the 
+\begin_inset Formula $\hat{g}_{j}(x|\boldsymbol{\theta})=\sum_{i=1}^{B}\theta_{i}N_{j,i}(x)$
+\end_inset
+
+ is 
+\begin_inset Formula $\sqrt{B}$
+\end_inset
+
+-Lipschitz since 
+\begin_inset Formula $N_{T,j}$
+\end_inset
+
+ is a normalized B-spline and 
+\begin_inset Formula 
+\[
+\sup_{x}N_{j,i}(x)=1
+\]
+
+\end_inset
+
+Hence for all 
+\begin_inset Formula $j=1,..,J$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\|\hat{g}_{j}(\cdot|\boldsymbol{\theta})-\hat{g}_{j}(\cdot|\boldsymbol{\theta}^{'})\|_{\infty} & = & \sup_{x}\left|\sum_{i=1}^{B}\left(\theta_{i}-\theta_{i}'\right)N_{j,i}(x)\right|\\
+ & = & \left|\sum_{i=1}^{B}|\theta_{i}-\theta_{i}'|\right|\\
+ & \le & \sqrt{B}\left\Vert \boldsymbol{\theta}-\boldsymbol{\theta}'\right\Vert _{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Apply the result from Section 2 to get the result for all 
+\begin_inset Formula $j=1,..,J$
+\end_inset
+
+ that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \frac{BJ^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The additive model then has the following Lipschitz bound 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\Vert \sum_{j=1}^{J}g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \sum_{j=1}^{J}\left\Vert g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g_{j}\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty}\\
+ & \le & \frac{BJ^{3}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Appendix
+\end_layout
+
+\begin_layout Subsubsection*
+Lemma lipschitz iff bounded gradient
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $g$
+\end_inset
+
+ is convex in 
+\begin_inset Formula $\boldsymbol{\theta}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+g(x|\boldsymbol{\theta})\mbox{ is }L\mbox{-Lipschitz}\implies\left\Vert \nabla_{\theta}g(x|\boldsymbol{\theta})\right\Vert _{2}\le\sqrt{p}L
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(The other direction can also be proved.
+ https://homes.cs.washington.edu/~marcotcr/blog/lipschitz/)
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\boldsymbol{\theta}^{'}-\boldsymbol{\theta}=\arg\max_{\boldsymbol{\beta}}\left\langle \nabla_{\theta}g(x|\boldsymbol{\theta})|_{\theta=\theta'},\boldsymbol{\beta}\right\rangle =\left\Vert \nabla_{\theta}g(x|\boldsymbol{\theta})|_{\theta=\theta'}\right\Vert _{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $g$
+\end_inset
+
+ is convex in 
+\begin_inset Formula $\theta$
+\end_inset
+
+, then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+g(x|\boldsymbol{\theta})-g(x|\boldsymbol{\theta}^{'}) & \ge & \left\langle \nabla_{\theta}g(x|\boldsymbol{\theta})|_{\theta=\theta'},\boldsymbol{\theta}^{'}-\boldsymbol{\theta}\right\rangle \\
+ & = & \left\Vert \nabla_{\theta}g(x|\boldsymbol{\theta})|_{\theta=\theta'}\right\Vert _{2}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Also, by the Lipschitz assumption,
+\begin_inset Formula 
+\[
+\left|g(x|\boldsymbol{\theta})-g(x|\boldsymbol{\theta}^{'})\right|\le L\|\boldsymbol{\theta}^{'}-\boldsymbol{\theta}\|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Lemma 2: Bounded gradient implies lipschitz
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ is a convex set.
+ If 
+\begin_inset Formula $\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})|_{\lambda=\lambda'}\|\le B$
+\end_inset
+
+ at all 
+\begin_inset Formula $\boldsymbol{\lambda}'$
+\end_inset
+
+ for all 
+\begin_inset Formula $i=1,...,J$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Then for all 
+\begin_inset Formula $\boldsymbol{\lambda}\in\Lambda$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert \le\sqrt{J}B\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Proof
+\end_layout
+
+\begin_layout Standard
+By the mean value theorem, there is some 
+\begin_inset Formula $\alpha\in(0,1)$
+\end_inset
+
+ such that
+\begin_inset Formula 
+\begin{eqnarray*}
+\left|\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda}')\right| & = & \left|\left\langle \left.\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\right|_{\lambda=\alpha\lambda+(1-\alpha)\lambda'},\boldsymbol{\lambda}-\boldsymbol{\lambda}'\right\rangle \right|\\
+ & \le & \max_{\lambda\in\Lambda}\|\nabla_{\boldsymbol{\lambda}}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\|\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|\\
+ & \le & B\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\begin_inset Formula 
+\[
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert \le\sqrt{J}B\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

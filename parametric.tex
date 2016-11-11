@@ -99,6 +99,9 @@ $j=1,...,J$ and any $\boldsymbol{\theta}'$, we have
 \]
 
 
+(If $\left|\left.\nabla_{\theta}P_{j}\left(\boldsymbol{\theta}\right)\right|_{\boldsymbol{\theta}=\boldsymbol{\theta}'}\right|\le K_{0}$,
+then we can drop the additional ridge penalty!)
+
 Let 
 \[
 C_{\theta^{*},\Lambda}=\frac{1}{2}\|y-g(\cdot|\boldsymbol{\theta}^{*})\|_{T}^{2}+\lambda_{max}\sum_{j=1}^{J}P_{j}(\boldsymbol{\theta}^{*})+\frac{w}{2}\|\boldsymbol{\theta}\|^{2}
@@ -252,20 +255,20 @@ and all $j=1,...,J$, we have
 
 Let 
 \[
-C_{\theta^{*},\Lambda}=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}^{(j),*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}\left(P_{j}(\boldsymbol{\theta}^{(j),*})+\frac{w}{2}\|\boldsymbol{\theta}^{(j),*}\|_{2}^{2}\right)
+C_{\theta^{*},\Lambda}=\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}g_{j}(\cdot|\boldsymbol{\theta}^{(j),*})\right\Vert _{T}^{2}+\lambda_{max}\sum_{j=1}^{J}P_{j}(\boldsymbol{\theta}^{(j),*})
 \]
 
 
 Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$ 
 
 \[
-\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right\Vert \le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right\Vert \le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{wm\lambda}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
 \]
 
 
 and
 \begin{eqnarray*}
-\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \frac{L^{2}J^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{w\lambda_{min}^{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
+\left\Vert g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}})\right)-g\left(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}})\right)\right\Vert _{\infty} & \le & \frac{L^{2}J^{2}\sqrt{2C_{\theta^{*},\Lambda}}}{m\lambda_{min}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|
 \end{eqnarray*}
 
 
