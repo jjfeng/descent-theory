@@ -13,6 +13,12 @@
 \title{The effect of adding a small ridge penalty}
 
 \maketitle
+\textbf{UPDATE: The current approaches all require the assumption
+that the original training criterion is strongly convex in $\boldsymbol{\theta}$,
+which is very silly since we only need to add a ridge penalty when
+the training criterion is not strongly convex. These proofs need more
+thinking through!}
+
 We will show that adding a small ridge penalty scaled by some constant
 $w$ does not change the fitted model by very much. 
 \begin{enumerate}
