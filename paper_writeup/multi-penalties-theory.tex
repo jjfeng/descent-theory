@@ -111,13 +111,13 @@ In penalized regression problems, the choice of penalty parameters is important 
 \spacingset{1.45}
 \section{Introduction}
 
-Per the usual regression framework, we observe response $y \in \mathbb{R}$ and predictors $\boldsymbol {x} \in \mathbb{R}^p$. Suppose $y$ is generated from the model $g^*$ from model class $\mathcal{G}$
+\textcolor{red}{I think this intro may be too aimed at penalized regression. Unless I'm mistaken the oracle inequality holds quite generally. I think we can streamline the exposition by talking generally about a class of estimators indexed by hyper/tuning parameters; and then later mention penalized regression with multiple penalties.} Per the usual regression framework, we observe response $y \in \mathbb{R}$ and predictors $\boldsymbol {x} \in \mathbb{R}^p$. Suppose $y$ is generated from the model $g^*$ from model class $\mathcal{G}$
 \begin{equation}
 y = g^*(\boldsymbol x) + \epsilon
 \end{equation}
-where $\epsilon_i$ are random errors with expectation zero. Our goal is to find the best model in $\mathcal{G}$ to model $y$ given $\boldsymbol x$.
+where $\epsilon_i$ are random errors with expectation zero. \textcolor{red}{Isn't our goal to estimate $g$?} Our goal is to find the best model in $\mathcal{G}$ to model $y$ given $\boldsymbol x$.
 
-In high-dimensional ($p \gg n$) or ill-posed problems, the ordinary least squares estimate performs poorly as it overfits to the training data. A common solution is to add regularization, or penalization, to control model complexity and induce desired structure. The penalized least squares estimate minimizes a criterion of the form
+\textcolor{red}{I don't think this next part is clear --- what is the ordinary least squares estimator? What kinds of $\mathcal{G}$ are we thinking about?} In high-dimensional ($p \gg n$) or ill-posed problems, the ordinary least squares estimate performs poorly as it overfits to the training data. A common solution is to add regularization, or penalization, to control model complexity and induce desired structure. The penalized least squares estimate minimizes a criterion of the form
 \begin{equation}
 \label{intro_train_criterion}
 \hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{n} \sum_{i=1}^n \left (y_i -  g(x_i) \right )^2 + \sum_{j=1}^J \lambda_j P_j(g)
@@ -147,7 +147,7 @@ Suppose we have observations $D = \left \{ (\boldsymbol{x}_i, y_i) \right \}_{i=
 \begin{equation}
 y_i = g^*(\boldsymbol x_i) + \epsilon_i \quad i=1,...,n
 \end{equation}
-where $g^*$ is from our model class $\mathcal{G}$ and $\epsilon_i$ are random variables with expectation zero. In the simple setting, one may assume that $\epsilon_i$ are normally distributed. Here we consider a more general situation where $\epsilon_1,...,\epsilon_n$ are uniformly sub-Gaussian random variables. We use the definition from \citep{Buldygin1980}:
+where $g^*$ is from our model class $\mathcal{G}$ and $\epsilon_i$ are random variables with expectation zero. \textcolor{red}{streamline as much as possible! Is the next sentence needed? Can we very briefly inline the uniform subgaussian def?} In the simple setting, one may assume that $\epsilon_i$ are normally distributed. Here we consider a more general situation where $\epsilon_1,...,\epsilon_n$ are uniformly sub-Gaussian random variables. We use the definition from \citep{Buldygin1980}:
 \begin{definition}
 	$\epsilon_1, ..., \epsilon_n$ are uniformly sub-Gaussian with parameter $b>0$ if for all $t \in \mathbb{R}$
 	\begin{equation}
@@ -158,7 +158,7 @@ Note that it is possible to show that if $\epsilon_1,...,\epsilon_n$ are uniform
 
 \subsection{Training/Validation Split}
 
-Suppose dataset $D$ is randomly split into a training set $T$ of size $n_T$ and validation set $V$ of size $n_V$. For a function $h$, define $\| h \|_V^2 = \frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ and similarly for $T$. Using this notation, the fitted model defined in  \eqref{intro_train_criterion} can be written as
+\textcolor{red}{Can we do this without discussing penalized regression? We have some operator $\Tau$ (pick something cooler) that maps from training data to models (give formal defs of those!}Suppose dataset $D$ is randomly split into a training set $T$ of size $n_T$ and validation set $V$ of size $n_V$. For a function $h$, define $\| h \|_V^2 = \frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ and similarly for $T$. Using this notation, the fitted model defined in  \eqref{intro_train_criterion} can be written as
 \begin{equation}
 \hat{g}(\cdot | \boldsymbol \lambda) = \argmin_{g\in \mathcal{G}} \frac{1}{2} \left \|y -  g \right \|_T^2 + \sum_{j=1}^J \lambda_j P_j(g)
 \end{equation}
@@ -168,7 +168,7 @@ In the training/validation framework, we minimize the validation error by tuning
 \label{cv_lambda}
 \hat{\boldsymbol \lambda} = \arg\min_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}(\cdot | \boldsymbol \lambda) \right \|_{V}^{2}
 \end{equation}
-We are interested in comparing its performance to the oracle penalty parameters $\tilde{\boldsymbol \lambda}$, which minimize the model error
+We are interested in comparing its performance to the oracle penalty parameters $\tilde{\boldsymbol \lambda}$, which minimize the model error \textcolor{red}{Should there be an expectation there?}
 \begin{equation}
 \tilde{\boldsymbol \lambda} = \argmin_{\boldsymbol{\lambda} \in \Lambda} \frac{1}{2} \left \| g^* - \hat{g}(\cdot | \boldsymbol \lambda) \right \|^2_V
 \end{equation}
@@ -178,7 +178,7 @@ We will establish a sharp oracle inequality for the model over the observed cova
 \label{function_class_GT}
 \mathcal{G}(T) = \left \{ \hat{g}(\cdot | \boldsymbol \lambda) : \lambda \in \Lambda  \right \}
 \end{equation}
-From the definition of $\hat{\boldsymbol \lambda}$, we can bound the difference of the validation losses
+\textcolor{red}{This should go later! It distracts here} From the definition of $\hat{\boldsymbol \lambda}$, we can bound the difference of the validation losses
 \begin{eqnarray}
 \label{basic_ineq}
 \left \|\hat{g}(\cdot | \hat{\boldsymbol \lambda}) - g^* \right \|_V^2 - \left \| \hat{g}(\cdot | \tilde{\boldsymbol \lambda}) - g^* \right \|_V^2
@@ -205,7 +205,7 @@ C \| \boldsymbol \lambda_1 - \boldsymbol \lambda_2 \|_2
 \end{definition}
 Function classes that satisfy \eqref{eq:smooth_funcs} have low metric entropy. Hence their empirical process terms are small with high probability.
 
-We are interested in bounding the metric entropy of $\mathcal{G}(T)$ to bound \eqref{eq:basic_ineq_emp_process}. $\mathcal{G}(T)$ is clearly a smaller class than $\mathcal{G}$ that is parametric in $\boldsymbol{\lambda}$, but more work needs to be done to show that the functions are Lipschitz in the penalty parameters. In Section \ref{sec:examples}, we present  penalized regression problems for additive models as one such example.
+We are interested in bounding the metric entropy of $\mathcal{G}(T)$ to bound \eqref{eq:basic_ineq_emp_process}. $\mathcal{G}(T)$ is clearly a smaller class than $\mathcal{G}$ that is parametric in $\boldsymbol{\lambda}$, but more work needs to be done to show that the functions are Lipschitz in the penalty parameters \textcolor{red}{? can't parse this sentence}. In Section \ref{sec:examples}, we present  penalized regression problems for additive models as one such example.
 
 We now present a sharp oracle inequality for the penalty parameters selected by a training/validation split.
 
@@ -243,8 +243,9 @@ we have
 \end{eqnarray*}
 
 \end{theorem}
+\textcolor{red}{can we upperbound $\alpha_n$ by something less crazy like $C\sqrt{J\log\left ( 32 C n(\lambda_{\max} - \lambda_{\min}) \right ) \right )}$ I know that is sort of a lie (if that $\lambda$-range is small) but it just makes things easier to read I think! (maybe there is some way, contingent on the $\lambda$ difference being bounded below, that could make it work}
 
-The result is a special case of Theorem \ref{train_val_thrm_complicated}, which applies to general function classes that are not Lipschitz. For example, in other penalized regression examples, we will find that the fitted functions satisfy
+\textcolor{red}{We need a lot more exposition about what the heck the above means!!!} The result is a special case of Theorem \ref{train_val_thrm_complicated}, which applies to general function classes that are not Lipschitz. For example, in other penalized regression examples, we will find that the fitted functions satisfy
 \begin{equation}
 \left \| f(\cdot | \boldsymbol \lambda_1) - f(\cdot | \boldsymbol \lambda_2) \right \|
 \le
@@ -307,7 +308,7 @@ In this section, we give an oracle inequality for $K$-fold cross-validation. Ins
 \begin{equation}
 \left \| g - g^* \right \|^2 = \int \left |g(x) - g^*(x) \right |^2 dx
 \end{equation}
-Toward this end, we will apply the oracle inequality in \citet{lecue2012oracle}.
+Toward this end, we will apply the oracle inequality in \citet{lecue2012oracle}. \textcolor{red}{what does this mean?}
 
 We will generalize the notation from the previous section. Let a dataset with $n$ samples be denoted $D^{(n)}$. The fitted model given any training data $D^{(n)}$ is denoted
 \begin{equation}
