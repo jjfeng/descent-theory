@@ -178,7 +178,7 @@ We hypothesize that many model-estimation procedures satisfy this Lipschitz assu
 
 \subsection{Training/Validation Split}
 
-In the training/validation split framework, the dataset $D^{(n)}$ is randomly partitioned into a training set $T$ and validation set $V$ of sizes $n_T$ and $n_V$, respectively. The selected hyperparameter $\hat{\boldsymbol{\lambda}}$ is the minimizer of the validation loss
+In the training/validation split framework, the dataset $D^{(n)}$ is randomly partitioned into a training set $T = (X_T, Y_T)$ and validation set $V = (X_V, Y_V)$ with $n_T$ and $n_V$ observations, respectively. The selected hyperparameter $\hat{\boldsymbol{\lambda}}$ is the minimizer of the validation loss
 \begin{equation}
 \label{eq:train_val_lambda}
 \hat{\boldsymbol \lambda} = \argmin_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}^{(n_T)}( \boldsymbol \lambda | D_T^{(n_T)}) \right \|_{V}^{2}
@@ -204,6 +204,7 @@ c \left (
 \vee 
 \sqrt{\frac{J \log (n C_\Lambda \lambda_{\max})}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
 \right )
+\label{thrm:train_val_delta}
 \end{equation}
 we have
 \begin{eqnarray*}
@@ -226,7 +227,7 @@ we have
 
 \end{theorem}
 
-Theorem \ref{thrm:train_val} states that as the number of validation samples grow, the difference between the selected model error and the oracle model error shrinks at the rate of $\delta^2$ with high probability. To facilitate the discussion, we present the result using asymptotic order notation.
+Theorem \ref{thrm:train_val} states that as the number of validation samples grow, the difference between the selected model error and the oracle model error shrinks at the rate of $\delta^2$ with high probability. $\delta^2$ can be thought of as the error incurred during the hyperparameter selection process. As seen in \eqref{thrm:train_val_delta}, it is the maximum of two terms: a near-parametric term and a geometric mean of the near-parametric term and the oracle error. To see this more clearly, we express Theorem \ref{thrm:train_val} using asymptotic notation.
 \begin{corollary}
 	Under the assumptions given in Theorem \ref{thrm:train_val}, we have
 	\begin{eqnarray}
@@ -242,22 +243,23 @@ Theorem \ref{thrm:train_val} states that as the number of validation samples gro
 	\label{eq:asym_train_val_theorem2}
 	\end{eqnarray}
 \end{corollary}
-We see that the error of the selected model is bounded by oracle error, a near-parametric term \eqref{eq:asym_train_val_theorem1},  and the geometric mean of the two \eqref{eq:asym_train_val_theorem2}. The latter two terms can be thought of as the error incurred from tuning multiple hyperparameters. We now discuss these two terms in more detail.
+Hence the error of the selected model is bounded by the error of the oracle model, the near-parameteric term \eqref{eq:asym_train_val_theorem1}, and the geometric mean of the two values \eqref{eq:asym_train_val_theorem2}. We refer to \eqref{eq:asym_train_val_theorem1} as near-parametric because the error term in parametric regression models are usually $O_p(J/n)$, where $J$ is the parameter dimension and $n$ is the number of training samples. Analogously, \eqref{eq:asym_train_val_theorem1} is roughly $O_p(J/n_V)$ modulo a $\log n$ term in the numerator. ($\log n$ grows at a sub-polynomial rate, so it changes the convergence rate by a very small amount.)
 
-We refer to \eqref{eq:asym_train_val_theorem1} as near-parametric since it is roughly equal to $J/n_V$, and parametric regression problems usually have a model error on the order of $J/n$, where $J$ is the parameter dimension and $n$ is the number of training samples. The appearance of this term seems to make intuitive sense. We can think of tuning hyperparameters as the problem of estimating $\tilde{\boldsymbol{\lambda}}$ over the $J$-dimensional parameter space given the validation data as training data.
-
-However, the geometric mean in \eqref{eq:asym_train_val_theorem2} suggests that treating the problem of tuning hyperparameters as a parametric regression problem is an oversimplification. The issue is that the model class $\mathcal{G}(T)$ does not contain the true model $g^*$. The bias term 
+In the semi- and non-parametric regression setting, the oracle error usually shrinks at a rate of $n^\omega$ where $\omega >-1$, which means that for large $n$, the oracle error will tend to dominate both the error terms. Therefore increasing the number of hyperparameters for such problems only results in small increases in the model error/degree of overfitting. In fact, if the oracle error rate is $O_p(n^\omega)$, the number of hyperparameters $J$ can grow at the rate
 \begin{equation}
-\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}}|T) \right \Vert^2_{V}
+\frac{n_{V} n^\omega }{\log (n C_\Lambda\lambda_{\max})}
 \end{equation}
-not only specifies the minimum validation loss achievable, but it also contributes to the convergence rate.
+without affecting the asymptotic convergence rate. Note that for parametric regression problems, this will not be the case. Adding hyperparameters incurs a similar cost as increasing the dimension of the model-estimation procedure.
 
-In the semi- and non-parametric regression setting, the oracle error usually shrinks at a polynomial rate of $n_T^\omega$ where $\omega > -1$. Hence in these problems, the oracle error will dominate both the error terms asymptotically. In fact, Theorem \ref{thrm:train_val} states that the maximum rate that the number of hyperparameters can grow without affecting the asymptotic convergence rate is proportional to 
+The appearance of the parametric term \eqref{eq:asym_train_val_theorem1} suggests that we can interpret the problem of tuning hyperparameters as a parametric regression problem over a $J$-dimensional parameter space where the validation data is the training data. However, this interpretation is an oversimplification due to model misspecification. Recall that we perform training/validation split over the model class
 \begin{equation}
-\frac{n_{V}}{c_0 + \log (n C_\Lambda\lambda_{\max})}
-\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}}| T) \right \Vert^2_{V}
+\mathcal{G}(T) = \left \{ \hat{g}^{(n_T)}( {\boldsymbol{\lambda}}| T) : \boldsymbol{\lambda} \in \Lambda \right \}
 \end{equation}
-As long as the number of hyperparameters does not grow at this rate, the amount of overfitting is likely minimal.
+$\mathcal{G}(T)$ is unlikely to contain the true model $g^*$ and has bias
+\begin{equation}
+\min_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( \boldsymbol{\lambda}|T) \right \Vert^2_{V}
+\end{equation}
+This bias term contributes to the convergence rate in the geometric mean \eqref{eq:asym_train_val_theorem2}.
 
 \subsection{Cross-Validation}
 
@@ -265,21 +267,23 @@ In this section, we give an oracle inequality for $K$-fold cross-validation. Pre
 \begin{equation}
 \left \| g - g^* \right \|^2 = \int \left |g(x) - g^*(x) \right |^2 dx
 \end{equation}
-The result in this section is an application of the oracle inequality in \citet{lecue2012oracle}.
+We will follow the framework in \citet{lecue2012oracle}.
 
 The problem setup for $K$-fold cross-validation is as follows. Let dataset $D^{(n)}$ be randomly partitioned into $K$ sets, which we assume to have equal size for simplicity. Partition $k$ will be denoted $D_k^{(n_V)}$ and its complement will be denoted $D_{-k}^{(n_T)} = D \setminus D_k^{(n_V)}$. We perform our model-selection procedure over $D_{-k}^{(n_T)}$ for $k=1,...,K$ and select the hyperparameter that minimizes the average validation loss
 \begin{eqnarray}
 \label{kfold_opt}
-\hat{\boldsymbol \lambda} &=& \argmin_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2K} \sum_{k=1}^K  \left \| y-\hat{g}(\boldsymbol \lambda | D_{-k}^{(n_T)}) \right \|_{D_k^{(n_V)}}^{2}
+\hat{\boldsymbol \lambda} &=& \argmin_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2K} \sum_{k=1}^K  \left \| y-\hat{g}^{(n_T)}(\boldsymbol \lambda | D_{-k}^{(n_T)}) \right \|_{D_k^{(n_V)}}^{2}
 \end{eqnarray}
 
 In traditional cross-validation, the final model is retrained on all the data with $\hat{\boldsymbol{\lambda}}$. However, bounding the generalization error of the retrained model requires additional regularity assumptions \citep{lecue2012oracle}. We consider the ``averaged version of cross-validation'' instead
 \begin{equation}
 \label{thrm:avg_cv}
-\bar{g}\left ( \hat{\boldsymbol \lambda} \middle | {D^{(n)}} \right ) = \frac{1}{K} \sum_{k=1}^K \hat{g} \left (\hat{\boldsymbol \lambda} \middle | D^{(n_T)}_{-k} \right )
+\bar{g}\left ( \hat{\boldsymbol \lambda} \middle | {D^{(n)}} \right ) = 
+\frac{1}{K} \sum_{k=1}^K 
+\hat{g}^{(n_T)} \left (\hat{\boldsymbol \lambda} \middle | D^{(n_T)}_{-k} \right )
 \end{equation}
 
-The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. The more general oracle inequality is in \citet{lecue2012oracle}, which is reproduced in Theorem \ref{thrm:k_fold_complicated}.
+The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which is reproduced in Theorem \ref{thrm:k_fold_complicated} for convenience.
 
 \begin{theorem}
 \label{thrm:kfold}
@@ -291,7 +295,7 @@ Suppose there is a constant $C_\Lambda >0$ such that for any dataset $D^{(n_T)}$
 Then there is are absolute constants $c_1, c_2 > 0$ such that for all $a > 0$,
 \begin{eqnarray}
 E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 &\le&
-(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 \\
+(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 \\
 && + c_1 \frac{(1+a)^2}{a} \frac{J}{n_V} 
 \left (
 G \log (GC_\Lambda \lambda_{max} ) \log n + c_2
@@ -299,11 +303,11 @@ G \log (GC_\Lambda \lambda_{max} ) \log n + c_2
 \end{eqnarray}
 \end{theorem}
 
-As we can see, Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are quite similar. The upper bounds in both theorems depend on the oracle error and a near-parametric term. The asymptotic convergence rate of the selected model is determined by whichever term dominates. For both the training/validation split framework and cross-validation, we find that tuning hyperparameters is a relatively ``cheap" problem to solve. If the oracle error is sub-parametric, the cost of tuning hyperparameters is negligible asymptotically.
+As we can see, Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are quite similar. The upper bounds in both theorems depend on the oracle error and a near-parametric term. Hence in semi- and non-parametric regression settings, tuning hyperparameters is a relatively ``cheap'' problem to solve and the error incurred is negligible asymptotically.
 
-There are also some important differences between Theorems \ref{thrm:train_val} and \ref{thrm:kfold}. The Lipschitz condition for Theorem \ref{thrm:kfold} requires the Lipschitz condition to hold with respect to $\| \cdot \|_\infty$, instead of the weaker condition with respect to $\| \cdot \|_V$. Also, we no longer have a sharp oracle inequality. The oracle rate is scaled by a constant $1+a$ where $a > 0$. These differences occur since we are trying to characterize the general behavior of the selected model based on just the validation loss.
+There are also some notable differences between Theorems \ref{thrm:train_val} and \ref{thrm:kfold}. The Lipschitz condition in Theorem \ref{thrm:kfold} is required to hold with respect to $\| \cdot \|_\infty$ rather than $\| \cdot \|_V$ as in Theorem \ref{thrm:train_val}. Also, we no longer have a sharp oracle inequality since the oracle error is scaled by $1+a$ where $a > 0$. These differences occur when we focus on characterizing the generalization error of the selected model instead.
 
-Finally, since the theorems in this section are finite-sample results, one could try to minimize the upper bound by increasing the number of hyperparameters or changing the ratio between the training and validation set sizes. Determining the optimal number of hyperparameters will unfortunately require knowing characteristics about the error variables.
+Finally, since the theorems in this section are finite-sample results, one could try to minimize the upper bound by increasing the number of hyperparameters or changing the ratio between the training and validation set sizes. Unfortunately, determining the optimal number of hyperparameters will require knowing characteristics about the error variables.
 
 \section{Penalized regression models}
 \label{sec:examples}
