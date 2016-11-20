@@ -73,7 +73,7 @@
 
 \if0\blind
 {
-  \title{\bf Oracle inequalities for validation set procedures with applications to penalized regression}
+  \title{\bf Oracle inequalities for tuning hyperparameters via validation sets with applications to penalized regression}
   \author{Jean Feng\thanks{
     Jean Feng was supported by NIH grants ???. % DP5OD019820 and T32CA206089.
     Noah Simon was supported by NIH grant DP5OD019820.
@@ -99,7 +99,7 @@
 \bigskip
 \begin{abstract}
 
-In the regression setting, model-estimation procedures construct models given training data and a set of hyperparameters. The optimal hyperparameters that minimize the model error are unknown so they are often estimated using validation set approaches. In this paper, we establish finite-sample oracle inequalities for cases where the model-estimation procedures are smoothly parameterized by the hyperparameters. Moreover, in the training/validation split framework, we establish a sharp oracle inequality on the model error, with additional near-parametric terms. Our main application is penalized regression problems with multiple penalty parameters. We establish that tuning penalty parameters only adds a near-parametric-rate error term by showing the fitted models are indeed Lipschitz in the penalty parameters. Hence we show that for semi- and non-parametric problems, the degree of overfitting is relatively small for regression problems with multiple penalty parameters.
+In the regression setting, model-estimation procedures construct models given training data and some  hyperparameters. The optimal hyperparameters that minimize the model error are unknown so they are often estimated using validation set approaches. Up to now, there is an open question regarding how the model error grows with the number of hyperparameters. To answer this question, we establish finite-sample oracle inequalities for training/validation split framework and cross-validation. If the model-estimation procedures are smoothly parameterized by the hyperparameters, the error incurred from tuning hyperparameters shrinks at roughly a parametric rate. Hence for semi- and non-parametric model-estimation procedures, this additional error is negligible and for parametric model-estimation procedures, adding a hyperparameter is roughly equivalent to adding a parameter to the model itself. Our main application is penalized regression problems with multiple penalty parameters. We establish the fitted models are Lipschitz in the penalty parameters, so a similar relationship holds between model error and the number of penalty parameters. This result encourages development of regularization methods with many penalty parameters.
 \end{abstract}
 
 \noindent%
