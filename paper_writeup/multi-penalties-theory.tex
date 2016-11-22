@@ -119,10 +119,10 @@ Our goal is to estimate $g^*$.
 
 Many model-estimation procedures can be formulated as selecting a model from some function class $\mathcal{G}$ given training data $T$ and $J$-dimensional hyperparameter vector $\boldsymbol{\lambda}$. For example, in penalized regression problems, the fitted model can be expressed as the minimizer of the penalized training criterion
 \begin{equation}
-\label{intro_penalized_regression}
+\label{thrm:intro_pen_reg}
 \hat{g}(\boldsymbol \lambda | T) = \argmin_{g\in \mathcal{G}} \sum_{(x_i, y_i) \in T} \left (y_i -  g(x_i) \right )^2 + \sum_{j=1}^J \lambda_j P_j(g)
 \end{equation}
-where $P_j$ are penalty functions and $\lambda_j$ are penalty parameters. As suggested by the notation in \eqref{intro_penalized_regression}, the penalty parameters are the hyperparameters in this model-estimation procedure.
+where $P_j$ are penalty functions and $\lambda_j$ are penalty parameters. As suggested by the notation in \eqref{thrm:intro_pen_reg}, the penalty parameters are the hyperparameters in this model-estimation procedure.
 
 Given a set of possible hyperparameters $\Lambda$, there is some oracle hyperparameter $\tilde{\boldsymbol{\lambda}}$ in $\Lambda$ that minimizes the difference between the fitted model and the true model. Usually $\tilde{\boldsymbol{\lambda}}$ is unknown so it is estimated using training/validation split or cross-validation. The basic idea is to fit models on a random partition of the observed data and evaluate their error on the remaining data. The final hyperparameters $\hat{\boldsymbol{\lambda}}$ are the minimizer of the error on this validation set. For a more complete review of cross-validation, refer to \citet{arlot2010survey}.
 
@@ -139,7 +139,7 @@ The goal of this paper is to characterize the performance of models when the hyp
 \end{equation}
 for some norm $\| \cdot \|$ and constant $a \ge 0$. Under the assumption that the model-estimation procedure is smoothly parameterized by the hyperparameters, we find that the error from tuning hyperparameters shrinks at roughly a parametric rate. For parametric model-estimation procedures, the additional error of adding a hyperparameter is roughly equivalent to adding a parameter to the model itself. For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle error and the number of hyperparameters can actually grow without affecting the asymptotic convergence rate.
 
-The main application in this paper is penalized regression models of the form \eqref{intro_penalized_regression}. We show that the fitted model is indeed smoothly parameterized by the penalty parameters so our oracle inequalities apply. Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect on the model error in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-component combinations. Adding more penalties may lead to better models.
+The main application in this paper is penalized regression models of the form \eqref{thrm:intro_pen_reg}. We show that the fitted model is indeed smoothly parameterized by the penalty parameters so our oracle inequalities apply. Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect on the model error in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-component combinations. Adding more penalties may lead to better models.
 
 We did not find any theoretical results addressing the relationship betwen the number of hyperparameters and model error. Most oracle inequalities only consider one-dimensional hyperparameters \citep{van2003unified, van2004asymptotic, gyorfi2006distribution}. Within the context of penalized regression problems, the oracle inequalities are also only for the case of a single penalty parameter \citep{golub1979generalized, chetverikov2016cross, chatterjee2015prediction}. Only \citet{lecue2012oracle} has a result that is relevant to answering our question of interest. We will use his framework to address the question of cross-validation for multiple hyperparameters. A potential reason for this dearth of literature is that, historically, tuning multiple hyperparameters was computationally difficult. However, there have been many proposals recently for overcoming this computational hurdle \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
 
@@ -156,9 +156,7 @@ In this section, we establish oracle inequalities for the model error from tunin
 %The final model is the output of a two step process. First, a set of models are generated using a model-estimation procedure for each hyperparameter vector in $\Lambda \subseteq \mathbb{R}^J$. Then we perform model-selection over this set to get the final model. 
 We first introduce some notation and formalize the model-estimation procedure. 
 
-Let $D^{(n)}$ denote a dataset with $n$ samples from the model \eqref{true_model} where $\epsilon$ are independent random variables with expectation zero. Suppose $\epsilon_1,...,\epsilon_n$ are uniformly sub-Gaussian with parameter $b>0$; i.e. $\max_{i=1,...,n} \mathbb{E} e^{t \epsilon_i} \le e^{b^2t^2/2}$ for all $t \in \mathbb{R}$.
-
-The model-estimation procedure accepts some hyperparameter of dimension $J$ and training data of size $m$ to output a fitted model from some model class $\mathcal{G}$. This can be formulated as an operator $\hat{g}^{(m)}(\cdot | D^{(m)})$ that maps a hyperparameter vector $\boldsymbol{\lambda}$ from some set $\Lambda \subseteq \mathbb{R}^J$ to a function in $\mathcal{G}$. 
+Let $D^{(n)}$ denote a dataset with $n$ samples from the model \eqref{true_model} where $\epsilon$ are independent random variables with expectation zero. The model-estimation procedure accepts some hyperparameter of dimension $J$ and training data of size $m$ to output a fitted model from some model class $\mathcal{G}$. This can be formulated as an operator $\hat{g}^{(m)}(\cdot | D^{(m)})$ that maps a hyperparameter vector $\boldsymbol{\lambda}$ from some set $\Lambda \subseteq \mathbb{R}^J$ to a function in $\mathcal{G}$. 
 
 In this section, we focus on model-estimation procedures that are Lipschitz.
 \begin{definition}
@@ -188,7 +186,11 @@ where $\| h \|_{V}=\frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ for any function $h$.
 We now present a finite-sample oracle inequality for the training/validation split framework assuming the model-estimation procedure is Lipschitz. The oracle inequality is sharp, i.e. $a=0$ in \eqref{thrm:intro_oracle_ineq}, unlike most other work \citep{gyorfi2006distribution, lecue2012oracle, van2003unified}. The reason for this difference is that the model error is taken with respect to the norm $\| \cdot \|_V$. Note that the result below is a special case of Theorem \ref{thrm:train_val_complicated}, which applies to general model-estimation procedures. 
 \begin{theorem}
 \label{thrm:train_val}
-Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $0 < \lambda_{\min} < \lambda_{\max}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b$. Suppose there are constants $\sigma > 0$ and $C_\Lambda \ge 5/(n \lambda_{\max})$ such that for any dataset $D^{(n_T)}$ with $\|\boldsymbol{\epsilon}\|_{D^{(n_T)}} \le \sigma$, $\hat g^{(n_T)}(\boldsymbol{\lambda} |D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
+Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $0 < \lambda_{\min} < \lambda_{\max}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b > 0$:
+$$
+\max_{i=1,...,n} \mathbb{E} e^{t \epsilon_i} \le e^{b^2t^2/2} \quad \forall t \in \mathbb{R}
+$$
+Suppose there is a constant $C_\Lambda \ge 5/(n \lambda_{\max})$ such that $\hat g^{(n_T)}(\boldsymbol{\lambda} |D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
 
 Let 
 \begin{equation}
@@ -229,6 +231,7 @@ we have
 
 Theorem \ref{thrm:train_val} states that as the number of validation samples grows, the difference between the selected model error and the oracle model error shrinks at the rate of $\delta^2$ with high probability. $\delta^2$ can be thought of as the error incurred during the hyperparameter selection process. As seen in \eqref{thrm:train_val_delta}, it is the maximum of two terms: a near-parametric term and a geometric mean of the near-parametric term and the oracle error. To see this more clearly, we express Theorem \ref{thrm:train_val} using asymptotic notation.
 \begin{corollary}
+	\label{corr:train_val}
 	Under the assumptions given in Theorem \ref{thrm:train_val}, we have
 	\begin{eqnarray}
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 &\le& \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
@@ -287,12 +290,12 @@ The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. It
 
 \begin{theorem}
 \label{thrm:kfold}
-Suppose the dataset can be partitioned into $K$ equal-sized sets, where $K \ge 2$. Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b$. 
-Suppose there is a $G \ge  2$ such that $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
+Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Suppose there is a $G \ge  2$ such that $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
 
-Suppose there is a constant $C_\Lambda >0$ such that for any dataset $D^{(n_T)}$ with $\|\boldsymbol{\epsilon}\|_{D^{(n_T)}} \le \sigma$, $\hat g (\boldsymbol{\lambda} | D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\| \cdot \|_\infty$ over $\Lambda$.
+Consider datasets of size $n$ where $n$ is divisible by $K$, for $K \ge 2$.
+Suppose random variables $\epsilon_i$ are independent with expectation zero and are bounded $\| \epsilon_i \|_\infty \le \sigma$. Suppose there is a constant $C_\Lambda >0$ such that for any dataset $D^{(n_T)}$, $\hat g (\boldsymbol{\lambda} | D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\| \cdot \|_\infty$ over $\Lambda$.
 
-Then there is are absolute constants $c_1, c_2 > 0$ such that for all $a > 0$,
+Then there are absolute constants $c_1, c_2 > 0$ such that for all $a > 0$,
 \begin{eqnarray}
 E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 &\le&
 (1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 \\
@@ -312,29 +315,60 @@ Finally, since the theorems in this section are finite-sample results, one could
 \section{Penalized regression models}
 \label{sec:examples}
 
-Theorems \ref{thrm:train_val} and \ref{thrm:kfold} require the fitted functions $\hat{g}(\cdot | \boldsymbol{\lambda})$ to be Lipschitz when the norm of the error terms is bounded. As an example, we show that additive models are $C$-Lipschitz in the penalty parameters. We will start from the simple example of parametric models fitted with smooth penalty functions, then consider nonsmooth penalty functions, and finally generalize the results to nonparametric additive models. 
+The main application of this paper is penalized regression models of the form \eqref{thrm:intro_pen_reg}. Penalty functions are used to control model complexity and induce desired characteristics (e.g. smoothness or sparsity). When multiple penalty functions are used, the resulting model exhibits a combination of the desired characteristics. Hence there has been recent interest in combining penalty functions, such as the elastic net or sparse group lasso. However no popular methods use more than two penalties, perhaps due to theoretical concerns regarding overfitting when there are many penalty parameters. Here we use the oracle inequalities from Section \ref{sec:main_results} to answer this open question.
 
-Recall that in many cases, we will want the range of $\Lambda$ to grow at some polynomial rate in $n$. The convergence rates given in Lemmas \ref{lemma:train_val_special} and \ref{lemma:kfold_special} hold if the Lipschitz constant is polynomial in $n$. The following results indeed show that the fitted models are $Cn^\kappa$-Lipschitz for some $\kappa > 0$.
+Recall that in our framework, the model-estimation procedure outputs the minimizer of the penalized training criterion, where the penalty parameters serve as the hyperparameters. The penalty parameters are tuned over some range $\Lambda$. As long as we can show that the fitted models are Lipschitz in the penalty parameters over $\Lambda$, we can apply Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
 
-%For all the examples, we add a small ridge penalty to the original penalized training criterion (if there isn't one already). In the parametric setting, the perturbed training criterion will have the form
-%\begin{equation}
-%\label{eq:lipschitz_form}
-%\| y - \sum_{j=1}^J g_j(\cdot | \boldsymbol{\theta}^{(j)}) \|_T^2
-%+ \sum_{j=1}^J 
-%\lambda_j 
-%P_j(\boldsymbol{\theta})
-%+ 
-%\underbrace{\sum_{j=1}^J  \lambda_j  \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2}_{\text{Ridge Penalty}}
-%\end{equation}
-%The ridge penalty is used in our proofs to ensure that the fitted functions are ``well-conditioned.''
-%In practice, $w$ can be chosen small enough such that the fitted models for the original problem and the perturbed ridge problem are indistinguishable. We quantify in Lemma \ref{lemma:ridge_perturb_smooth} how small $w$ needs to be. For many problems, $w$ just needs to be polynomial in $n$. Since the Lipschitz constant $C$ in \eqref{eq:lipschitz_form} is usually polynomial in $w$, then $w$ contributes at most a $\log n$ term to the convergence rate in Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
+We are particularly interested in the case where the limits of $\Lambda$ are polynomial in the sample size. The reason is that the oracle penalty parameters over $\mathbb{R}^J_+$ are usually polynomial in $n$ \citep{van2000empirical, van2014additive, buhlmann2011statistics}. In order to ensure $\Lambda$ contains the optimal penalty parameters, we consider
+\begin{equation}
+\label{thrm:lambda_range}
+\Lambda = [ n^{-t_{\min}}, n^{t_{\max}}]^J
+\end{equation}
+for sufficiently large $t_{\min}, t_{\max} \ge 0$. (Ideally we would set $\Lambda = \mathbb{R}^J_+$, but the penalized regression can be ill-behaved for very small penalty parameters.)
 
-Finally, we note that additive models are not the only problems where the estimators are smoothly parameterized by the penalty functions. In the Appendix, we show that regression problems where we fit a single model $g(\cdot | \boldsymbol{\theta})$ with multiple, individually-scaled penalties $P_j(\boldsymbol{\theta})$ satisfies \eqref{eq:lipschitz_squared}.
+If $\Lambda$ is of the form \eqref{thrm:lambda_range}, the Lipschitz constant for the penalized regression examples in this section are all polynomial in $n$. That is, there exist constants $C, \kappa \ge 0$ such that
+\begin{equation}
+\label{thrm:lipschitz_pen_reg}
+\left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}'|T) \right \| \le C n^\kappa \left \| \boldsymbol{\lambda} - \boldsymbol{\lambda}' \right \| \quad \forall \boldsymbol{\lambda}, \boldsymbol{\lambda}' \in \Lambda
+\end{equation}
+Assuming \eqref{thrm:lambda_range} and \eqref{thrm:lipschitz_pen_reg}, we get the following oracle inequalities when tuning penalty parameters via training/validation split and cross-validation. The results are very similar to Corollary \ref{corr:train_val} and Theorem \ref{thrm:kfold}. Since the error terms are proportional to the log of the Lipschitz constant, we again have near-parametric terms with $\log n$ in the numerator. 
+\begin{corollary}
+	 Suppose $\lambda_{\min} = n^{-t_{\min}}$ and $\lambda_{\max} = n^{t_{\max}}$ for $t_{\min}, t_{\max} \ge 0$. Let $C, \kappa  > 0$.
+	 
+	 \begin{enumerate}
+	 	\item Suppose conditions in Theorem \ref{thrm:train_val} hold with $C_\Lambda = C n^\kappa$. Then 
+		\begin{eqnarray}
+		\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 &\le& \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
+		&& + O_p \left(\frac{J (1 + \kappa + t_{\max})\log n}{n_{V}} \right) 
+		\\
+		&& + O_p \left(
+		\sqrt{
+			\frac{J (1 + \kappa + t_{\max})\log n}{n_{V}}
+			\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}}| T) \right \Vert^2_{V}
+		}
+		\right )
+		\end{eqnarray}
+	 	
+	 	\item Suppose conditions in Theorem \ref{thrm:kfold}  hold with $C_\Lambda = C n^\kappa$. Then for sufficiently large $n$, there is an absolute constant $c_1 > 0$ such that for all $a > 0$,
+	 	\begin{eqnarray}
+	 	E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 &\le&
+	 	(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 \\
+	 	&& + c_1 \frac{(1+a)^2}{a} 
+	 	\frac{J (t_{\max} + \kappa) (\log n)^2}{n_V} 
+	 	\end{eqnarray}
+	 \end{enumerate}
+\end{corollary}
+
+It remains to show that the fitted models are Lipschitz in the penalty parameters. We will do an in-depth study of additive models, which have the form
+\begin{equation}
+g(x_1, ..., x_J)= \sum_{j=1}^J g_j(x_j)
+\end{equation}
+We first consider parametric additive models fitted with smooth penalties, then those with nonsmooth penalties, and finally nonparametric additive models. Results for more general penalized regression problems are included in Section \ref{sec:proofs}.
+
 
 \subsection{Parametric additive models}
 \label{sec:param_add_models}
-
-Here we consider parametric additive models of the form
+Parametric additive models have the form
 \begin{equation}
 g(\cdot | \boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)}) = \sum_{j=1}^J g_j(\cdot | \boldsymbol{\theta}^{(j)})
 \end{equation}
@@ -347,12 +381,12 @@ L_T \left (y, \boldsymbol{\theta} | \boldsymbol{\lambda} \right)
 \coloneqq \frac{1}{2} \left  \| y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j P_j(\boldsymbol{\theta}^{(j)})
 \end{equation}
-We show that the fitted models are indeed Lipschitz in the penalty parameters with respect to $\| \cdot \|_\infty$, which satisfies the condition in both Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
+We show that the fitted models are indeed Lipschitz in the penalty parameters with respect to $\| \cdot \|_\infty$.
 
 %\footnote{Many popular estimators are Lipschitz since we usually construct the model by taking a linear combination of some basis functions.}
 
 \subsubsection{Parametric regression with smooth penalties}
-We first suppose the penalty functions are all smooth. In the following section, we will generalize the results to include certain nonsmooth penalty functions. The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
+Suppose the penalty functions are smooth. The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
 \begin{lemma}
 	\label{lemma:param_add}
 	Let 
@@ -389,7 +423,7 @@ We first suppose the penalty functions are all smooth. In the following section,
 	\end{equation}
 \end{lemma}
 
-Notice that the result requires that the training criterion is strongly convex at its minimizer. If this is not true, one can add augment the penalty function $P_j(\boldsymbol{\theta}^{(j)})$ with a ridge penalty $\| \boldsymbol{\theta}^{(j)} \|_2^2$ so that the training criterion becomes
+Notice that the result assumes that the training criterion is strongly convex at its minimizer. If this is not true, one can add augment the penalty function $P_j(\boldsymbol{\theta}^{(j)})$ with a ridge penalty $\| \boldsymbol{\theta}^{(j)} \|_2^2$ so that the training criterion becomes
 \begin{equation}
 \label{eq:param_add_models_ridge}
 \frac{1}{2} \left  \| y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
@@ -446,7 +480,7 @@ For illustration, we present the proof for Lemma \ref{lemma:param_add} in the ca
 
 \subsubsection{Parametric regression with non-smooth penalties}
 
-If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless we find that for many popular non-smooth penalty functions, such as the lasso (CITE) and group lasso (CITE), the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
+If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless we find that for many popular non-smooth penalty functions, such as the lasso \citep{tibshirani1996regression} and group lasso \citep{yuan2006model}, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
 
 \begin{definition}
 	The differentiable space of a real-valued function $f$ at $\boldsymbol{\theta}$ is
@@ -506,112 +540,6 @@ In lasso and group lasso problems, it is hypothesized that almost every penalty 
 		Then any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda_{smooth}$ satisfies  \eqref{eq:param_add_lipschitz}.
 \end{lemma}
 
-%
-%\subsection{Parametric models general}
-%\label{sec:smoothness_domain}
-%
-%Our first example is penalized regression for parametric models $g(\cdot | \boldsymbol{\theta})$ where $\boldsymbol{\theta} \in \mathbb{R}^p$. The number of dimensions $p$ is allowed to grow with $n$, as commonly done in sieve estimation. We focus on estimators of the form
-%\begin{equation}
-%\label{eq:param_ridge}
-%\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) = \argmin_{\boldsymbol{\theta }\in \mathbb{R}^p} 
-%\left  \| y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
-%+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}) + \frac{w}{2} \| \boldsymbol{\theta} \|^2_2 \right )
-%\end{equation}
-%We show that $g(\cdot | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz with respect to $\|\cdot\|_\infty$, thereby satisfying both Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
-%
-%\subsubsection{Parametric regression with smooth penalties}
-%We begin with considering the case where all the penalty functions are smooth. The following section will generalize these result to include non-smooth penalty functions like the lasso and group lasso.
-%
-%To show that $g(\cdot | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz, we will need the model class and the penalty functions to be well-behaved. Our results rely on the following two conditions.
-%\begin{condition}
-%	\label{condn:param2}
-%	There exist constants $L, r \ge 0$ such that the functions are $Lp^r$-Lipschitz in the model parameters with respect to $\| \cdot \|_\infty$:
-%	\begin{equation}
-%	\left \|g(\cdot|\boldsymbol{\theta}^{(1)})-g(\cdot|\boldsymbol{\theta}^{(2)})\right \|_{\infty}
-%	\le Lp^{r}
-%	\left \|\boldsymbol{\theta}^{(1)}-\boldsymbol{\theta}^{(2)} \right \|_{2} 
-%	\quad \forall \enskip \boldsymbol{\theta}^{(1)}, \boldsymbol{\theta}^{(2)} \in \mathbb{R}^p
-%	\end{equation}
-%\end{condition}
-%
-%\begin{condition}
-%	\label{condn:param1}
-%	There exists some constant $K$ such that for penalty function $P_j$ for all $j=1,...,j$,
-%	\begin{equation}
-%	\left | \frac{d}{d m}P_j(\boldsymbol{\theta} + m \boldsymbol{\beta}) \right |_{m = m'} \le K \|\boldsymbol{\beta}\|_{2}
-%	\end{equation}
-%	for any $\boldsymbol{\theta}, \boldsymbol{\beta} \in \mathbb{R}^p$ and $m' \in \mathbb{R}$.
-%\end{condition}
-%
-%Condition \ref{condn:param2} requires that the Lipschitz constant grows no faster than a polynomial rate in the number of features. Many models satisfy this condition, assuming they are parameterized appropriately. For example, Condition \ref{condn:param2} is satisfied by linear regression when the covariates are bounded.
-%
-%It is easy to show that Condition \ref{condn:param1} is satisfied by many popular parametric penalties, such as the ridge penalty $\| \cdot \|_2^2$, lasso $\| \cdot \|_1$, and group lasso $\| \cdot \|_2$. (Proofs are given in Section \ref{sec:proofs}, if you insist.) 
-%
-%The following lemma states that the fitted models are Lipschitz by the penalty parameters.
-%\begin{lemma}
-%	\label{lemma:parametric}
-%	Suppose Condition \ref{condn:param2} and \ref{condn:param1} are satisfied.
-%	Suppose $\hat{\boldsymbol{\theta}}$ is defined by \eqref{eq:param_ridge}.
-%	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
-%	\[
-%	\left \|
-%	g \left (\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}) \right ) - g \left ( \cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}) \right )
-%	\right \|_{\infty}
-%	\le
-%	\left \|
-%	\boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)} 
-%	\right \|_{2}
-%	stuff
-%	\]
-%\end{lemma}
-%
-%Now we provide an outline of the proof.
-
-%\subsubsection{Nonsmooth penalties}\label{sec:nonsmooth}
-%
-%If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless, we find that for many popular non-smooth penalty functions, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we use the approach in Feng \& Simon (TBD- CITE?). We begin with the following definitions:
-%
-%\begin{definition}
-%	The differentiable space of a real-valued function $L$ at $\boldsymbol{\theta}$ is the set of functions
-%	\begin{equation}
-%	\Omega^{L}(\boldsymbol{\theta}) = \left \{ \boldsymbol{\beta} \middle | \lim_{\epsilon \rightarrow 0} \frac{L(\boldsymbol{\theta} + \epsilon \boldsymbol{\beta}) - L(\boldsymbol{\theta})}{\epsilon} \text{ exists } \right \}
-%	\end{equation}
-%\end{definition}
-%
-%\begin{definition}
-%	$S$ is a local optimality space for a convex function $L(\cdot, \boldsymbol \lambda_0)$ if there exists a neighborhood $W$ containing $\boldsymbol \lambda_0$ such that for every $\boldsymbol \lambda \in W$,
-%	\begin{equation}
-%	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} L(\boldsymbol{\theta}, \boldsymbol \lambda) =
-%	\argmin_{\boldsymbol{\theta} \in S} L(\boldsymbol{\theta}, \boldsymbol \lambda)
-%	\end{equation}
-%\end{definition}
-%
-%We now use these definitions to state the conditions that guarantee that the fitted functions are still smoothly parameterized by the penalty parameters.
-%Let the training criterion be denoted
-%\begin{eqnarray*}
-%	L_T(\boldsymbol{\theta}, \boldsymbol{\lambda}) &=& \argmin_{g\in \mathcal{G}} 
-%	\left \| \boldsymbol y -  g(X| \boldsymbol{\theta}) \right \|^2_T 
-%	+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}) + \frac{w}{2} \| \boldsymbol{\theta} \|^2_D \right )
-%\end{eqnarray*}
-%
-%We will need following conditions to hold for almost every $\boldsymbol{\lambda} \in \Lambda$:
-%\begin{condition}
-%	\label{condn:nonsmooth1}
-%	The differentiable space $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\boldsymbol{\theta})$ at $\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right)$ is a local optimality space for $L_T\left(\cdot,\boldsymbol{\lambda}\right)$.
-%\end{condition}
-%\begin{condition}
-%	\label{condn:nonsmooth2}
-%	$L_T(\cdot, \boldsymbol{\lambda})$ is twice continuously differentiable along directions in $\Omega^{L_T(\cdot, \boldsymbol{\lambda})}(\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}\right))$.
-%\end{condition}
-%
-%Equipped with the conditions above, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the result is exactly the same as Lemma \ref{lemma:nonparam_smooth}.
-%
-%\begin{lemma}
-%	\label{lemma:nonsmooth}
-%
-%\end{lemma}
-
-
 \subsection{Nonparametric additive models}
 \label{sec:smoothness_validation}
 
@@ -623,39 +551,7 @@ We now generalize the results to nonparametric additive models. We consider esti
 \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j P_j(g_j)
 \end{equation}
-where $P_j$ are now penalty functionals. The following lemma states that the fitted functions are Lipschitz with respect to $\| \cdot \|_D$, which satisfies the Lipschitz condition in Theorem \ref{thrm:train_val}.
-%Notice that the additional ridge penalty is now over the fitted values at the observed covariates. This ensures that the fitted values at the observed covariates is well-behaved. 
-
-%\begin{definition}
-%	Let $\mathcal{G}$ be a function class.
-%	Let $P:\mathcal{G} \mapsto \mathbb{R}$ be a functional and $g$ and $h$ be functions in $\mathcal{G}$.
-%	The pathwise derivative of $P$ at $g$ with respect to $h$ is defined as
-%	$$
-%	\frac{d}{d m} P(g + mh) = \lim_{m \rightarrow 0} \frac{P(g + mh) - P(g)}{m}
-%	$$
-%	if the limit exists.
-%	The pathwise second derivative of $P$ at $g$ with respect to $h$ is defined as
-%	$$
-%	\frac{d^2}{d m^2} P(g + mh) = \lim_{m \rightarrow 0} \frac{\frac{d}{d t} P(g + th) - \frac{d}{d m} P(g)}{m}
-%	$$	
-%	if the pathwise derivative of $P$ and the limit exists.
-%	$P$ is twice-differentiable if the pathwise second derivative of $P$ at any $g \in \mathcal{G}$ with respect to any $h \in \mathcal{G}$ exists.
-%\end{definition}
-%Furthermore, one can show that the functional $P$ is convex if the pathwise second derivative of a penalty function is always positive as follows
-%\begin{equation}
-%\frac{d^2}{d m^2} P_j(f + mh) \ge 0 \forall j= 1,...,J \text{ and } \forall h \in \mathcal{G}
-%\end{equation}
-%\textcolor{red}{(Do I need to prove or define this? Has someone done this already?)}. 
-
-%As an example, consider the $r$-th degree Sobolev penalty
-%\begin{equation}
-%P(g) = \int \left(g^{(r)}(x) \right)^2 dx
-%\end{equation}
-%Its pathwise second derivative at $g$ with respect to $h$ is
-%\begin{eqnarray}
-%\frac{d^2}{dm^2} P(g) &=& \frac{d^2}{dm^2} \int \left((g + mh)^{(r)}(x) \right)^2 dx\\
-%&=& 2 \int \left(h^{(r)}(x) \right)^2 dx
-%\end{eqnarray}
+where $P_j$ are now penalty functionals. The following lemma states that the fitted functions are Lipschitz with respect to $\| \cdot \|_{D^{(n)}}$.
 
 \begin{lemma}
 \label{lemma:nonparam_smooth}
@@ -671,8 +567,9 @@ D^2 \left (
 \circ h, h
 \right \rangle 
 \ge m
-\quad \forall h \in \mathcal{G},  \|h \|_D = 1
+\quad \forall h \in \mathcal{G},  \|h \|_{D^{(n)}} = 1
 \end{equation}
+where $D^2$ is the second Gateuax derivative.
 
 Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
 \begin{equation}
@@ -684,80 +581,13 @@ C_{\theta^{*},\Lambda}=
 For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have
 \begin{equation}
 \left\Vert 
-\sum_{j=1}^J \hat{g}_j\left(\cdot|\boldsymbol{\lambda}^{(1)} \right)-\hat{g}_j\left(\cdot|\boldsymbol{\lambda}^{(2)} \right)\right\Vert _{D}
+\sum_{j=1}^J \hat{g}_j\left(\cdot|\boldsymbol{\lambda}^{(1)} \right)-\hat{g}_j\left(\cdot|\boldsymbol{\lambda}^{(2)} \right)\right\Vert _{D^{(n)}}
 \le
 \frac{J}{m \lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}\frac{n}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
 \left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|
 \end{equation}
 \end{lemma}
 
-%\subsection{Example: Smoothing Splines with a Sobolev Penalty}
-%
-%Finally, we consider the example of smoothing splines fitted using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. For a given set of penalty parameters, the smoothing spline estimate is
-%\begin{equation}
-%\label{ex:sobolev}
-%\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
-%\arg\min_{g_j\in\mathcal{G}}
-%\frac{1}{2} \left \|y- \sum_{j=1}^J g_j \right \|_{T}^{2}
-%+ \sum_{j=1}^J \lambda_j 
-%\int \left (g_j^{(r_j)}(x) \right )^2 dx
-%\end{equation}
-%where $g^{(r)}$ is the derivative of $g$ of order $r \ge 2$.
-%
-%We can show that smoothing splines are smoothly-parameterized by the penalty parameters with respect to $\|\cdot\|_V$ using the approach in Section \ref{sec:smoothness_validation}. As done in the nonparametric additive model example, we can perturb \eqref{ex:sobolev} with an additional ridge penalty as follows
-%\begin{equation}
-%\label{eq:sobolev_nonparam_ridge}
-%\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
-%\arg\min_{g_j\in\mathcal{G}}
-%\frac{1}{2} \left \|y- \sum_{j=1}^J g_j \right \|_{T}^{2}
-%+ \sum_{j=1}^J \lambda_j 
-%\left (
-%\int \left (g_j^{(r_j)}(x) \right )^2 dx
-%+ \frac{w}{2} \|g_j\|^2_D
-%\right )
-%\end{equation}
-%
-%Moreover, solutions to \eqref{ex:sobolev} have the property that the fitted functions $\hat{g}_j(\cdot | \boldsymbol \lambda)$ can be expressed as the weighted sum of normalized B-splines: (CITE for proof) 
-%\begin{equation}
-%\hat{g}_j(x | \boldsymbol \lambda) = \sum_{i=1}^{p} \theta_i N_{ij}(x)
-%\end{equation}
-%where $N_{ij}$ is a normalized B-spline. The degree of B-spline depends on the degree of the Sobolev penalty and the number of B-splines $p$ is determined by the number of knots and the degree of the B-spline.
-%Since smoothing splines are parametric, we can then apply the same logic in Section \ref{sec:smoothness_domain} to show that smoothing splines are smoothly-parameterized by the penalty parameters with respect to $\|\cdot\|_\infty$. Again, we perturb \eqref{ex:sobolev} with an additional ridge penalty as follows
-%\begin{equation}
-%\label{eq:sobolev_param_ridge}
-%\left \{ \hat{g}_j(\cdot | \boldsymbol \lambda) \right \}_{j=1}^J =
-%\arg\min_{g_j\in\mathcal{G}}
-%\frac{1}{2} \left \|y- \sum_{j=1}^J N_j \boldsymbol{\theta}_j \right \|_{T}^{2}
-%+ \sum_{j=1}^J \lambda_j 
-%\left (
-%P_j(\boldsymbol{\theta}_j)
-%+ \frac{w}{2} \| \boldsymbol{\theta}_j \|^2_D
-%\right )
-%\end{equation}
-%The key is to show that Condition \ref{condn:nonsmooth1} is satisfied. 
-%
-%The following lemma states that smoothing splines are indeed smoothly-parameterized by the penalty parameters.
-%\begin{lemma}
-%\label{lemma:sobolev}
-%Suppose $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
-%
-%Suppose $\lambda_j \in [\lambda_{\min}, \lambda_{\max}]^J$ for all $j=1,...,j$.
-%
-%In the setting of \eqref{eq:sobolev_nonparam_ridge}, the fitted functions satisfy
-%\begin{equation}
-%\left\Vert \sum_{j=1}^J \hat{g}_j(\cdot|\lambda^{(1)}) - \hat{g}_j(\cdot|\lambda^{(2)}) \right\Vert _V
-%\le
-%\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert
-%stuff
-%\end{equation}
-%In the setting of \eqref{eq:sobolev_param_ridge}, the fitted functions satisfy
-%\begin{equation}
-%\left\Vert \sum_{j=1}^J \hat{g}_j(\cdot|\lambda^{(1)}) - \hat{g}_j(\cdot|\lambda^{(2)}) \right\Vert _\infty
-%\le
-%\left\Vert \lambda^{(1)}-\lambda^{(2)}\right\Vert
-%stuff
-%\end{equation}
-%\end{lemma}
 
 \section{Simulations}\label{sec:simulations}
 
@@ -807,22 +637,20 @@ as the validation set size increases. The difference of the validation losses dr
 
 \section{Discussion}\label{sec:discussion}
 
-In this paper, we have established oracle inequalities for penalty parameter selection using a training/validation split framework or $k$-fold cross-validation. The results address the concern in \citet{bengio2000gradient} regarding ``the amount of overfitting that can be brought when too many hyperparameters are optimized.'' Our results show that 
-this should not be a major concern. In a non-parametric setting or parametric setting where $p$ grows with $n$, the oracle error is the dominating term in the upper bound. At worst, the tuning penalty parameter problem contributes an error that is on the same order as the oracle error, say in a parametric setting where $p$ is fixed. 
+In this paper, we have established oracle inequalities for hyperparameter selection using a training/validation split framework or $k$-fold cross-validation. The results address the concern in \citet{bengio2000gradient} regarding ``the amount of overfitting that can be brought when too many hyperparameters are optimized.'' Our results show that 
+this should not be a major concern. In a non-parametric setting or parametric setting where $p$ grows with $n$, the oracle error is the dominating term in the upper bound. In the parametric setting, the tuning penalty parameter problem contributes an error that is on the same order as the oracle error. 
 
-There is recent interest in combining regularization methods, but seems to be an artificial restriction to two or three penalty parameters. The area of penalized regression methods with tens or hundreds of penalty parameters remains largely unexplored. Our results suggest that this direction of research could be fruitful. As shown in Feng and Simon (TBD), un-pooling the penalty parameters in a sparse group lasso model is surprisingly effective.
+We applied our results to penalized regression problems to understand the relationship between the number of penalty parameters and model error. Our results suggest that for semi- and non-parametric penalized regression models, increasing the number of penalty functions may improve performance. For example, Feng and Simon (TBD) tried fitting an un-pooled version of sparse group lasso model with a hundred penalty parameters and significantly decreased the model's generalization error.
 
-One major caveat to our results is that we have assumed that the penalty parameters can be tuned such that the validation loss is minimized. However it is difficult to find the global minimizer since the validation loss is not convex in the penalty parameters. Optimization methods need to be developed to effectively solve the bilevel optimization problems in \eqref{eq:bilevel}. In addition, it would be worthwhile to understand the performance of models that are only local minimizers of the validation loss.
+A major caveat to our results is that we have assumed that we can find the global minimizer of the validation loss over the penalty parameter space. Unfortunately, this is currently computationally intractable since the validation loss is not convex in the penalty parameters. Better optimization methods need to be developed to solve this problem. In addition, we should characterize the model error when it is only possible to find local minimizers of the validation loss.
 
-Finally, there are still many open questions to explore. Our results assume that the fitted models are smoothly parameterized with respect to the penalty parameters and we provide a number of examples that satisfy these conditions. There are probably many more examples of regression problems that satisfy the smoothness condition and the smoothness condition itself can probably be generalized. In addition, it would be interesting to bound the distance between the selected and oracle penalty parameters
+Finally, more work can be done to understand the behavior of hyperparameter selection methods. This paper focused on bounding the model error but did not bound the distance between the selected and oracle penalty parameters
 \begin{equation}
 \label{penalty_diff}
 \left \| \hat{\boldsymbol \lambda} - \tilde{\boldsymbol \lambda} \right \|_2
 \end{equation}
-Such a result would perhaps give a more intuitive understanding of penalty parameter selection methods.
+Such a result would perhaps give a more intuitive understanding of hyperparameter selection methods.
 
-
-%We find that the difference between the oracle error and the selected model error does not increase dramatically with the number of penalty parameters. the increase in error from tuning parameters model decreases at a near-parametric rate if the fitted models are smoothly parameterized in terms of the penalty parameters. For many penalized regression problems, we find that this is indeed the case. Our results show that adding penalty parameters does not drastically increase the model complexity. This supports recent efforts to combine regularization methods and ``un-pool" regularization parameters. Furthermore, since our result holds for a search over a dense set of penalty parameters, our prediction error bounds apply to cross-validation over a continuum of values, as done in hyper-parameter optimization methods.
 
 \section{The Proof} \label{sec:proofs}
 
