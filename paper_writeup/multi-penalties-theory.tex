@@ -725,7 +725,8 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $0 < \lambda_{\min} < \lambda_{\max}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b > 0$.
 Suppose there is a function $\psi:\mathbb{R}\mapsto\mathbb{R}$ and constant $r > 0$ such that
 \begin{equation}
-\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi(R)\mbox{ }\forall R>r
+\label{eq:dudley_bound}
+\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi(R) \quad \forall R>r
 \end{equation}
 Also, suppose $\psi\left(u\right)/u^{2}$ is non-increasing in $u$ for all $u > r$.
 Let $\tilde{\boldsymbol \lambda}$ be defined as in \eqref{eq:tilde_lambda_def}.
@@ -828,55 +829,117 @@ we have
 	
 \end{proof}
 
-The proof of Theorem \ref{thrm:train_val} is just an application of Theorem \ref{thrm:train_val_complicated}. Once we determine the entropy of the $\mathcal{G}$ where the fitted functions are Lipschitz and the bounding function $\psi$.
+We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:train_val}. Before proceeding, we determining the entropy of $\mathcal{G}(T)$ when the functions are Lipschitz in the hyperparameters.
 
 \begin{lemma}
-Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Suppose there is a $C > 0$ such that 
-\begin{equation}
-\label{eq:lemma_train_val_lipschitz}
-\left \| \hat{g}(\boldsymbol{\lambda}) - \hat{g}(\boldsymbol{\lambda}') \right \|_V \le C \left \| \boldsymbol{\lambda} - \boldsymbol{\lambda}' \right \|_2 \quad \boldsymbol{\lambda}, \boldsymbol{\lambda}' \in \Lambda
-\end{equation}
-Then for all $R \ge n^{-1}$, we have
-\begin{equation}
-\label{eq:train_val_entropy}
-\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
-\le
-R\left ( J (1 + \log(32 C (\lambda_{\max} - \lambda_{\min}))) n \right )^{1/2}
-\end{equation}
-
+	\label{lemma:covering_cube}
+	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Suppose $\mathcal{G}(T)$ is $C$-Lipschitz in $\boldsymbol{\lambda}$ with respect to some norm $\| \cdot \|$.
+	Then the entropy of $\mathcal{G}(T)$ with respect to $\| \cdot \|$ is
+	\begin{equation}
+	H\left(u, \mathcal{G}(T),\|\cdot\|\right) \le
+	J \log \left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)
+	\end{equation}
 \end{lemma}
+\begin{proof}
+	Using a slight variation of the proof for Lemma 2.5 in \citet{van2000empirical}, we can show
+	\begin{equation}
+	N\left(u,\Lambda,\|\cdot\|_{2}\right) \le \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)^{J}
+	\end{equation}
+	
+	Under the Lipschitz assumption, a $\delta$-cover for $\Lambda$
+	is a $C\delta$-cover for $\mathcal{G}(T)$. The covering number for $\mathcal{G}(T)$ wrt $\|\cdot\|_{V}$ is bounded by the covering number for $\Lambda$ as follows
+	\begin{eqnarray}
+	N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right)
+	&\le& N\left(\frac{u}{C},\Lambda,\|\cdot\|_{2}\right)\\
+	&\le& \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u/C}{u/C}\right)^{J}
+	\end{eqnarray}
+\end{proof}
+
+Now we ready to prove Theorem \ref{thrm:train_val}.
 
 \begin{proof}
-Assuming \eqref{eq:lemma_train_val_lipschitz} holds, a $\delta$-cover for $\Lambda$
-is a $C\delta$-cover for $\mathcal{G}(T)$. The covering number for $\mathcal{G}(T)$ wrt $\|\cdot\|_{V}$ is bounded by the covering number for $\Lambda$ as follows
-\[
-N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right)\le N\left(\frac{u}{C},\Lambda,\|\cdot\|_{2}\right)
-\]
-One can bound the covering number for $\Lambda$ using a variation of Lemma 2.5 in \citet{van2000empirical}
-\begin{equation}
-	N\left(u,\Lambda,\|\cdot\|_{2}\right) \le \left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)^{J}
-\end{equation}
-
-So we have
+By Lemma \ref{lemma:covering_cube}, we have
 \begin{eqnarray*}
 	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du 
-	& \le & J^{1/2}\int_{0}^{R}\left[\log4+\log\left(\frac{8C\left(\lambda_{max}-\lambda_{min}\right)}{u}\right)\right]^{1/2}du\\
-	& \le & RJ^{1/2}\left[\int_{0}^{1}\left(\log4+\log\left(\frac{8C\left(\lambda_{max}-\lambda_{min}\right)}{R}\right)+J\log\frac{1}{v}\right)dv\right]^{1/2}\\
+	&=& \int_{0}^{R} \left ( 
+	J \log \left(\frac{4C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)
+	\right )^{1/2}
+	du\\
+	& \le & J^{1/2}\int_{0}^{R}\left[\log4+\log\left(\frac{8C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)}{u}\right)\right]^{1/2}du\\
+	& \le & RJ^{1/2}\left[\int_{0}^{1}\left(\log4+\log\left(\frac{8C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)}{R}\right)+J\log\frac{1}{v}\right)dv\right]^{1/2}\\
 	&=& 
 	R\left[J \left (
-	1+\log \left (32C\left(\lambda_{max}-\lambda_{min}\right)\right)
+	1+\log \left (32C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)\right)
 	+ \log\frac{1}{R} 
 	\right )
 	\right]^{1/2}
 \end{eqnarray*}
-where the second inequality follows from a change of variables and the concavity of the square root function. If we restrict $R > n^{-1}$, then \eqref{eq:train_val_entropy} follows.
+where the second inequality follows from a change of variables and the concavity of the square root function. If we restrict $R > n^{-1}$ and $C_\Lambda \ge 32e/(n \lambda_{\max})$, then 
+\begin{equation}
+\label{eq:train_val_entropy}
+\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
+\le
+\psi (R) \coloneqq 2 R\left ( J \log(C_\Lambda \lambda_{\max}n) \right )^{1/2}
+\end{equation}
+Applying Theorem \ref{thrm:train_val_complicated}, we get our desired result.
 
 \end{proof}
 
 \subsection{Proof for cross-validation}
-We now present the proof for Theorem \ref{thrm:kfold}. The more general version is given in Lemma 3.2 in \citet{lecue2012oracle}.
+We now present the proof for Theorem \ref{thrm:kfold}, which is an application of Theorem 3.5 in \citet{lecue2012oracle}. We reproduce Theorem 3.5 below for convenience. The theorem calculates entropy with respect to the Orlicz norm $\| \cdot \|_{\phi} = \inf \{ C > 0: E[\exp(|f|/C) - 1] \le 1 \}$.
+
+\begin{theorem}
+	\label{thrm:mitchell}
+	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Let
+	$\mathcal{Q} = \{ \| g^* - \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T) \|_2^2 : \boldsymbol{\lambda} \in \Lambda \}$.
+	Suppose there is $G > 0$ such that $\sup_{g \in \mathcal{G}} \| g \|_\infty \le G$.
+	
+	Suppose there is a $d_{\min}$ and a strictly increasing function $\psi$ such that $\psi^{-1}$ is strictly convex, the convex conjugate $\psi^*$ of $\psi^{-1}$ increases, $\psi^*(\infty ) = \infty$ and there exists $r \ge1$ such that $\psi^*(x)/x^r$ is decreasing in $x$ and
+	\begin{equation}
+	\psi(d) \ge \int_0^{\sqrt{d}} H^{1/2}(u, \mathcal{Q}_d, \| \cdot \|_2) du +
+	\frac{\log n_V}{\sqrt{n_V}} \int_0^{2G} H(u, \mathcal{Q}_d, \| \cdot \|_\phi) du
+	\quad
+	\forall d > d_{\min}
+	\end{equation}
+	where $ \mathcal{Q}_d = \{ Q \in \mathcal{Q}: \| Q \|_2 \le \sqrt{d} \}$.
+	
+	Suppose that the model-estimation procedure is exchangeable (i.e. any ordering of the same training data produces the same fitted model).
+	
+	Then for every $a > 0$ and $q > 1$, the following inequality holds
+	\begin{eqnarray}
+	E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 &\le&
+	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda} \left [
+	E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2  
+	\right ] \\
+	&& + \frac{ac}{q}\left [
+	\psi^* \left (\frac{2q^{r}(1+a)}{a\sqrt{n_T}} \right ) \vee d_{\min}
+	\right ]
+	\end{eqnarray}
+\end{theorem}
+
+In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy of the loss functions with respect to the Orlicz norm.
+
+\begin{lemma}
+	\begin{equation}
+	\gamma_1(\mathcal{Q}_d^{L_2}, \| \cdot \|_\psi) \le 
+	2GJ\left (  
+	1 + \log(128GC(\lambda_{\max} - \lambda_{\min})
+	\right )
+	\end{equation}
+	
+	and
+	
+	\begin{equation}
+	\gamma_2(\mathcal{Q}_d^{L_2}, \| \cdot \|_2) \le 
+	\sqrt{d} \left [ J \left ( 
+	1 + \log\left (\frac{128GC(\lambda_{\max} - \lambda_{\min}}{\sqrt{d}} \right )
+	\right )
+	\right ]^{1/2}
+	\end{equation}
+\end{lemma}
+
 \begin{proof}
-	hello
+	As 
 \end{proof}
 
 \subsection{Proof for Lispchitz conditions}
