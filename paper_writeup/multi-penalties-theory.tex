@@ -364,8 +364,8 @@ It remains to show that the fitted models are Lipschitz in the penalty parameter
 \begin{equation}
 g(x_1, ..., x_J)= \sum_{j=1}^J g_j(x_j)
 \end{equation}
-We first consider parametric additive models fitted with smooth and non-smooth penalties and then nonparametric additive models. Results for more general penalized regression problems are included in Section \ref{sec:proofs}.
-
+We first consider parametric additive models fitted with smooth and non-smooth penalties and then nonparametric additive models. Results for more general penalized regression may be derived in a similar manner (note that different problems may satisfy slightly different smoothness conditions, in which case Theorems \ref{thrm:train_val_complicated} and \ref{thrm:mitchell} are needed to bound the model error). \textcolor{red}{I don't think I have space for putting results for more general penalized regression problems.}
+%Results for more general penalized regression problems are included in Section \ref{sec:proofs}.
 
 \subsection{Parametric additive models}
 \label{sec:param_add_models}
@@ -693,28 +693,26 @@ We will bound the empirical process term using the following Lemma, which is a s
 
 \begin{lemma}
 	\label{lemma:cor83}
-	\textcolor{red}{adapt to our new notation}
-	Let $Q_{m}$ be the empirical distributon of $m$ observations at
-	covariates $x_{i}$.
-	
-	Suppose $\epsilon$ are $m$ independent sub-gaussian errors with parameter $b > 0$. Suppose
-	the model class $\mathcal{F}(T)$ has elements $\sup_{f\in\mathcal{F}_{n}(T)}\|f\|_{Q_{m}}\le R$
+	Suppose we have dataset $D^{(m)}$ where $\epsilon_1,...,\epsilon_m$ are independent random variables with mean zero and uniformly sub-gaussian with parameter $b > 0$. Suppose
+	the model class $\mathcal{F}$ has elements $\sup_{f\in\mathcal{F}}\|f\|_{D^{(m)}}\le R$
 	and satisfies
 	\[
-	\psi_{T}(R)\ge\int_{0}^{R}H^{1/2}(u,\mathcal{F}(T),\|\cdot\|_{Q_{m}})du
+	\psi(R)\ge\int_{0}^{R}H^{1/2}(u,\mathcal{F},\|\cdot\|_{D^{(m)}})du
 	\]
 	
 	
 	There is a constant $a > 0$ dependent only on $b$ such that
 	for all $\delta>0$ satisfying
 	\[
-	\sqrt{m}\delta\ge a(\psi_{T}(R)\vee R)
+	\sqrt{m}\delta\ge a(\psi(R)\vee R)
 	\]
 	
 	
 	we have 
 	\[
-	Pr\left(\left.\sup_{f\in\mathcal{F}(T)}\left|\frac{1}{m}\sum_{i=1}^{m}\epsilon_{i}f(x_{i})\right|\ge\delta\right|T\right)\le a\exp\left(-\frac{m\delta^{2}}{4a^{2}R^{2}}\right)
+	Pr\left(\sup_{f\in\mathcal{F}}\left|\frac{1}{m}\sum_{i=1}^{m}\epsilon_{i}f(x_{i})\right|\ge\delta\right)
+	\le 
+	a\exp\left(-\frac{m\delta^{2}}{4a^{2}R^{2}}\right)
 	\]
 	
 \end{lemma}
