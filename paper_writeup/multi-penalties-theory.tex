@@ -947,9 +947,11 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 	Plugging in \eqref{eq:convex_conjugate} into Theorem \ref{thrm:mitchell} gives us the result in Theorem \ref{thrm:kfold}.
 \end{proof}
 
-\subsection{Proof for Lispchitz conditions}
+\subsection{Penalized regression for additive models}
 
-\paragraph{Proof of Lemma \ref{lemma:param_add}}
+We now show that penalized regression problems for additive models satisfies the Lipschitz condition.
+
+\paragraph{Lemma \ref{lemma:param_add}}
 \begin{proof}
 By the gradient optimality conditions, we have for all $j=1:J$ 
 \begin{equation}
@@ -1021,9 +1023,80 @@ Define the following matrices
 	Finally the result \eqref{eq:param_add_lipschitz} clearly follows since $g_j(\boldsymbol{\theta})$ are Lipschitz in $\boldsymbol{\theta}$ with respect to $\| \cdot \|_\infty$.
 \end{proof}
 
-\paragraph{Proof of Lemma \ref{lemma:nonsmooth}}
+\paragraph{Lemma \ref{lemma:nonsmooth}}
 
-\paragraph{Proof of Lemma \ref{lemma:nonparam_smooth}}
+\begin{proof}
+	Consider any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$. 
+	
+	From Condition \ref{condn:nonsmooth1}, every point $\boldsymbol{\lambda} \in \Lambda_{smooth}$ is the center of a ball $B(\boldsymbol{\lambda})$ with nonzero radius where the differentiable space within $B(\boldsymbol{\lambda})$ is constant.
+	Hence by Condition \ref{condn:nonsmooth2}, it can be shown that there must exist a countable
+	set of points $\bar{\boldsymbol{\ell}} 
+	%=\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}
+	\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ where $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \bar{\boldsymbol{\ell}}$
+	such that the union of their differentiable neighborhoods cover  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ entirely:
+	\[
+	%\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})
+	\mu_{1}\left(\cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
+	\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)=\left\Vert \mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right\Vert _{2}
+	\]
+	where $\mu_{1}$ is the Lebesgue measure over  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$.
+	
+	Consider the intersections of boundaries of the differentiable neighborhoods with the line segment:
+	\[
+	P=
+	\left ( 
+	\cup_{\ell \in \bar{\boldsymbol{\ell}}}
+	\mbox{Bd}B\left(\boldsymbol{\ell}\right)
+	\right )
+	\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})
+	\]
+	Every point $p\in P$ can be expressed as $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
+	for some $\alpha_{p}\in[0,1]$. So points in $P$ can ordered by increasing $\alpha_{p}$ to get the sequence $\boldsymbol{p}^{(1)}, \boldsymbol{p}^{(2)}, ... $.
+	By Condition \ref{condn:nonsmooth1}, the differentiable space of the training criterion
+	is also constant over $\mathcal{L}\left(\boldsymbol{p}^{(i)},\boldsymbol{p}^{(i+1)}\right)$ since each of these sub-segments are a subset of $B(\boldsymbol{\ell})$ for some $\boldsymbol{\ell} \in \bar{\boldsymbol{\ell}}$. 
+	
+	Let the differentiable
+	space over the interior of line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
+	be denoted $\Omega_{i}$. 
+	By Condition \ref{condn:nonsmooth1}, the differentiable space is also a local optimality
+	space. Let $U^{(i)}$ be an orthonormal basis of $\Omega_{i}$. For
+	each $i$, we can express $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)$ for
+	all $\boldsymbol{\lambda}\in\mbox{Int}\left\{ \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)\right\} $
+	as
+	\[
+	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)=U^{(i)}\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)
+	\]
+	\[
+	\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)=\arg\min_{\beta}L_{T}(U^{(i)}\boldsymbol{\beta},\boldsymbol{\lambda})
+	\]
+	Apply Lemma \ref{lemma:param_add} with $\Lambda= \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$, and modify the proofs to take directional derivatives
+	along the columns of $U^{(i)}$ instead. Then there is a constant
+	constant $c>0$ independent of $i$ such that for all $i=1,2...$,
+	such that
+	\[
+	\left\Vert 
+	\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)} | T)
+	-\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)} | T)
+	\right\Vert _{2}
+	\le 
+	c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}
+	\]
+	
+	
+	Finally, we can sum these inequalities. By the triangle inequality,
+	\begin{eqnarray*}
+		\left\Vert 
+		\hat{\theta}(\boldsymbol{\lambda}^{(1)} |T)
+		- \hat{\theta}(\boldsymbol{\lambda}^{(2)} |T)
+		\right\Vert _{2} 
+		& \le & \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
+		& \le & \sum_{i=1}^{\infty}
+		c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}\\
+		& = & c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+	\end{eqnarray*}
+\end{proof}
+
+\paragraph{Lemma \ref{lemma:nonparam_smooth}}
 
 
 \bigskip

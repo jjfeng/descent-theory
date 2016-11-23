@@ -383,14 +383,14 @@ Hence
 
 Putting all of this together, we get that for all $j=1,...,J$
 \begin{eqnarray*}
-\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}+w\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{\lambda})\right\Vert  & \le & \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}
+\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le & \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}
 \end{eqnarray*}
 
 
 \textbf{3. We bound the norm of $\nabla_{\lambda_{k}}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$
 for all $k=1,...,J$.}
 
-For every $i=1,...,p$, we have
+For every $i=1,...,J$, we have
 \begin{eqnarray*}
 \|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\| & = & \|M^{\top}\left(S+D\right)^{-1}e_{k}\|\\
  & \le & \sum_{j=1}^{J}\|M_{j}\|_{2}\left\Vert \left(S+D\right)^{-1}\right\Vert _{2}\\
