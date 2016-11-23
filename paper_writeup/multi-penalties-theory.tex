@@ -896,6 +896,7 @@ We now present the proof for Theorem \ref{thrm:kfold}, which is an application o
 	
 	Suppose there is a $d_{\min}$ and a strictly increasing function $\psi$ such that $\psi^{-1}$ is strictly convex, the convex conjugate $\psi^*$ of $\psi^{-1}$ increases, $\psi^*(\infty ) = \infty$ and there exists $r \ge1$ such that $\psi^*(x)/x^r$ is decreasing in $x$ and
 	\begin{equation}
+	\label{eq:mitchell_dudley_bound}
 	\psi(d) \ge \int_0^{\sqrt{d}} H^{1/2}(u, \mathcal{Q}_d, \| \cdot \|_2) du +
 	\frac{\log n_V}{\sqrt{n_V}} \int_0^{2G} H(u, \mathcal{Q}_d, \| \cdot \|_\phi) du
 	\quad
@@ -912,39 +913,113 @@ We now present the proof for Theorem \ref{thrm:kfold}, which is an application o
 	E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2  
 	\right ] \\
 	&& + \frac{ac}{q}\left [
-	\psi^* \left (\frac{2q^{r}(1+a)}{a\sqrt{n_T}} \right ) \vee d_{\min}
+	\psi^* \left (\frac{2q^{r}(1+a)}{a\sqrt{n_V}} \right ) \vee d_{\min}
 	\right ]
 	\end{eqnarray}
 \end{theorem}
 
 In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy of the loss functions with respect to the Orlicz norm.
 
-\begin{lemma}
-	\begin{equation}
-	\gamma_1(\mathcal{Q}_d^{L_2}, \| \cdot \|_\psi) \le 
-	2GJ\left (  
-	1 + \log(128GC(\lambda_{\max} - \lambda_{\min})
-	\right )
-	\end{equation}
-	
-	and
-	
-	\begin{equation}
-	\gamma_2(\mathcal{Q}_d^{L_2}, \| \cdot \|_2) \le 
-	\sqrt{d} \left [ J \left ( 
-	1 + \log\left (\frac{128GC(\lambda_{\max} - \lambda_{\min}}{\sqrt{d}} \right )
-	\right )
-	\right ]^{1/2}
-	\end{equation}
-\end{lemma}
-
 \begin{proof}
-	As 
+	First we determine $\psi$ in \eqref{eq:mitchell_dudley_bound}. Note that because $\|\cdot\|_\phi \le 2\|\cdot \|_\infty $ and $\| \cdot \|_2 \le \| \cdot \|_\infty$, then both $H(2u,\mathcal{Q}_{d}(T),\|\cdot\|_{\phi})$ and $H(u,\mathcal{Q}_{d}(T),\|\cdot\|_2)$ are bounded by 
+	$H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty})$.
+	By Lemma \ref{lemma:covering_cube}, we know
+	\begin{equation}
+	H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty}) \le J \log\left [
+	\frac{16GC\lambda_{\max} + 2u}{u}
+	\right ]
+	\end{equation}
+	Hence we can let
+	\begin{equation}
+	\psi(d) \coloneqq
+	\sqrt{d}K_{n,1}
+	+
+	\frac{K_{n,2}}{\sqrt{n_V}} 
+	\end{equation}
+	for $K_{n,1} = \left[J\left(1+\log\left(128\sqrt{n_V} GC\lambda_{max}  \right)\right)\right]^{1/2}$ and $K_{n,2} = \log n_V 2GJ\left(1+\log\left(128GC\lambda_{max}\right)\right)$. $\psi(d)$ is a valid upper bound in \eqref{eq:mitchell_dudley_bound}  for all $d > n_V^{-1}$.
+	
+	We can show that the convex conjugate of $\psi^{-1}$ is
+	\begin{equation}
+	\label{eq:convex_conjugate}
+	\psi^*(z) = \frac{z^2 K_{n,1}^2}{4} + \frac{z K_{n,2}}{\sqrt{n_V}}
+	\end{equation}	
+	
+	Plugging in \eqref{eq:convex_conjugate} into Theorem \ref{thrm:mitchell} gives us the result in Theorem \ref{thrm:kfold}.
 \end{proof}
 
 \subsection{Proof for Lispchitz conditions}
 
 \paragraph{Proof of Lemma \ref{lemma:param_add}}
+\begin{proof}
+By the gradient optimality conditions, we have for all $j=1:J$ 
+\begin{equation}
+\label{eq:grad_opt}
+\left.\nabla_{\theta^{(j)}} \left [
+\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
+\right ]
+\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}=0
+\end{equation}
+
+Now we implicitly differentiate with respect to $\boldsymbol{\lambda}$ 
+\begin{equation}
+\label{eq:implicit_diff}
+\nabla_{\lambda}\left\{ \left.\nabla_{\theta^{(j)}}
+\left [
+\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
+\right ]
+\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0
+\end{equation}
+
+Define the following matrices 
+\begin{eqnarray*}
+	S = \left.\nabla_{\theta}\left [
+	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}
+	\right ]
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda | T)}
+	\end{eqnarray*}
+	
+	\[
+	D=\left.diag\left(\left\{ \nabla_{\boldsymbol{\theta}^{(j)}}^{2}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right\} _{j=1}^{J}\right)\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
+	\]
+	
+	
+	\[
+	M: \text{column } M_j = \left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
+	\]
+	From the product rule and chain rule, we can then write the system of equations in \eqref{eq:implicit_diff} as
+	\begin{equation}
+	\label{eq:param_matrix}
+	\left(\begin{array}{cccc}
+	\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{1}(\boldsymbol{\lambda}) & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{2}(\boldsymbol{\lambda}) & ... & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{p}(\boldsymbol{\lambda})\end{array}\right)=-M^{\top}\left(S+D\right)^{-1}
+	\end{equation}
+	We now bound each column in $M$. From the \eqref{eq:grad_opt} and Cauchy Schwarz, we have 
+	\begin{eqnarray*}
+		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le & \frac{1}{\lambda_{min}\sqrt{n_{T}}}\left\Vert y-g(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}		
+	\end{eqnarray*}
+	The norm of the gradients of $g_j$ can be bounded since $g_j$ is Lipschitz. Also, by definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$, we have
+	\begin{eqnarray}
+	\frac{1}{2}\left\Vert y-g(\cdot|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}\left(\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right) & \le & \frac{1}{2}\left\Vert y-g(\cdot|\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j),*})\\
+	& \le & C_{\theta^{*},\Lambda}
+	\end{eqnarray}
+	
+	Hence for all $j=1,...,J$
+	\begin{eqnarray*}
+		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le & \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}
+	\end{eqnarray*}
+
+	Now we bound the norm of $\nabla_\lambda \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$. From \eqref{eq:param_matrix}, we have for all $j=1,...,J$
+	\begin{eqnarray*}
+		\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\| & = & \|M^{\top}\left(S+D\right)^{-1}e_{k}\|\\
+		& \le & \sum_{j=1}^{J}\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert _{2}\left\Vert \left(S+D\right)^{-1}\right\Vert _{2}\\
+		& \le & J\left(\frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}\right)\frac{1}{m}
+	\end{eqnarray*}
+	where the last line follows from the fact that $(S + D)^-1 \succeq m^{-1}I$. Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz
+	\begin{equation}
+	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{m\lambda_{min}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}
+	\end{equation}
+	Finally the result \eqref{eq:param_add_lipschitz} clearly follows since $g_j(\boldsymbol{\theta})$ are Lipschitz in $\boldsymbol{\theta}$ with respect to $\| \cdot \|_\infty$.
+\end{proof}
 
 \paragraph{Proof of Lemma \ref{lemma:nonsmooth}}
 
