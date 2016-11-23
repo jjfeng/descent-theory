@@ -566,22 +566,24 @@ Suppose the penalty functions $P_{j}$ are twice Gateaux differentiable and conve
 \right \rangle 
 \ge m
 \quad \forall h_j \in \mathcal{G}_j,  \|h_j \|_{D^{(n)}} = 1
+\label{eq:gateuax}
 \end{equation}
 where $D^2_{g_j}$ is the second Gateuax derivative with respect to $g_j$.
 
 Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
 \begin{equation}
-C_{\theta^{*},\Lambda}=
+C_{\Lambda}^*=
 \frac{1}{2}\left\Vert y- \sum_{j=1}^J g^*_j\right\Vert _{T}^{2}
 +\lambda_{max}\sum_{j=1}^{J} P_{j}(g^*_j)
 \end{equation}
 
 For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have
 \begin{equation}
+\label{eq:nonparam_lipshitz_thrm}
 \left\Vert 
 \sum_{j=1}^J \hat{g}_j^{(n_T)}\left(\boldsymbol{\lambda}^{(1)} |T \right)-\hat{g}_j^{(n_T)}\left(\boldsymbol{\lambda}^{(2)} |T \right)\right\Vert _{D^{(n)}}
 \le
-\frac{J}{m \lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}\frac{n}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\frac{J}{m \lambda_{min}}\sqrt{2 C_{\Lambda}^* \frac{n}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
 \left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|
 \end{equation}
 \end{lemma}
@@ -855,8 +857,7 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 	\end{eqnarray}
 \end{proof}
 
-Now we ready to prove Theorem \ref{thrm:train_val}.
-
+\paragraph{Theorem \ref{thrm:train_val}}
 \begin{proof}
 By Lemma \ref{lemma:covering_cube}, we have
 \begin{eqnarray*}
@@ -882,10 +883,9 @@ where the second inequality follows from a change of variables and the concavity
 \psi (R) \coloneqq 2 R\left ( J \log(C_\Lambda \lambda_{\max}n) \right )^{1/2}
 \end{equation}
 Applying Theorem \ref{thrm:train_val_complicated}, we get our desired result.
-
 \end{proof}
 
-\subsection{Proof for cross-validation}
+\subsection{Cross-validation}
 We now present the proof for Theorem \ref{thrm:kfold}, which is an application of Theorem 3.5 in \citet{lecue2012oracle}. We reproduce Theorem 3.5 below for convenience. The theorem calculates entropy with respect to the Orlicz norm $\| \cdot \|_{\phi} = \inf \{ C > 0: E[\exp(|f|/C) - 1] \le 1 \}$.
 
 \begin{theorem}
@@ -920,6 +920,7 @@ We now present the proof for Theorem \ref{thrm:kfold}, which is an application o
 
 In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy of the loss functions with respect to the Orlicz norm.
 
+\paragraph{Theorem \ref{thrm:kfold}}
 \begin{proof}
 	First we determine $\psi$ in \eqref{eq:mitchell_dudley_bound}. Note that because $\|\cdot\|_\phi \le 2\|\cdot \|_\infty $ and $\| \cdot \|_2 \le \| \cdot \|_\infty$, then both $H(2u,\mathcal{Q}_{d}(T),\|\cdot\|_{\phi})$ and $H(u,\mathcal{Q}_{d}(T),\|\cdot\|_2)$ are bounded by 
 	$H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty})$.
@@ -1097,6 +1098,116 @@ Define the following matrices
 \end{proof}
 
 \paragraph{Lemma \ref{lemma:nonparam_smooth}}
+
+\begin{proof}
+	Let $H_{0} = \left \{
+	j:\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}} \ne 0 \forall j = 1,...,J
+	\right \}$.
+	For all $j \in H_0$, let 
+	\[
+	h_{j}=
+	\frac{\hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)}{\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}}}
+	\]
+	For notational convenience, let $\hat{g}_{1,j} = \hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)$. Consider the optimization problem
+	\begin{equation}
+	\hat{\boldsymbol{m}}(\boldsymbol{\lambda})=\left\{ \hat{m}_{j}(\boldsymbol{\lambda})\right\} _{j\in H_0}
+	=\argmin_{m_{j} \in \mathbb{R}: j\in H_0}
+	\frac{1}{2}
+	\left \|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right) \right \|_{T}^{2}
+	+\sum_{j=1}^{J}\lambda_{j}
+	P_{j} \left (\hat{g}_{1,j}+m_{j}h_{j} \right )
+	\end{equation}
+	By the gradient optimality conditions, we have
+	\begin{equation}
+		\nabla_{m} \left .
+		\left[\frac{1}{2}\|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right] \right |_{m=\hat{m}(\lambda)}
+		= 0
+		\label{eq:nonparam_grad_opt}
+	\end{equation}
+	Implicit differentiation with respect to $\boldsymbol{\lambda}$ gives us
+	\begin{equation}
+		\nabla_\lambda 
+		\nabla_m
+		\left . \left[
+		\frac{1}{2}\|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right] \right |_{m=\hat{m}(\lambda)}
+		= 0
+		\label{eq:nonparam_imp_diff}
+	\end{equation}
+	Define the following matrices
+	\[
+	S:S_{ij}=\langle h_{j},h_{j}\rangle_{T}
+	\]
+	\[
+	D_{1}=diag\left(
+	\left \{
+	\left.\lambda_{j}\frac{\partial^{2}}{\partial m_{j}^{2}}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right|_{m=\hat{m}(\lambda)}
+	\right \}_{j=1}^J
+	\right)
+	\]
+	
+	
+	\[
+	D_{2}=diag\left(\left \{ \left.
+	\frac{\partial}{\partial m_{j}}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right|_{m=\hat{m}(\lambda)}
+	\right \}_{j=1}^J
+	\right)
+	\]
+	
+	
+	\[
+	M:\mbox{ column }M_{j}=\nabla_{\lambda}\hat{m}_{j}(\lambda) \quad \forall j=1,...,J
+	\]
+	
+	
+	The system of equations from \eqref{eq:nonparam_imp_diff} can be written as  $M=D_{2}\left(S+D_{1}\right)^{-1}$.
+	
+	Now we bound each element in $D_2$. From \eqref{eq:nonparam_grad_opt} and Cauchy Schwarz, we have for all $k=1,...,J$
+	\begin{equation}
+		\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)}
+		\le 
+		\frac{1}{\lambda_{min}}
+		\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)
+		\right\Vert _{T}\|h_{k}\|_{T}
+	\end{equation}
+	We note that $\|h_{k}\|_{T} \le \sqrt{\frac{n_{D}}{n_{T}}}$. Also, by definition of $\hat{m}(\boldsymbol{\lambda})$,
+	\begin{eqnarray*}
+	\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})
+	& \le & \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})\\
+	& \le & C_{\Lambda}^* + J\lambda_{max}\max_{j=1:J}P_{j}(\hat{g}_{1,j})
+	\end{eqnarray*}
+	Hence every diagonal element in $D_2$ is bounded above by
+	\begin{equation}
+	\frac{1}{\lambda_{min}}
+	\sqrt{2C_{\Lambda}^* \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+	\end{equation}
+	
+	
+	Now we can bound the norm of the gradient $\boldsymbol{\hat{m}}_k(\boldsymbol{\lambda})$ for $k \in H_0$
+	\begin{eqnarray}
+	\|\nabla_{\lambda}\hat{m}_{k}(\boldsymbol{\lambda})\|
+	& = & \left\Vert D_{2}\left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
+	& \le & \frac{1}{\lambda_{min}}
+		\sqrt{2C_{\Lambda}^*
+		\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
+	\end{eqnarray}
+	By the assumption in \eqref{eq:gateuax}, $e_{k}^\top \left(S+D_{1}\right) e_{k} \ge m$.
+	
+	By the mean value theorem and Cauchy Schwarz, we have
+	\begin{equation}
+		\left|\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})\right| 
+		\le \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C^*_\Lambda \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+	\end{equation}
+	Since $
+	\left|
+	\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})
+	\right|  =
+	\left \| 
+	\hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)
+	\right  \|_{D^{(n)}}
+	$, the result in \eqref{eq:nonparam_lipshitz_thrm} follows.
+	
+	
+\end{proof}
 
 
 \bigskip

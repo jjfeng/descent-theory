@@ -95,24 +95,24 @@ Then for any $\boldsymbol{\lambda^{(1)},\lambda^{(2)}}\in\Lambda$
 we have for all $j=1,...,J$
 
 \[
-\left\Vert \hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\right\Vert _{D}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\left\Vert \hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\right\Vert _{D}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C_{g^{*},\Lambda}\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
 \]
 
 
 
 \subsubsection*{Proof}
 
-For every $j=1,...,J$, let 
+Let the set of additive components with nonzero differences be denoted
+\[
+H_{nonzero}=\left\{ j:\|\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\|_{D}>0\right\} 
+\]
+
+
+For every $j\in H_{nonzero}$, let 
 \[
 h_{j}=\frac{\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})}{\left\Vert \hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\right\Vert _{D}}
 \]
 For notational convenient, let $\hat{g}_{1,j}(\cdot)=\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})$.
-
-Let the set of additive components with nonzero differences be denoted
-\[
-H_{nonzero}=\left\{ j:\|h_{j}\|_{D}>0\right\} 
-\]
-
 
 We consider the optimization problem restricted to the set of non-zero
 differences
@@ -169,7 +169,7 @@ M=D_{2}\left(S+D_{1}\right)^{-1}
 \]
 
 
-\textbf{2. We bound every diagonal element in $D_{3}$}:
+\textbf{2. We bound every diagonal element in $D_{2}$}:
 
 We first bound $\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|$
 for all $k\in H_{nonzero}$.
@@ -217,14 +217,14 @@ Putting the two above inequalities together, we get
 
 So 
 \begin{eqnarray*}
-\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)} & \le & \frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)} & \le & \frac{1}{\lambda_{min}}\sqrt{2C_{g^{*},\Lambda}\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
 \end{eqnarray*}
 
 
 Define the matrix $D_{upper}$ which bounds the diagonal elements
 of $D_{2}$
 \[
-D_{upper}=\frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+D_{upper}=\frac{1}{\lambda_{min}}\sqrt{2C_{g^{*},\Lambda}\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
 \]
 
 
@@ -238,8 +238,8 @@ Hence
 \|\nabla_{\lambda}\hat{m}_{k}(\lambda)\| & = & \|Me_{k}\|\\
  & = & \left\Vert D_{2}\left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
  & \le & \left\Vert D_{upper}\left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
- & \le & \frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
- & \le & \frac{1}{\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}d^{-1}
+ & \le & \frac{1}{\lambda_{min}}\sqrt{2C_{g^{*},\Lambda}\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
+ & \le & \frac{1}{\lambda_{min}}\sqrt{2C_{g^{*},\Lambda}\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}d^{-1}
 \end{eqnarray*}
 
 
@@ -255,7 +255,7 @@ By the MVT, for all $j=1,..,J$, we have that there exists an $\alpha\in(0,1)$
 such that 
 \begin{eqnarray*}
 \left|\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})\right| & = & \left|\left\langle \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)},\nabla_{\lambda}\hat{m}_{j}(\boldsymbol{\lambda})\right\rangle _{\boldsymbol{\lambda}=\alpha\boldsymbol{\lambda}^{(1)}+(1-\alpha)\boldsymbol{\lambda}^{(2)}}\right|\\
- & \le & \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+ & \le & \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C_{g^{*},\Lambda}\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
 \end{eqnarray*}
 
 
@@ -267,7 +267,7 @@ Since
 
 Then 
 \[
-\left\Vert \hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\right\Vert _{D}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+\left\Vert \hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(2)})-\hat{g}_{j}(\cdot|\boldsymbol{\lambda}^{(1)})\right\Vert _{D}\le\left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C_{g^{*},\Lambda}\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
 \]
 
 
