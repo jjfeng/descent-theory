@@ -99,7 +99,7 @@
 \bigskip
 \begin{abstract}
 
-\textcolor{red}{You say ``model error'' a lot. This isn't really a precise term. Be more precise.} In the regression setting, given a set of hyper-parameters, a model-estimation procedure constructs a model from training data. The optimal hyperparameters, that minimize generalization error of the model, are usually unknown. In practice they are often estimated using split-sample validation. Up to now, there is an open question regarding how the generalization error of the selected model grows with the number of hyperparameters to be estimated. To answer this question, we establish finite-sample oracle inequalities for selection based on a single training/test split and based on cross-validation. We show that if the model-estimation procedures are smoothly parameterized by the hyperparameters, the error incurred from tuning hyperparameters shrinks at nearly a parametric rate. Hence for semi- and non-parametric model-estimation procedures, for a fixed number of hyperparameters, this additional error is negligible. For parametric model-estimation procedures, adding a hyperparameter is roughly equivalent to adding a parameter to the model itself. In addition, we specialize these ideas for penalized regression problems with multiple penalty parameters. We establish that the fitted models are Lipschitz in the penalty parameters and thus our oracle inequalities apply. This result encourages development of regularization methods with many penalty parameters.
+In the regression setting, given a set of hyper-parameters, a model-estimation procedure constructs a model from training data. The optimal hyperparameters, that minimize generalization error of the model, are usually unknown. In practice they are often estimated using split-sample validation. Up to now, there is an open question regarding how the generalization error of the selected model grows with the number of hyperparameters to be estimated. To answer this question, we establish finite-sample oracle inequalities for selection based on a single training/test split and based on cross-validation. We show that if the model-estimation procedures are smoothly parameterized by the hyperparameters, the error incurred from tuning hyperparameters shrinks at nearly a parametric rate. Hence for semi- and non-parametric model-estimation procedures, for a fixed number of hyperparameters, this additional error is negligible. For parametric model-estimation procedures, adding a hyperparameter is roughly equivalent to adding a parameter to the model itself. In addition, we specialize these ideas for penalized regression problems with multiple penalty parameters. We establish that the fitted models are Lipschitz in the penalty parameters and thus our oracle inequalities apply. This result encourages development of regularization methods with many penalty parameters.
 \end{abstract}
 
 \noindent%
@@ -143,9 +143,9 @@ The goal of this paper is to characterize the performance of models when the hyp
 \end{equation}
 for some norm $\| \cdot \|$ and constant $a \ge 0$; where $\delta(J,n)$ is a function of the number of parameters to tune and the number of validation samples $n$. Under the assumption that the model-estimation procedure is smoothly parameterized by the hyperparameters, we find that the contribution to $\delta$ from tuning hyperparameters is roughly a parametric rate. For parametric model-estimation procedures, the additional error from adding a hyperparameter is roughly equivalent to adding a parameter to the model itself. For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle error and the number of hyperparameters can actually grow without affecting the asymptotic convergence rate.
 
-In this paper, we also specialize these results to penalized regression models of the form \eqref{eq:intro_pen_reg}. We show that the fitted model is indeed smoothly parameterized by the penalty parameters so our oracle inequalities apply. Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect on the model error in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-way combinations. Adding more penalties may lead to better models.
+In this paper, we also specialize these results to penalized regression models of the form \eqref{eq:intro_pen_reg}. We show that the fitted model is indeed smoothly parameterized by the penalty parameters so our oracle inequalities apply. Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-way combinations. Adding more penalties may lead to better models.
 
-We did not find any theoretical results addressing the relationship betwen the number of hyperparameters and model error. Most oracle inequalities only consider one-dimensional hyperparameters \citep{van2003unified, van2004asymptotic, gyorfi2006distribution}. Within the context of penalized regression problems, the oracle inequalities are also only for the case of a single penalty parameter \citep{golub1979generalized, chetverikov2016cross, chatterjee2015prediction}. Only \citet{lecue2012oracle} has a result that is relevant to answering our question of interest. We will use his framework to address the question of cross-validation for multiple hyperparameters. A potential reason for this dearth of literature is that, historically, tuning multiple hyperparameters has been computationally difficult. However, there have been many proposals recently for overcoming this computational hurdle \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
+We did not find any theoretical results addressing the relationship between the number of hyperparameters and generalization error of the selected model. Most oracle inequalities only consider one-dimensional hyperparameters \citep{van2003unified, van2004asymptotic, gyorfi2006distribution}. Within the context of penalized regression problems, the oracle inequalities are also only for the case of a single penalty parameter \citep{golub1979generalized, chetverikov2016cross, chatterjee2015prediction}. Only \citet{lecue2012oracle} has a result that is relevant to answering our question of interest. We will use his framework to address the question of cross-validation for multiple hyperparameters. A potential reason for this dearth of literature is that, historically, tuning multiple hyperparameters has been computationally difficult. However, there have been many proposals recently for overcoming this computational hurdle \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
 
 Section \ref{sec:main_results} presents oracle inequalities for model-estimation procedures that are smoothly parameterized by the hyperparameters. These results answer our question regarding how the number of hyperparameters affects the model error.
 Section \ref{sec:examples} applies these results to penalized regression models.
@@ -156,8 +156,7 @@ Section \ref{sec:proofs} presents oracle inequalities for general model-estimati
 
 \section{Main Result} \label{sec:main_results}
 
-In this section, we establish oracle inequalities for the model error from tuning hyperparameters by a single training/validation split and cross-validation.
-We first introduce some notation and formalize the model-estimation procedure. 
+In this section, we establish oracle inequalities for models where the hyperparameters are tuned by a single training/validation split and cross-validation. We first introduce some notation and formalize the model-estimation procedure. 
 
 Let $D^{(n)}$ denote a dataset with $n$ samples from the model \eqref{true_model}. The model-estimation procedure accepts some hyperparameter of dimension $J$ and training data of size $n_T$ to output a fitted model from some model class $\mathcal{G}$. This can be formulated as an operator $\hat{g}^{(n_T)}(\cdot | D^{(n_T)})$ that maps a hyperparameter vector $\boldsymbol{\lambda}$ from some set $\Lambda \subseteq \mathbb{R}^J$ to a function in $\mathcal{G}$. 
 
@@ -230,7 +229,7 @@ we have
 
 \end{theorem}
 
-Theorem \ref{thrm:train_val} states that as the number of validation samples grows, the difference between the selected model error and the oracle model error shrinks at the rate of $\delta^2$ with high probability. $\delta^2$ can be thought of as the error incurred during the hyperparameter selection process. As seen in \eqref{thrm:train_val_delta}, it is the maximum of two terms: a near-parametric term and a geometric mean of the near-parametric term and the oracle error. To see this more clearly, we express Theorem \ref{thrm:train_val} using asymptotic notation.
+Theorem \ref{thrm:train_val} states that with high probability, the difference between the true model and the selected model is bounded above by the difference between the true model and the oracle model plus $\delta^2$. Hence $\delta^2$ can be thought of as the error incurred during the hyperparameter selection process. As seen in \eqref{thrm:train_val_delta}, it is the maximum of two terms: a near-parametric term and a geometric mean of the near-parametric term and the oracle error. To see this more clearly, we express Theorem \ref{thrm:train_val} using asymptotic notation.
 \begin{corollary}
 	\label{corr:train_val}
 	Under the assumptions given in Theorem \ref{thrm:train_val}, we have
@@ -253,7 +252,7 @@ In the semi- and non-parametric regression settings, the oracle error usually sh
 \begin{equation}
 \frac{n_{V} n^{-\omega}}{\log (n C_\Lambda\lambda_{\max})}
 \end{equation}
-without affecting the asymptotic convergence rate. Note that for parametric regression problems, this will not be the case. \textcolor{red}{Noah: I think the bound in (10) should give $n_vn^{-\omega/2}/\operatorname{log}(n)$ (I think that second one should be the bound?) Jean: I think you forgot that (10) has a $\sqrt{J}$, not a $J$. The growth rate of $J$ should be the same whether you use (9) or (10).}
+without affecting the asymptotic convergence rate. Note that for parametric regression problems, this will not be the case.
 
 The appearance of the parametric term \eqref{eq:asym_train_val_theorem1} suggests that we can interpret the problem of tuning hyperparameters as a parametric regression problem over a $J$-dimensional parameter space where the validation data is the training data. However, this interpretation is an oversimplification. Recall that we perform the training/validation split over the model class
 \begin{equation}
@@ -360,7 +359,7 @@ In our examples, the Lipschitz constant is inversely proportional to $\lambda_{\
 \end{corollary}
 We get very similar results to those in Corollary \ref{corr:train_val} and Theorem \ref{thrm:kfold}. We still have the same near-parametric term and geometric mean in the oracle inequality for the single training/validation split and a near-parametric term in the oracle inequality for cross-validation. The near-parametric terms have the familiar $\log n$ in the numerator because the error terms are proportional to the log of the Lipschitz constant and $\lambda_{\max}$. 
 
-Therefore we reach the same conclusion for the relationship between penalty parameters and model error. In high dimensional and non-parametric penalized regression problems satisfying \eqref{thrm:lipschitz_pen_reg}, the error from tuning penalty parameters is negligible compared to the error from solving the penalized regression problem itself.
+Therefore we reach the same conclusion for the relationship between penalty parameters and the generalization error of the selected model. In high dimensional and non-parametric penalized regression problems satisfying \eqref{thrm:lipschitz_pen_reg}, the error from tuning penalty parameters is negligible compared to the error from solving the penalized regression problem with the oracle penalty parameters.
 
 It remains to characterize those penalized problems wherein the fitted models are Lipschitz in the penalty parameters. In this manuscript we will do an in-depth study of additive models, which have the form
 \begin{equation}
@@ -641,24 +640,24 @@ as the validation set size increases. The difference of the validation losses dr
 
 \section{Discussion}\label{sec:discussion}
 
-In this paper, we established oracle inequalities for hyperparameter selection using a single training/validation split or $K$-fold cross-validation. The results address the open question regarding model error when many hyperparameters need to be tuned. If the model-estimation procedure is smoothly parameterized by the hyperparameters, then in a non-parametric setting or parametric setting where $p$ grows with $n$, the oracle error is the dominating term in the upper bound. In the parametric setting, the tuning penalty parameter problem contributes an error that is on the same order as the oracle error. 
+In this paper, we established oracle inequalities for hyperparameter selection using a single training/validation split or $K$-fold cross-validation. We used our results to address the open question regarding how generalization error of a model grows with the number of hyperparameters. If the model-estimation procedure is smoothly parameterized by the hyperparameters, in a semi- or non-parametric setting, tuning hyperparameters contributes a negligible amount to the error term. In the parametric setting, tuning hyperparameters contributes an error that is on the same order as the oracle error. 
 
-We then applied our results to penalized regression problems. We showed that the fitted models are Lipschitz in the penalty parameters and get the same relationship between penalty parameters and model error. This suggests that the we should push past the artificial barrier of two penalty parameters and consider combining tens or even hundreds of penalty parameters. For example, Feng and Simon (TBD) fit an un-pooled version of sparse group lasso model with a hundred penalty parameters and significantly decreased the model's generalization error.
+We then applied our results to penalized regression problems. We showed that the fitted models are Lipschitz in the penalty parameters and, consequently, the same relationship between penalty parameters and model error holds. This suggests that the we should push past the artificial barrier of two penalty parameters and consider combining tens or even hundreds of penalty parameters. For example, Feng and Simon (TBD) fit an un-pooled version of sparse group lasso model with a hundred penalty parameters and significantly decreased the model's generalization error.
 
 A major caveat to our results is that we have assumed that it is possible to find the global minimizer of the validation loss over the penalty parameter space. Unfortunately, this is currently computationally intractable since the validation loss is not convex in the penalty parameters. Better optimization methods need to be developed to solve this problem. Current methods only guarantee finding a local minimizer. More theoretical results are necessary to understand how robust the models are to optimization error.
 
-An interesting direction for future work is to understand the behavior of hyperparameter selection in the hyperparameter space, in contrast to our approach of characterizing model error. For example, bounds on the distance between the selected and oracle penalty parameters
+An interesting direction for future work is to understand the behavior of hyperparameter selection in the hyperparameter space. For example, bounds on the distance between the selected and oracle penalty parameters
 \begin{equation}
 \label{penalty_diff}
 \left \| \hat{\boldsymbol \lambda} - \tilde{\boldsymbol \lambda} \right \|_2
 \end{equation}
 can perhaps lend to a more intuitive understanding of hyperparameter selection methods.
 
-\section{The Proof} \label{sec:proofs}
+\section{Proofs} \label{sec:proofs}
 
 For functions $f$ and $g$ and a dataset $D^{(m)}$ with $m$ samples, we denote the inner product of $f$ and $g$ at covariates $D$ as $\langle f,g \rangle_D = \frac{1}{m} \sum_{x_i \in D} f(x_i) g(x_i) $.
 
-\subsection{Proof for a single training/validation split}
+\subsection{A single training/validation split}
 \label{appendix:train_val}
 
 Theorem \ref{thrm:train_val} is a special case of Theorem \ref{thrm:train_val_complicated}, which applies to general model-estimation procedures. The proof is based on the inequality below. Inequalities of this form are often called a ``basic inequality'', since it is derived directly from the definition and the quantity of interest, the difference in the error of the selected model and the oracle model, is bounded by an empirical process term.
