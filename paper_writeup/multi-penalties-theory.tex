@@ -145,7 +145,7 @@ for some norm $\| \cdot \|$ and constant $a \ge 0$; where $\delta(J,n)$ is a fun
 
 In this paper, we also specialize these results to penalized regression models of the form \eqref{eq:intro_pen_reg}. We show that the fitted model is indeed smoothly parameterized by the penalty parameters so our oracle inequalities apply. Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-way combinations. Adding more penalties may lead to better models.
 
-We did not find any theoretical results addressing the relationship between the number of hyper-parameters and generalization error of the selected model. Most oracle inequalities only consider one-dimensional hyper-parameters \citep{van2003unified, van2004asymptotic, gyorfi2006distribution}. Within the context of penalized regression problems, the oracle inequalities are also only for the case of a single penalty parameter \citep{golub1979generalized, chetverikov2016cross, chatterjee2015prediction}. Only \citet{lecue2012oracle} has a result that is relevant to answering our question of interest. We will use his framework to address the question of cross-validation for multiple hyper-parameters. A potential reason for this dearth of literature is that, historically, tuning multiple hyper-parameters has been computationally difficult. However, there have been many proposals recently for overcoming this computational hurdle \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
+During our literature search, we did find any theoretical results addressing the relationship between the number of hyper-parameters and generalization error of the selected model. Most oracle inequalities only consider tuning a one-dimensional hyper-parameter over a finite $\Lambda$ \citep{van2003unified, van2004asymptotic, gyorfi2006distribution}. Others have addressed split-sample validation for specific penalized regression problems, but they solely consider problems with a single penalty parameter \citep{golub1979generalized, chetverikov2016cross, chatterjee2015prediction}. Only \citet{lecue2012oracle} has a result that is relevant to answering our question of interest by using techniques from empirical process theory. A potential reason for this dearth of literature is that, historically, tuning multiple hyper-parameters has been computationally difficult. However, there have been many proposals recently for overcoming this computational hurdle \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
 
 Section \ref{sec:main_results} presents oracle inequalities for model-estimation procedures that are smoothly parameterized by the hyper-parameters. These results answer our question regarding how the number of hyper-parameters affects the model error.
 Section \ref{sec:examples} applies these results to penalized regression models.
@@ -174,7 +174,7 @@ In this section, we focus on model-estimation procedures that are Lipschitz.
 	\label{eq:smooth_funcs}
 	\end{equation}
 \end{definition}
-We hypothesize that many model-estimation procedures satisfy this Lipschitz assumption since it ensures that the procedure is well-behaved. Section \ref{sec:examples} shows that penalized regression models indeed satisfy this assumption. The following results (from Sections~\ref{sec:single},\ref{sec:cv}) show that the contribution to the error from tuning multiple hyper-parameters for such procedures is roughly parametric. Hence for semi- or non-parametric model-estimation procedures, the error from tuning a fixed number of hyper-parameters is negligible. In fact, we specify a bound on the rate at which the number of hyper-parameters can grow in such problems without asymptotically increasing the generalization error from the oracle model.
+We hypothesize that many model-estimation procedures satisfy this Lipschitz assumption since it ensures that the procedure is well-behaved. Section \ref{sec:examples} shows that penalized regression models indeed satisfy this assumption. The following results (from Sections~\ref{sec:single}, \ref{sec:cv}) show that the contribution to the error from tuning multiple hyper-parameters for such procedures is roughly parametric. Hence for semi- or non-parametric model-estimation procedures, the error from tuning a fixed number of hyper-parameters is negligible. In fact, we specify a bound on the rate at which the number of hyper-parameters can grow in such problems without asymptotically increasing the generalization error from the oracle model.
 
 \subsection{A single Training/Validation Split}\label{sec:single}
 
@@ -185,7 +185,7 @@ For a single training/validation split, the dataset $D^{(n)}$ is randomly partit
 \end{equation}
 where $\| h \|_{V}=\frac{1}{n_V}\sum_{i\in V} h^2(x_i)$ for any function $h$. 
 
-We now present a finite-sample oracle inequality for the single training/validation split assuming the model-estimation procedure is Lipschitz. Our oracle inequality is sharp, i.e. $a=0$ in \eqref{thrm:intro_oracle_ineq}, unlike most other work \citep{gyorfi2006distribution, lecue2012oracle, van2003unified}. Note that the result below is a special case of our Theorem \ref{thrm:train_val_complicated} in Appendix \ref{appendix:train_val}, which applies to general model-estimation procedures.
+We now present a finite-sample oracle inequality for the single training/validation split assuming the model-estimation procedure is Lipschitz. Our oracle inequality is sharp, i.e. $a=0$ in \eqref{thrm:intro_oracle_ineq}, unlike most other work \citep{gyorfi2006distribution, lecue2012oracle, van2003unified}. Note that the result below is a special case of Theorem \ref{thrm:train_val_complicated} in Section \ref{appendix:train_val}, which applies to general model-estimation procedures.
 \begin{theorem}
 \label{thrm:train_val}
 Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $0 < \lambda_{\min} < \lambda_{\max}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b > 0$:
@@ -285,7 +285,7 @@ In traditional cross-validation, the final model is retrained on all the data wi
 \hat{g}^{(n_T)} \left (\hat{\boldsymbol \lambda} \middle | D^{(n_T)}_{-k} \right )
 \end{equation}
 
-The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which is reproduced in Theorem \ref{thrm:k_fold_complicated} for convenience.
+The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which is reproduced in Theorem \ref{thrm:mitchell} for convenience.
 
 \begin{theorem}
 \label{thrm:kfold}
@@ -609,34 +609,21 @@ We fit a smoothing splines using the Sobolev penalty \citep{de1978practical, wah
 \end{equation}
 The training set contained 100 samples and models were fitted with 10 knots. A grid search was performed over the penalty parameter values $\{10^{-9 + 0.05i}: i = 0, ..., 140 \}$. We tested 36 validation set sizes $n_V = \lfloor 20 * 2^{i} \rfloor$ for equally log-spaced intervals from $i = 0$ to $i = 7$. A total of 20 simulations were run for each validation set size.
 
-Figure \ref{fig:emp_v_theory} plots the difference of between the model loss and the oracle loss
+Figure \ref{fig:simulations} plots the difference of between the model loss and the oracle loss
 $$
 \left \| \sum_{j=1}^2 \hat{g}^{(n_T)}_j(\hat{\boldsymbol{\lambda}}|T) - g^*_j \right \|_V^2 - 
 \left \| \sum_{j=1}^2 \hat{g}^{(n_T)}_j(\tilde{\boldsymbol{\lambda}} | T) - g^*_j \right \|_V^2
 $$
 as the validation set size increases. The difference of the validation losses drops at a rate of about $n^{-1}$. This rate is in fact faster than that in Theorem \ref{thrm:train_val}; the geometric mean in the oracle inequality seems to play no role in the convergence rate. We conjecture that smoothing splines may satisfy additional regularity conditions such that the geometric mean may be discarded.
 
-%As stated in Lemma \ref{lemma:train_val_special}, the validation loss difference should be bounded by the sum of a near-parametric term \eqref{eq:asym_train_val_theorem2} and the geometric mean of the oracle error and the near-parametric term \eqref{eq:asym_train_val_theorem3}. To determine if \eqref{eq:asym_train_val_theorem3} is truly necessary, we compared the two linear regression models:
-%\begin{eqnarray}
-%\text{Validation loss difference} &\sim & \beta_1 \left (\frac{1}{n_V} \right)^{1/2} \\
-%\label{eq:model_no_geom}
-%\text{Validation loss difference} &\sim& \beta_1' \left (\frac{1}{n_V} \right )^{1/2} + \beta_2' \sqrt{\left (\frac{1}{n_V} \right )^{1/2}\left \| \hat{g}(\cdot | \tilde{\boldsymbol{\lambda}}) - g^* \right \|_V}
-%\label{eq:model_geom}
-%\end{eqnarray}
-%where \eqref{eq:model_geom} corresponds to the model that includes the geometric term. (Note that we remove the $\log n$ term in the near-parametric term since the range of $\Lambda$ is fixed in this simulation study.) From an ANOVA test, we reject the null hypothesis that the validation loss difference follows the model in \eqref{eq:model_no_geom} (p-value $< 1$e$^{-3}$). This gives us confidence that the geometric term is indeed necessary in Theorem \ref{thrm:train_val} and Lemma \ref{lemma:train_val_special}.
-
 \begin{figure}
-\label{fig:emp_v_theory}
 \caption{
 	Validation loss difference between oracle and selected model as validation set size grows
-	%Bottom: The expected versus the empirical validation loss. The line is the best fit from least squares.
 }
 \centering
-%\includegraphics[height=80mm]{../R/figures/validation_size_loss.pdf}
 \includegraphics[height=80mm]{../R/figures/validation_size_loss_diff.pdf}
-%\includegraphics[height=80mm]{../R/figures/qqplot.pdf}
+\label{fig:simulations}
 \end{figure}
-
 
 \section{Discussion}\label{sec:discussion}
 
@@ -644,14 +631,9 @@ In this paper, we considered model-estimation procedures that construct models g
 
 We then specialized our results to penalized regression problems with multiple penalty parameters. We showed that the fitted models are Lipschitz in the penalty parameters and thus the same relationship between the number of penalty parameters and model error holds. This result suggests that the recent efforts to combine penalty functions should push past the artificial barrier of two-way combinations and consider regularization methods with tens or even hundreds of penalty parameters. For example, Feng and Simon (TBD) fit an un-pooled version of sparse group lasso model with a hundred penalty parameters and significantly decreased the model's generalization error.
 
-A major caveat to our results is that we have assumed that it is possible to find the global minimizer of the validation loss over the penalty parameter space; however this is computationally intractable even for small numbers of penalty parameters (e.g. $J > 3$) since the validation loss is usually not convex in the penalty parameters. Better optimization methods need to be developed to solve this problem. In addition, oracle inequalities need to be established for penalty parameters that are only local minimizers of the validation loss.
+A caveat to our results is that we have assumed it is possible to find the global minimizer of the validation loss over the hyper-parameter space. Unfortunately this is currently computationally intractable even for small numbers of hyper-parameters (e.g. $J > 3$) since the validation loss is usually not convex in the hyper-parameters. From a computational standpoint, we need to develop better optimization methods to solve this problem. From a theoretical standpoint, oracle inequalities need to be established for hyper-parameters that are only local minimizers of the validation loss. For many model-estimation procedures, local minimizers often perform fairly well \citep{kunapuli2008bilevel}. This behavior is probably due to some regularity condition shared by many model-estimation procedures.
 
-Finally, an interesting direction of work would be to understand the behavior of hyper-parameter selection in the hyper-parameter space. That is, bounds on the distance between the selected and oracle penalty parameters
-\begin{equation}
-\label{penalty_diff}
-\left \| \hat{\boldsymbol \lambda} - \tilde{\boldsymbol \lambda} \right \|_2
-\end{equation}
-can perhaps lend a more intuitive understanding of hyper-parameter selection methods.
+Finally, an interesting direction of work would be to understand the behavior of hyper-parameter selection in the hyper-parameter space. Bounds on the distance between the selected and oracle hyper-parameters may lend a more intuitive understanding of hyper-parameter selection methods.
 
 \section{Proofs} \label{sec:proofs}
 
