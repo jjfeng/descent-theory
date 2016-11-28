@@ -280,7 +280,7 @@ plot(
     cv_to_oracle_not_tiny$n,
     cv_to_oracle_not_tiny$loss_diff_sq,
     # type = "b",
-    ylab="Validation Loss Diff",
+    ylab="Validation Loss Difference",
     xlab="Validation Set Size",
     cex=0.3,
     cex.axis=1.25,
