@@ -141,7 +141,7 @@ The goal of this paper is to characterize the performance of models when the hyp
 \underbrace{\inf_{\lambda \in \Lambda} \left \| g^* - \hat{g}\left (\boldsymbol{\lambda} , T \right ) \right \|^2}_{\text{Oracle error}}
 + \delta\left(J,n\right)
 \end{equation}
-for some norm $\| \cdot \|$ and constant $a \ge 0$; where $\delta(J,n)$ is a function of the number of parameters to tune and the number of validation samples $n$. Under the assumption that the model-estimation procedure is smoothly parameterized by the hyper-parameters, we find that the contribution to $\delta$ from tuning hyper-parameters is roughly a parametric rate. For parametric model-estimation procedures, the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself. For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle error and the number of hyper-parameters can actually grow without affecting the asymptotic convergence rate.
+for some norm $\| \cdot \|$ and constant $a \ge 0$; where $\delta(J,n)$ is a function of the number of parameters to tune and the number of validation samples $n$. Under the assumption that the model-estimation procedure is smoothly parameterized by the hyper-parameters, we find that the contribution to $\delta$ from tuning $J$ hyper-parameters scales linearly in $J$. For parametric model-estimation procedures, the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself. For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle error and the number of hyper-parameters can actually grow without affecting the asymptotic convergence rate.
 
 In this paper, we also specialize these results to penalized regression models of the form \eqref{eq:intro_pen_reg}. We show that the fitted model is indeed smoothly parameterized by the penalty parameters so our oracle inequalities apply. Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-way combinations. Adding more penalties may lead to better models.
 
@@ -248,9 +248,9 @@ Theorem \ref{thrm:train_val} states that with high probability, the difference b
 \end{corollary}
 Hence the error of the selected model is bounded by the error of the oracle model, the near-parameteric term \eqref{eq:asym_train_val_theorem1}, and the geometric mean of the two values \eqref{eq:asym_train_val_theorem2}. We refer to \eqref{eq:asym_train_val_theorem1} as near-parametric because the error term in parametric regression models are usually $O_p(J/n)$, where $J$ is the parameter dimension and $n$ is the number of training samples. Analogously, \eqref{eq:asym_train_val_theorem1} is roughly $O_p(J/n_V)$ modulo a $\log n$ term in the numerator.
 
-In the semi- and non-parametric regression settings, the oracle error usually shrinks at a rate of $n^{-\omega}$ where $\omega \in (0, 1)$, which means that for large $n$, the oracle error will tend to dominate both the error terms. Therefore increasing the number of hyper-parameters for such problems only results in small increases in the model error/degree of overfitting. In fact, if the oracle error rate is $O_p(n^{-\omega})$, the number of hyper-parameters $J$ can grow at the rate
+In the semi- and non-parametric regression settings, the oracle error usually shrinks at a rate of $n^{-\omega}$ where $\omega \in (0, 1)$, which means that for large $n$, the oracle error will tend to dominate both the error terms. Therefore increasing the number of hyper-parameters for such problems only results in small increases in the model error/degree of overfitting. In fact, if the oracle error rate is $O_p(n_T^{-\omega})$, the number of hyper-parameters $J$ can grow at the rate
 \begin{equation}
-\frac{n_{V} n^{-\omega}}{\log (n C_\Lambda\lambda_{\max})}
+\frac{n_{V} n_T^{-\omega}}{\log (n C_\Lambda\lambda_{\max})}
 \end{equation}
 without affecting the asymptotic convergence rate. Note that for parametric regression problems, this will not be the case.
 
@@ -380,7 +380,7 @@ L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)
 \coloneqq \frac{1}{2} \left  \| y -  g(\boldsymbol{\theta}) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j P_j(\boldsymbol{\theta}^{(j)})
 \end{equation}
-Suppose the true model has parameters $\boldsymbol{\theta}^*$.
+Suppose the true model has parameters $\boldsymbol{\theta}^*$. \textcolor{red}{Do we need the true model to be additive? Or do you really just want to define $\boldsymbol{\theta}^*$ as the population minimizer?}
 
 %\footnote{Many popular estimators are Lipschitz since we usually construct the model by taking a linear combination of some basis functions.}
 
@@ -396,9 +396,11 @@ We begin with the simple case where the penalty functions are smooth. The follow
 	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)
 	\end{equation}
 	
+	\noindent
 	Suppose that $g_j(\boldsymbol{\theta}^{(j)})$ are $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
 	
-	Suppose $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are twice-differentiable and convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$. Suppose $L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)$ is twice-differentiable and convex with respect to $\boldsymbol{\theta}$.
+	\noindent
+	Further suppose $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are twice-differentiable and convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$. Also suppose $L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)$ is twice-differentiable and convex with respect to $\boldsymbol{\theta}$.
 	
 	Suppose there exists $m > 0$ such that the Hessian of the penalized training criterion at the minimizer satisfies 
 	\begin{equation}
@@ -412,7 +414,7 @@ We begin with the simple case where the penalty functions are smooth. The follow
 	+\lambda_{max}\sum_{j=1}^{J} P_{j}(\boldsymbol{\theta}^{(j),*})
 	\end{equation}
 	
-	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have
+	Then, for any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have
 	\begin{equation}
 	\label{eq:param_add_lipschitz}
 	\left\Vert g\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}} | T)\right)-
@@ -525,18 +527,18 @@ In lasso and group lasso problems, it is hypothesized that almost every penalty 
 \begin{lemma}
 	\label{lemma:nonsmooth}
 		Define $\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda} | T\right )$ as in \eqref{eq:param_add_estimator}.
+
+\noindent
+Suppose $g_j(\boldsymbol{\theta}^{(j)})$ is $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
+
+\noindent		
+Further suppose that $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$.  Also suppose that $L_T\left ( \boldsymbol{\theta} , \boldsymbol{\lambda} \right )$ is convex with respect to $\boldsymbol{\theta}$.
 		
-		Suppose $g_j(\boldsymbol{\theta}^{(j)})$ is $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
-		
-		Suppose $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$. Suppose $L_T\left ( \boldsymbol{\theta} , \boldsymbol{\lambda} \right )$ is convex with respect to $\boldsymbol{\theta}$.
-		
-		Let $U_\lambda$ be an orthonormal matrix with columns forming a basis for the differentiable space of $L_T(\cdot , \boldsymbol{\lambda})$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$.
-		Suppose there is a $m > 0$ such that the Hessian of the penalized training criterion with respect to the differentiable space at the minimizer satisfies 
+		Let $U_\lambda$ be an orthonormal matrix with columns forming a basis for the differentiable space of $L_T(\cdot , \boldsymbol{\lambda})$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$. Suppose there exists $m > 0$ such that the Hessian of the penalized training criterion with respect to the differentiable space at the minimizer satisfies 
 		\begin{equation}
 		\left . _{U_\lambda}\nabla_{\theta}^2 L_T(\boldsymbol{\theta}, \boldsymbol{\lambda}) \right |_{\theta = \hat{\theta}(\boldsymbol{\lambda})} \succeq mI
-		\end{equation}
-		
-		Suppose $\Lambda_{smooth} \subseteq \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ satisfies Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2}.
+		\end{equation}		
+Suppose $\Lambda_{smooth} \subseteq \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ satisfies Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2}.
 		
 		Then any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda_{smooth}$ satisfies  \eqref{eq:param_add_lipschitz}.
 \end{lemma}
@@ -553,14 +555,14 @@ We now generalize the results to nonparametric additive models. We consider esti
 \frac{1}{2} \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j P_j(g_j)
 \end{eqnarray}
-where $P_j$ are now penalty functionals. The following lemma states that the fitted functions are Lipschitz with respect to $\| \cdot \|_{D^{(n)}}$. Let the true model be $\left\{ g_j^* \right \}_{j=1}^J$.
+where $P_j$ are now penalty functionals. For some problems, eg. smoothing splines, we can show that the solution to~\eqref{eq:train_crit_nonparam} lies in a parametric family (of growing dimension); and use the results of Sections~\ref{sec:param_smooth}, and \ref{sec:param_nonsmooth} to give our Lipschitz bounds. However, this is not always possible. Nevertheless we can still obtain similar results in the non-parametric problem. The following lemma states that the fitted functions are Lipschitz with respect to $\| \cdot \|_{D^{(n)}}$. Let the true model be $\left\{ g_j^* \right \}_{j=1}^J$ . \textcolor{red}{As before, do we need the ``true'' model?}
 
 
 \begin{lemma}
 \label{lemma:nonparam_smooth}
 Suppose $\mathcal{G}_1, ..., \mathcal{G}_J$ are convex univariate function classes.
 
-Suppose the penalty functions $P_{j}$ are twice Gateaux differentiable and convex over $\mathcal{G}_j$. Suppose there is a $m > 0$ such that for all $j=1,...,J$, the training criterion has a twice Gateaux derivative with respect to $g_j$ at $\hat{g}^{(n_T)}_j( \boldsymbol{\lambda} | T)$ satisfies
+Suppose the penalty functions $P_{j}$ are twice Gateaux differentiable and convex over $\mathcal{G}_j$. Suppose there is a $m > 0$ such that for all $j=1,...,J$, the training criterion has a second Gateaux derivative with respect to $g_j$ at $\hat{g}^{(n_T)}_j( \boldsymbol{\lambda} | T)$ satisfies
 \begin{equation}
 \left \langle 
 \left . D^2_{g_j} L_T \left ( \left \{ g_j \right \}_{j=1}^J, \boldsymbol{\lambda} \right ) \right |_{g_j= \hat{g}^{(n_T)}_j( \boldsymbol{\lambda} | T) }
@@ -570,7 +572,7 @@ Suppose the penalty functions $P_{j}$ are twice Gateaux differentiable and conve
 \quad \forall h_j \in \mathcal{G}_j,  \|h_j \|_{D^{(n)}} = 1
 \label{eq:gateuax}
 \end{equation}
-where $D^2_{g_j}$ is the second Gateuax derivative with respect to $g_j$.
+where $D^2_{g_j}$ is the second Gateaux derivative with respect to $g_j$. \textcolor{red}{By this do you mean that both derivatives are in the direction of $g_j$? perhaps be more precise here. I'm not sure that this statement is actually well specified? Even for first order Gateaux differentiability. Which directions are we allowed to take derivatives in? Any direction in the convex space?}
 
 Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
 \begin{equation}
@@ -593,7 +595,7 @@ For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \col
 
 \section{Simulations}\label{sec:simulations}
 
-We now provide a simulation study for the prediction error bound given in Theorem \ref{thrm:train_val}. The penalty parameters are chosen by a single training/validation split. We show that the error of the selected model converges to that of the oracle model at the near-parametric rate.
+We now provide a simulation study for the prediction error bound given in Theorem \ref{thrm:train_val}. The penalty parameters are chosen by a single training/validation split. We show that the error of the selected model converges to that of the oracle model at a near-parametric rate.
 
 Observations were generated from the model
 \begin{equation}
@@ -602,7 +604,7 @@ y = \exp(x_1) + x_2^2 + \sigma \epsilon
 where $\epsilon \sim N(0,1)$ and $\sigma$ scaled the error term such that the signal to noise ratio was 2.
 The covariates $x_1$ and $x_2$ were uniformly distributed over the interval $(-1, 1)$.
 
-We fit a smoothing splines using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. The fitted models were of the form
+We fit an additive smoothing spline model using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. The fitted models were of the form
 \begin{equation}
 \label{eqn:sim_diff}
 \left \{ \hat{g}_j^{(n_T)}(\boldsymbol{\lambda}|T) \right \}^2_{j=1} = \argmin_{g_1, g_2} \| y - g_1(x_1) - g_2(x_2) \|_T^2 + \lambda_1 \int_{-1}^1 (g_1^{(2)}(x))^2 dx + \lambda_2 \int_{-1}^1 (g_2^{(2)}(x))^2 dx
@@ -614,7 +616,7 @@ $$
 \left \| \sum_{j=1}^2 \hat{g}^{(n_T)}_j(\hat{\boldsymbol{\lambda}}|T) - g^*_j \right \|_V^2 - 
 \left \| \sum_{j=1}^2 \hat{g}^{(n_T)}_j(\tilde{\boldsymbol{\lambda}} | T) - g^*_j \right \|_V^2
 $$
-as the validation set size increases. The difference of the validation losses drops at a rate of about $n^{-1}$. This rate is in fact faster than that in Theorem \ref{thrm:train_val}; the geometric mean in the oracle inequality seems to play no role in the convergence rate. We conjecture that smoothing splines may satisfy additional regularity conditions such that the geometric mean may be discarded.
+as the validation set size increases. The difference of the validation losses drops at a rate of about $n^{-1}$. This rate is in fact faster than the bound given in Theorem \ref{thrm:train_val}; the geometric mean in the oracle inequality seems to play no role in the convergence rate. We conjecture that smoothing splines may satisfy additional regularity conditions such that the geometric mean may be discarded.
 
 \begin{figure}
 \caption{
@@ -627,11 +629,11 @@ as the validation set size increases. The difference of the validation losses dr
 
 \section{Discussion}\label{sec:discussion}
 
-In this paper, we considered model-estimation procedures that construct models given a set of hyper-parameters where the hyper-parameters are tuned via split-sample validation. Our goal was to address the open question as to how the generalization error of the model grows with the number of hyper-parameters to be estimated. To do so, we established finite-sample oracle inequalities for selection based on a single training/validation split and based on $K$-fold cross-validation. We showed that if the model-estimation procedure is smoothly parameterized by the hyper-parameters, the generalization error of the model is bounded by the oracle error, a near-parametric term, and the geometric mean of the two. In a semi- or non-parametric setting, the error incurred from tuning hyper-parameters is negligible compared to the oracle error. In the parametric setting, tuning hyper-parameters contributes an error that is roughly on the same order as the oracle error. 
+In this paper, we considered model-estimation procedures that construct models with hyper-parameters tuned via split-sample validation. Our goal was to address the following open question: How does the generalization error of a model grow with the number of hyper-parameters to be estimated. To do so, we established finite-sample oracle inequalities for selection based on a single training/validation split and based on $K$-fold cross-validation. We showed that if the model-estimation procedure is smoothly parameterized by the hyper-parameters, the generalization error of the model is bounded by a combination of the oracle error, a near-parametric term, and the geometric mean of the two. In a semi- or non-parametric setting, the error incurred from tuning hyper-parameters is asymptotically negligible compared to the oracle error. In the parametric setting, tuning hyper-parameters contributes an error that is roughly on the same order as the oracle error. 
 
-We then specialized our results to penalized regression problems with multiple penalty parameters. We showed that the fitted models are Lipschitz in the penalty parameters and thus the same relationship between the number of penalty parameters and model error holds. This result suggests that the recent efforts to combine penalty functions should push past the artificial barrier of two-way combinations and consider regularization methods with tens or even hundreds of penalty parameters. For example, Feng and Simon (TBD) fit an un-pooled version of sparse group lasso model with a hundred penalty parameters and significantly decreased the model's generalization error.
+We then specialized our results to penalized regression problems with multiple penalty parameters. We showed that in many cases the fitted models are Lipschitz in the penalty parameters and thus the same relationship between the number of penalty parameters and model error holds. This result suggests that the recent efforts to combine penalty functions should push past the artificial barrier of two-way combinations and consider regularization methods with tens or even hundreds of penalty parameters. For example, Feng and Simon (TBD) fit an un-pooled version of sparse group lasso model with a hundred penalty parameters and significantly decreased the model's generalization error.
 
-A caveat to our results is that we have assumed it is possible to find the global minimizer of the validation loss over the hyper-parameter space. Unfortunately this is currently computationally intractable even for small numbers of hyper-parameters (e.g. $J > 3$) since the validation loss is usually not convex in the hyper-parameters. From a computational standpoint, we need to develop better optimization methods to solve this problem. From a theoretical standpoint, oracle inequalities need to be established for hyper-parameters that are only local minimizers of the validation loss. For many model-estimation procedures, local minimizers often perform fairly well \citep{kunapuli2008bilevel}. This behavior is probably due to some regularity condition shared by many model-estimation procedures.
+A caveat to our results is that we have assumed it is possible to find the global minimizer of the validation loss over the hyper-parameter space. Unfortunately this is currently computationally intractable even for small numbers of hyper-parameters (e.g. $J > 3$) since the validation loss is usually not convex in the hyper-parameters. From a computational standpoint, we need to develop better optimization methods to solve this problem. From a theoretical standpoint, oracle inequalities need to be established for hyper-parameters that are only local minimizers of the validation loss. For many model-estimation procedures, local minimizers often perform fairly well \citep{kunapuli2008bilevel}. This behavior is probably due to some regularity condition shared by many model-estimation procedures. \textcolor{red}{So long as the local minimizer has loss near the global minimizer don't we still have many of these results? Is there some way to use the duality gap to evaluate how well we are doing? (not to be included in this manuscript)}
 
 Finally, an interesting direction of work would be to understand the behavior of hyper-parameter selection in the hyper-parameter space. Bounds on the distance between the selected and oracle hyper-parameters may lend a more intuitive understanding of hyper-parameter selection methods.
 
@@ -644,7 +646,7 @@ For functions $f$ and $g$ and a dataset $D^{(m)}$ with $m$ samples, we denote th
 \subsection{A single training/validation split}
 \label{appendix:train_val}
 
-Theorem \ref{thrm:train_val} is a special case of Theorem \ref{thrm:train_val_complicated}, which applies to general model-estimation procedures. The proof is based on the inequality below. Inequalities of this form are often called a ``basic inequality'', since it is derived directly from the definition and the quantity of interest, the difference in the error of the selected model and the oracle model, is bounded by an empirical process term.
+Theorem \ref{thrm:train_val} is a special case of Theorem \ref{thrm:train_val_complicated}, which applies to general model-estimation procedures. The proof is based on the inequality below. Inequalities of this form are often called ``basic inequalities'', since they are derived directly from the definition. In this ``basic inequality'' we see that the quantity of interest, the difference in the error of the selected model and the oracle model, is bounded by an empirical process term.
 
 \begin{lemma}{Basic inequality}
 	\begin{equation}
@@ -704,7 +706,7 @@ We will bound the empirical process term using the following Lemma, which is a s
 	
 \end{lemma}
 
-We are now ready to prove the oracle inequality. It uses a standard peeling argument. For readability, we will use the simplified notation $\hat{g}(\hat{\boldsymbol{\lambda}})$ and $\hat{g}(\tilde{\boldsymbol{\lambda}})$.
+We are now ready to prove the oracle inequality. It uses a standard peeling argument. For readability, we will use the simplified notation $\hat{g}(\hat{\boldsymbol{\lambda}})$ and $\hat{g}(\tilde{\boldsymbol{\lambda}})$ \textcolor{red}{what do these refer to?}.
 
 \begin{theorem}
 \label{thrm:train_val_complicated}
@@ -758,14 +760,11 @@ we have
 		&  & Pr\left(\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right) \label{eq:train_val_prob}\\
 		& = & \sum_{s=0}^{\infty}Pr\left(2^{2s}\delta^{2}\le\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\le2^{2s+2}\delta^{2}\right) 
 		\label{eq:peeled} \\
-		&\le&
-		Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V} \wedge
-		\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert_{V}^{2}\le2^{2s+2}\delta^{2}+
-		2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right| \right )
-		\label{eq:peel_ineq}
+		&\le& Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\right. \label{eq:peel_ineq}\\
+		& & \qquad  \left.\wedge \left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert_{V}^{2}\le2^{2s+2}\delta^{2}+ 2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right| \right )	
 	\end{eqnarray}
 	where we applied the basic inequality in the last inequality.
-	Each summand in \eqref{eq:peel_ineq} can be bounded by splitting the event into the cases where $2^{2s+2} \delta^2$ is bigger or $2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right|$ is bigger. Splitting up the probability and applying Cauchy Schwarz gives us the following bound for \eqref{eq:train_val_prob}
+	Each summand in \eqref{eq:peel_ineq} can be bounded by splitting the event into the cases where either $2^{2s+2} \delta^2$ or $2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right|$ is larger. Splitting up the probability and applying Cauchy Schwarz gives us the following bound for \eqref{eq:train_val_prob}
 	\begin{eqnarray}
 	&& Pr\left(
 	\sup_{\boldsymbol{\lambda} \in \Lambda: \left\Vert \hat{g}(\cdot|{\boldsymbol{\lambda}})-\hat{g}(\cdot|\tilde{\boldsymbol{\lambda}})\right\Vert _{V}
@@ -816,7 +815,7 @@ we have
 	
 \end{proof}
 
-We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:train_val}. Before proceeding, we determining the entropy of $\mathcal{G}(T)$ when the functions are Lipschitz in the hyper-parameters.
+We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:train_val}. Before proceeding, we determine the entropy of $\mathcal{G}(T)$ when the functions are Lipschitz in the hyper-parameters.
 
 \begin{lemma}
 	\label{lemma:covering_cube}
@@ -1002,7 +1001,7 @@ Define the following matrices
 		& \le & \sum_{j=1}^{J}\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert _{2}\left\Vert \left(S+D\right)^{-1}\right\Vert _{2}\\
 		& \le & J\left(\frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}\right)\frac{1}{m}
 	\end{eqnarray*}
-	where the last line follows from the fact that $(S + D)^-1 \succeq m^{-1}I$. Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz
+	where the last line follows from the fact that $(S + D)^{-1} \succeq m^{-1}I$. Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz
 	\begin{equation}
 	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{m\lambda_{min}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}
 	\end{equation}
@@ -1021,11 +1020,12 @@ Define the following matrices
 	\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ where $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \bar{\boldsymbol{\ell}}$
 	such that the union of their differentiable neighborhoods cover  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ entirely:
 	\[
+	\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right) \subseteq \cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
 	%\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})
-	\mu_{1}\left(\cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
-	\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)=\left\Vert \mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right\Vert _{2}
+	%\mu_{1}\left(\cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
+	%\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)=\left\Vert \mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right\Vert _{2}
 	\]
-	where $\mu_{1}$ is the Lebesgue measure over  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$.
+	%where $\mu_{1}$ is the Lebesgue measure over  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$.
 	
 	Consider the intersections of boundaries of the differentiable neighborhoods with the line segment:
 	\[
@@ -1086,7 +1086,7 @@ Define the following matrices
 
 \begin{proof}
 	Let $H_{0} = \left \{
-	j:\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}} \ne 0 \forall j = 1,...,J
+	j:\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}} \ne 0\,\, \forall j = 1,...,J
 	\right \}$.
 	For all $j \in H_0$, let 
 	\[
