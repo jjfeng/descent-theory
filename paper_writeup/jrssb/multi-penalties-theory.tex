@@ -1,6 +1,5 @@
-\documentclass[12pt]{article}
+\documentclass{statsoc}
 \usepackage{amsmath}
-\usepackage{amsthm}
 \usepackage{graphicx,psfrag,epsf}
 \usepackage{enumerate}
 \usepackage{natbib}
@@ -8,22 +7,11 @@
 \usepackage{color}
 \usepackage{mathtools}
 
-%\pdfminorversion=4
-% NOTE: To produce blinded version, replace "0" with "1" below.
-\newcommand{\blind}{0}
-
-% DON'T change margins - should be 1 inch all around.
-\addtolength{\oddsidemargin}{-.5in}%
-\addtolength{\evensidemargin}{-.5in}%
-\addtolength{\textwidth}{1in}%
-\addtolength{\textheight}{1.3in}%
-\addtolength{\topmargin}{-.8in}%
-
-
 %%%% Packages and definitions
 \usepackage{amssymb}
 
 \usepackage{xr}
+\externaldocument{supp-multi-penalties-theory}
 
 \usepackage[top=0.85in,left=1.0in,right=1.0in,footskip=0.75in]{geometry}
 
@@ -36,23 +24,15 @@
 % textcomp package and marvosym package for additional characters
 \usepackage{textcomp,marvosym}
 
-\usepackage[ruled]{algorithm}
-\usepackage{algorithmic}
-
 % cite package, to clean up citations in the main text. Do not remove.
 \usepackage{cite}
 
 % Use nameref to cite supporting information files (see Supporting Information section for more info)
 \usepackage{nameref,hyperref}
 
-%\usepackage{amsthm}
-
 % ligatures disabled
 \usepackage{microtype}
 \DisableLigatures[f]{encoding = *, family = * }
-
-% for the beautiful checkmarks
-\usepackage{pifont}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}{Corollary}
@@ -62,52 +42,23 @@
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 
+\title[Oracle inequalities for hyper-parameter selection]{Oracle inequalities for tuning hyper-parameters via validation sets with applications to penalized regression}
+\author{Jean Feng, Noah Simon}
+\address{Department of Biostatistics, University of Washington, Seattle, USA}
+\email{jeanfeng@uw.edu, nrsimon@uw.edu}
 
 \begin{document}
 
-\def\spacingset#1{\renewcommand{\baselinestretch}%
-{#1}\small\normalsize} \spacingset{1}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\if0\blind
-{
-  \title{\bf Oracle inequalities for tuning hyper-parameters via validation sets with applications to penalized regression}
-  \author{Jean Feng\thanks{
-    Jean Feng was supported by NIH grants ???. % DP5OD019820 and T32CA206089.
-    Noah Simon was supported by NIH grant DP5OD019820.
-    The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health.}\\
-    Department of Biostatistics, University of Washington\\
-    and \\
-    Noah Simon \\
-    Department of Biostatistics, University of Washington}
-  \maketitle
-} \fi
-
-\if1\blind
-{
-  \bigskip
-  \bigskip
-  \bigskip
-  \begin{center}
-    {\LARGE\bf title goes here}
-\end{center}
-  \medskip
-} \fi
-
-\bigskip
 \begin{abstract}
-
-In the regression setting, given a set of hyper-parameters, a model-estimation procedure constructs a model from training data. The optimal hyper-parameters, that minimize generalization error of the model, are usually unknown. In practice they are often estimated using split-sample validation. Up to now, there is an open question regarding how the generalization error of the selected model grows with the number of hyper-parameters to be estimated. To answer this question, we establish finite-sample oracle inequalities for selection based on a single training/test split and based on cross-validation. We show that if the model-estimation procedures are smoothly parameterized by the hyper-parameters, the error incurred from tuning hyper-parameters shrinks at nearly a parametric rate. Hence for semi- and non-parametric model-estimation procedures, for a fixed number of hyper-parameters, this additional error is negligible. For parametric model-estimation procedures, adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself. In addition, we specialize these ideas for penalized regression problems with multiple penalty parameters. We establish that the fitted models are Lipschitz in the penalty parameters and thus our oracle inequalities apply. This result encourages development of regularization methods with many penalty parameters.
+	In the regression setting, given a set of hyper-parameters, a model-estimation procedure constructs a model from training data. The optimal hyper-parameters, that minimize generalization error of the model, are usually unknown. In practice they are often estimated using split-sample validation. Up to now, there is an open question regarding how the generalization error of the selected model grows with the number of hyper-parameters to be estimated. To answer this question, we establish finite-sample oracle inequalities for selection based on a single training/test split and based on cross-validation. We show that if the model-estimation procedures are smoothly parameterized by the hyper-parameters, the error incurred from tuning hyper-parameters shrinks at nearly a parametric rate. Hence for semi- and non-parametric model-estimation procedures, for a fixed number of hyper-parameters, this additional error is negligible. For parametric model-estimation procedures, adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself. In addition, we specialize these ideas for penalized regression problems with multiple penalty parameters. We establish that the fitted models are Lipschitz in the penalty parameters and thus our oracle inequalities apply. This result encourages development of regularization methods with many penalty parameters.
 \end{abstract}
 
-\noindent%
-{\it Keywords:}  Hyperparameter selection, Cross-validation, Regularization, Regression
-\vfill
+\keywords{
+Hyper-parameter selection, Cross-validation, Regularization, Regression
+}
 
 \newpage
-\spacingset{1.45}
+
 \section{Introduction}
 
 Per the usual regression framework, suppose we observe response $y \in \mathbb{R}$ and predictors $\boldsymbol {x} \in \mathbb{R}^p$. Suppose $y$ is generated by a true model $g^*$ plus random error $\epsilon$ with $\operatorname{E}\left[\epsilon\right] = 0$, as follows
@@ -151,7 +102,7 @@ Section \ref{sec:main_results} presents oracle inequalities for model-estimation
 Section \ref{sec:examples} applies these results to penalized regression models.
 Section \ref{sec:simulations} provides a simulation study to support our theoretical results.
 Section \ref{sec:discussion} discusses our findings and potential future work.
-Section \ref{sec:proofs} presents oracle inequalities for general model-estimation procedures and proofs for all the results.
+Oracle inequalities for general model-estimation procedures and proofs for all the results are given in the Appendix.
 
 
 \section{Main Result} \label{sec:main_results}
@@ -295,14 +246,14 @@ Consider datasets of size $n$ where $n$ is divisible by $K$, for $K \ge 2$.
 Suppose random variables $\epsilon_i$ are independent with expectation zero and are bounded $\| \epsilon_i \|_\infty \le \sigma$. Suppose there is a constant $C_\Lambda >0$ such that for any dataset $D^{(n_T)}$, $\hat g (\boldsymbol{\lambda} | D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\| \cdot \|_\infty$ over $\Lambda$.
 
 Then there are absolute constants $c_1, c_2 > 0$ such that for all $a > 0$,
-\begin{eqnarray}
+\begin{eqnarray*}
 E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 &\le&
 (1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 \\
 && + c_1 \frac{(1+a)^2}{a} \frac{J}{n_V} 
 \left (
 G \log (GC_\Lambda \lambda_{max} ) \log n + c_2
 \right )
-\end{eqnarray}
+\end{eqnarray*}
 \end{theorem}
 
 As we can see, Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are quite similar. The upper bounds in both theorems depend on the oracle error and a near-parametric term. For parametric model-estimation procedures, tuning hyper-parameters incurs a similar cost as the model-estimation procedure itself. In semi- and non-parametric regression settings, tuning hyper-parameters is a relatively ``cheap'' and incurs an error that is negligible asymptotically.
@@ -336,7 +287,7 @@ In our examples, the Lipschitz constant is inversely proportional to $\lambda_{\
 	 
 	 \begin{enumerate}
 	 	\item Single training/validation split: Suppose conditions in Theorem \ref{thrm:train_val} hold with $C_\Lambda = C n^\kappa$. Then 
-		\begin{eqnarray}
+		\begin{eqnarray*}
 		\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 &\le& \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
 		&& + O_p \left(\frac{J (1 + \kappa + t_{\max})\log n}{n_{V}} \right) 
 		\\
@@ -346,15 +297,15 @@ In our examples, the Lipschitz constant is inversely proportional to $\lambda_{\
 			\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}}| T) \right \Vert^2_{V}
 		}
 		\right )
-		\end{eqnarray}
+		\end{eqnarray*}
 	 	
 	 	\item Averaged version of $K$-fold cross-validation: Suppose conditions in Theorem \ref{thrm:kfold}  hold with $C_\Lambda = C n^\kappa$. Then for sufficiently large $n$, there is an absolute constant $c_1 > 0$ such that for all $a > 0$,
-	 	\begin{eqnarray}
+	 	\begin{eqnarray*}
 	 	E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 &\le&
 	 	(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 \\
 	 	&& + c_1 \frac{(1+a)^2}{a} 
 	 	\frac{J (t_{\max} + \kappa) (\log n)^2}{n_V} 
-	 	\end{eqnarray}
+	 	\end{eqnarray*}
 	 \end{enumerate}
 \end{corollary}
 We get very similar results to those in Corollary \ref{corr:train_val} and Theorem \ref{thrm:kfold}. We still have the same near-parametric term and geometric mean in the oracle inequality for the single training/validation split and a near-parametric term in the oracle inequality for cross-validation. The near-parametric terms have the familiar $\log n$ in the numerator because the error terms are proportional to the log of the Lipschitz constant and $\lambda_{\max}$. 
@@ -466,15 +417,14 @@ We can now characterize a set $\Lambda_{smooth} \subseteq \Lambda$ over which th
 \end{condition}
 \begin{condition}
 	\label{condn:nonsmooth2}
-	For every $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$
-	, let the line segment between the two points be denoted 
+	For every $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$, let the line segment between the two points be denoted 
 	$$
 	\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})=\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} 
 	$$
 	Suppose the intersection $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap\Lambda_{smooth}^{C}$
 	is countable.
 \end{condition}
-As an example, the solution to the lasso follows a piecewise linear path, so $\Lambda_{smooth}^C$ contains a countable number of points. Equipped with these conditions, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the Lipschitz constant is exactly the same as that in Lemma \ref{lemma:param_add}.
+For example, the lasso satisfies the conditions above since its solution follows a piecewise linear path \citep{efron2004least}. Equipped with these conditions, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the Lipschitz constant is exactly the same as that in Lemma \ref{lemma:param_add}.
 
 \begin{lemma}
 	\label{lemma:nonsmooth}
@@ -559,10 +509,12 @@ where $\epsilon \sim N(0,1)$ and $\sigma$ scaled the error term such that the si
 The covariates $x_1$ and $x_2$ were uniformly distributed over the interval $(-1, 1)$.
 
 We fit an additive smoothing spline model using the Sobolev penalty \citep{de1978practical, wahba1990spline, green1994nonparametric}. The fitted models were of the form
-\begin{equation}
-\label{eqn:sim_diff}
-\left \{ \hat{g}_j^{(n_T)}(\boldsymbol{\lambda}|T) \right \}^2_{j=1} = \argmin_{g_1, g_2} \| y - g_1(x_1) - g_2(x_2) \|_T^2 + \lambda_1 \int_{-1}^1 (g_1^{(2)}(x))^2 dx + \lambda_2 \int_{-1}^1 (g_2^{(2)}(x))^2 dx
-\end{equation}
+\begin{eqnarray*}
+\left \{ \hat{g}_j^{(n_T)}(\boldsymbol{\lambda}|T) \right \}^2_{j=1} &=& 
+\argmin_{g_1, g_2} \left \| y - g_1(x_1) - g_2(x_2) \right \|_T^2 \\
+&&+ \lambda_1 \int_{-1}^1 (g_1^{(2)}(x))^2 dx 
++ \lambda_2 \int_{-1}^1 (g_2^{(2)}(x))^2 dx
+\end{eqnarray*}
 The training set contained 100 samples and models were fitted with 10 knots. A grid search was performed over the penalty parameter values $\{10^{-9 + 0.05i}: i = 0, ..., 140 \}$. We tested 36 validation set sizes $n_V = \lfloor 20 * 2^{i} \rfloor$ for equally log-spaced intervals from $i = 0$ to $i = 7$. A total of 20 simulations were run for each validation set size.
 
 Figure \ref{fig:simulations} plots the difference of between the model loss and the oracle loss
@@ -577,7 +529,7 @@ as the validation set size increases. The difference of the validation losses dr
 	Validation loss difference between oracle and selected model as validation set size grows
 }
 \centering
-\includegraphics[height=80mm]{../R/figures/validation_size_loss_diff.pdf}
+\includegraphics[height=80mm]{validation_size_loss_diff.pdf}
 \label{fig:simulations}
 \end{figure}
 
@@ -591,565 +543,6 @@ We note that our results only assume that the selected hyper-parameter has a sma
 
 Finally, an interesting direction of work would be to understand the behavior of hyper-parameter selection in the hyper-parameter space. Bounds on the distance between the selected and oracle hyper-parameters may lend a more intuitive understanding of hyper-parameter selection methods.
 
-\section{Proofs} \label{sec:proofs}
-
-This section presents proofs to the previous theorems and lemmas. In addition, it presents generalizations of Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
-
-For functions $f$ and $g$ and a dataset $D^{(m)}$ with $m$ samples, we denote the inner product of $f$ and $g$ at covariates $D$ as $\langle f,g \rangle_D = \frac{1}{m} \sum_{x_i \in D} f(x_i) g(x_i) $.
-
-\subsection{A single training/validation split}
-\label{appendix:train_val}
-
-Theorem \ref{thrm:train_val} is a special case of Theorem \ref{thrm:train_val_complicated}, which applies to general model-estimation procedures. The proof is based on the inequality below. Inequalities of this form are often called ``basic inequalities'', since they are derived directly from the definition. In this ``basic inequality'' we see that the quantity of interest, the difference in the error of the selected model and the oracle model, is bounded by an empirical process term.
-
-\begin{lemma}{Basic inequality}
-	\begin{equation}
-	\label{thrm:basic_ineq}
-	\left \| g^* - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \|^2_V 
-	- \left \| g^* - \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) \right \|^2_V
-	\le 
-	\left \langle \epsilon, \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \rangle_V
-	\end{equation}
-\end{lemma}
-
-\begin{proof}
-	By definition,
-	\begin{equation}
-	\left \| y - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \|^2_V \le 
-	\left \| y - \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) \right \|^2_V
-	\end{equation}
-\end{proof}
-
-We are therefore interested in bounding the empirical process term in \eqref{thrm:basic_ineq}. A common approach is to use a measure of complexity of the function class. For a single training/validation split, where we treat the training set as fixed, we only need to consider the complexity of the fitted models from the model-selection procedure
-\begin{equation}
-\mathcal{G}(T)=\left\{ \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T) : \boldsymbol{\lambda} \in \Lambda \right\}
-\end{equation}
-This model class can be considerably less complex compared to the original function class $\mathcal{G}$, such as the special case in Theorem \ref{thrm:train_val} where we suppose $\mathcal{G}(T)$ is Lipschitz. For this proof, we will use metric entropy as a measure of model class complexity. We recall its definition below.
-\begin{definition}
-	Let $\mathcal{F}$ be a function class. Let the covering number $N(u, \mathcal{F}, \| \cdot \|)$ be the smallest set of $u$-covers of $\mathcal{F}$ with respect to the norm $\| \cdot \|$. The metric entropy of $\mathcal{F}$ is defined as the log of the covering number:
-\begin{equation}
-H (u, \mathcal{F}, \| \cdot \| ) = \log N(u, \mathcal{F}, \| \cdot \|)
-\end{equation}
-\end{definition}
-
-We will bound the empirical process term using the following Lemma, which is a simplification of Corollary 8.3 in \citet{van2000empirical}.
-
-\begin{lemma}
-	\label{lemma:cor83}
-	Suppose we have dataset $D^{(m)}$ where $\epsilon_1,...,\epsilon_m$ are independent random variables with mean zero and uniformly sub-gaussian with parameter $b > 0$. Suppose
-	the model class $\mathcal{F}$ has elements $\sup_{f\in\mathcal{F}}\|f\|_{D^{(m)}}\le R$
-	and satisfies
-	\[
-	\psi(R)\ge\int_{0}^{R}H^{1/2}(u,\mathcal{F},\|\cdot\|_{D^{(m)}})du
-	\]
-	
-	
-	There is a constant $a > 0$ dependent only on $b$ such that
-	for all $\delta>0$ satisfying
-	\[
-	\sqrt{m}\delta\ge a(\psi(R)\vee R)
-	\]
-	
-	
-	we have 
-	\[
-	Pr\left(\sup_{f\in\mathcal{F}}\left|\frac{1}{m}\sum_{i=1}^{m}\epsilon_{i}f(x_{i})\right|\ge\delta\right)
-	\le 
-	a\exp\left(-\frac{m\delta^{2}}{4a^{2}R^{2}}\right)
-	\]
-	
-\end{lemma}
-
-We are now ready to prove the oracle inequality. It uses a standard peeling argument.
-
-\begin{theorem}
-\label{thrm:train_val_complicated}
-
-Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $0 < \lambda_{\min} < \lambda_{\max}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b > 0$.
-Suppose there is a function $\psi:\mathbb{R}\mapsto\mathbb{R}$ and constant $r > 0$ such that
-\begin{equation}
-\label{eq:dudley_bound}
-\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi(R) \quad \forall R>r
-\end{equation}
-Also, suppose $\psi\left(u\right)/u^{2}$ is non-increasing in $u$ for all $u > r$.
-Let $\tilde{\boldsymbol \lambda}$ be defined as in \eqref{eq:tilde_lambda_def}.
-
-Then there is a constant $c>0$ only depending on $b$ such that for all $\delta$ satisfying
-\begin{equation}
-\label{eq:train_val_delta_condn}
-\sqrt{n_V}\delta^{2}
-\ge
-c \left ( 
-\psi(\delta)
-\vee 
-\delta
-\vee
-\psi \left (
-4\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2
-\right ) 
-\vee
-4 \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2
-\right )
-\end{equation}
-we have
-\begin{eqnarray*}
-	Pr\left(
-	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 -
-	\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
-	\ge\delta^2
-	\middle | 
-	T, X_V
-	\right )
-	&\le& c\exp\left(-\frac{n_{V}\delta^{4}}{
-		c^{2}
-		\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
-	}\right) \\
-	&& +c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right) \\ 
-\end{eqnarray*}
-\end{theorem}
-
-\begin{proof}
-	We will use the simplified notation $\hat{g}(\hat{\boldsymbol{\lambda}}) \coloneqq \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}} | T)$ and $\hat{g}(\tilde{\boldsymbol{\lambda}}) \coloneqq \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}} | T)$. In addition, the following probabilities are all conditional on $X_V$ and $T$ but we leave them out for readability.
-	\begin{eqnarray}
-		&  & Pr\left(\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right) \label{eq:train_val_prob}\\
-		& = & \sum_{s=0}^{\infty}Pr\left(2^{2s}\delta^{2}\le\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\le2^{2s+2}\delta^{2}\right) 
-		\label{eq:peeled} \\
-		&\le& Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\right. \label{eq:peel_ineq}\\
-		& & \qquad  \left.\wedge \left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert_{V}^{2}\le2^{2s+2}\delta^{2}+ 2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right| \right )	
-	\end{eqnarray}
-	where we applied the basic inequality in the last inequality.
-	Each summand in \eqref{eq:peel_ineq} can be bounded by splitting the event into the cases where either $2^{2s+2} \delta^2$ or $2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right|$ is larger. Splitting up the probability and applying Cauchy Schwarz gives us the following bound for \eqref{eq:train_val_prob}
-	\begin{eqnarray}
-	&& Pr\left(
-	\sup_{\boldsymbol{\lambda} \in \Lambda: \left\Vert \hat{g}({\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert _{V}
-		\le
-		4\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}}
-	2\left\langle \epsilon,\hat{g}({\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
-	\ge 
-	\delta^{2}
-	\right)
-	\label{eq:train_val_1}
-	\\
-	&& + \sum_{s=0}^{\infty} Pr\left(
-	\sup_{\boldsymbol{\lambda} \in \Lambda: \left\Vert \hat{g}({\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert _{V}
-		\le
-		2^{s+3/2}\delta}
-	2\left\langle \epsilon,\hat{g}({\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
-	\ge
-	2^{2s} \delta^{2}
-	\right)
-	\label{eq:train_val_2}
-	\end{eqnarray}
-	
-	We can bound both \eqref{eq:train_val_1} and \eqref{eq:train_val_2} using Lemma \ref{lemma:cor83}. For our choice of $\delta$ in \eqref{eq:train_val_delta_condn},
-	there is some constant $a>0$ dependent only on $b$ such that \eqref{eq:train_val_1} is bounded above by
-	\[ 
-	a\exp\left(-\frac{n_{V}\delta^{4}}{4a^{2}\left(16\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right)
-	\]
-	In addition, our choice of $\delta$ from \eqref{eq:train_val_delta_condn} and our assumption that $\psi(u)/u^2$ is non-increasing implies that the condition in Lemma \ref{lemma:cor83} is satisfied for all $s=0,1,...,\infty$ simultaneously. Hence for all $s=0,1,...,\infty$, we have
-	\[
-	Pr\left(
-	\sup_{\boldsymbol{\lambda} \in \Lambda: \left\Vert \hat{g}({\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert _{V}
-		\le
-		2^{s+3/2}\delta}
-	2\left\langle \epsilon,\hat{g}({\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V}
-	\ge
-	2^{2s} \delta^{2}
-	\right)
-	\le 
-	a\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4a^{2}2^{2s+3}\delta^{2}}\right)
-	\]
-	
-	Putting this all together, there is a constant $c$ such that \eqref{eq:train_val_prob} is bounded above by
-	\begin{equation}
-	c\exp\left(-\frac{n_{V}\delta^{4}}{4 c^{2}\left(16\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right)
-	+
-	c\exp\left(-\frac{n_{V} \delta^2}{c^{2}}\right)
-	\end{equation}
-	
-\end{proof}
-
-We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:train_val}. Before proceeding, we determine the entropy of $\mathcal{G}(T)$ when the functions are Lipschitz in the hyper-parameters.
-
-\begin{lemma}
-	\label{lemma:covering_cube}
-	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Suppose $\mathcal{G}(T)$ is $C$-Lipschitz in $\boldsymbol{\lambda}$ with respect to some norm $\| \cdot \|$.
-	Then the entropy of $\mathcal{G}(T)$ with respect to $\| \cdot \|$ is
-	\begin{equation}
-	H\left(u, \mathcal{G}(T),\|\cdot\|\right) \le
-	J \log \left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)
-	\end{equation}
-\end{lemma}
-\begin{proof}
-	Using a slight variation of the proof for Lemma 2.5 in \citet{van2000empirical}, we can show
-	\begin{equation}
-	N\left(u,\Lambda,\|\cdot\|_{2}\right) \le \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)^{J}
-	\end{equation}
-	
-	Under the Lipschitz assumption, a $\delta$-cover for $\Lambda$
-	is a $C\delta$-cover for $\mathcal{G}(T)$. The covering number for $\mathcal{G}(T)$ wrt $\|\cdot\|_{V}$ is bounded by the covering number for $\Lambda$ as follows
-	\begin{eqnarray}
-	N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right)
-	&\le& N\left(\frac{u}{C},\Lambda,\|\cdot\|_{2}\right)\\
-	&\le& \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u/C}{u/C}\right)^{J}
-	\end{eqnarray}
-\end{proof}
-
-\paragraph{Theorem \ref{thrm:train_val}}
-\begin{proof}
-By Lemma \ref{lemma:covering_cube}, we have
-\begin{eqnarray*}
-	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du 
-	&=& \int_{0}^{R} \left ( 
-	J \log \left(\frac{4C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)
-	\right )^{1/2}
-	du\\
-	& \le & J^{1/2}\int_{0}^{R}\left[\log4+\log\left(\frac{8C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)}{u}\right)\right]^{1/2}du\\
-	& \le & RJ^{1/2}\left[\int_{0}^{1}\left(\log4+\log\left(\frac{8C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)}{R}\right)+J\log\frac{1}{v}\right)dv\right]^{1/2}\\
-	&=& 
-	R\left[J \left (
-	1+\log \left (32C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)\right)
-	+ \log\frac{1}{R} 
-	\right )
-	\right]^{1/2}
-\end{eqnarray*}
-where the second inequality follows from a change of variables and the concavity of the square root function. If we restrict $R > n^{-1}$ and $C_\Lambda \ge 32e/(n \lambda_{\max})$, then 
-\begin{equation}
-\label{eq:train_val_entropy}
-\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
-\le
-\psi (R) \coloneqq 2 R\left ( J \log(C_\Lambda \lambda_{\max}n) \right )^{1/2}
-\end{equation}
-Applying Theorem \ref{thrm:train_val_complicated}, we get our desired result.
-\end{proof}
-
-\subsection{Cross-validation}
-We now present the proof for Theorem \ref{thrm:kfold}, which is an application of Theorem 3.5 in \citet{lecue2012oracle}. We reproduce Theorem 3.5 below for convenience. The theorem calculates entropy with respect to the Orlicz norm $\| \cdot \|_{\phi} = \inf \{ C > 0: E[\exp(|f|/C) - 1] \le 1 \}$.
-
-\begin{theorem}
-	\label{thrm:mitchell}
-	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Let
-	$\mathcal{Q} = \{ \| g^* - \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T) \|_2^2 : \boldsymbol{\lambda} \in \Lambda \}$.
-	Suppose there is $G > 0$ such that $\sup_{g \in \mathcal{G}} \| g \|_\infty \le G$.
-	
-	Suppose there is a $d_{\min}$ and a strictly increasing function $\psi$ such that $\psi^{-1}$ is strictly convex, the convex conjugate $\psi^*$ of $\psi^{-1}$ increases, $\psi^*(\infty ) = \infty$ and there exists $r \ge1$ such that $\psi^*(x)/x^r$ is decreasing in $x$ and
-	\begin{equation}
-	\label{eq:mitchell_dudley_bound}
-	\psi(d) \ge \int_0^{\sqrt{d}} H^{1/2}(u, \mathcal{Q}_d, \| \cdot \|_2) du +
-	\frac{\log n_V}{\sqrt{n_V}} \int_0^{2G} H(u, \mathcal{Q}_d, \| \cdot \|_\phi) du
-	\quad
-	\forall d > d_{\min}
-	\end{equation}
-	where $ \mathcal{Q}_d = \{ Q \in \mathcal{Q}: \| Q \|_2 \le \sqrt{d} \}$.
-	
-	Suppose that the model-estimation procedure is exchangeable (i.e. any ordering of the same training data produces the same fitted model).
-	
-	Then for every $a > 0$ and $q > 1$, the following inequality holds
-	\begin{eqnarray}
-	E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 &\le&
-	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda} \left [
-	E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2  
-	\right ] \\
-	&& + \frac{ac}{q}\left [
-	\psi^* \left (\frac{2q^{r}(1+a)}{a\sqrt{n_V}} \right ) \vee d_{\min}
-	\right ]
-	\end{eqnarray}
-\end{theorem}
-
-In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy of the loss functions with respect to the Orlicz norm.
-
-\paragraph{Theorem \ref{thrm:kfold}}
-\begin{proof}
-	First we determine $\psi$ in \eqref{eq:mitchell_dudley_bound}. Note that because $\|\cdot\|_\phi \le 2\|\cdot \|_\infty $ and $\| \cdot \|_2 \le \| \cdot \|_\infty$, then both $H(2u,\mathcal{Q}_{d}(T),\|\cdot\|_{\phi})$ and $H(u,\mathcal{Q}_{d}(T),\|\cdot\|_2)$ are bounded by 
-	$H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty})$.
-	By Lemma \ref{lemma:covering_cube}, we know
-	\begin{equation}
-	H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty}) \le J \log\left [
-	\frac{16GC\lambda_{\max} + 2u}{u}
-	\right ]
-	\end{equation}
-	Hence we can let
-	\begin{equation}
-	\psi(d) \coloneqq
-	\sqrt{d}K_{n,1}
-	+
-	\frac{K_{n,2}}{\sqrt{n_V}} 
-	\end{equation}
-	for $K_{n,1} = \left[J\left(1+\log\left(128\sqrt{n_V} GC\lambda_{max}  \right)\right)\right]^{1/2}$ and $K_{n,2} = \log n_V 2GJ\left(1+\log\left(128GC\lambda_{max}\right)\right)$. $\psi(d)$ is a valid upper bound in \eqref{eq:mitchell_dudley_bound}  for all $d > n_V^{-1}$.
-	
-	We can show that the convex conjugate of $\psi^{-1}$ is
-	\begin{equation}
-	\label{eq:convex_conjugate}
-	\psi^*(z) = \frac{z^2 K_{n,1}^2}{4} + \frac{z K_{n,2}}{\sqrt{n_V}}
-	\end{equation}	
-	
-	Plugging in \eqref{eq:convex_conjugate} into Theorem \ref{thrm:mitchell} gives us the result in Theorem \ref{thrm:kfold}.
-\end{proof}
-
-\subsection{Penalized regression for additive models}
-
-We now show that penalized regression problems for additive models satisfies the Lipschitz condition.
-
-\paragraph{Lemma \ref{lemma:param_add}}
-\begin{proof}
-We will use the notation $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) \coloneqq \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)$. By the gradient optimality conditions, we have for all $j=1:J$ 
-\begin{equation}
-\label{eq:grad_opt}
-\left.\nabla_{\theta^{(j)}} \left [
-\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
-\right ]
-\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}=0
-\end{equation}
-
-Now we implicitly differentiate with respect to $\boldsymbol{\lambda}$ 
-\begin{equation}
-\label{eq:implicit_diff}
-\nabla_{\lambda}\left\{ \left.\nabla_{\theta^{(j)}}
-\left [
-\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
-\right ]
-\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0
-\end{equation}
-
-Define the following matrices 
-\begin{eqnarray*}
-	S = \left.\nabla_{\theta}\left [
-	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}
-	\right ]
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda | T)}
-	\end{eqnarray*}
-	
-	\[
-	D=\left.diag\left(\left\{ \nabla_{\boldsymbol{\theta}^{(j)}}^{2}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right\} _{j=1}^{J}\right)\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
-	\]
-	
-	
-	\[
-	M: \text{column } M_j = \left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
-	\]
-	From the product rule and chain rule, we can then write the system of equations in \eqref{eq:implicit_diff} as
-	\begin{equation}
-	\label{eq:param_matrix}
-	\left(\begin{array}{cccc}
-	\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{1}(\boldsymbol{\lambda}) & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{2}(\boldsymbol{\lambda}) & ... & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{p}(\boldsymbol{\lambda})\end{array}\right)=-M^{\top}\left(S+D\right)^{-1}
-	\end{equation}
-	We now bound each column in $M$. From the \eqref{eq:grad_opt} and Cauchy Schwarz, we have 
-	\begin{eqnarray*}
-		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le & \frac{1}{\lambda_{min}\sqrt{n_{T}}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}		
-	\end{eqnarray*}
-	The norm of the gradients of $g_j$ can be bounded since $g_j$ is Lipschitz. Also, by definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$, we have
-	\begin{eqnarray}
-	\frac{1}{2}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}\left(\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right) & \le & \frac{1}{2}\left\Vert y-g(\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j),*})\\
-	& \le & C_{\theta^{*},\Lambda}
-	\end{eqnarray}
-	
-	Hence for all $j=1,...,J$
-	\begin{eqnarray*}
-		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le & \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}
-	\end{eqnarray*}
-
-	Now we bound the norm of $\nabla_\lambda \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$. From \eqref{eq:param_matrix}, we have for all $j=1,...,J$
-	\begin{eqnarray*}
-		\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\| & = & \|M^{\top}\left(S+D\right)^{-1}e_{k}\|\\
-		& \le & \sum_{j=1}^{J}\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert _{2}\left\Vert \left(S+D\right)^{-1}\right\Vert _{2}\\
-		& \le & J\left(\frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}\right)\frac{1}{m}
-	\end{eqnarray*}
-	where the last line follows from the fact that $(S + D)^{-1} \succeq m^{-1}I$. Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz
-	\begin{equation}
-	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{m\lambda_{min}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}
-	\end{equation}
-	Finally the result \eqref{eq:param_add_lipschitz} clearly follows since $g_j(\boldsymbol{\theta})$ are Lipschitz in $\boldsymbol{\theta}$ with respect to $\| \cdot \|_\infty$.
-\end{proof}
-
-\paragraph{Lemma \ref{lemma:nonsmooth}}
-
-\begin{proof}
-	Consider any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$. 
-	
-	From Condition \ref{condn:nonsmooth1}, every point $\boldsymbol{\lambda} \in \Lambda_{smooth}$ is the center of a ball $B(\boldsymbol{\lambda})$ with nonzero radius where the differentiable space within $B(\boldsymbol{\lambda})$ is constant.
-	Hence by Condition \ref{condn:nonsmooth2}, it can be shown that there must exist a countable
-	set of points $\bar{\boldsymbol{\ell}} 
-	%=\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}
-	\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ where $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \bar{\boldsymbol{\ell}}$
-	such that the union of their differentiable neighborhoods cover  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ entirely:
-	\[
-	\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right) \subseteq \cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
-	%\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})
-	%\mu_{1}\left(\cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
-	%\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)=\left\Vert \mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right\Vert _{2}
-	\]
-	%where $\mu_{1}$ is the Lebesgue measure over  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$.
-	
-	Consider the intersections of boundaries of the differentiable neighborhoods with the line segment:
-	\[
-	P=
-	\left ( 
-	\cup_{\ell \in \bar{\boldsymbol{\ell}}}
-	\mbox{Bd}B\left(\boldsymbol{\ell}\right)
-	\right )
-	\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})
-	\]
-	Every point $p\in P$ can be expressed as $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
-	for some $\alpha_{p}\in[0,1]$. So points in $P$ can ordered by increasing $\alpha_{p}$ to get the sequence $\boldsymbol{p}^{(1)}, \boldsymbol{p}^{(2)}, ... $.
-	By Condition \ref{condn:nonsmooth1}, the differentiable space of the training criterion
-	is also constant over $\mathcal{L}\left(\boldsymbol{p}^{(i)},\boldsymbol{p}^{(i+1)}\right)$ since each of these sub-segments are a subset of $B(\boldsymbol{\ell})$ for some $\boldsymbol{\ell} \in \bar{\boldsymbol{\ell}}$. 
-	
-	Let the differentiable
-	space over the interior of line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
-	be denoted $\Omega_{i}$. 
-	By Condition \ref{condn:nonsmooth1}, the differentiable space is also a local optimality
-	space. Let $U^{(i)}$ be an orthonormal basis of $\Omega_{i}$. For
-	each $i$, we can express $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)$ for
-	all $\boldsymbol{\lambda}\in\mbox{Int}\left\{ \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)\right\} $
-	as
-	\[
-	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)=U^{(i)}\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)
-	\]
-	\[
-	\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)=\arg\min_{\beta}L_{T}(U^{(i)}\boldsymbol{\beta},\boldsymbol{\lambda})
-	\]
-	Apply Lemma \ref{lemma:param_add} with $\Lambda= \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$, and modify the proofs to take directional derivatives
-	along the columns of $U^{(i)}$ instead. Then there is a constant
-	constant $c>0$ independent of $i$ such that for all $i=1,2...$,
-	such that
-	\[
-	\left\Vert 
-	\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)} | T)
-	-\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)} | T)
-	\right\Vert _{2}
-	\le 
-	c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}
-	\]
-	
-	
-	Finally, we can sum these inequalities. By the triangle inequality,
-	\begin{eqnarray*}
-		\left\Vert 
-		\hat{\theta}(\boldsymbol{\lambda}^{(1)} |T)
-		- \hat{\theta}(\boldsymbol{\lambda}^{(2)} |T)
-		\right\Vert _{2} 
-		& \le & \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
-		& \le & \sum_{i=1}^{\infty}
-		c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}\\
-		& = & c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
-	\end{eqnarray*}
-\end{proof}
-
-\paragraph{Lemma \ref{lemma:nonparam_smooth}}
-
-\begin{proof}
-	Let $H_{0} = \left \{
-	j:\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}} \ne 0\,\, \forall j = 1,...,J
-	\right \}$.
-	For all $j \in H_0$, let 
-	\[
-	h_{j}=
-	\frac{\hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)}{\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}}}
-	\]
-	For notational convenience, let $\hat{g}_{1,j} = \hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)$. Consider the optimization problem
-	\begin{equation}
-	\hat{\boldsymbol{m}}(\boldsymbol{\lambda})=\left\{ \hat{m}_{j}(\boldsymbol{\lambda})\right\} _{j\in H_0}
-	=\argmin_{m_{j} \in \mathbb{R}: j\in H_0}
-	\frac{1}{2}
-	\left \|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right) \right \|_{T}^{2}
-	+\sum_{j=1}^{J}\lambda_{j}
-	P_{j} \left (\hat{g}_{1,j}+m_{j}h_{j} \right )
-	\end{equation}
-	By the gradient optimality conditions, we have
-	\begin{equation}
-		\nabla_{m} \left .
-		\left[\frac{1}{2}\|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right] \right |_{m=\hat{m}(\lambda)}
-		= 0
-		\label{eq:nonparam_grad_opt}
-	\end{equation}
-	Implicit differentiation with respect to $\boldsymbol{\lambda}$ gives us
-	\begin{equation}
-		\nabla_\lambda 
-		\nabla_m
-		\left . \left[
-		\frac{1}{2}\|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right] \right |_{m=\hat{m}(\lambda)}
-		= 0
-		\label{eq:nonparam_imp_diff}
-	\end{equation}
-	Define the following matrices
-	\[
-	S:S_{ij}=\langle h_{j},h_{j}\rangle_{T}
-	\]
-	\[
-	D_{1}=diag\left(
-	\left \{
-	\left.\lambda_{j}\frac{\partial^{2}}{\partial m_{j}^{2}}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right|_{m=\hat{m}(\lambda)}
-	\right \}_{j=1}^J
-	\right)
-	\]
-	
-	
-	\[
-	D_{2}=diag\left(\left \{ \left.
-	\frac{\partial}{\partial m_{j}}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right|_{m=\hat{m}(\lambda)}
-	\right \}_{j=1}^J
-	\right)
-	\]
-	
-	
-	\[
-	M:\mbox{ column }M_{j}=\nabla_{\lambda}\hat{m}_{j}(\lambda) \quad \forall j=1,...,J
-	\]
-	
-	
-	The system of equations from \eqref{eq:nonparam_imp_diff} can be written as  $M=D_{2}\left(S+D_{1}\right)^{-1}$.
-	
-	Now we bound each element in $D_2$. From \eqref{eq:nonparam_grad_opt} and Cauchy Schwarz, we have for all $k=1,...,J$
-	\begin{equation}
-		\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)}
-		\le 
-		\frac{1}{\lambda_{min}}
-		\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)
-		\right\Vert _{T}\|h_{k}\|_{T}
-	\end{equation}
-	We note that $\|h_{k}\|_{T} \le \sqrt{\frac{n_{D}}{n_{T}}}$. Also, by definition of $\hat{m}(\boldsymbol{\lambda})$,
-	\begin{eqnarray*}
-	\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})
-	& \le & \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})\\
-	& \le & C_{\Lambda}^* + J\lambda_{max}\max_{j=1:J}P_{j}(\hat{g}_{1,j})
-	\end{eqnarray*}
-	Hence every diagonal element in $D_2$ is bounded above by
-	\begin{equation}
-	\frac{1}{\lambda_{min}}
-	\sqrt{2C_{\Lambda}^* \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
-	\end{equation}
-	
-	
-	Now we can bound the norm of the gradient $\boldsymbol{\hat{m}}_k(\boldsymbol{\lambda})$ for $k \in H_0$
-	\begin{eqnarray}
-	\|\nabla_{\lambda}\hat{m}_{k}(\boldsymbol{\lambda})\|
-	& = & \left\Vert D_{2}\left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
-	& \le & \frac{1}{\lambda_{min}}
-		\sqrt{2C_{\Lambda}^*
-		\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
-	\end{eqnarray}
-	By the assumption in \eqref{eq:gateuax}, $e_{k}^\top \left(S+D_{1}\right) e_{k} \ge m$.
-	
-	By the mean value theorem and Cauchy Schwarz, we have
-	\begin{equation}
-		\left|\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})\right| 
-		\le \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C^*_\Lambda \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
-	\end{equation}
-	Since $
-	\left|
-	\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})
-	\right|  =
-	\left \| 
-	\hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)
-	\right  \|_{D^{(n)}}
-	$, the result in \eqref{eq:nonparam_lipshitz_thrm} follows.
-	
-	
-\end{proof}
-
-
-\bigskip
 
 \bibliographystyle{agsm}
 \bibliography{multi-penalties-theory}
