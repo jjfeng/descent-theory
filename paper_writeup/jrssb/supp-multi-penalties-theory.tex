@@ -11,7 +11,6 @@
 
 %%%% Packages and definitions
 \usepackage{amssymb}
-
 \usepackage{xr}
 \externaldocument{multi-penalties-theory}
 
@@ -37,10 +36,12 @@
 \DisableLigatures[f]{encoding = *, family = * }
 
 \newtheorem{theorem}{Theorem}
-\newtheorem{corollary}{Corollary}
 \newtheorem{lemma}{Lemma}
 \newtheorem{definition}{Definition}
-\newtheorem{condition}{Condition}
+
+\setcounter{theorem}{2}
+\setcounter{lemma}{3}
+\setcounter{definition}{3}
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 
@@ -126,7 +127,7 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 \begin{theorem}
 \label{thrm:train_val_complicated}
 
-Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $0 < \lambda_{\min} < \lambda_{\max}$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b > 0$.
+Consider a set of hyper-parameters $\Lambda$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b$ and $B$.
 Suppose there is a function $\psi:\mathbb{R}\mapsto\mathbb{R}$ and constant $r > 0$ such that
 \begin{equation}
 \label{eq:dudley_bound}
@@ -234,7 +235,7 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 
 \begin{lemma}
 	\label{lemma:covering_cube}
-	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Suppose $\mathcal{G}(T)$ is $C$-Lipschitz in $\boldsymbol{\lambda}$ with respect to some norm $\| \cdot \|$.
+	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$ where $\lambda_{\min} \le \lambda_{\max}$. Suppose $\mathcal{G}(T)$ is $C$-Lipschitz in $\boldsymbol{\lambda}$ with respect to some norm $\| \cdot \|$.
 	Then the entropy of $\mathcal{G}(T)$ with respect to $\| \cdot \|$ is
 	\begin{equation}
 	H\left(u, \mathcal{G}(T),\|\cdot\|\right) \le
@@ -262,38 +263,39 @@ By Lemma \ref{lemma:covering_cube}, we have
 \begin{align}
 	& \int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du \\
 	&= \int_{0}^{R} \left ( 
-	J \log \left(\frac{4C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)
+	J \log \left(\frac{4C_\Lambda\Delta_{\Lambda}+2u}{u}\right)
 	\right )^{1/2}
 	du\\
-	& \le J^{1/2}\int_{0}^{R}\left[\log4+\log\left(\frac{8C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)}{u}\right)\right]^{1/2}du\\
-	& \le RJ^{1/2}\left[\int_{0}^{1}\left(\log4+\log\left(\frac{8C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)}{R}\right)+J\log\frac{1}{v}\right)dv\right]^{1/2}\\
+	& \le J^{1/2}\int_{0}^{R}\left[\log4+\log\left(\frac{8C_\Lambda\Delta_{\Lambda}}{u}\right)\right]^{1/2}du\\
+	& \le RJ^{1/2}\left[\int_{0}^{1}\left(\log4+\log\left(\frac{8C_\Lambda\Delta_{\Lambda}}{R}\right)+J\log\frac{1}{v}\right)dv\right]^{1/2}\\
 	&=
 	R\left[J \left (
-	1+\log \left (32C_\Lambda\left(\lambda_{max}-\lambda_{min}\right)\right)
+	1+\log \left (32C_\Lambda\Delta_{\Lambda}\right)
 	+ \log\frac{1}{R} 
 	\right )
 	\right]^{1/2}
 \end{align}
-where the second inequality follows from a change of variables and the concavity of the square root function. If we restrict $R > n^{-1}$ and $C_\Lambda \ge 32e/(n \lambda_{\max})$, then 
+where the second inequality follows from a change of variables and the concavity of the square root function. If we restrict $R > n^{-1}$ and $C_\Lambda \ge 32e/(n \Delta_{\Lambda})$, then 
 \begin{equation}
 \label{eq:train_val_entropy}
 \int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
 \le
-\psi (R) \coloneqq 2 R\left ( J \log(C_\Lambda \lambda_{\max}n) \right )^{1/2}
+\psi (R) \coloneqq 2 R\left ( J \log(C_\Lambda \Delta_{\Lambda} n) \right )^{1/2}
 \end{equation}
 Applying Theorem \ref{thrm:train_val_complicated}, we get our desired result.
 \end{proof}
 
 \subsection{Cross-validation}
-We now present the proof for Theorem \ref{thrm:kfold}, which is an application of Theorem 3.5 in \citet{lecue2012oracle}. We reproduce Theorem 3.5 below for convenience. The theorem calculates entropy with respect to the Orlicz norm $\| \cdot \|_{\phi} = \inf \{ C > 0: E[\exp(|f|/C) - 1] \le 1 \}$.
+\label{app:cv}
+We now present the proof for Theorem \ref{thrm:kfold}. It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which we have reproduced below for convenience. The theorem uses entropy with respect to the Orlicz norm $\| \cdot \|_{\phi} = \inf \{ C > 0: E[\exp(|f|/C) - 1] \le 1 \}$.
 
 \begin{theorem}
 	\label{thrm:mitchell}
-	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$. Let
+	Consider a set of hyper-parameters $\Lambda$. Let
 	$\mathcal{Q} = \{ \| g^* - \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T) \|_2^2 : \boldsymbol{\lambda} \in \Lambda \}$.
 	Suppose there is $G > 0$ such that $\sup_{g \in \mathcal{G}} \| g \|_\infty \le G$.
 	
-	Suppose there is a $d_{\min}$ and a strictly increasing function $\psi$ such that $\psi^{-1}$ is strictly convex, the convex conjugate $\psi^*$ of $\psi^{-1}$ increases, $\psi^*(\infty ) = \infty$ and there exists $r \ge1$ such that $\psi^*(x)/x^r$ is decreasing in $x$ and
+	Suppose there is a $d_{\min} \ge 0$ and a strictly increasing function $\psi$ such that $\psi^{-1}$ is strictly convex, the convex conjugate $\psi^*$ of $\psi^{-1}$ increases, $\psi^*(\infty ) = \infty$ and there exists $r \ge1$ such that $\psi^*(x)/x^r$ is decreasing in $x$ and
 	\begin{equation}
 	\label{eq:mitchell_dudley_bound}
 	\psi(d) \ge \int_0^{\sqrt{d}} H^{1/2}(u, \mathcal{Q}_d, \| \cdot \|_2) du +
@@ -305,7 +307,7 @@ We now present the proof for Theorem \ref{thrm:kfold}, which is an application o
 	
 	Suppose that the model-estimation procedure is exchangeable (i.e. any ordering of the same training data produces the same fitted model).
 	
-	Then for every $a > 0$ and $q > 1$, the following inequality holds
+	Then there is an absolute constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
 	\begin{align}
 	E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 
 	&\le
@@ -327,7 +329,7 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 	By Lemma \ref{lemma:covering_cube}, we know
 	\begin{equation}
 	H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty}) \le J \log\left [
-	\frac{16GC\lambda_{\max} + 2u}{u}
+	\frac{16GC\Delta_{\Lambda} + 2u}{u}
 	\right ]
 	\end{equation}
 	Hence we can let
@@ -337,7 +339,7 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 	+
 	\frac{K_{n,2}}{\sqrt{n_V}} 
 	\end{equation}
-	for $$K_{n,1} = \left[J\left(1+\log\left(128\sqrt{n_V} GC\lambda_{max}  \right)\right)\right]^{1/2}$$ and $$K_{n,2} = \log n_V 2GJ\left(1+\log\left(128GC\lambda_{max}\right)\right)$$
+	for $$K_{n,1} = \left[J\left(1+\log\left(128\sqrt{n_V} GC \Delta_{\Lambda} \right)\right)\right]^{1/2}$$ and $$K_{n,2} = \log n_V 2GJ\left(1+\log\left(128GC \Delta_{\Lambda} \right)\right)$$
 	
 	$\psi(d)$ is a valid upper bound in \eqref{eq:mitchell_dudley_bound}  for all $d > n_V^{-1}$.
 	
@@ -610,5 +612,7 @@ Define the following matrices
 	$, the result in \eqref{eq:nonparam_lipshitz_thrm} follows.
 \end{proof}
 
+\bibliographystyle{agsm}
+\bibliography{supp-multi-penalties-theory}
 
 \end{document}
