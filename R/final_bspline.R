@@ -5,7 +5,6 @@ library(splines)
 library(mgcv)
 library(fda)
 
-n_cores <- 3
 
 Get_norm2 <- function(h) { sqrt(mean(h^2)) }
 
@@ -193,17 +192,10 @@ Do_bspline_cv_oracle_repl <- function(reps, n_train, n_validate, lambda1_range, 
         Make_data(n_train, n_validate, snr=snr)
     })
     
-    cl <- makeCluster(n_cores)
-    clusterExport(cl, 
-                  c("lambda1_range", "lambda2_range", "grid_int", "datasets", "bdiag",
-                      "Do_bspline_CV_oracle", "Get_bspline_losses", "Make_lambda_grid", "Eval_losses", "Get_best_lambdas", "Fit_bspline", "Get_norm2")
-    )
-    res <- parLapply(cl, seq(reps), function(i){
-        dataset <- datasets[[i]]
+    res <- parLapply(cl, datasets, function(dataset){
         Do_bspline_CV_oracle(dataset, lambda1_range, lambda2_range, grid_int)
     })
     res <- do.call("rbind", res)
-    stopCluster(cl)
     
     data.frame(sapply(res, as.numeric))
 }
@@ -218,6 +210,15 @@ grid_int <- 0.05
 n_sizes <- floor(20 * 2^seq(7, 0, by=-0.2))
 n_reps <- 20
 snr <- 2
+
+n_cores <- 3
+
+cl <- makeCluster(n_cores)
+clusterExport(cl, 
+              c("lambda1_range", "lambda2_range", "grid_int", "bdiag",
+                "Do_bspline_CV_oracle", "Get_bspline_losses", "Make_lambda_grid", "Eval_losses", "Get_best_lambdas", "Fit_bspline", "Get_norm2")
+)
+
 
 cv_to_oracle_all <- lapply(n_sizes, function(n_val) {
     cv_to_oracle_ntrains <- lapply(n_trains, function(n_train){
@@ -244,6 +245,9 @@ cv_to_oracle_all <- do.call("rbind", cv_to_oracle_all)
 save(cv_to_oracle_all, file = "cv_to_oracle_all_final.RData")
 cv_to_oracle_not_tiny <- cv_to_oracle_all[cv_to_oracle_all$loss_diff_sq > 1e-10,]
 cv_to_oracle_compare_w <- aggregate(loss_diff_sq ~ n, cv_to_oracle_all, FUN = mean)
+
+stopCluster(cl)
+
 
 pdf('figures/validation_size_loss_diff_final.pdf', width=10, height=6)
 par(mar=c(5,5,1,1), mfrow=c(1,1))
