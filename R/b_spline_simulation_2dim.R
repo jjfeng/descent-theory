@@ -234,7 +234,7 @@ Do_bspline_cv_oracle_repl <- function(reps, n_train, n_validate, n_test, lambda1
 set.seed(1)
 
 # very good settings!
-n_trains <- 100 #c(200)
+n_trains <- 100
 n_test <- 10
 # coarse lambda grid
 lambda1_range <- c(-9, -2)

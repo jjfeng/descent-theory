@@ -153,10 +153,10 @@ Do_bspline_CV_oracle <- function(dataset, lambda1_range, lambda2_range, grid_int
     grid_res <- Eval_losses(dataset, lam_grid$grid)
     
     cv_best_lams <- Get_best_lambdas(grid_res, lam_grid$grid, "validation")
-    print(paste("coarse: cv_best_lams", cv_best_lams$lambdas))
+    print(paste("cv_best_lams", cv_best_lams$lambdas))
     
     oracle_best_lams <- Get_best_lambdas(grid_res, lam_grid$grid, "true_validation")
-    print(paste("coarse: oracle_best_lams", oracle_best_lams$lambdas))
+    print(paste("oracle_best_lams", oracle_best_lams$lambdas))
     
     # Plot_bpline_fits(dataset, dataset$train_idx, dataset$train_bspline_matrix, res[[oracle_lam_idx]], res[[cv_lam_idx]])
     Plot_bpline_fits(dataset, dataset$val_idx, dataset$val_bspline_matrix, grid_res[[oracle_best_lams$lam_idx]], grid_res[[cv_best_lams$lam_idx]])
