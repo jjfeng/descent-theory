@@ -7,7 +7,7 @@ library(fda)
 
 n_cores <- 3
 
-et_norm2 <- function(h) { sqrt(mean(h^2)) }
+Get_norm2 <- function(h) { sqrt(mean(h^2)) }
 
 # Fits a single B-spline
 Fit_bspline <- function(train_y, train_bspline_matrix, penmats, lams) {
