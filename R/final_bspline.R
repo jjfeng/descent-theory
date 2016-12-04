@@ -5,9 +5,9 @@ library(splines)
 library(mgcv)
 library(fda)
 
-w <- 0
+n_cores <- 3
 
-Get_norm2 <- function(h) { sqrt(mean(h^2)) }
+et_norm2 <- function(h) { sqrt(mean(h^2)) }
 
 # Fits a single B-spline
 Fit_bspline <- function(train_y, train_bspline_matrix, penmats, lams) {
@@ -26,7 +26,7 @@ Fit_bspline <- function(train_y, train_bspline_matrix, penmats, lams) {
     BB_diag <- bdiag(lam_BBs)
     
     fitted_gamma <- solve(
-        1/n_train * BB + bdiag(lam_penmats) + w * BB_diag,
+        1/n_train * BB + bdiag(lam_penmats),
         t(train_bspline_matrix) %*% train_y
     )
     coef <- 1/n_train * fitted_gamma
@@ -159,7 +159,7 @@ Do_bspline_CV_oracle <- function(dataset, lambda1_range, lambda2_range, grid_int
     print(paste("oracle_best_lams", oracle_best_lams$lambdas))
     
     # Plot_bpline_fits(dataset, dataset$train_idx, dataset$train_bspline_matrix, res[[oracle_lam_idx]], res[[cv_lam_idx]])
-    Plot_bpline_fits(dataset, dataset$val_idx, dataset$val_bspline_matrix, grid_res[[oracle_best_lams$lam_idx]], grid_res[[cv_best_lams$lam_idx]])
+    # Plot_bpline_fits(dataset, dataset$val_idx, dataset$val_bspline_matrix, grid_res[[oracle_best_lams$lam_idx]], grid_res[[cv_best_lams$lam_idx]])
     
     data.frame(
         eps=mean((dataset$val_y - dataset$val_true_y)^2),
@@ -189,11 +189,22 @@ Plot_bpline_fits <- function(dataset, observations_idx, dataset_bspline_matrix, 
 }
 
 Do_bspline_cv_oracle_repl <- function(reps, n_train, n_validate, lambda1_range, lambda2_range, grid_int, snr=2) {
-    res <- replicate(reps, {
-        dataset <- Make_data(n_train, n_validate, snr=snr)
+    datasets <- lapply(seq(reps), function(i){
+        Make_data(n_train, n_validate, snr=snr)
+    })
+    
+    cl <- makeCluster(n_cores)
+    clusterExport(cl, 
+                  c("lambda1_range", "lambda2_range", "grid_int", "datasets", "bdiag",
+                      "Do_bspline_CV_oracle", "Get_bspline_losses", "Make_lambda_grid", "Eval_losses", "Get_best_lambdas", "Fit_bspline", "Get_norm2")
+    )
+    res <- parLapply(cl, seq(reps), function(i){
+        dataset <- datasets[[i]]
         Do_bspline_CV_oracle(dataset, lambda1_range, lambda2_range, grid_int)
-    }, simplify = T)
-    res <- data.frame(t(res))
+    })
+    res <- do.call("rbind", res)
+    stopCluster(cl)
+    
     data.frame(sapply(res, as.numeric))
 }
 
@@ -203,7 +214,7 @@ n_trains <- 100
 n_test <- 10
 lambda1_range <- c(-9, -2)
 lambda2_range <- c(-9, -2)
-grid_interval <- 0.05
+grid_int <- 0.05
 n_sizes <- floor(20 * 2^seq(7, 0, by=-0.2))
 n_reps <- 20
 snr <- 2
@@ -217,7 +228,7 @@ cv_to_oracle_all <- lapply(n_sizes, function(n_val) {
             n_validate=n_val,
             lambda1_range=lambda1_range, 
             lambda2_range=lambda2_range, 
-            grid_int=grid_interval, 
+            grid_int=grid_int, 
             snr=snr
         )
         print(colMeans(cv_oracle))
