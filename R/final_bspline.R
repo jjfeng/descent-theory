@@ -219,7 +219,7 @@ snr <- 2
 n_cores <- 3
 
 cl <- makeCluster(n_cores)
-clusterExport(cl, 
+clusterExport(cl,
               c("lambda1_range", "lambda2_range", "grid_int", "bdiag",
                 "Do_bspline_CV_oracle", "Get_bspline_losses", "Make_lambda_grid", "Eval_losses", "Get_best_lambdas", "Fit_bspline", "Get_norm2")
 )
