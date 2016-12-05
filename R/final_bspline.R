@@ -193,9 +193,14 @@ Do_bspline_cv_oracle_repl <- function(reps, n_train, n_validate, lambda1_range, 
     })
     
     res <- parLapply(cl, datasets, function(dataset){
-        Do_bspline_CV_oracle(dataset, lambda1_range, lambda2_range, grid_int)
+        tryCatch(
+            Do_bspline_CV_oracle(dataset, lambda1_range, lambda2_range, grid_int)
+        , error=function(e){
+            print("asdjfasjdf")
+            NA
+        })
     })
-    res <- do.call("rbind", res)
+    res <- do.call("rbind", lapply(res, Filter, f = Negate(is.na)))
     
     data.frame(sapply(res, as.numeric))
 }
