@@ -83,7 +83,7 @@ plot(
     cv_to_oracle_hom$loss_diff_sq,
     ylab="Validation Loss Difference",
     xlab="Number of penalty parameters",
-    cex=0.5,
+    cex=0.7,
     cex.axis=1.2,
     cex.lab=1.4,
     log="xy",

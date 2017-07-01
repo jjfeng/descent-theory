@@ -86,7 +86,7 @@ plot(
     cv_to_oracle_hetero$cv_true_validation,
     ylab="Validation Loss",
     xlab="Number of penalty parameters",
-    cex=0.5,
+    cex=0.7,
     cex.axis=1.2,
     cex.lab=1.4,
     log="xy",
