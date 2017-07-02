@@ -6,7 +6,7 @@
 \usepackage[landscape]{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \usepackage{mathtools}
-\usepackage{amsbsy}
+\usepackage{amsmath}
 \usepackage{esint}
 \usepackage{babel}
 \begin{document}
@@ -64,6 +64,7 @@ E_{D}\|\hat{g}_{MCV}(\cdot|D)-g^{*}\|^{2}=E_{D}\left[\int\left(\hat{g}_{MCV}(x|D
 \section{Theorem 2}
 
 We will assume that $\sup_{g\in\mathcal{G}}\|g\|_{\infty}\le G$.
+Suppose $\|\epsilon\|_{\infty}\le G$.
 
 Let $\Lambda=[\lambda_{min},\lambda_{max}]^{J}$.
 
@@ -92,8 +93,7 @@ C_{\Lambda}=1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)
 \subsubsection*{Proof}
 
 We apply Theorem 3.5 in Mitchell's paper. We consider the loss function
-$Q(x,g)=\left(g(x)-g^{*}(x)\right)^{2}$. Clearly $Q(x,g^{*})=0$.
-We will use the set of statistics 
+$Q(x,g)=\left(g(x)-y\right)^{2}$. We will use the set of statistics
 \[
 \mathcal{G}(T)=\left\{ \hat{g}_{T}(\cdot|\boldsymbol{\lambda})\right\} 
 \]
@@ -108,7 +108,7 @@ Theorem 3.5 relies on assumption A.1 and A.2 to be satisfied.
 Assumption A.1 states that the Orlicz norm with $\psi_{1}=\exp(x)-1$
 is bounded for some constant $K_{0}$:
 \[
-\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{\psi_{1}}}\le K_{0}
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-y\right)^{2}-\left(g^{*}-y\right)^{2}\right\Vert _{L_{\psi_{1}}}\le K_{0}
 \]
 
 
@@ -120,22 +120,25 @@ where
 
 Since we have assumed that $\|g\|_{\infty}\le G$, then by Lemma Orlicz-norm-properties
 (see Appendix)
-\[
-\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{\psi_{1}}}\le2\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{\infty}\le8G^{2}
-\]
+\begin{eqnarray*}
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-y\right)^{2}-\left(g^{*}-y\right)^{2}\right\Vert _{L_{\psi_{1}}} & \le & 2\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-y\right)^{2}-\left(g^{*}-y\right)^{2}\right\Vert _{\infty}\\
+ & \le & 18G^{2}
+\end{eqnarray*}
 
 
 Assumption A.2 states that
 \[
-\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{2}}\le K_{1}\|\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{L_{2}}
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-y\right)^{2}-\left(g^{*}-y\right)^{2}\right\Vert _{L_{2}}\le K_{1}\|\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\|_{L_{2}}
 \]
 
 
-To see that this is satisfied, note that 
+To see that this is satisfied, note that
 \begin{eqnarray*}
-\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\right\Vert _{L_{2}}^{2} & = & \int\left(g^{*}(x)-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{4}d\mu(x)\\
- & \le & \left\Vert \left(g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{2}\right\Vert _{L_{1}}\left\Vert \left(g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right)^{2}\right\Vert _{\infty}\\
- & \le & 4G^{2}\left\Vert g^{*}-\hat{g}_{D}(\cdot|\boldsymbol{\lambda})\right\Vert _{L_{2}}^{2}
+\left\Vert \left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-y\right)^{2}-\left(g^{*}-y\right)^{2}\right\Vert _{L_{2}}^{2} & = & \int\left(\left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-y\right)^{2}-\left(g^{*}-y\right)^{2}\right)^{2}d\mu(x)\\
+ & = & \int\left(\left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}+2\left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)\left(g^{*}-y\right)\right)^{2}d\mu(x)\\
+ & = & \int\left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\left(\left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)+2\left(g^{*}-y\right)\right)^{2}d\mu(x)\\
+ & \le & \int\left(\hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right)^{2}\left(2K+2K\right)^{2}d\mu(x)\\
+ & \le & 16G^{2}\left\Vert \hat{g}_{D}(\cdot|\boldsymbol{\lambda})-g^{*}\right\Vert _{L_{2}}^{2}
 \end{eqnarray*}
 
 
@@ -144,7 +147,7 @@ To see that this is satisfied, note that
 Theorem 3.5 requires calculating the entropies of the excess loss
 functions 
 \[
-\mathcal{Q}(T)=\left\{ Q(x|\boldsymbol{\lambda})=\left(\hat{g}_{T}(x|\boldsymbol{\lambda})-g^{*}(x)\right)^{2}:\lambda\in\Lambda\right\} 
+\mathcal{Q}(T)=\left\{ \left(\hat{g}_{T}(x|\boldsymbol{\lambda})-y\right)^{2}-\left(g^{*}(x)-y\right)^{2}:\lambda\in\Lambda\right\} 
 \]
 
 
@@ -153,7 +156,7 @@ where $T$ is any training dataset.
 We are interested in calculating the $\|\cdot\|_{\psi_{1}}$ and $\|\cdot\|_{L_{2}}$
 entropy of the function class 
 \[
-\mathcal{Q}_{d}^{L_{2}}(T)=\left\{ Q\in\mathcal{Q}(T):\|Q\|_{L_{2}}\le\sqrt{d}\right\} 
+\mathcal{Q}_{d}^{L_{2}}(T)=\left\{ \tilde{Q}\in\mathcal{Q}(T):\|\tilde{Q}\|_{L_{2}}\le\sqrt{d}\right\} 
 \]
 
 
@@ -174,9 +177,9 @@ We show that the excess log functions $Q(x|\boldsymbol{\lambda})$
 are smoothly parametric in $\boldsymbol{\lambda}$:
 
 \begin{eqnarray*}
-\left\Vert Q(x|\boldsymbol{\lambda}_{1})-Q(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty} & = & \left\Vert \left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-g^{*}(x)\right)^{2}-\left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})-g^{*}(x)\right)^{2}\right\Vert _{\infty}\\
- & = & \left\Vert \left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right)\left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})+\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})-2g^{*}(x)\right)\right\Vert _{\infty}\\
- & \le & \left\Vert \hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\left\Vert \hat{g}_{T}(x|\boldsymbol{\lambda}_{1})+\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})-2g^{*}(x)\right\Vert _{\infty}
+\left\Vert Q(x|\boldsymbol{\lambda}_{1})-Q(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty} & = & \left\Vert \left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-y\right)^{2}-\left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})-y\right)^{2}\right\Vert _{\infty}\\
+ & = & \left\Vert \left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right)\left(\hat{g}_{T}(x|\boldsymbol{\lambda}_{1})+\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})-2y\right)\right\Vert _{\infty}\\
+ & \le & 6G\left\Vert \hat{g}_{T}(x|\boldsymbol{\lambda}_{1})-\hat{g}_{T}(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}
 \end{eqnarray*}
 
 
@@ -188,40 +191,40 @@ Under the assumption that
 
 then
 \[
-\left\Vert Q(x|\boldsymbol{\lambda}_{1})-Q(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\le4GC\left\Vert \boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\right\Vert 
+\left\Vert Q(x|\boldsymbol{\lambda}_{1})-Q(x|\boldsymbol{\lambda}_{2})\right\Vert _{\infty}\le6GC\left\Vert \boldsymbol{\lambda}_{1}-\boldsymbol{\lambda}_{2}\right\Vert 
 \]
 
 
 Hence by lemma param covering cube
 
 \begin{eqnarray*}
-H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\infty}) & \le & H\left(\frac{u}{4GC},\Lambda,\|\cdot\|_{2}\right)\\
- & \le & \log\left[\frac{1}{C_{J}}\left(\frac{16GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\infty}) & \le & H\left(\frac{u}{6GC},\Lambda,\|\cdot\|_{2}\right)\\
+ & \le & \log\left[\frac{1}{C_{J}}\left(\frac{36GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
 \end{eqnarray*}
 
 
 Hence
 
 \[
-H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le\log\left[\frac{1}{C_{J}}\left(\frac{32GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})\le\log\left[\frac{1}{C_{J}}\left(\frac{72GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
 \]
 
 
 and
 
 \[
-H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le\log\left[\frac{1}{C_{J}}\left(\frac{16GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
+H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\le\log\left[\frac{1}{C_{J}}\left(\frac{36GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]
 \]
 
 
 We calculate each component of the complexity term $J(d)$: 
 \begin{eqnarray*}
 \gamma_{1}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}}) & \le & \int_{0}^{2G}H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{\psi_{1}})du\\
- & = & \int_{0}^{2G}\log\left[\frac{1}{C_{J}}\left(\frac{32GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]du\\
- & = & 2G\int_{0}^{1}\left[\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})+4Gv}{2Gv}\right)\right]dv\\
- & \le & 2G\int_{0}^{1}\left[\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})}{v}\right)+J\log4\right]dv\\
- & = & 2G\left[\log\left(\frac{1}{C_{J}}\right)+J+J\log\left(32GC(\lambda_{max}-\lambda_{min})\right)+J\log4\right]\\
- & < & 2GJ\left(1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)\right)
+ & = & \int_{0}^{2G}\log\left[\frac{1}{C_{J}}\left(\frac{72GC(\lambda_{max}-\lambda_{min})+2u}{u}\right)^{J}\right]du\\
+ & = & 2G\int_{0}^{1}\left[\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{72GC(\lambda_{max}-\lambda_{min})+4Gv}{2Gv}\right)\right]dv\\
+ & \le & 2G\int_{0}^{1}\left[\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{72GC(\lambda_{max}-\lambda_{min})}{v}\right)+J\log4\right]dv\\
+ & = & 2G\left[\log\left(\frac{1}{C_{J}}\right)+J+J\log\left(72GC(\lambda_{max}-\lambda_{min})\right)+J\log4\right]\\
+ & < & 2GJ\left(1+\log\left(288GC(\lambda_{max}-\lambda_{min})\right)\right)
 \end{eqnarray*}
 
 
@@ -231,11 +234,11 @@ and
 
 \begin{eqnarray*}
 \gamma_{2}(\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}}) & = & \int_{0}^{\sqrt{d}}\left[H(u,\mathcal{Q}_{d}^{L_{2}}(T),\|\cdot\|_{L_{2}})\right]^{1/2}du\\
- & = & \sqrt{d}\int_{0}^{1}\left(\log\left[\frac{1}{C_{J}}\left(\frac{16GC(\lambda_{max}-\lambda_{min})+2\sqrt{d}v}{\sqrt{d}v}\right)^{J}\right]\right)^{1/2}dv\\
- & \le & \sqrt{d}\left[\int_{0}^{1}\left(\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}v}\right)+J\log4\right)dv\right]^{1/2}\\
- & = & \sqrt{d}\left[\int_{0}^{1}\left(\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)+J\log\frac{1}{v}+J\log4\right)dv\right]^{1/2}\\
- & = & \sqrt{d}\left[\log\left(\frac{1}{C_{J}}\right)+J+J\log4+J\log\left(\frac{32GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)\right]^{1/2}\\
- & < & \sqrt{d}\left[J\left(1+\log\left(\frac{128GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)\right)\right]^{1/2}
+ & = & \sqrt{d}\int_{0}^{1}\left(\log\left[\frac{1}{C_{J}}\left(\frac{36GC(\lambda_{max}-\lambda_{min})+2\sqrt{d}v}{\sqrt{d}v}\right)^{J}\right]\right)^{1/2}dv\\
+ & \le & \sqrt{d}\left[\int_{0}^{1}\left(\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{72GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}v}\right)+J\log4\right)dv\right]^{1/2}\\
+ & = & \sqrt{d}\left[\int_{0}^{1}\left(\log\left(\frac{1}{C_{J}}\right)+J\log\left(\frac{72GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)+J\log\frac{1}{v}+J\log4\right)dv\right]^{1/2}\\
+ & = & \sqrt{d}\left[\log\left(\frac{1}{C_{J}}\right)+J+J\log4+J\log\left(\frac{72GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)\right]^{1/2}\\
+ & < & \sqrt{d}\left[J\left(1+\log\left(\frac{288GC(\lambda_{max}-\lambda_{min})}{\sqrt{d}}\right)\right)\right]^{1/2}
 \end{eqnarray*}
 
 
@@ -258,13 +261,13 @@ Let us choose $d_{min}=1/n_{V}$. Then
 
 Let 
 \[
-K_{n,1}=\left[J\left(1+\log\left(128GC(\lambda_{max}-\lambda_{min})\sqrt{n_{V}}\right)\right)\right]^{1/2}
+K_{n,1}=\left[J\left(1+\log\left(288GC(\lambda_{max}-\lambda_{min})\sqrt{n_{V}}\right)\right)\right]^{1/2}
 \]
 
 
 and
 \[
-K_{n,2}=2GJ\left(1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)\right)\left(\log n_{V}\right)
+K_{n,2}=2GJ\left(1+\log\left(288GC(\lambda_{max}-\lambda_{min})\right)\right)\left(\log n_{V}\right)
 \]
 
 
@@ -295,7 +298,7 @@ function in $z$ for $r=3\ge1$. Also $\lim_{z\rightarrow\infty}\psi(z)=\infty$.
 Theorem 3.5 states that for all $a>0,q>1$, we have
 
 \[
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E_{D^{(n_{T})}}\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{ac\epsilon_{q}(1/q)}{q}
+E\left[\|y-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]-E\left[\|y-g^{*}\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}\left(E_{D^{(n_{T})}}\left[\|y-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]-E\left[\|y-g^{*}\|^{2}\right]\right)+\frac{ac\epsilon_{q}(1/q)}{q}
 \]
 
 
@@ -309,36 +312,77 @@ We calculate $\epsilon_{q}\left(\frac{1}{q}\right)$:
 
 Finally, we get
 \begin{eqnarray*}
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right] & \le & (1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+ac\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\frac{1}{\sqrt{n_{V}}}\left(\frac{2q^{2}(1+a)}{a\sqrt{n_{V}}}\right)\right)\\
- & = & (1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c}{n_{V}}\left(K_{n,1}^{2}q^{5}\frac{(1+a)^{2}}{a}+2K_{n,2}q^{2}(1+a)\right)
+ &  & E\left[\|y-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]-E\left[\|y-g^{*}\|^{2}\right]\\
+ & \le & (1+a)\min_{\lambda\in\Lambda}\left(E_{D^{(n_{T})}}\left[\|y-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]-E\left[\|y-g^{*}\|^{2}\right]\right)+ac\left(\frac{K_{n,1}^{2}}{4}q^{5}\left(\frac{2(1+a)}{a\sqrt{n_{V}}}\right)^{2}+K_{n,2}\frac{1}{\sqrt{n_{V}}}\left(\frac{2q^{2}(1+a)}{a\sqrt{n_{V}}}\right)\right)\\
+ & = & (1+a)\min_{\lambda\in\Lambda}\left(E_{D^{(n_{T})}}\left[\|y-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]-E\left[\|y-g^{*}\|^{2}\right]\right)+\frac{c}{n_{V}}\left(K_{n,1}^{2}q^{5}\frac{(1+a)^{2}}{a}+2K_{n,2}q^{2}(1+a)\right)
 \end{eqnarray*}
 
 
 As $q\rightarrow1$, we get 
 \[
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\left[E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{c}{n_{V}}\left(K_{n,1}^{2}\frac{(1+a)}{a}+2K_{n,2}\right)\right]
+E\left[\|y-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]-E\left[\|y-g^{*}\|^{2}\right]\le(1+a)\left[\min_{\lambda\in\Lambda}\left[\left(E_{D^{(n_{T})}}\left[\|y-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]-E\left[\|y-g^{*}\|^{2}\right]\right)\right]+\frac{c}{n_{V}}\left(K_{n,1}^{2}\frac{(1+a)}{a}+2K_{n,2}\right)\right]
 \]
 
+
+Let $\mathcal{E}(g)=\left[\left(E_{D^{(n_{T})}}\left[\|y-g\|^{2}\right]-E\left[\|y-g^{*}\|^{2}\right]\right)\right]$
 
 \textbf{4. Massaging to make a pretty theorem}
 
 We can write the above as
 
 \[
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+(1+a)\frac{cJ}{n_{V}}\left(\frac{(1+a)}{a}\left(C_{\Lambda}+\frac{1}{2}\log n_{V}\right)+4GC_{\Lambda}\left(\log n_{V}\right)\right)
+\mathcal{E}(\hat{g}_{MCV}(\cdot|D))\le(1+a)\min_{\lambda\in\Lambda}\mathcal{E}\left(\hat{g}_{D^{(n_{T})}}(\cdot|\lambda)\right)+(1+a)\frac{cJ}{n_{V}}\left(\frac{(1+a)}{a}\left(\tilde{C}+\frac{1}{2}\log n_{V}\right)+4G\tilde{C}\left(\log n_{V}\right)\right)
 \]
 
 
 where
-\[
-C_{\Lambda}=1+\log\left(128GC(\lambda_{max}-\lambda_{min})\right)
-\]
+\begin{eqnarray*}
+\tilde{C} & = & 1+\log\left(288GC(\lambda_{max}-\lambda_{min})\right)\\
+ & \le & 5+\log\left(GC\Delta_{\lambda}\right)
+\end{eqnarray*}
 
 
 Moreover, since $(1+a)/a>1$, we can write
 
+\begin{eqnarray*}
+\mathcal{E}(\hat{g}_{MCV}(\cdot|D)) & \le & (1+a)\min_{\lambda\in\Lambda}\mathcal{E}\left(\hat{g}_{D^{(n_{T})}}(\cdot|\lambda)\right)+\frac{(1+a)^{2}}{a}\frac{cJ}{n_{V}}\left(\tilde{C}+\frac{1}{2}\log n_{V}+4G\tilde{C}\log n_{V}\right)\\
+ & = & (1+a)\min_{\lambda\in\Lambda}\mathcal{E}\left(\hat{g}_{D^{(n_{T})}}(\cdot|\lambda)\right)+\frac{(1+a)^{2}}{a}\frac{cJ}{n_{V}}\left(5+\log\left(GC\Delta_{\lambda}\right)+\frac{1}{2}\log n_{V}+4G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\log n_{V}\right)\\
+ & \le & (1+a)\min_{\lambda\in\Lambda}\mathcal{E}\left(\hat{g}_{D^{(n_{T})}}(\cdot|\lambda)\right)+\frac{(1+a)^{2}}{a}\frac{cJ}{n_{V}}\left(16G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\log n_{V}\right)
+\end{eqnarray*}
+
+
+as long as $4G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\ge\frac{1}{2}$
+and $\log\left(GC\Delta_{\lambda}\right)\le4G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\log n_{V}$
+and $5\le4G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\log n_{V}$.
+
+First, note that if $G\ge1/2$, then 
 \[
-E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{(1+a)^{2}}{a}\frac{cJ}{n_{V}}\left(C_{\Lambda}+\frac{1}{2}\log n_{V}+4GC_{\Lambda}\log n_{V}\right)
+\log\left(GC\Delta_{\lambda}\right)\le2G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\le4G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\log n_{V}
+\]
+
+
+and 
+\[
+5\le2G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\le4G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\log n_{V}
+\]
+
+
+Also
+
+\[
+\frac{1}{8}\le\frac{1}{2}\left(5+\log\left(GC\Delta_{\lambda}\right)\right)\le4G\left(5+\log\left(GC\Delta_{\lambda}\right)\right)
+\]
+
+
+Also, I want to write 
+\[
+5\le\log\left(GC\Delta_{\lambda}\right)\implies\exp(5)/G\Delta_{\lambda}\le C
+\]
+
+
+Then
+\[
+\mathcal{E}(\hat{g}_{MCV}(\cdot|D))\le(1+a)\min_{\lambda\in\Lambda}\mathcal{E}\left(\hat{g}_{D^{(n_{T})}}(\cdot|\lambda)\right)+32\frac{(1+a)^{2}}{a}\frac{cJ}{n_{V}}G\log\left(GC\Delta_{\lambda}\right)\log n_{V}
 \]
 
 
@@ -358,7 +402,7 @@ we have
 
 
 Then there is an absolute constant $c>0$ and a constant $c_{G}$
-that only depends on $G$ such that for all $a>0$
+ that only depends on $G$ such that for all $a>0$
 
 \[
 E\left[\|g^{*}-\hat{g}_{MCV}(\cdot|D)\|^{2}\right]\le(1+a)\min_{\lambda\in\Lambda}E\left[\|g^{*}-\hat{g}_{D^{(n_{T})}}(\cdot|\boldsymbol{\lambda})\|^{2}\right]+\frac{(1+a)^{2}}{a}\frac{c^{2}J}{n_{V}}\left[\left(c_{G}\log n_{V}+1\right)\left(\left(\kappa+t_{max}\right)\log n_{T}+1\right)+c_{G}\right]

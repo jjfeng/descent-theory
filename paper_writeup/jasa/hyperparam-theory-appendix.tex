@@ -276,8 +276,23 @@ We now present the proof for Theorem \ref{thrm:kfold}. It is an application of T
 \begin{theorem}
 	\label{thrm:mitchell}
 	Consider a set of hyper-parameters $\Lambda$. Let
-	$\mathcal{Q} = \{ \| g^* - \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T) \|_2^2 : \boldsymbol{\lambda} \in \Lambda \}$.
+	$
+	\mathcal{Q} = \{ 
+	\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}|D^{(n_T)}) \right) ^2 
+	- \left (y - g^* \right) ^2 
+	: \boldsymbol{\lambda} \in \Lambda \}
+	$.
 	Suppose there is $G > 0$ such that $\sup_{g \in \mathcal{G}} \| g \|_\infty \le G$.
+	
+	Suppose there exist a constant $K_0, K_1 \ge 0$ such that for any $m \in \mathbb{N}$, the following two inequalities hold
+	\begin{align}
+	\left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) \right) ^2 
+	- \left (y - g^* \right) ^2  \right \|_{\phi} & \le K_0\\
+	\left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) \right) ^2 
+	- \left (y - g^* \right) ^2  \right \|_{2} & \le 
+	K_1 \left \| \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) - g^* \right \|_{2}.
+	\label{eq:cv_assump}
+	\end{align}
 	
 	Suppose there is a $d_{\min} \ge 0$ and a strictly increasing function $\psi$ such that $\psi^{-1}$ is strictly convex, the convex conjugate $\psi^*$ of $\psi^{-1}$ increases, $\psi^*(\infty ) = \infty$ and there exists $r \ge1$ such that $\psi^*(x)/x^r$ is decreasing in $x$ and
 	\begin{equation}
@@ -287,18 +302,22 @@ We now present the proof for Theorem \ref{thrm:kfold}. It is an application of T
 	\quad
 	\forall d > d_{\min}
 	\end{equation}
-	where $ \mathcal{Q}_d = \{ Q \in \mathcal{Q}: \| Q \|_2 \le \sqrt{d} \}$.
+	where $ \mathcal{Q}_d = \{ \tilde{Q} \in \mathcal{Q}: \| \tilde{Q} \|_2 \le \sqrt{d} \}$.
 	
 	Suppose that the model-estimation procedure is exchangeable (i.e. any ordering of the same training data produces the same fitted model).
 	
 	Then there is an absolute constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
 	\begin{align}
-	E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 
+	E_{D^{(n)}} \left \|
+	\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^*
+	\right \|_2^2
 	&\le
-	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda} \left [
-	E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2  
-	\right ] \\
-	& + \frac{ac}{q}\left [
+	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda} 
+	E_{D^{(n_T)}} \left \|
+	\hat{g}^{(n_T)} ( \hat{\boldsymbol \lambda} | {D^{(n_T)}} )
+	- g^*
+	\right \|^2_2
+	+ \frac{ac}{q}\left [
 	\psi^* \left (\frac{2q^{r + 1}(1+a)}{a\sqrt{n_V}} \right ) \vee d_{\min}
 	\right ]
 	\end{align}
@@ -308,14 +327,17 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 
 \subsubsection{Proof for Theorem \ref{thrm:kfold}}
 \begin{proof}
-	First we determine $\psi$ in \eqref{eq:mitchell_dudley_bound}. Note that because $\|\cdot\|_\phi \le 2\|\cdot \|_\infty $ and $\| \cdot \|_2 \le \| \cdot \|_\infty$, then both $H(2u,\mathcal{Q}_{d}(T),\|\cdot\|_{\phi})$ and $H(u,\mathcal{Q}_{d}(T),\|\cdot\|_2)$ are bounded by 
-	$H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty})$.
+	We first check that the two assumptions in \eqref{eq:cv_assump} hold. This is easy to show with the assumption that $\sup_{g \in \mathcal G} \|g\|_\infty, \|\epsilon\|_\infty \le G$.
+	
+	Next we determine $\psi$ in \eqref{eq:mitchell_dudley_bound}. Note that because $\|\cdot\|_\phi \le 2\|\cdot \|_\infty $ and $\| \cdot \|_2 \le \| \cdot \|_\infty$, then both $H(2u,\mathcal{Q}_d,\|\cdot\|_{\phi})$ and $H(u,\mathcal{Q}_d,\|\cdot\|_2)$ are bounded by 
+	$H(u,\mathcal{Q}_d,\|\cdot\|_{\infty})$.
 	By Lemma \ref{lemma:covering_cube}, we know
 	\begin{equation}
 	H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty}) \le J \log\left [
-	\frac{16GC\Delta_{\Lambda} + 2u}{u}
+	\frac{c_0GC\Delta_{\Lambda} + 2u}{u}
 	\right ]
 	\end{equation}
+	for an absolute constant $c_0 > 0$.
 	Hence we can let
 	\begin{equation}
 	\psi(d) \coloneqq
@@ -323,7 +345,10 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 	+
 	\frac{K_{n,2}}{\sqrt{n_V}} 
 	\end{equation}
-	for $$K_{n,1} = \left[J\left(1+\log\left(128\sqrt{n_V} GC \Delta_{\Lambda} \right)\right)\right]^{1/2}$$ and $$K_{n,2} = \log n_V 2GJ\left(1+\log\left(128GC \Delta_{\Lambda} \right)\right)$$
+	for $$K_{n,1} = \left[J\left(1+\log\left(c_1\sqrt{n_V} GC \Delta_{\Lambda} \right)\right)\right]^{1/2}$$ 
+	and 
+	$$K_{n,2} = \log n_V 2GJ\left(1+\log\left(c_1 GC \Delta_{\Lambda} \right)\right)$$
+	where $c_1 > 0$ is an absolute constant.
 	
 	$\psi(d)$ is a valid upper bound in \eqref{eq:mitchell_dudley_bound}  for all $d > n_V^{-1}$.
 	
@@ -333,7 +358,7 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 	\psi^*(z) = \frac{z^2 K_{n,1}^2}{4} + \frac{z K_{n,2}}{\sqrt{n_V}}
 	\end{equation}	
 	
-	Plugging in \eqref{eq:convex_conjugate} into Theorem \ref{thrm:mitchell} gives us the result in Theorem \ref{thrm:kfold}.
+	Plugging in \eqref{eq:convex_conjugate} into Theorem \ref{thrm:mitchell} and taking $q \rightarrow 1$ gives us the result in Theorem \ref{thrm:kfold}.
 \end{proof}
 
 \subsection{Penalized regression for additive models}

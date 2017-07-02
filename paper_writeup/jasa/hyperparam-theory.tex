@@ -259,15 +259,21 @@ The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. It
 
 \begin{theorem}
 	\label{thrm:kfold}
-	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$. Suppose there is a $G \ge  2$ such that $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$.
+	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$. Suppose there is a $G \ge  2$ such that $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$ and $\|\epsilon \|_\infty \le G$
 	
 	Consider the setting of averaged version of $K$-fold cross-validation where $K \ge 2$ and the datasets are of size $n$ where $n$ is divisible by $K$. Let $n_V = n/K = n_V$ and $n_T = n - n_V$. Suppose random variables $\epsilon_i$ are independent with expectation zero and are bounded $\| \epsilon_i \|_\infty \le \sigma$. Suppose there is a constant $C_\Lambda > e^5/G\Delta_{\Lambda}$ such that for any dataset $D^{(n_T)}$, $\hat g (\boldsymbol{\lambda} | D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\| \cdot \|_\infty$ over $\Lambda$.
 	
 	Then there is an absolute constant $c > 0$ such that for all $a > 0$,
 	\begin{align*}
-	E_{D^{(n)}} \left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 &\le
-	(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  E_{D^{(n_T)}} \left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 \\
-	& + c \frac{(1+a)^2}{a} \frac{J G \log (GC_\Lambda \Delta_{\Lambda} ) \log n_V }{n_V} 
+	&
+	E_{D^{(n)}}
+	\left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 
+	\\
+	&\le
+	(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  
+	E_{D^{(n_T)}}
+	\left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 
+	+ c \frac{(1+a)^2}{a} \frac{J G \log (GC_\Lambda \Delta_{\Lambda} ) \log n_V }{n_V} 
 	\end{align*}
 \end{theorem}
 
