@@ -4,6 +4,12 @@ library(foreach)
 library(splines)
 library(mgcv)
 library(fda)
+library(ggplot2)
+
+jitter_log <- function(vals, scaler=0.05) {
+    noise <- rnorm(length(vals), mean=0, sd=vals*scaler)
+    vals + noise
+}
 
 
 Get_norm2 <- function(h) { sqrt(mean(h^2)) }

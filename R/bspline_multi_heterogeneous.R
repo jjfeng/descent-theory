@@ -33,7 +33,7 @@ num_p <- 8
 n_trains <- 200
 true_func <- do_heterogeneous_func
 num_lams <- c(1,2,4,8)
-n_reps <- 10
+n_reps <- 40
 snr <- 2
 
 n_cores <- 3
@@ -79,11 +79,26 @@ print(cv_to_oracle_hetero)
 
 stopCluster(cl)
 
-pdf('figures/validation_size_loss_heterogeneous.pdf', width=8, height=5)
+agg_cv_to_oracle_hetero <- aggregate(
+    cv_true_validation ~ n, data=cv_to_oracle_hetero, FUN=function(x){quantile(x, 0.75)}
+)
+
+cv_to_oracle_merge <- merge(cv_to_oracle_hetero, agg_cv_to_oracle_hetero, by="n", suffixes = c("", ".agg"))
+lmdata <- cv_to_oracle_merge[cv_to_oracle_merge$cv_true_validation >= cv_to_oracle_merge$cv_true_validation.agg,]
+fit <- lm(log(cv_true_validation) ~ log(n), lmdata)
+fit_summ <- summary(fit)
+fit_summ
+lmfits <- data.frame(
+    n=lmdata$n,
+    fitted=exp(fit$fitted.values)
+)
+cv_to_oracle_merge <- merge(cv_to_oracle_merge, lmfits, by="n")
+
+
 par(mar=c(5,5,1,1), mfrow=c(1,1))
 plot(
-    jitter(cv_to_oracle_hetero$n, 0.15),
-    cv_to_oracle_hetero$cv_true_validation,
+    jitter_log(lmdata$n, 0.02),
+    lmdata$cv_true_validation,
     ylab="Validation Loss",
     xlab="Number of penalty parameters",
     cex=0.7,
@@ -93,9 +108,6 @@ plot(
     xaxt = "n"
 )
 axis(1, at=num_lams, labels=num_lams, cex.axis=1.4)
-lmdata <- cv_to_oracle_hetero
-fit <- lm(log(cv_true_validation) ~ log(n), lmdata)
-fit_summ <- summary(fit)
 lines(
     lmdata$n,
     exp(fit$fitted.values)
@@ -111,4 +123,26 @@ legend(
     cex=1.2
 )
 dev.off()
+
+par(mar=c(5,5,1,1), mfrow=c(1,1))
+slope_text <- paste(
+    "Slope: ",
+    format(fit_summ$coefficients[2, 1], digits=4),
+    " (",
+    format(1.96 * fit_summ$coefficients[2,2], digits=4),
+    ")",
+    sep=""
+)
+ggplot(cv_to_oracle_merge, aes(x=as.factor(n), y=cv_true_validation, group=n)) + 
+    geom_boxplot(coef=5.0) +
+    geom_line(data=cv_to_oracle_merge, aes(x=as.factor(n), y=fitted, group = 1), color="blue") +
+    scale_y_log10(breaks=c(0.5, 0.6, 0.8)) +
+    xlab("Number of Penalty Parameters") +
+    ylab("Validation Loss") +
+    annotate("text", x = 1.25, y = 0.45,
+             label = slope_text, size=5) +
+    theme_bw() +
+    theme(axis.text=element_text(size=14),
+          axis.title=element_text(size=16))
+ggsave('figures/validation_size_loss_heterogeneous.pdf', width=8, height=5)
 

@@ -30,7 +30,7 @@ num_p <- 8
 n_trains <- 200
 true_func <- do_homogeneous_func
 num_lams <- c(1,2,4,8)
-n_reps <- 10
+n_reps <- 40
 snr <- 2
 
 n_cores <- 3
@@ -76,36 +76,40 @@ print(cv_to_oracle_hom)
 
 stopCluster(cl)
 
-pdf('figures/validation_size_loss_diff_homogeneous.pdf', width=8, height=5)
-par(mar=c(5,5,1,1), mfrow=c(1,1))
-plot(
-    jitter(cv_to_oracle_hom$n, 0.15),
-    cv_to_oracle_hom$loss_diff_sq,
-    ylab="Validation Loss Difference",
-    xlab="Number of penalty parameters",
-    cex=0.7,
-    cex.axis=1.2,
-    cex.lab=1.4,
-    log="xy",
-    xaxt = "n"
+agg_cv_to_oracle_hom = aggregate(
+    loss_diff_sq ~ n, cv_to_oracle_hom, FUN=function(x){quantile(x, 0.75)}
 )
-axis(1, at=num_lams, labels=num_lams, cex.axis=1.2)
-lmdata <- cv_to_oracle_hom[cv_to_oracle_hom$loss_diff_sq > 1e-5,]
+cv_to_oracle_merge <- merge(cv_to_oracle_hom, agg_cv_to_oracle_hom, by=c("n"), suffix=c("", ".agg"))
+
+lmdata <- cv_to_oracle_merge[cv_to_oracle_merge$loss_diff_sq >= cv_to_oracle_merge$loss_diff_sq.agg,]
 fit <- lm(log(loss_diff_sq) ~ log(n), lmdata)
 fit_summ <- summary(fit)
-lines(
-    lmdata$n,
-    exp(fit$fitted.values)
+fit_summ
+lmfits <- data.frame(
+    n=lmdata$n,
+    fitted=exp(fit$fitted.values)
 )
-legend(
-    "bottomright",
-    legend=paste(
-        "Slope:",
-        format(fit_summ$coefficients[2, 1], digits=4),
-        "+/-",
-        format(1.96 * fit_summ$coefficients[2,2], digits=4)
-    ),
-    cex = 1.2
+cv_to_oracle_merge <- merge(cv_to_oracle_merge, lmfits, by="n")
+
+par(mar=c(5,5,1,1), mfrow=c(1,1))
+slope_text <- paste(
+    "Slope: ",
+    format(fit_summ$coefficients[2, 1], digits=4),
+    " (",
+    format(fit_summ$coefficients[2,2], digits=4),
+    ")",
+    sep = ""
 )
-dev.off()
+ggplot(cv_to_oracle_merge, aes(x=as.factor(n), y=loss_diff_sq, group=n)) + 
+    geom_boxplot(coef=5.0) +
+    geom_line(data=cv_to_oracle_merge, aes(x=as.factor(n), y=fitted, group = 1), color="blue") +
+    scale_y_log10() +
+    xlab("Number of Penalty Parameters") +
+    ylab("Validation Loss Difference") +
+    annotate("text", x = 3.8, y = 0.000004,
+             label = slope_text, size=5) +
+    theme_bw() +
+    theme(axis.text=element_text(size=14),
+          axis.title=element_text(size=16))
+ggsave('figures/validation_size_loss_diff_homogeneous.pdf', width=8, height=5)
 
