@@ -77,7 +77,7 @@ print(cv_to_oracle_hom)
 stopCluster(cl)
 
 agg_cv_to_oracle_hom = aggregate(
-    loss_diff_sq ~ n, cv_to_oracle_hom, FUN=function(x){quantile(x, 0.75)}
+    loss_diff_sq ~ n, cv_to_oracle_hom, FUN=function(x){quantile(x, 0.5)}
 )
 cv_to_oracle_merge <- merge(cv_to_oracle_hom, agg_cv_to_oracle_hom, by=c("n"), suffix=c("", ".agg"))
 

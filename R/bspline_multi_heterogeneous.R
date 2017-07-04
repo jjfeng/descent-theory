@@ -80,7 +80,7 @@ print(cv_to_oracle_hetero)
 stopCluster(cl)
 
 agg_cv_to_oracle_hetero <- aggregate(
-    cv_true_validation ~ n, data=cv_to_oracle_hetero, FUN=function(x){quantile(x, 0.75)}
+    cv_true_validation ~ n, data=cv_to_oracle_hetero, FUN=function(x){quantile(x, 0.5)}
 )
 
 cv_to_oracle_merge <- merge(cv_to_oracle_hetero, agg_cv_to_oracle_hetero, by="n", suffixes = c("", ".agg"))
@@ -136,10 +136,10 @@ slope_text <- paste(
 ggplot(cv_to_oracle_merge, aes(x=as.factor(n), y=cv_true_validation, group=n)) + 
     geom_boxplot(coef=5.0) +
     geom_line(data=cv_to_oracle_merge, aes(x=as.factor(n), y=fitted, group = 1), color="blue") +
-    scale_y_log10(breaks=c(0.5, 0.6, 0.8)) +
+    scale_y_log10(breaks=c(0.4, 0.6, 0.8)) +
     xlab("Number of Penalty Parameters") +
     ylab("Validation Loss") +
-    annotate("text", x = 1.25, y = 0.45,
+    annotate("text", x = 1.25, y = 0.37,
              label = slope_text, size=5) +
     theme_bw() +
     theme(axis.text=element_text(size=14),

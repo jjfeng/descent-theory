@@ -283,10 +283,12 @@ There are also some notable differences between Theorems \ref{thrm:train_val} an
 
 \section{Penalized regression models}
 \label{sec:examples}
+Now we consider penalized regression procedures of the form \eqref{eq:intro_pen_reg}, where the penalty parameters are the hyper-parameters.
+Penalty functions encourage particular characteristics in the fitted models (e.g. smoothness or sparsity) and combining multiple penalty functions results in models that exhibit a combination of the desired characteristics. 
+Thus, naturally, there is a much interest in using multiple penalty functions, such as the elastic net or sparse group lasso.
+However few popular methods incorporate more than two penalties due to a) the concern that models may overfit the data when selection of many penalty parameters is required; and b) computational issues in optimizing multiple penalty parameters. In this section, we evaluate the validity of concern (a) using the results of Section~\ref{sec:main_results}. We see that, contrary to popular wisdom, using split-sample validation to select multiple penalty parameters should not result in overfitting (even if many parameters need to be tuned). For computational concerns (b), we refer the reader to recent papers on hyper-parameter estimation \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
 
-Penalized regression is a class of model-generating procedures where hyper-parameters are of particular interest. In this manuscript, we consider penalized regression procedures of the form \eqref{eq:intro_pen_reg}. Penalty functions are used to control model complexity and induce desired characteristics (e.g. smoothness or sparsity). When multiple penalty functions are used, the resulting model exhibits a combination of the desired characteristics. Hence there has been recent interest in combining penalty functions, such as the elastic net or sparse group lasso. However few popular methods use more than two penalties. This has been due to a) the concern that models may overfit the data when selection of many penalty parameters is required; and b) computational issues in optimizing multiple penalty parameters. In this section, we evaluate the validity of concern (a) using the results of Section~\ref{sec:main_results}. We see that, contrary to popular wisdom, using split-sample validation to select multiple penalty parameters should not result in overfitting (even if many parameters need to be tuned). For computational concerns (b), we refer the reader to recent papers on hyper-parameter estimation \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
-
-Recall that in our framework, the model-estimation procedure takes in penalty parameters (i.e. hyper-parameters) and then finds the minimizer of the penalized training criterion \eqref{eq:intro_pen_reg}. Models are fit for penalty parameters within some set $\Lambda$. As long as we can show that the fitted models are Lipschitz in the penalty parameters over $\Lambda$, we can apply Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
+Recall that in our framework, the model-estimation procedure finds the minimizer of the penalized training criterion \eqref{eq:intro_pen_reg} for penalty parameter values within some set $\Lambda$. As long as we can show that the fitted models are Lipschitz in the penalty parameters over $\Lambda$, we can apply Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
 
 Our results do not allow us to consider split-sample validation over all $\lambda\in\mathbb{R}^J_+$: generally as $\lambda_{min} \rightarrow 0$, for any finite $n$, our fitted models become very widely behaved. Instead we restrict ourselves to 
 \begin{equation}
@@ -567,11 +569,11 @@ $$
 \left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\tilde{\boldsymbol{\lambda}} | T) - g^*_j \right \|_V^2.
 $$
 
-To verify if our oracle inequalities match the simulation results, we performed linear regression with the logarithm of the validation loss difference as the response and the logarithm of the number of penalty parameters $J$ as the covariate. We only regressed over the upper quartiles of validation loss differences for each value of $J$ since our theoretical results are maximal inequalities. The slope of the fitted line was close to one, which suggests that the validation loss difference does indeed grow linearly in the number of penalty parameters.
+To verify if our oracle inequalities match the simulation results, we performed linear regression with the logarithm of the validation loss difference as the response and the logarithm of the number of penalty parameters $J$ as the covariate. We only regressed over the top 50\% of validation loss differences for each value of $J$ since our theoretical results are maximal inequalities. The slope of the fitted line was close to one, which suggests that the validation loss difference does indeed grow linearly in the number of penalty parameters.
 
 The results for Simulation 2 are shown in Figure \ref{fig:simulations}(b). 
 We see that the validation loss of the selected model, defined as $\left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\hat{\boldsymbol{\lambda}}|T) - g^*_j \right \|_V^2$, decreases as the number of penalty parameters $J$ increases.
-Again, we fit a linear model over the upper quartiles of the validation loss values for each value of $J$. The slope is negative, so adding more penalty parameters improved the performance in this case.
+Again, we fit a linear model over the top 50\% of the validation loss values for each value of $J$. The slope is negative, so adding more penalty parameters improved the performance in this case.
 
 These simulation results suggest that adding more hyper-parameters can improve model-estimation procedures. For nonparametric additive models, having an individual penalty parameter for each additive component allows the model to learn about the differing smoothness of each component. On the other hand, if we know a priori that the additive components have the same smoothness, then it is beneficial to use a single penalty parameter.
 
@@ -586,7 +588,7 @@ These simulation results suggest that adding more hyper-parameters can improve m
 	\caption{Simulation 2: sum of sinusoids with increasing frequency}
 	\end{subfigure}
 	\caption{
-		Performance of the selected model on the validation set as the number of penalty parameters grows. The slope of the linear model is shown in each plot, with standard error given in parentheses.
+		Plots of the performance of the selected model as the number of penalty parameters grows. The blue line is the fitted linear model over the top 50\% of points for each number of penalty parameters. We display the slope of the fitted model in each plot, with standard error given in parentheses.
 	}
 	\label{fig:simulations}
 \end{figure}
@@ -595,13 +597,14 @@ These simulation results suggest that adding more hyper-parameters can improve m
 
 The goal of this paper is to characterize the generalization error of model-estimation procedures that tune multiple hyper-parameters via single training/validation split or $K$-fold cross-validation. 
 If the estimated models are Lipschitz with respect to the hyper-parameters, the generalization error of the selected model is upper bounded by a combination of the oracle error, a near-parametric term in the number of hyper-parameters, and a geometric mean of the two.
-In the semi- or non-parametric setting, the error incurred from tuning hyper-parameters is dominated by the oracle error asymptotically, so having many hyper-parameters is unlikely to drastically increase the generalization error of the selected model.
-In the parametric setting, the error incurred from tuning hyper-parameters is roughly on the same order as the oracle error, so one should be more careful about adding more hyper-parameters. Still, adding hyper-parameters is not more ``costly'' than adding model parameters.
-These results show that if adding hyper-parameters shrinks the oracle error term by a sufficient amount, it can improve the performance of the selected model.
+These results show that if additional hyper-parameters shrink the oracle error term by a sufficient amount, they can improve the performance of the selected model.
+In the semi- or non-parametric setting, the error incurred from tuning hyper-parameters is dominated by the oracle error asymptotically; so having many hyper-parameters is unlikely to drastically increase the generalization error of the selected model.
+In the parametric setting, the error incurred from tuning hyper-parameters is roughly on the same order as the oracle error; so one should be careful about adding more hyper-parameters, though hyper-parameters are not more ``costly'' than model parameters.
 
-We also considered the special case of penalized regression problems with multiple penalty parameters. In our example of additive univariate models, we show that the estimated models are Lipschitz in the penalty parameters, which means our theoretical results apply. Our results opens us to the possibility of using multiple penalties with individual penalty parameters, which can help induce the desired model structure. Most of the recent efforts artificially restrict themselves to two-way combinations. However our results suggest that regularization methods with tens or even hundreds of penalty parameters may also perform well. Using recently-developed algorithms for tuning multiple hyper-parameters (CITE), it is now computationally tractable to test out more complex regularization schemes.
 
-One drawback of our theoretical results is that we have assumed it is possible to find the global minimizer of the validation loss. Unfortunately this is computationally intractable since the validation loss is not convex with respect to the hyper-parameters. This problem is particularly exacerbated in the setting of multiple hyper-parameters since it is computationally infeasible to perform an exhaustive grid-search. We hope to address this question in future research.
+We also considered the special case of penalized regression problems with multiple penalty parameters. In our example of additive univariate models, we show that the estimated models are Lipschitz in the penalty parameters, which means our theoretical results apply. Our results suggest using multiple penalties to induce the desired model characteristics and allowing for many penalty parameters, rather than the usual one or two penalty parameters. Moreover, using recently-developed algorithms for tuning multiple hyper-parameters \citep{bengio2000gradient, foo2008efficient, snoek2012practical}, it is now computationally tractable to test out regularization schemes with many penalty parameters.
+
+One drawback of our theoretical results is that we have assumed it is possible to find the global minimizer of the validation loss. Unfortunately this is computationally intractable since the validation loss is not convex with respect to the hyper-parameters. This problem is exacerbated when there are multiple hyper-parameters since it is computationally infeasible to perform an exhaustive grid-search. We hope to address this question in future research.
 
 \bibliographystyle{agsm}
 \bibliography{hyperparam-theory}
