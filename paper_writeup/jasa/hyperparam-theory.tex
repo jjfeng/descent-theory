@@ -555,11 +555,11 @@ g_j^*(x_j) = \sin(x_j * 1.2^{j - 4}) \quad \text{for } j = 1,...,p.
 \label{eq:sim2}
 \end{align}
 Since the Sobolev norms of $g_j$ increase with $j$, we expect the oracle penalty parameters to be monotonically decreasing, $\tilde{\lambda}_1 > ... > \tilde{\lambda}_p$. 
-As we increase the number of penalty parameters, we expect the upper bound in the oracle inequality to shrink if the decrease in the oracle error term outweighs changes in the other terms.
+As the number of penalty parameters increases, we expect the oracle error term to shrink. If the oracle error term shrinks fast enough, the validation loss of the selected model should decrease.
 
 For both simulations, we used $p = 8$ features and fit the models using 200 training and 200 validation samples. We considered 1, 2, 4, and 8 free penalty parameters, where the penalty parameter structure was nested. That is, when considering $k$ free penalty parameters, we constrained $\lambda_{8\ell/k + 1}, ...,  \lambda_{8(\ell + 1)/k}$ to be equal, for $\ell= 1,...,k$. Each simulation setting was replicated forty times.
 
-The penalty parameters were tuned using the nonlinear minimization algorithm \texttt{nlm} in \texttt{R} (CITE) with initializations at $\{\vec{1}, 0.1 \times \vec{1}, 0.01 \times \vec{1}\}$. 
+The penalty parameters were tuned using the nonlinear minimization algorithm \texttt{nlm} in \texttt{R} with initializations at $\{\vec{1}, 0.1 \times \vec{1}, 0.01 \times \vec{1}\}$. 
 Multiple initializations were required since minimizing the validation loss with respect to the penalty parameters is a non-convex problem.
 We did not use the usual method of grid-search since it is computationally intractable when there are more than three penalty parameters.
 
@@ -568,12 +568,13 @@ $$
 \left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\hat{\boldsymbol{\lambda}}|T) - g^*_j \right \|_V^2 - 
 \left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\tilde{\boldsymbol{\lambda}} | T) - g^*_j \right \|_V^2.
 $$
+As expected, the validation loss difference increases with the number of penalty parameters.
+To see if our oracle inequalities match the simulation results, we performed linear regression with the logarithm of the validation loss difference as the response and the logarithm of the number of penalty parameters as the covariate. 
+We fit the model over the simulation results with at least two penalty parameters since the data is highly skewed for the case of a single penalty parameter. 
+We estimated a slope of 1.00 (standard error 0.15), which suggests that the validation loss difference grows at most linearly in the number of penalty parameters. 
+If we also include the simulations results for a single penalty parameter, the estimated slope is 1.45 with a standard error of 0.14. The difference in slope estimates suggests that our oracle inequality might not be tight for a single penalty parameter.
 
-To verify if our oracle inequalities match the simulation results, we performed linear regression with the logarithm of the validation loss difference as the response and the logarithm of the number of penalty parameters $J$ as the covariate. We only regressed over the top 50\% of validation loss differences for each value of $J$ since our theoretical results are maximal inequalities. The slope of the fitted line was close to one, which suggests that the validation loss difference does indeed grow linearly in the number of penalty parameters.
-
-The results for Simulation 2 are shown in Figure \ref{fig:simulations}(b). 
-We see that the validation loss of the selected model, defined as $\left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\hat{\boldsymbol{\lambda}}|T) - g^*_j \right \|_V^2$, decreases as the number of penalty parameters $J$ increases.
-Again, we fit a linear model over the top 50\% of the validation loss values for each value of $J$. The slope is negative, so adding more penalty parameters improved the performance in this case.
+The results from Simulation 2 are shown in Figure \ref{fig:simulations}(b). As the number of penalty parameters increases, the validation loss of the oracle model decreases. In addition, due to the error incurred from tuning multiple hyper-parameters, the gap between the validation loss of the oracle and selected model increases with the number of penalty parameters. Nonetheless, since the validation loss of the oracle model is decreasing at a fast enough rate, the validation loss of the selected model decreases with the number of penalty parameters.
 
 These simulation results suggest that adding more hyper-parameters can improve model-estimation procedures. For nonparametric additive models, having an individual penalty parameter for each additive component allows the model to learn about the differing smoothness of each component. On the other hand, if we know a priori that the additive components have the same smoothness, then it is beneficial to use a single penalty parameter.
 
@@ -588,7 +589,8 @@ These simulation results suggest that adding more hyper-parameters can improve m
 	\caption{Simulation 2: sum of sinusoids with increasing frequency}
 	\end{subfigure}
 	\caption{
-		Plots of the performance of the selected model as the number of penalty parameters grows. The blue line is the fitted linear model over the top 50\% of points for each number of penalty parameters. We display the slope of the fitted model in each plot, with standard error given in parentheses.
+		Plots of the performance of the selected model as the number of penalty parameters grows. 
+		%The blue line is the fitted linear model over the top 50\% of points for each number of penalty parameters. We display the slope of the fitted model in each plot, with standard error given in parentheses.
 	}
 	\label{fig:simulations}
 \end{figure}
