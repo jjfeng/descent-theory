@@ -67,7 +67,7 @@
 }\hfill }
 
 \markboth{\hfill{\footnotesize\rm Jean Feng and Noah Simon} \hfill}
-{\hfill {\footnotesize\rm An analysis of the cost of hyper-parameter selection via split-sample validation} \hfill}
+{\hfill {\footnotesize\rm Hyper-parameter selection via split-sample validation} \hfill}
 
 \renewcommand{\thefootnote}{}
 $\ $\par \fontsize{12}{14pt plus.8pt minus .6pt}\selectfont
@@ -117,19 +117,19 @@ Theorem \ref{thrm:train_val} is a special case of Theorem \ref{thrm:train_val_co
 	By definition,
 	\begin{equation}
 	\left \| y - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \|^2_V \le 
-	\left \| y - \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) \right \|^2_V
+	\left \| y - \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) \right \|^2_V.
 	\end{equation}
 \end{proof}
 
 We are therefore interested in bounding the empirical process term in \eqref{thrm:basic_ineq}. A common approach is to use a measure of complexity of the function class. For a single training/validation split, where we treat the training set as fixed, we only need to consider the complexity of the fitted models from the model-selection procedure
 \begin{equation}
-\mathcal{G}(T)=\left\{ \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T) : \boldsymbol{\lambda} \in \Lambda \right\}
+\mathcal{G}(T)=\left\{ \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T) : \boldsymbol{\lambda} \in \Lambda \right\}.
 \end{equation}
 This model class can be considerably less complex compared to the original function class $\mathcal{G}$, such as the special case in Theorem \ref{thrm:train_val} where we suppose $\mathcal{G}(T)$ is Lipschitz. For this proof, we will use metric entropy as a measure of model class complexity. We recall its definition below.
 \begin{definition}
 	Let $\mathcal{F}$ be a function class. Let the covering number $N(u, \mathcal{F}, \| \cdot \|)$ be the smallest set of $u$-covers of $\mathcal{F}$ with respect to the norm $\| \cdot \|$. The metric entropy of $\mathcal{F}$ is defined as the log of the covering number:
 	\begin{equation}
-	H (u, \mathcal{F}, \| \cdot \| ) = \log N(u, \mathcal{F}, \| \cdot \|)
+	H (u, \mathcal{F}, \| \cdot \| ) = \log N(u, \mathcal{F}, \| \cdot \|).
 	\end{equation}
 \end{definition}
 
@@ -141,22 +141,20 @@ We will bound the empirical process term using the following Lemma, which is a s
 	the model class $\mathcal{F}$ has elements $\sup_{f\in\mathcal{F}}\|f\|_{D^{(m)}}\le R$
 	and satisfies
 	\[
-	\psi(R)\ge\int_{0}^{R}H^{1/2}(u,\mathcal{F},\|\cdot\|_{D^{(m)}})du
+	\psi(R)\ge\int_{0}^{R}H^{1/2}(u,\mathcal{F},\|\cdot\|_{D^{(m)}})du.
 	\]
 	
 	
 	There is a constant $a > 0$ dependent only on $b$ and $B$ such that
 	for all $\delta>0$ satisfying
 	\[
-	\sqrt{m}\delta\ge a(\psi(R)\vee R)
+	\sqrt{m}\delta\ge a(\psi(R)\vee R),
 	\]
-	
-	
 	we have 
 	\[
 	Pr\left(\sup_{f\in\mathcal{F}}\left|\frac{1}{m}\sum_{i=1}^{m}\epsilon_{i}f(x_{i})\right|\ge\delta\right)
 	\le 
-	a\exp\left(-\frac{m\delta^{2}}{4a^{2}R^{2}}\right)
+	a\exp\left(-\frac{m\delta^{2}}{4a^{2}R^{2}}\right).
 	\]
 	
 \end{lemma}
@@ -170,7 +168,7 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 	Suppose there is a function $\psi:\mathbb{R}\mapsto\mathbb{R}$ and constant $r > 0$ such that
 	\begin{equation}
 	\label{eq:dudley_bound}
-	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi(R) \quad \forall R>r
+	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi(R) \quad \forall R>r.
 	\end{equation}
 	Also, suppose $\psi\left(u\right)/u^{2}$ is non-increasing in $u$ for all $u > r$.
 	Let $\tilde{\boldsymbol \lambda}$ be defined as in \eqref{eq:tilde_lambda_def}.
@@ -190,23 +188,23 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 	\right ) 
 	\vee
 	4 \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2
-	\right )
+	\right ),
 	\end{equation}
 	we have
-	\begin{eqnarray*}
-		&& Pr\left(
+	\begin{align*}
+		& Pr\left(
 		\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 -
 		\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
 		\ge\delta^2
 		\middle | 
 		T, X_V
 		\right )\\
-		&\le& c\exp\left(-\frac{n_{V}\delta^{4}}{
+		&\le c\exp\left(-\frac{n_{V}\delta^{4}}{
 			c^{2}
 			\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
 		}\right) 
-		+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right)
-	\end{eqnarray*}
+		+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right).
+	\end{align*}
 \end{theorem}
 
 \begin{proof}
@@ -216,7 +214,7 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 	& = \sum_{s=0}^{\infty}Pr\left(2^{2s}\delta^{2}\le\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\le2^{2s+2}\delta^{2}\right) 
 	\label{eq:peeled} \\
 	&\le \sum_{s=0}^{\infty} Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\right. \label{eq:peel_ineq}\\
-	& \qquad  \left.\wedge \left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert_{V}^{2}\le2^{2s+2}\delta^{2}+ 2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right| \right )	
+	& \qquad  \left.\wedge \left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert_{V}^{2}\le2^{2s+2}\delta^{2}+ 2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right| \right ),
 	\end{align}
 	where we applied the basic inequality in the last inequality.
 	Each summand in \eqref{eq:peel_ineq} can be bounded by splitting the event into the cases where either $2^{2s+2} \delta^2$ or $2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right|$ is larger. Splitting up the probability and applying Cauchy Schwarz gives us the following bound for \eqref{eq:train_val_prob}
@@ -239,13 +237,13 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 	\ge
 	2^{2s} \delta^{2}
 	\right)
-	\label{eq:train_val_2}
+	\label{eq:train_val_2}.
 	\end{align}
 	
 	We can bound both \eqref{eq:train_val_1} and \eqref{eq:train_val_2} using Lemma \ref{lemma:cor83}. For our choice of $\delta$ in \eqref{eq:train_val_delta_condn},
 	there is some constant $a>0$ dependent only on $b$ such that \eqref{eq:train_val_1} is bounded above by
 	\[ 
-	a\exp\left(-\frac{n_{V}\delta^{4}}{4a^{2}\left(16\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right)
+	a\exp\left(-\frac{n_{V}\delta^{4}}{4a^{2}\left(16\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right).
 	\]
 	In addition, our choice of $\delta$ from \eqref{eq:train_val_delta_condn} and our assumption that $\psi(u)/u^2$ is non-increasing implies that the condition in Lemma \ref{lemma:cor83} is satisfied for all $s=0,1,...,\infty$ simultaneously. Hence for all $s=0,1,...,\infty$, we have
 	\begin{align}
@@ -258,14 +256,14 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 	2^{2s} \delta^{2}
 	\right)
 	& \le 
-	a\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4a^{2}2^{2s+3}\delta^{2}}\right)
+	a\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4a^{2}2^{2s+3}\delta^{2}}\right).
 	\end{align}
 	
 	Putting this all together, there is a constant $c$ such that \eqref{eq:train_val_prob} is bounded above by
 	\begin{equation}
 	c\exp\left(-\frac{n_{V}\delta^{4}}{4 c^{2}\left(16\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right)
 	+
-	c\exp\left(-\frac{n_{V} \delta^2}{c^{2}}\right)
+	c\exp\left(-\frac{n_{V} \delta^2}{c^{2}}\right).
 	\end{equation}
 	
 \end{proof}
@@ -278,21 +276,20 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 	Then the entropy of $\mathcal{G}(T)$ with respect to $\| \cdot \|$ is
 	\begin{equation}
 	H\left(u, \mathcal{G}(T),\|\cdot\|\right) \le
-	J \log \left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)
+	J \log \left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right).
 	\end{equation}
 \end{lemma}
 \begin{proof}
 	Using a slight variation of the proof for Lemma 2.5 in \citet{van2000empirical}, we can show
-	\begin{equation}
-	N\left(u,\Lambda,\|\cdot\|_{2}\right) \le \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)^{J}
-	\end{equation}
-	
+	\begin{align}
+	N\left(u,\Lambda,\|\cdot\|_{2}\right) \le \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)^{J}.
+	\end{align}
 	Under the Lipschitz assumption, a $\delta$-cover for $\Lambda$
 	is a $C\delta$-cover for $\mathcal{G}(T)$. The covering number for $\mathcal{G}(T)$ wrt $\|\cdot\|_{V}$ is bounded by the covering number for $\Lambda$ as follows
 	\begin{eqnarray}
 	N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right)
 	&\le& N\left(\frac{u}{C},\Lambda,\|\cdot\|_{2}\right)\\
-	&\le& \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u/C}{u/C}\right)^{J}
+	&\le& \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u/C}{u/C}\right)^{J}.
 	\end{eqnarray}
 \end{proof}
 
@@ -312,14 +309,14 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 	1+\log \left (32C_\Lambda\Delta_{\Lambda}\right)
 	+ \log\frac{1}{R} 
 	\right )
-	\right]^{1/2}
+	\right]^{1/2},
 	\end{align}
 	where the second inequality follows from a change of variables and the concavity of the square root function. If we restrict $R > n^{-1}$ and $C_\Lambda \ge 32e/(n \Delta_{\Lambda})$, then 
 	\begin{equation}
 	\label{eq:train_val_entropy}
 	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
 	\le
-	\psi (R) \coloneqq 2 R\left ( J \log(C_\Lambda \Delta_{\Lambda} n) \right )^{1/2}
+	\psi (R) \coloneqq 2 R\left ( J \log(C_\Lambda \Delta_{\Lambda} n) \right )^{1/2}.
 	\end{equation}
 	Applying Theorem \ref{thrm:train_val_complicated}, we get our desired result.
 \end{proof}
@@ -376,7 +373,7 @@ We now present the proof for Theorem \ref{thrm:kfold}. It is an application of T
 	& + \frac{ac}{q}\left [
 	\psi^* \left (\frac{2q^{r + 1}(1+a)}{a\sqrt{n_V}} \right ) \vee d_{\min}
 	\right ]
-	\end{split}
+	\end{split}.
 	\end{align}
 \end{theorem}
 
@@ -421,7 +418,6 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 \subsection{Penalized regression for additive models}
 
 We now show that penalized regression problems for additive models satisfies the Lipschitz condition.
-
 \subsubsection{Proof for Lemma \ref{lemma:param_add}}
 \begin{proof}
 	We will use the notation $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) \coloneqq \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)$. By the gradient optimality conditions, we have for all $j=1:J$ 
@@ -430,7 +426,7 @@ We now show that penalized regression problems for additive models satisfies the
 	\left.\nabla_{\theta^{(j)}} \left [
 	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
 	\right ]
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}=0
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}=0.
 	\end{equation}
 	
 	Now we implicitly differentiate with respect to $\boldsymbol{\lambda}$ 
@@ -440,10 +436,10 @@ We now show that penalized regression problems for additive models satisfies the
 	\left [
 	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
 	\right ]
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0.
 	\end{equation}
 	
-	Define the following matrices 
+	Define the following matrices:
 	\begin{align*}
 		S = \left.\nabla_{\theta}\left [
 		\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}
@@ -464,21 +460,21 @@ We now show that penalized regression problems for additive models satisfies the
 	\begin{equation}
 	\label{eq:param_matrix}
 	\left(\begin{array}{cccc}
-	\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{1}(\boldsymbol{\lambda}) & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{2}(\boldsymbol{\lambda}) & ... & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{p}(\boldsymbol{\lambda})\end{array}\right)=-M^{\top}\left(S+D\right)^{-1}
+	\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{1}(\boldsymbol{\lambda}) & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{2}(\boldsymbol{\lambda}) & ... & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{p}(\boldsymbol{\lambda})\end{array}\right)=-M^{\top}\left(S+D\right)^{-1}.
 	\end{equation}
 	We now bound each column in $M$. From the \eqref{eq:grad_opt} and Cauchy Schwarz, we have 
 	\begin{align*}
-		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le  \frac{1}{\lambda_{min}\sqrt{n_{T}}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}		
+		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le  \frac{1}{\lambda_{min}\sqrt{n_{T}}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}.
 	\end{align*}
 	The norm of the gradients of $g_j$ can be bounded since $g_j$ is Lipschitz. Also, by definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$, we have
 	\begin{align*}
 	\frac{1}{2}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}\left(\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right) & \le \frac{1}{2}\left\Vert y-g(\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j),*})\\
-	& \le C_{\theta^{*},\Lambda}
+	& \le C_{\theta^{*},\Lambda}.
 	\end{align*}
 	
 	Hence for all $j=1,...,J$
 	\begin{align}
-	\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}
+	\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}.
 	\end{align}
 	
 	Now we bound the norm of $\nabla_\lambda \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$. From \eqref{eq:param_matrix}, we have for all $j=1,...,J$
@@ -487,9 +483,9 @@ We now show that penalized regression problems for additive models satisfies the
 	& \le \sum_{j=1}^{J}\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert _{2}\left\Vert \left(S+D\right)^{-1}\right\Vert _{2}\\
 	& \le  J\left(\frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}\right)\frac{1}{m}
 	\end{align}
-	where the last line follows from the fact that $(S + D)^{-1} \succeq m^{-1}I$. Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz
+	where the last line follows from the fact that $(S + D)^{-1} \succeq m^{-1}I$. Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz:
 	\begin{equation}
-	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{m\lambda_{min}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}
+	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{m\lambda_{min}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}.
 	\end{equation}
 	Finally the result \eqref{eq:param_add_lipschitz} clearly follows since $g_j(\boldsymbol{\theta})$ are Lipschitz in $\boldsymbol{\theta}$ with respect to $\| \cdot \|_\infty$.
 \end{proof}
@@ -505,7 +501,7 @@ We now show that penalized regression problems for additive models satisfies the
 	\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ where $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \bar{\boldsymbol{\ell}}$
 	such that the union of their differentiable neighborhoods cover  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ entirely:
 	\[
-	\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right) \subseteq \cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
+	\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right) \subseteq \cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell}).
 	%\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})
 	%\mu_{1}\left(\cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
 	%\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)=\left\Vert \mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right\Vert _{2}
@@ -519,7 +515,7 @@ We now show that penalized regression problems for additive models satisfies the
 	\cup_{\ell \in \bar{\boldsymbol{\ell}}}
 	\mbox{Bd}B\left(\boldsymbol{\ell}\right)
 	\right )
-	\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})
+	\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}).
 	\]
 	Every point $p\in P$ can be expressed as $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
 	for some $\alpha_{p}\in[0,1]$. So points in $P$ can ordered by increasing $\alpha_{p}$ to get the sequence $\boldsymbol{p}^{(1)}, \boldsymbol{p}^{(2)}, ... $.
@@ -538,7 +534,7 @@ We now show that penalized regression problems for additive models satisfies the
 	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)=U^{(i)}\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)
 	\]
 	\[
-	\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)=\arg\min_{\beta}L_{T}(U^{(i)}\boldsymbol{\beta},\boldsymbol{\lambda})
+	\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)=\arg\min_{\beta}L_{T}(U^{(i)}\boldsymbol{\beta},\boldsymbol{\lambda}).
 	\]
 	Apply Lemma \ref{lemma:param_add} with $\Lambda= \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$, and modify the proofs to take directional derivatives
 	along the columns of $U^{(i)}$ instead. Then there is a constant
@@ -550,7 +546,7 @@ We now show that penalized regression problems for additive models satisfies the
 	-\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)} | T)
 	\right\Vert _{2}
 	\le 
-	c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}
+	c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}.
 	\]
 	
 	
@@ -563,7 +559,7 @@ We now show that penalized regression problems for additive models satisfies the
 	& \le \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
 	& \le \sum_{i=1}^{\infty}
 	c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}\\
-	& = c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+	& = c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
 	\end{align*}
 \end{proof}
 
@@ -576,7 +572,7 @@ We now show that penalized regression problems for additive models satisfies the
 	For all $j \in H_0$, let 
 	\[
 	h_{j}=
-	\frac{\hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)}{\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}}}
+	\frac{\hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)}{\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}}}.
 	\]
 	For notational convenience, let $\hat{g}_{1,j} = \hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)$. Consider the optimization problem
 	\begin{equation}
@@ -585,13 +581,13 @@ We now show that penalized regression problems for additive models satisfies the
 	\frac{1}{2}
 	\left \|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right) \right \|_{T}^{2}
 	+\sum_{j=1}^{J}\lambda_{j}
-	P_{j} \left (\hat{g}_{1,j}+m_{j}h_{j} \right )
+	P_{j} \left (\hat{g}_{1,j}+m_{j}h_{j} \right ).
 	\end{equation}
 	By the gradient optimality conditions, we have
 	\begin{equation}
 	\nabla_{m} \left .
 	\left[\frac{1}{2}\|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right] \right |_{m=\hat{m}(\lambda)}
-	= 0
+	= 0.
 	\label{eq:nonparam_grad_opt}
 	\end{equation}
 	Implicit differentiation with respect to $\boldsymbol{\lambda}$ gives us
@@ -600,7 +596,7 @@ We now show that penalized regression problems for additive models satisfies the
 	\nabla_m
 	\left . \left[
 	\frac{1}{2}\|y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+m_{j}h_{j}\right)\|_{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right] \right |_{m=\hat{m}(\lambda)}
-	= 0
+	= 0.
 	\label{eq:nonparam_imp_diff}
 	\end{equation}
 	Define the following matrices
@@ -625,7 +621,7 @@ We now show that penalized regression problems for additive models satisfies the
 	
 	
 	\[
-	M:\mbox{ column }M_{j}=\nabla_{\lambda}\hat{m}_{j}(\lambda) \quad \forall j=1,...,J
+	M:\mbox{ column }M_{j}=\nabla_{\lambda}\hat{m}_{j}(\lambda) \quad \forall j=1,...,J.
 	\]
 	
 	
@@ -637,18 +633,18 @@ We now show that penalized regression problems for additive models satisfies the
 	\le 
 	\frac{1}{\lambda_{min}}
 	\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)
-	\right\Vert _{T}\|h_{k}\|_{T}
+	\right\Vert _{T}\|h_{k}\|_{T}.
 	\end{equation}
 	We note that $\|h_{k}\|_{T} \le \sqrt{\frac{n_{D}}{n_{T}}}$. Also, by definition of $\hat{m}(\boldsymbol{\lambda})$,
 	\begin{align*}
 	\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})
 	& \le \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})\\
-	& \le C_{\Lambda}^* + J\lambda_{max}\max_{j=1:J}P_{j}(\hat{g}_{1,j})
+	& \le C_{\Lambda}^* + J\lambda_{max}\max_{j=1:J}P_{j}(\hat{g}_{1,j}).
 	\end{align*}
 	Hence every diagonal element in $D_2$ is bounded above by
 	\begin{equation}
 	\frac{1}{\lambda_{min}}
-	\sqrt{2C_{\Lambda}^* \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+	\sqrt{2C_{\Lambda}^* \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}.
 	\end{equation}
 	
 	
@@ -658,14 +654,14 @@ We now show that penalized regression problems for additive models satisfies the
 	& = & \left\Vert D_{2}\left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
 	& \le & \frac{1}{\lambda_{min}}
 	\sqrt{2C_{\Lambda}^*
-		\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \left(S+D_{1}\right)^{-1}e_{k}\right\Vert
+		\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \left(S+D_{1}\right)^{-1}e_{k}\right\Vert.
 	\end{eqnarray}
 	By the assumption in \eqref{eq:gateuax}, $e_{k}^\top \left(S+D_{1}\right) e_{k} \ge m$.
 	
 	By the mean value theorem and Cauchy Schwarz, we have
 	\begin{equation}
 	\left|\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})\right| 
-	\le \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C^*_\Lambda \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
+	\le \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C^*_\Lambda \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}.
 	\end{equation}
 	Since $
 	\left|
