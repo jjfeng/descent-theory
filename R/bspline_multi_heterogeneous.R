@@ -82,47 +82,23 @@ stopCluster(cl)
 agg_cv_to_oracle_hetero <- aggregate(
     cv_true_validation ~ n, data=cv_to_oracle_hetero, FUN=function(x){quantile(x, 0.5)}
 )
+cv_to_oracle_hetero$cv_true_validation_sq <- cv_to_oracle_hetero$cv_true_validation^2
+cv_to_oracle_hetero$oracle_true_validation_loss_sq <- cv_to_oracle_hetero$oracle_true_validation_loss^2
 
-cv_to_oracle_merge <- merge(cv_to_oracle_hetero, agg_cv_to_oracle_hetero, by="n", suffixes = c("", ".agg"))
-lmdata <- cv_to_oracle_merge[cv_to_oracle_merge$cv_true_validation >= cv_to_oracle_merge$cv_true_validation.agg,]
-fit <- lm(log(cv_true_validation) ~ log(n), lmdata)
-fit_summ <- summary(fit)
-fit_summ
-lmfits <- data.frame(
-    n=lmdata$n,
-    fitted=exp(fit$fitted.values)
-)
-cv_to_oracle_merge <- merge(cv_to_oracle_merge, lmfits, by="n")
+cv_to_oracle_hetero_melt <- melt(cv_to_oracle_hetero, id=c("n"))
+# cv_to_oracle_hetero_melt$variable <- cv_to_oracle_hetero_melt$variable
+cv_to_oracle_hetero_melt <- cv_to_oracle_hetero_melt[cv_to_oracle_hetero_melt$variable %in% c("oracle_true_validation_loss_sq", "cv_true_validation_sq"),]
 
-
-par(mar=c(5,5,1,1), mfrow=c(1,1))
-plot(
-    jitter_log(lmdata$n, 0.02),
-    lmdata$cv_true_validation,
-    ylab="Validation Loss",
-    xlab="Number of penalty parameters",
-    cex=0.7,
-    cex.axis=1.2,
-    cex.lab=1.4,
-    log="xy",
-    xaxt = "n"
-)
-axis(1, at=num_lams, labels=num_lams, cex.axis=1.4)
-lines(
-    lmdata$n,
-    exp(fit$fitted.values)
-)
-legend(
-    "bottomleft",
-    legend=paste(
-        "Slope:",
-        format(fit_summ$coefficients[2, 1], digits=4),
-        "+/-",
-        format(1.96 * fit_summ$coefficients[2,2], digits=4)
-    ),
-    cex=1.2
-)
-dev.off()
+# cv_to_oracle_merge <- merge(cv_to_oracle_hetero, agg_cv_to_oracle_hetero, by="n", suffixes = c("", ".agg"))
+# lmdata <- cv_to_oracle_merge  #[cv_to_oracle_merge$cv_true_validation >= cv_to_oracle_merge$cv_true_validation.agg,]
+# fit <- lm(log(cv_true_validation_sq) ~ log(n), lmdata)
+# fit_summ <- summary(fit)
+# fit_summ
+# lmfits <- data.frame(
+#     n=lmdata$n,
+#     fitted=exp(fit$fitted.values)
+# )
+# cv_to_oracle_merge <- merge(cv_to_oracle_merge, lmfits, by="n")
 
 par(mar=c(5,5,1,1), mfrow=c(1,1))
 slope_text <- paste(
@@ -133,16 +109,35 @@ slope_text <- paste(
     ")",
     sep=""
 )
-ggplot(cv_to_oracle_merge, aes(x=as.factor(n), y=cv_true_validation, group=n)) + 
+ggplot(cv_to_oracle_merge, aes(x=as.factor(n), y=cv_true_validation_sq, group=n)) + 
     geom_boxplot(coef=5.0) +
-    geom_line(data=cv_to_oracle_merge, aes(x=as.factor(n), y=fitted, group = 1), color="blue") +
-    scale_y_log10(breaks=c(0.4, 0.6, 0.8)) +
+    # geom_line(data=cv_to_oracle_merge, aes(x=as.factor(n), y=fitted, group = 1), color="blue") +
+    scale_y_log10(breaks=c(0.2,0.4, 0.6)) +
     xlab("Number of Penalty Parameters") +
     ylab("Validation Loss") +
-    annotate("text", x = 1.25, y = 0.37,
-             label = slope_text, size=5) +
+    # annotate("text", x = 1.25, y = 0.37,
+    #          label = slope_text, size=5) +
     theme_bw() +
     theme(axis.text=element_text(size=14),
           axis.title=element_text(size=16))
+
+cv_to_oracle_hetero_melt$variable <- as.character(cv_to_oracle_hetero_melt$variable)
+cv_to_oracle_hetero_melt$variable[cv_to_oracle_hetero_melt$variable == "oracle_true_validation_loss_sq"] = "Oracle Model"
+cv_to_oracle_hetero_melt$variable[cv_to_oracle_hetero_melt$variable == "cv_true_validation_sq"] = "Selected Model"
+
+ggplot(cv_to_oracle_hetero_melt, aes(x=as.factor(n), y=value, fill=variable)) + 
+    geom_boxplot(coef=5.0) +
+    scale_y_log10(breaks=c(0.2,0.4, 0.6)) +
+    xlab("Number of Penalty Parameters") +
+    ylab("Validation Loss") +
+    theme_bw() +
+    theme(
+        legend.position = c(0.15,0.15),
+        legend.text=element_text(size=15),
+        axis.text=element_text(size=14),
+        axis.title=element_text(size=16)
+    ) +
+    guides(fill=guide_legend(title=""))
+
 ggsave('figures/validation_size_loss_heterogeneous.pdf', width=8, height=5)
 

@@ -363,6 +363,7 @@ We now present the proof for Theorem \ref{thrm:kfold}. It is an application of T
 	
 	Then there is an absolute constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
 	\begin{align}
+	\begin{split}
 	E_{D^{(n)}} \left \|
 	\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^*
 	\right \|_2^2
@@ -371,10 +372,11 @@ We now present the proof for Theorem \ref{thrm:kfold}. It is an application of T
 	E_{D^{(n_T)}} \left \|
 	\hat{g}^{(n_T)} ( \hat{\boldsymbol \lambda} | {D^{(n_T)}} )
 	- g^*
-	\right \|^2_2
-	+ \frac{ac}{q}\left [
+	\right \|^2_2\\
+	& + \frac{ac}{q}\left [
 	\psi^* \left (\frac{2q^{r + 1}(1+a)}{a\sqrt{n_V}} \right ) \vee d_{\min}
 	\right ]
+	\end{split}
 	\end{align}
 \end{theorem}
 
@@ -382,7 +384,7 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 
 \subsubsection{Proof for Theorem \ref{thrm:kfold}}
 \begin{proof}
-	We first check that the two assumptions in \eqref{eq:cv_assump} hold. This is easy to show with the assumption that $\sup_{g \in \mathcal G} \|g\|_\infty, \|\epsilon\|_\infty \le G$.
+	We first check that the two assumptions in \eqref{eq:cv_assump} hold. This is easy to show with the assumption that $\sup_{g \in \mathcal G} \|g\|_\infty \le  G$ and $\|\epsilon\|_\infty \le G$.
 	
 	Next we determine $\psi$ in \eqref{eq:mitchell_dudley_bound}. Note that because $\|\cdot\|_\phi \le 2\|\cdot \|_\infty $ and $\| \cdot \|_2 \le \| \cdot \|_\infty$, then both $H(2u,\mathcal{Q}_d,\|\cdot\|_{\phi})$ and $H(u,\mathcal{Q}_d,\|\cdot\|_2)$ are bounded by 
 	$H(u,\mathcal{Q}_d,\|\cdot\|_{\infty})$.
@@ -410,7 +412,7 @@ In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy 
 	We can show that the convex conjugate of $\psi^{-1}$ is
 	\begin{equation}
 	\label{eq:convex_conjugate}
-	\psi^*(z) = \frac{z^2 K_{n,1}^2}{4} + \frac{z K_{n,2}}{\sqrt{n_V}}
+	\psi^*(z) = \frac{z^2 K_{n,1}^2}{4} + \frac{z K_{n,2}}{\sqrt{n_V}}.
 	\end{equation}	
 	
 	Plugging in \eqref{eq:convex_conjugate} into Theorem \ref{thrm:mitchell} and taking $q \rightarrow 1$ gives us the result in Theorem \ref{thrm:kfold}.

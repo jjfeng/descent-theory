@@ -23,13 +23,6 @@ Fit_bspline <- function(train_y, train_bspline_matrix, penmats, lams) {
     })
     BB <- t(train_bspline_matrix) %*% train_bspline_matrix
     
-    # also calculate the additional ridge perturbation
-    lam_BBs <- lapply(seq(length(lams)), function(i) {
-        Bi <- train_bspline_matrix[, seq((i-1) * gamma_size + 1, i * gamma_size)]
-        lams[i] * t(Bi) %*% Bi
-    })
-    BB_diag <- bdiag(lam_BBs)
-    
     fitted_gamma <- solve(
         1/n_train * BB + bdiag(lam_penmats),
         t(train_bspline_matrix) %*% train_y
@@ -161,31 +154,39 @@ Search_lam <- function(dataset, n_lams, loss_fun, additional_init=NA) {
             loss_val
         }
     }
-    init_lam_vals = c(0, -1, -2)
-    optim_cv_lam <- rep(init_lam_vals[1], n_lams)
-    best_cv_res <- 1000
-    for (init_val in init_lam_vals) {
-        init_lams = rep(init_val, n_lams)
-        cv_res <- nlm(
-            optim_fn,
-            init_lams
-        )
-        if (cv_res$minimum < best_cv_res) {
-            best_cv_res <- cv_res$minimum
-            optim_cv_lam <- cv_res$estimate
-            print(init_val)
-            print(optim_cv_lam)
+    if (n_lams == 1) {
+        log_lams <- seq(-5, -2, by=0.005)
+        cv_reses <- lapply(log_lams, optim_fn)
+        best_lam_idx <- which.min(cv_reses)
+        best_cv_res <- cv_reses[best_lam_idx]
+        optim_cv_lam <- log_lams[best_lam_idx]
+    } else {
+        init_lam_vals = c(0, -1, -2)
+        optim_cv_lam <- rep(init_lam_vals[1], n_lams)
+        best_cv_res <- 1000
+        for (init_val in init_lam_vals) {
+            init_lams = rep(init_val, n_lams)
+            cv_res <- nlm(
+                optim_fn,
+                init_lams
+            )
+            if (cv_res$minimum < best_cv_res) {
+                best_cv_res <- cv_res$minimum
+                optim_cv_lam <- cv_res$estimate
+                print(init_val)
+                print(optim_cv_lam)
+            }
         }
-    }
-    
-    if (!is.na(additional_init)) {
-        cv_res <- nlm(
-            optim_fn,
-            additional_init
-        )
-        if (cv_res$minimum < best_cv_res) {
-            best_cv_res <- cv_res$minimum
-            optim_cv_lam <- cv_res$estimate
+        
+        if (!is.na(additional_init)) {
+            cv_res <- nlm(
+                optim_fn,
+                additional_init
+            )
+            if (cv_res$minimum < best_cv_res) {
+                best_cv_res <- cv_res$minimum
+                optim_cv_lam <- cv_res$estimate
+            }
         }
     }
     
@@ -201,6 +202,7 @@ Do_bspline_CV_oracle <- function(dataset, n_lams, plt_func) {
     print(optim_cv_lam)
     optim_oracle_lam <- Search_lam(dataset, n_lams, Get_bspline_true_val_losses, additional_init = optim_cv_lam)
     print(optim_oracle_lam)
+    print(optim_cv_lam == optim_oracle_lam)
     
     cv_lams <- Create_full_lams(optim_cv_lam, n_lams, num_p)
     oracle_lams <- Create_full_lams(optim_oracle_lam, n_lams, num_p)

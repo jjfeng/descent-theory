@@ -76,22 +76,14 @@ print(cv_to_oracle_hom)
 
 stopCluster(cl)
 
-agg_cv_to_oracle_hom = aggregate(
-    loss_diff_sq ~ n, cv_to_oracle_hom, FUN=function(x){quantile(x, 0.5)}
-)
-cv_to_oracle_merge <- merge(cv_to_oracle_hom, agg_cv_to_oracle_hom, by=c("n"), suffix=c("", ".agg"))
+fit_all <- lm(log(loss_diff_sq) ~ log(n), cv_to_oracle_hom)
+summary(fit_all)
 
-lmdata <- cv_to_oracle_merge[cv_to_oracle_merge$loss_diff_sq >= cv_to_oracle_merge$loss_diff_sq.agg,]
-fit <- lm(log(loss_diff_sq) ~ log(n), lmdata)
-fit_summ <- summary(fit)
-fit_summ
-lmfits <- data.frame(
-    n=lmdata$n,
-    fitted=exp(fit$fitted.values)
-)
-cv_to_oracle_merge <- merge(cv_to_oracle_merge, lmfits, by="n")
+fit_some <- lm(log(loss_diff_sq) ~ log(n), cv_to_oracle_hom[cv_to_oracle_hom$n != 1,])
+summary(fit_some)
 
 par(mar=c(5,5,1,1), mfrow=c(1,1))
+cv_to_oracle_merge <- cv_to_oracle_hom
 slope_text <- paste(
     "Slope: ",
     format(fit_summ$coefficients[2, 1], digits=4),
@@ -100,16 +92,20 @@ slope_text <- paste(
     ")",
     sep = ""
 )
-ggplot(cv_to_oracle_merge, aes(x=as.factor(n), y=loss_diff_sq, group=n)) + 
+
+ggplot(cv_to_oracle_merge, aes(x=as.factor(n), y=loss_diff_sq, fill=c('0'))) +
     geom_boxplot(coef=5.0) +
-    geom_line(data=cv_to_oracle_merge, aes(x=as.factor(n), y=fitted, group = 1), color="blue") +
+    # geom_line(data=cv_to_oracle_merge, aes(x=as.factor(n), y=fitted, group = 1), color="blue") +
     scale_y_log10() +
     xlab("Number of Penalty Parameters") +
     ylab("Validation Loss Difference") +
-    annotate("text", x = 3.8, y = 0.000004,
-             label = slope_text, size=5) +
+    # annotate("text", x = 3.8, y = 0.000004,
+             # label = slope_text, size=5) +
     theme_bw() +
     theme(axis.text=element_text(size=14),
-          axis.title=element_text(size=16))
+          axis.title=element_text(size=16)) +
+    guides(fill=FALSE) +
+    scale_fill_manual(values=c('#999999'))
+
 ggsave('figures/validation_size_loss_diff_homogeneous.pdf', width=8, height=5)
 
