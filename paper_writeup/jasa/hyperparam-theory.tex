@@ -105,7 +105,9 @@ $\tilde{\boldsymbol{\lambda}}$ is unknown and often estimated using a single tra
 
 The performance of split-sample validation procedures is typically characterized by an oracle inequality that bounds the generalization error of the expected model selected from the validation set procedure. For $\Lambda$ that are finite, oracle inequalities have been established for a single training/validation split \citet{gyorfi2006distribution} and a general cross-validation framework \citep{van2003unified, van2004asymptotic}. To handle continuous $\Lambda$, one can use entropy-based approaches \citep{lecue2012oracle}. 
 
-The goal of this paper is to characterize the performance of models when the hyper-parameters must be tuned by some split-sample validation procedure. We are particularly interested in an open question raised in \citet{bengio2000gradient}: what is the ``amount of overfitting... when too many hyper-parameters are optimized''? To do this, we show that finite-sample oracle inequalities of the form
+The goal of this paper is to characterize the performance of models when the hyper-parameters must be tuned by some split-sample validation procedure. We are particularly interested in an open question raised in \citet{bengio2000gradient}: what is the ``amount of overfitting... when too many hyper-parameters are optimized''? and in addition, when do we reach ``too many hyper-parameters?'' In this paper we show that actually a large number of hyper-parameters can be tuned without overfitting. In fact, if an oracle estimator converges at rate $1/R(n)$, then the number of hyper parameters can grow at roughly a rate of $n/R(n)$ up to log terms without affecting the convergence rate. In practice, for penalized regression, this means that one can propose and tune over much more complex models than are currently often used. In addition, this explains, in part, the strong performance of machine-learning-based models that tune many more hyper-parameters than standard statistical models \textcolor{red}{Citations?}.
+
+ To show these results, we prove that finite-sample oracle inequalities of the form
 \begin{equation}
 \label{thrm:intro_oracle_ineq}
 \left \| g^* - \hat{g}\left (\hat{\boldsymbol{\lambda}}, T \right ) \right \|^2
@@ -571,8 +573,9 @@ $$
 As expected, the validation loss difference increases with the number of penalty parameters.
 To see if our oracle inequalities match the simulation results, we performed linear regression with the logarithm of the validation loss difference as the response and the logarithm of the number of penalty parameters as the covariate. 
 We fit the model over the simulation results with at least two penalty parameters since the data is highly skewed for the case of a single penalty parameter. 
-We estimated a slope of 1.00 (standard error 0.15), which suggests that the validation loss difference grows at most linearly in the number of penalty parameters. 
-If we also include the simulations results for a single penalty parameter, the estimated slope is 1.45 with a standard error of 0.14. The difference in slope estimates suggests that our oracle inequality might not be tight for a single penalty parameter.
+We estimated a slope of 1.00 (standard error 0.15), which suggests that the validation loss difference grows linearly in the number of penalty parameters. 
+The results for a single penalty parameter fall below this estimated line --- including the single parameter case gives a slope of 1.45 with standard error 0.14.
+This suggests that our oracle inequality might not be tight for a single penalty parameter.
 
 The results from Simulation 2 are shown in Figure \ref{fig:simulations}(b). As the number of penalty parameters increases, the validation loss of the oracle model decreases. In addition, due to the error incurred from tuning multiple hyper-parameters, the gap between the validation loss of the oracle and selected model increases with the number of penalty parameters. Nonetheless, since the validation loss of the oracle model is decreasing at a fast enough rate, the validation loss of the selected model decreases with the number of penalty parameters.
 
