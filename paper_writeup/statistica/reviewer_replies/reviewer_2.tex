@@ -1,0 +1,59 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{color}
+
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-.5in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.3in}%
+\addtolength{\topmargin}{-.8in}%
+
+
+\newcommand{\overall}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\point}[1]{\item \textcolor{blue}{#1}}
+\newcommand{\reply}{\item[]\ }
+
+%opening
+\title{Response to Reviewer 1}
+
+\begin{document}
+	
+	\maketitle
+	
+	We appreciate the helpful feedback from the reviewer. We have addressed your questions and comments. Below we give a point-by-point response to each of the questions:
+	
+	\subsubsection*{Suggestions/comments}
+	
+	\begin{enumerate}
+		\point{
+			The authors should specify the distribution of $x_i$'s and also explain how random variables $x_i$ and $\epsilon_i$ are related. Is it assumed that observations are i.i.d. across $i$ and that $\epsilon_i$ is independent of $x_i$? I am fine with both but many researchers consider the latter as rather restrictive because it excludes, for example, the case when yi’s are binary.
+		}
+		
+		\point {
+			The previous comment is important because in the case of cross-validation, the author's derive results with the norm $\| \cdot \|$ being the usual L2-norm, e.g. $\|g\| = \int_0^1 g(x)^2 dx $, but I do not see how this is actually possible if the distribution of $x_i$’s is not specified. What if $x_i$’s can only take two values, 0 or 1?
+		}
+	
+		\point{
+			In the case of the single splitting procedure, the authors derive results with the norm $\|\cdot\|$ being $\|\cdot\|_V$ , which is defined by $\|g \|_V^2 = n_V^{-1} \sum_{i\in V} g^2(x_i)$ where $V$ is the validating subsample and $n_V$ is the number of observations in $V$ . This norm is problematic because it depends on how the observations are splitted into the training and validating subsamples. It would be much cleaner to use the usual L2-norm, like in the case of the cross-validation procedure. (And that again requires specifying the distribution of $x_i$’s.)
+		}
+	
+		\point{
+			Page 2, lines 43-46: “for a given training dataset T and norm $\|\cdot \|$”. Actually, since cross-validation is used, the norm $\|\cdot \|$ can not be arbitrary as the sentence suggests.
+		}
+	
+		\point{
+			Page 4, lines 24-27: “the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself.” This seems a bit inaccurate because, for example, for the lasso estimation, the error only scales like $\log p$ instead of $p$.
+		}
+	
+		\point{
+		Page 6, lines 41-45: “We hypothesize that many model-estimation pro- cedure satisfy this Lipschitz assumption.” The word “hypothesize” seems inappropriate here.
+		}
+	
+		\point{
+			Page 7, line 29: $\|h\|_V = \frac{1}{n_V} \sum_{i \in V} h^2(x_i, y_i)$ should be $\|h\|_V^2 = \frac{1}{n_V} \sum_{i \in V} h^2(x_i, y_i).$
+		}
+	
+		\end{enumerate} 
+	
+\end{document}
