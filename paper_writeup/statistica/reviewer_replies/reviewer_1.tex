@@ -29,20 +29,63 @@
 		\point{
 			The key assumption is the C-Lipschitz condition of the penalized criterion function on the tuning parameters.  This is a high level condition and the authors try to illustrate it using some low-level sufficient conditions.
 			In the current version, it is not clear whether these low-level conditions can be verified in specific examples, and they are sufficient for the main results of the paper.
+		}
+		\reply{I don't get what you mean by ``they are sufficient for the main results of the paper.''}
+		
+		\point{
 			For example, in Lemma 2 of the paper, the authors introduced the subset of the tuning parameters such that the C-Lipschitz condition holds in the case that the penalty function is not smooth.
 			Does this mean that one has to replace the original set by this subset in practice since it is not clear whether the C-Lipschitz condition holds outside this subset?
 			Is this subset known or it has to be estimated?
 		}
+		\reply{
+%			You don't know what $\Lambda_{smooth}$ is, but that's okay.
+%			We essentially assume that $\Lambda_{smooth}^C$ is a measure zero set -- it is countable. It's very unlikely you'll land on it so we only need to consider performance over $\Lambda_{smooth}$.
+%			$\Lambda_{smooth}$ is mostly a theoretical construct!
+%			In practice, you just need to tune over $\Lambda$.
+%			Now what is the behavior over $\Lambda_{smooth}^C$? Would we rather our estimates be based on those points instead? I don't think so....
+			
+			SHIT - I think we can drop the whole $\Lambda_{smooth}$ restriction in Lemma 2. I think the proof will carry through as long as Condition 2 holds!
+			
+			Action: update the proof.
+			
+			Also, in practice, just tune over $\Lambda$.
+		}
 	
 		\point{
-			Since the authors consider the smooth and non-smooth penalty functions in the paper. It would be good if the can use two specific examples to illustrate the low-level conditions in Lemma 1, Lemma 2 and Lemma 3. For example, they may consider the penalty function using the Sobolev norm for smooth case, and the Lasso penalty for the non-smooth case.
+			Since the authors consider the smooth and non-smooth penalty functions in the paper, it would be good if the can use two specific examples to illustrate the low-level conditions in Lemma 1, Lemma 2 and Lemma 3. For example, they may consider the penalty function using the Sobolev norm for smooth case, and the Lasso penalty for the non-smooth case.
+		}
+	
+		\reply{
+		
+			Lemma 1: ridge penalty
+		
+			Lemma 2: lasso penalty - we can just copy fro our previous paper? or do we reference that paper?
+			
+			Lemma 3: sobolev norm? honestly, i dont know enough nonparametric penalty functions...
 		}
 		
 		\point{
-		The notations of the paper are slightly messy. In Theorem 2 and Theorem 3, are the expectation operators taken under the empirical measure? In displays (4.26) and (4.32), does “I” stand for the identity matrix? Moreover, what does the inequality symbol in these two displays mean?
+		The notations of the paper are slightly messy.
 		}
-		
-		\reply We apologize that the notation in the paper were messy. We have updated much of the notation to improve the clarity of the equations.
+	
+		\reply{
+			We apologize that the notation in the paper were messy. We have updated much of the notation to improve the clarity of the equations.
+		}
+	
+		\point{
+			In Theorem 2 and Theorem 3, are the expectation operators taken under the empirical measure?
+		}
+		\reply{
+			fixing this! reviewer 2 also had similar comments
+		}
+		\point{
+		In displays (4.26) and (4.32), does “I” stand for the identity matrix? What does the inequality symbol in these two displays mean?
+		}
+	
+		\reply{
+			yes! we need to clarify.
+			inequality means positive semi-definite! need to clarify!
+		}
 	\end{enumerate} 
 	
 \end{document}

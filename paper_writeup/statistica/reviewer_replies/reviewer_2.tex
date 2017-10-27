@@ -14,8 +14,9 @@
 \newcommand{\point}[1]{\item \textcolor{blue}{#1}}
 \newcommand{\reply}{\item[]\ }
 
+
 %opening
-\title{Response to Reviewer 1}
+\title{Response to Reviewer 2}
 
 \begin{document}
 	
@@ -27,31 +28,61 @@
 	
 	\begin{enumerate}
 		\point{
-			The authors should specify the distribution of $x_i$'s and also explain how random variables $x_i$ and $\epsilon_i$ are related. Is it assumed that observations are i.i.d. across $i$ and that $\epsilon_i$ is independent of $x_i$? I am fine with both but many researchers consider the latter as rather restrictive because it excludes, for example, the case when yi’s are binary.
+			The authors should specify the distribution of $x_i$'s and also explain how random variables $x_i$ and $\epsilon_i$ are related. Is it assumed that observations are i.i.d. across $i$ and that $\epsilon_i$ is independent of $x_i$? I am fine with both but many researchers consider the latter as rather restrictive because it excludes, for example, the case when $y_i$’s are binary.
+		}
+	
+		\reply{
+			yes i assume $x$ is independent of $\epsilon$.
+			yes i assume iid
 		}
 		
 		\point {
-			The previous comment is important because in the case of cross-validation, the author's derive results with the norm $\| \cdot \|$ being the usual L2-norm, e.g. $\|g\| = \int_0^1 g(x)^2 dx $, but I do not see how this is actually possible if the distribution of $x_i$’s is not specified. What if $x_i$’s can only take two values, 0 or 1?
+			The previous comment is important because in the case of cross-validation, the author's derive results with the norm $\| \cdot \|$ being the usual L2-norm, e.g. $\|g\|^2 = \int_0^1 g(x)^2 dx $, but I do not see how this is actually possible if the distribution of $x_i$’s is not specified. What if $x_i$’s can only take two values, 0 or 1?
 		}
+	
+		\reply{
+			Yes, typo. should be $\|g\|^2 = E_X[g^2]$
+		}
+		
 	
 		\point{
 			In the case of the single splitting procedure, the authors derive results with the norm $\|\cdot\|$ being $\|\cdot\|_V$ , which is defined by $\|g \|_V^2 = n_V^{-1} \sum_{i\in V} g^2(x_i)$ where $V$ is the validating subsample and $n_V$ is the number of observations in $V$ . This norm is problematic because it depends on how the observations are splitted into the training and validating subsamples. It would be much cleaner to use the usual L2-norm, like in the case of the cross-validation procedure. (And that again requires specifying the distribution of $x_i$’s.)
+		}
+	
+		\reply{
+			@noah - what should we do? our proof is for $\|\cdot\|_V$
 		}
 	
 		\point{
 			Page 2, lines 43-46: “for a given training dataset T and norm $\|\cdot \|$”. Actually, since cross-validation is used, the norm $\|\cdot \|$ can not be arbitrary as the sentence suggests.
 		}
 	
+		\reply{
+			i have no idea what you are referring to. where? and what do you mean exactly?
+		}
+	
 		\point{
 			Page 4, lines 24-27: “the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself.” This seems a bit inaccurate because, for example, for the lasso estimation, the error only scales like $\log p$ instead of $p$.
 		}
 	
+		\reply {
+			yes this is true. we should change the wording here
+		}
+	
 		\point{
-		Page 6, lines 41-45: “We hypothesize that many model-estimation pro- cedure satisfy this Lipschitz assumption.” The word “hypothesize” seems inappropriate here.
+		Page 6, lines 41-45: “We hypothesize that many model-estimation procedure satisfy this Lipschitz assumption.” The word “hypothesize” seems inappropriate here.
+		}
+	
+		\reply{
+			@noah - what's a better word here
 		}
 	
 		\point{
 			Page 7, line 29: $\|h\|_V = \frac{1}{n_V} \sum_{i \in V} h^2(x_i, y_i)$ should be $\|h\|_V^2 = \frac{1}{n_V} \sum_{i \in V} h^2(x_i, y_i).$
+		}
+	
+		\reply{
+			yes, sorry for the typo
 		}
 	
 		\end{enumerate} 
