@@ -17,7 +17,7 @@
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{amsthm}
-
+\usepackage{todonotes}
 \usepackage{mathtools}
 \usepackage{xr}
 \externaldocument{hyperparam-theory}
@@ -323,38 +323,40 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 
 \subsection{Cross-validation}
 \label{app:cv}
-We now present the proof for Theorem \ref{thrm:kfold}. It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which we have reproduced below for convenience. The theorem uses entropy with respect to the Orlicz norm $\| \cdot \|_{\phi} = \inf \{ C > 0: E[\exp(|f|/C) - 1] \le 1 \}$.
+We now present the proof for Theorem \ref{thrm:kfold}.
+It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which we have reproduced below for convenience.
 
 \begin{theorem}
 	\label{thrm:mitchell}
 	Consider a set of hyper-parameters $\Lambda$. Let
-	$
+	$$
 	\mathcal{Q} = \{ 
 	\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}|D^{(n_T)}) \right) ^2 
 	- \left (y - g^* \right) ^2 
-	: \boldsymbol{\lambda} \in \Lambda \}
-	$.
-	Suppose there is $G > 0$ such that $\sup_{g \in \mathcal{G}} \| g \|_\infty \le G$.
+	: \boldsymbol{\lambda} \in \Lambda \}.
+	$$
 	
-	Suppose there exist a constant $K_0, K_1 \ge 0$ such that for any $m \in \mathbb{N}$, the following two inequalities hold
+	Suppose there exist a constant $K_0, K_1 \ge 0$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$, the following two inequalities hold
 	\begin{align}
 	\left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) \right) ^2 
-	- \left (y - g^* \right) ^2  \right \|_{\phi} & \le K_0\\
+	- \left (y - g^* \right) ^2  \right \|_{L_{\psi_1}} & \le K_0
+	\label{eq:cv_assump1}\\
 	\left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) \right) ^2 
-	- \left (y - g^* \right) ^2  \right \|_{2} & \le 
-	K_1 \left \| \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) - g^* \right \|_{2}.
-	\label{eq:cv_assump}
+	- \left (y - g^* \right) ^2  \right \|_{L_2} & \le 
+	K_1 \left \| \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) - g^* \right \|_{L_2}.
+	\label{eq:cv_assump2}
 	\end{align}
 	
-	Suppose there is a $d_{\min} \ge 0$ and a strictly increasing function $\psi$ such that $\psi^{-1}$ is strictly convex, the convex conjugate $\psi^*$ of $\psi^{-1}$ increases, $\psi^*(\infty ) = \infty$ and there exists $r \ge1$ such that $\psi^*(x)/x^r$ is decreasing in $x$ and
+	Suppose there is a $d_{\min} \ge 0$ and a strictly increasing function $J$ such that $J^{-1}$ is strictly convex,
+	the convex conjugate $\psi$ of $J^{-1}$ increases, $\psi(\infty ) = \infty$ and there exists $r \ge 1$ such that $\psi(x)/x^r$ decreases and
 	\begin{equation}
 	\label{eq:mitchell_dudley_bound}
-	\psi(d) \ge \int_0^{\sqrt{d}} H^{1/2}(u, \mathcal{Q}_d, \| \cdot \|_2) du +
-	\frac{\log n_V}{\sqrt{n_V}} \int_0^{2G} H(u, \mathcal{Q}_d, \| \cdot \|_\phi) du
+	J(t) \ge \int_0^{2\sqrt{t}} H^{1/2}(u, \mathcal{Q}_t, \| \cdot \|_2) du +
+	\frac{\log n_V}{\sqrt{n_V}} \int_0^{2\|G\|_{L_{\psi_1}}} H(u, \mathcal{Q}_t, \| \cdot \|_\phi) du
 	\quad
-	\forall d > d_{\min}
+	\forall t > t_{\min}
 	\end{equation}
-	where $ \mathcal{Q}_d = \{ \tilde{Q} \in \mathcal{Q}: \| \tilde{Q} \|_2 \le \sqrt{d} \}$.
+	where $\mathcal{Q}_t = \{Q \in \mathcal{Q}: \| Q \|_{L_2} \le \sqrt{t} \}$.
 	
 	Suppose that the model-estimation procedure is exchangeable (i.e. any ordering of the same training data produces the same fitted model).
 	
@@ -363,26 +365,96 @@ We now present the proof for Theorem \ref{thrm:kfold}. It is an application of T
 	\begin{split}
 	E_{D^{(n)}} \left \|
 	\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^*
-	\right \|_2^2
+	\right \|_{L_2}^2
 	&\le
 	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda} 
 	E_{D^{(n_T)}} \left \|
 	\hat{g}^{(n_T)} ( \hat{\boldsymbol \lambda} | {D^{(n_T)}} )
 	- g^*
-	\right \|^2_2\\
+	\right \|^2_{L_2}\\
 	& + \frac{ac}{q}\left [
-	\psi^* \left (\frac{2q^{r + 1}(1+a)}{a\sqrt{n_V}} \right ) \vee d_{\min}
+	\psi \left (\frac{2q^{r + 1}(1+a)}{a\sqrt{n_V}} \right ) \vee t_{\min}
 	\right ]
 	\end{split}.
 	\end{align}
 \end{theorem}
 
-In order to apply Theorem \ref{thrm:mitchell}, we need to determine the entropy of the loss functions with respect to the Orlicz norm.
+To prove Theorem \ref{thrm:kfold}, we will need the following lemma that describes the relationship between Lipschitz functions
+\begin{lemma}
+	Suppose the same conditions as Theorem~\ref{thrm:mitchell}.
+	Suppose norm $\|\cdot \|$ satisfies
+	\begin{align}
+	\| XY \| \le \|X\|_*\|Y\|_*
+	\label{eq:cauchy-like}
+	\end{align}
+	for some norm $\|\cdot \|_*$ for any random variables $X,Y$ and $\sup_{g \in \mathcal G}\|g(x)\|_*, \|\epsilon\|_* < \infty$.
+	Moreover, suppose the Lipschitz assumption that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$, we have
+	\begin{align}
+	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le G(x) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2
+	\end{align}
+	We have
+	\begin{align}
+	N(\mathcal{Q}, u, \|\cdot \|)
+	\le N \left (\Lambda, \frac{u}{\left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right) \|G(x)\|_*}, \|\cdot \|_{2} \right)
+	\end{align}
+	\label{lemma:covering_lipschitz}
+\end{lemma}
+\begin{proof}
+\begin{align}
+& \left \|
+\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
+- \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
+\right \|\\
+& = \left \|
+\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right)
+\left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right ) - \left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right )^2 \right \|\\
+%JF falling off page
+& \le  \left (2 \|\epsilon\|_* + \left \|g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(2)} | D^{(m)})(x) \right \|_* \right)
+\left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right \|_* \\
+& \le  \left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right)
+\left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right \|_*
+\end{align}
+where we applied \eqref{eq:cauchy-like} in the first inequality.
+
+Applying the Lipschitz assumption, we have
+\begin{align}
+\begin{split}
+& \left \|
+\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
+- \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
+\right \| \\
+& \le  \left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right) \|G(x)\|_* \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
+\end{split}
+\end{align}
+\end{proof}
 
 \subsubsection{Proof for Theorem \ref{thrm:kfold}}
 \begin{proof}
-	We first check that the two assumptions in \eqref{eq:cv_assump} hold. This is easy to show with the assumption that $\sup_{g \in \mathcal G} \|g\|_\infty \le  G$ and $\|\epsilon\|_\infty \le G$.
-	
+We check that the assumption \eqref{eq:cv_assump1} holds.
+\begin{align}
+& \left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2  \right \|_{L_{\psi_1}} \\
+& = \left \| 2 \epsilon \left (g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x) \right ) + \left( g^*(x) - \hat{g}(\lambda | D^{(m)})(x) \right)^2 \right \|_{L_{\psi_1}} \\
+\label{eq:sum2}
+& \le 3 \left \| \epsilon^2 \vee \left (g^*(x) - \hat{g}(\boldsymbol(\lambda) | D^{(m)})(x) \right )^2 \right \|_{L_{\psi_1}}
+\end{align}
+The last line follows by considering the case where $|\epsilon| > |g^*(x) - \hat{g}(\boldsymbol(\lambda) | D^{(m)})(x)|$ and when the inequality is in the other direction.
+By triangle inequality, we then have
+\begin{align}
+& \left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2  \right \|_{L_{\psi_1}} \\
+& \le 3 \| \epsilon^2 \|_{L_{\psi_1}} + \| \left (g^*(x) - \hat{g}(\boldsymbol(\lambda) | D^{(m)})(x) \right )^2 \|_{L_{\psi_1}} \\
+& = 3 \| \epsilon \|_{L_{\psi_2}}^2 + \| g^*(x) - \hat{g}(\boldsymbol(\lambda) | D^{(m)})(x)  \|_{L_{\psi_2}}^2
+\end{align}
+Since we assumed that $\|\epsilon\|_{L_{\psi_2}}$ and $\|G\|_{L_{\psi_2}}$ are finite, then clearly \eqref{eq:cv_assump1} holds.
+
+Next, we check that assumption \eqref{eq:cv_assump2} holds.
+\begin{align}
+& \left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2  \right \|_{L_2} \\
+& = \left \| 2 \epsilon \left (g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x) \right ) + \left( g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x) \right)^2 \right \|_{L_2} \\
+& \le \left (2 \|\epsilon\|_{L_2} + \|g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x)\|_{L_2} \right) \left \| g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x) \right \|_{L_2}
+\end{align}
+Since $\|f\|_{L_2} \le c \|f\|_{L_{\psi_2}}$, then clearly \eqref{eq:cv_assump2} holds.
+
+
 	Next we determine $\psi$ in \eqref{eq:mitchell_dudley_bound}. Note that because $\|\cdot\|_\phi \le 2\|\cdot \|_\infty $ and $\| \cdot \|_2 \le \| \cdot \|_\infty$, then both $H(2u,\mathcal{Q}_d,\|\cdot\|_{\phi})$ and $H(u,\mathcal{Q}_d,\|\cdot\|_2)$ are bounded by 
 	$H(u,\mathcal{Q}_d,\|\cdot\|_{\infty})$.
 	By Lemma \ref{lemma:covering_cube}, we know
@@ -446,7 +518,7 @@ We now show that penalized regression problems for additive models satisfies the
 		\right ]
 		\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda | T)}
 	\end{align*}
-	
+	\todo{S is the second deriv!}
 	\[
 	D=\left.diag\left(\left\{ \nabla_{\boldsymbol{\theta}^{(j)}}^{2}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right\} _{j=1}^{J}\right)\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
 	\]
@@ -466,6 +538,8 @@ We now show that penalized regression problems for additive models satisfies the
 	\begin{align*}
 		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le  \frac{1}{\lambda_{min}\sqrt{n_{T}}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}.
 	\end{align*}
+	\todo{the sqrt nT got lost later on!}
+	
 	The norm of the gradients of $g_j$ can be bounded since $g_j$ is Lipschitz. Also, by definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$, we have
 	\begin{align*}
 	\frac{1}{2}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}\left(\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right) & \le \frac{1}{2}\left\Vert y-g(\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j),*})\\
@@ -483,11 +557,15 @@ We now show that penalized regression problems for additive models satisfies the
 	& \le \sum_{j=1}^{J}\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert _{2}\left\Vert \left(S+D\right)^{-1}\right\Vert _{2}\\
 	& \le  J\left(\frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}\right)\frac{1}{m}
 	\end{align}
-	where the last line follows from the fact that $(S + D)^{-1} \succeq m^{-1}I$. Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz:
+	\todo{make this calculate differently}
+	where the last line follows from the fact that $(S + D)^{-1} \succeq m^{-1}I$.
+	\todo{typo in the matrix ineq}
+	Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz:
 	\begin{equation}
 	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{m\lambda_{min}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}.
 	\end{equation}
 	Finally the result \eqref{eq:param_add_lipschitz} clearly follows since $g_j(\boldsymbol{\theta})$ are Lipschitz in $\boldsymbol{\theta}$ with respect to $\| \cdot \|_\infty$.
+	\todo{is it wrt infty norm? do we want to assume this?}
 \end{proof}
 
 \subsubsection{Proof for Lemma \ref{lemma:nonsmooth}}
@@ -569,6 +647,7 @@ We now show that penalized regression problems for additive models satisfies the
 	Let $H_{0} = \left \{
 	j:\left\Vert \hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)\right\Vert _{D^{(n)}} \ne 0\,\, \forall j = 1,...,J
 	\right \}$.
+	\todo{notation is confusing. not for all.}
 	For all $j \in H_0$, let 
 	\[
 	h_{j}=
@@ -583,6 +662,7 @@ We now show that penalized regression problems for additive models satisfies the
 	+\sum_{j=1}^{J}\lambda_{j}
 	P_{j} \left (\hat{g}_{1,j}+m_{j}h_{j} \right ).
 	\end{equation}
+	\todo{notation is confusing cause m is already defined}
 	By the gradient optimality conditions, we have
 	\begin{equation}
 	\nabla_{m} \left .
@@ -603,6 +683,8 @@ We now show that penalized regression problems for additive models satisfies the
 	\[
 	S:S_{ij}=\langle h_{j},h_{j}\rangle_{T}
 	\]
+	\todo{this doesnt look right. where is i?}
+	
 	\[
 	D_{1}=diag\left(
 	\left \{
@@ -641,6 +723,7 @@ We now show that penalized regression problems for additive models satisfies the
 	& \le \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})\\
 	& \le C_{\Lambda}^* + J\lambda_{max}\max_{j=1:J}P_{j}(\hat{g}_{1,j}).
 	\end{align*}
+	\todo{this step might be hard to follow. add more explanation}
 	Hence every diagonal element in $D_2$ is bounded above by
 	\begin{equation}
 	\frac{1}{\lambda_{min}}
@@ -659,10 +742,12 @@ We now show that penalized regression problems for additive models satisfies the
 	By the assumption in \eqref{eq:gateuax}, $e_{k}^\top \left(S+D_{1}\right) e_{k} \ge m$.
 	
 	By the mean value theorem and Cauchy Schwarz, we have
+	\todo{MVT or mean value ineq?}
 	\begin{equation}
 	\left|\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})\right| 
 	\le \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C^*_\Lambda \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}.
 	\end{equation}
+	\todo{what is d?}
 	Since $
 	\left|
 	\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})

@@ -51,28 +51,38 @@
 	
 		\reply{
 			@noah - what should we do? our proof is for $\|\cdot\|_V$
+			
+			ryan tibshirani's paper on another paper, "additive model for trend filtering", and move from the empirical norm to the 2-norm
+			
+			really explain why we use the empirical norm instead of the 2 norm
+			
+			will mess up the coefficients. but we want to keep the sharp upper bounds
+			
+			of course interesting, but that's beyond the scope of the current paper.
+			
+			check thru the CV paper and explain why that works whereas we don't use it for training validation split.
 		}
-	
+
 		\point{
 			Page 2, lines 43-46: “for a given training dataset T and norm $\|\cdot \|$”. Actually, since cross-validation is used, the norm $\|\cdot \|$ can not be arbitrary as the sentence suggests.
 		}
-	
+
 		\reply{
 			i have no idea what you are referring to. where? and what do you mean exactly?
 		}
-	
+
 		\point{
 			Page 4, lines 24-27: “the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself.” This seems a bit inaccurate because, for example, for the lasso estimation, the error only scales like $\log p$ instead of $p$.
 		}
-	
+
 		\reply {
 			yes this is true. we should change the wording here
 		}
-	
+
 		\point{
 		Page 6, lines 41-45: “We hypothesize that many model-estimation procedure satisfy this Lipschitz assumption.” The word “hypothesize” seems inappropriate here.
 		}
-	
+
 		\reply{
 			@noah - what's a better word here
 		}

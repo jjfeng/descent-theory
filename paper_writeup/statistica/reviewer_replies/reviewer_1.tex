@@ -38,16 +38,7 @@
 			Is this subset known or it has to be estimated?
 		}
 		\reply{
-%			You don't know what $\Lambda_{smooth}$ is, but that's okay.
-%			We essentially assume that $\Lambda_{smooth}^C$ is a measure zero set -- it is countable. It's very unlikely you'll land on it so we only need to consider performance over $\Lambda_{smooth}$.
-%			$\Lambda_{smooth}$ is mostly a theoretical construct!
-%			In practice, you just need to tune over $\Lambda$.
-%			Now what is the behavior over $\Lambda_{smooth}^C$? Would we rather our estimates be based on those points instead? I don't think so....
-			
-			SHIT - I think we can drop the whole $\Lambda_{smooth}$ restriction in Lemma 2. I think the proof will carry through as long as Condition 2 holds!
-			
-			Action: update the proof.
-			
+			We updated the proof. Gah, so sorry.
 			Also, in practice, just tune over $\Lambda$.
 		}
 	
@@ -59,9 +50,11 @@
 		
 			Lemma 1: ridge penalty
 		
-			Lemma 2: lasso penalty - we can just copy fro our previous paper? or do we reference that paper?
+			Lemma 2: lasso penalty - we can just copy from our previous paper? or do we reference that paper? maybe appendix.
 			
 			Lemma 3: sobolev norm? honestly, i dont know enough nonparametric penalty functions...
+			
+			also get specific rates for these penalties.
 		}
 		
 		\point{
@@ -79,7 +72,7 @@
 			fixing this! reviewer 2 also had similar comments
 		}
 		\point{
-		In displays (4.26) and (4.32), does “I” stand for the identity matrix? What does the inequality symbol in these two displays mean?
+			In displays (4.26) and (4.32), does “I” stand for the identity matrix? What does the inequality symbol in these two displays mean?
 		}
 	
 		\reply{

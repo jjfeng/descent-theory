@@ -116,6 +116,22 @@ Cross-validation, Regression, Regularization.
 \setcounter{section}{1} %***
 \setcounter{equation}{0} %-1
 
+Done
+\begin{enumerate}
+	\item Update lemma 2, write a formal proof for lemma 2
+\end{enumerate}
+
+TODO
+\begin{enumerate}
+	\item Make examples for each of the lemmas - give example convergence rates
+	\item Read tibshirani’s proof for moving for emp norm to 2 norm?
+	\item Read massart's model selection theorem and see if it is helpful here.
+	\item Reread the proof for the CV theorem
+	\item Decide how we should proceed with reviewer 2's request: (1) argue that it is not desired and (2) give a corollary
+	\item Update all the notation and check all the notation.
+	\item Make the english flow better. Feels like it needs lots of rewriting… though maybe that’s not a good idea. Dunno.
+\end{enumerate}
+
 \section{Introduction}
 
 %JF wow this paper's english can really use some level-upping. some paragraphs also don't flow.
@@ -212,6 +228,7 @@ We now present a finite-sample oracle inequality for the single training/validat
 	\max_{i=1,...,n} B^2 \left ( \mathbb{E} e^{|\epsilon_i|^2/B^2} - 1 \right ) \le b^2.
 	$$
 	Suppose there is a constant $C_\Lambda \ge 32e/(n \Delta_{\Lambda})$ such that $\hat g^{(n_T)}(\boldsymbol{\lambda} |D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\| \cdot \|_V$ over $\Lambda$.
+	\todo{is the lower bound on CLambda reasonable?}
 	
 	Let 
 	\begin{equation}
@@ -283,11 +300,14 @@ Since $\mathcal{G}(T)$ is unlikely to contain the true model $g^*$, we should in
 
 \subsection{Cross-Validation}\label{sec:cv}
 
-In this section, we give an oracle inequality for $K$-fold cross-validation. Previously, the oracle inequality was with respect to the $L_2$-norm over the validation covariates. Now we give our result with respect to functional $L_2$-norm
+In this section, we give an oracle inequality for $K$-fold cross-validation.
+Previously, the oracle inequality was with respect to the $L_2$-norm over the validation covariates.
+Now we give our result with respect to functional $L_2$-norm.
+Let $\mu$ be the probability distribution of $(X,Y)$.
+Then
 \begin{equation}
-\left \| g - g^* \right \|^2 = \int \left |g(x) - g^*(x) \right |^2 dx.
+\left \| g - g^* \right \|^2_{L_2} = \int \left |g(x) - g^*(x) \right |^2 d\mu(x).
 \end{equation}
-\todo{update norm definition}
 
 For $K$-fold cross-validation our setup is as follows. Let dataset $D^{(n)}$ be randomly partitioned into $K$ sets, which we assume to have equal size for simplicity. Partition $k$ will be denoted $D_k^{(n_V)}$ and its complement will be denoted $D_{-k}^{(n_T)} = D^{(n)} \setminus D_k^{(n_V)}$. We train our model using $D_{-k}^{(n_T)}$ for $k=1,...,K$ and select the hyper-parameter that minimizes the average validation loss
 \begin{eqnarray}
@@ -304,12 +324,35 @@ In traditional cross-validation, the final model is retrained on all the data wi
 \end{equation}
 The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which is reproduced in Theorem \ref{thrm:mitchell} in the Appendix \ref{app:cv} for convenience.
 
+Before presenting the theorem, recall the definition of the Orlicz norm:
+\begin{definition}
+	For a function $\psi: \mathbb{R}_+ \mapsto \mathbb{R}$ that is convex, non-decreasing, $\psi(0) = 0$, define the Orlicz $\psi$-norm of $f$ to be
+	\begin{align}
+	\|f\|_{L_\psi} = \inf \{C > 0: \mathbb{P}\psi(|f|/C) \le 1\}.
+	\end{align}
+\end{definition}
+We will be interested in the particular function $\psi_\alpha = \exp(x^\alpha) - 1 $ for $\alpha = 2$.
+The $\psi_\alpha$-norm measures the exponential tail behavior of a random variable.
+We will use it to bound the tail behavior of functions in the function class $\mathcal{G}$ and the random variable/noise $\epsilon$.
+In addition, note that the $L_2$-norm is a special case of the Orlicz norm with the function $\psi(x) = x^2$.
+
+Now on to the theorem.
+
 \begin{theorem}
 	\label{thrm:kfold}
-	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$. Suppose there is a $G \ge  2$ such that $\sup_{g \in \mathcal{G}} \|g\|_\infty \le G$. Suppose random variables $\epsilon_i$ are independent with expectation zero and are bounded $\| \epsilon_i \|_\infty \le G$.
-	
-	Consider the setting of averaged version of $K$-fold cross-validation where $K \ge 2$ and the datasets are of size $n$ where $n$ is divisible by $K$. Let $n_V = n/K = n_V$ and $n_T = n - n_V$.  Suppose there is a constant $C_\Lambda > e^5/G\Delta_{\Lambda}$ such that for any dataset $D^{(n_T)}$, $\hat g (\boldsymbol{\lambda} | D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\| \cdot \|_\infty$ over $\Lambda$.
-	
+	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$.
+	Let $G(x)$ be an envelope function such that $\sup_{g \in \mathcal{G}} |g (x)| \le G(x)$ and $\|G\|_{L_{\psi_2}} <\infty$.
+	Suppose random variables $\epsilon_i$ are independent with expectation zero, satisfy $\|\epsilon\|_{L_{\psi_2}} <\infty$, and are independent of $X$.
+
+Consider the setting of averaged version of $K$-fold cross-validation where $K \ge 2$ and the datasets are of size $n$ where $n$ is divisible by $K$.
+Let $n_V = n/K = n_V$ and $n_T = n - n_V$.
+
+Suppose for any dataset $D^{(n_T)}$, $\hat g (\boldsymbol{\lambda} | D^{(n_T)})$ satisfies for any $x$
+\begin{align}
+\left | \hat g (\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) - \hat g (\boldsymbol{\lambda}^{(2)} | D^{(n_T)})(x) \right |
+\le G(x) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
+\end{align}
+
 	Then there is an absolute constant $c > 0$ such that for all $a > 0$,
 	\begin{align*}
 	&
@@ -317,12 +360,17 @@ The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. It
 	\left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 
 	\\
 	&\le
-	(1+a) \min_{\boldsymbol{\lambda} \in \Lambda}  
+	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda}  
 	E_{D^{(n_T)}}
 	\left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 
-	+ c \frac{(1+a)^2}{a} \frac{J G \log (GC_\Lambda \Delta_{\Lambda} ) \log n_V }{n_V}.
+	+ \textcolor{red}{c \frac{(1+a)^2}{a} \frac{J G \log (GC_\Lambda \Delta_{\Lambda} ) \log n_V }{n_V}.}
 	\end{align*}
+	%JF inf not min
 \end{theorem}
+
+$\|G\|_{L_{\psi_2}} < \infty$ is a joint condition on $X$ and $\mathcal{G}$....
+
+$\|\epsilon\|_{L_{\psi_2}} < \infty$ states that $\epsilon$ is sub-gaussian.
 
 As we can see, Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are quite similar. The upper bounds in both theorems depend on the oracle error and a near-parametric term. For parametric model-estimation procedures, tuning hyper-parameters incurs a similar cost as the model-estimation procedure itself. In semi- and non-parametric regression settings, tuning hyper-parameters is a relatively ``cheap'' and incurs an error that is negligible asymptotically.
 
@@ -416,23 +464,31 @@ We begin with the simple case where the penalty functions are smooth. The follow
 \begin{lemma}
 	\label{lemma:param_add}
 	Let 
+	% JF ew this notation is confusing
 	\begin{equation}
 	\label{eq:param_add_estimator}
-	\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda} | T \right )  = 
+	\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda} | T \right )  =
 	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)
 	\end{equation}
+	%JF maybe mention that this assumes that the minimizer is unique. In order for this to be satisfies, we can suppose that the function is convex, though this isn't necessary.
 	
 	\noindent
 	Suppose that $g_j(\boldsymbol{\theta}^{(j)})$ are $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
+	%JF Rewrite using the other Lipschitz definition
 	
 	\noindent
-	Further suppose $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are twice-differentiable and convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$. Also suppose $L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)$ is twice-differentiable and convex with respect to $\boldsymbol{\theta}$.
+	Further suppose $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are twice-differentiable and convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$.
+	%JF dont think we need it to be convex. we have later requirement that is needed
+	Also suppose $L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)$ is twice-differentiable and convex with respect to $\boldsymbol{\theta}$.
+	%JF dont think we need it to be convex. we have later requirement that is needed
 	
 	Suppose there exists $m > 0$ such that the Hessian of the penalized training criterion at the minimizer satisfies 
 	\begin{equation}
 	\left . \nabla_{\theta}^2 L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right) \right |_{\theta = \hat{\theta}(\boldsymbol{\lambda} | T )} \succeq mI.
+	\label{eq:smooth_pos_def}
 	\end{equation}
-	
+	%JF for all lambda.
+
 	Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
 	\begin{equation}
 	C_{\theta^{*},\Lambda}=
@@ -451,7 +507,30 @@ We begin with the simple case where the penalty functions are smooth. The follow
 	\end{equation}
 \end{lemma}
 
-%JF maybe mention that ridge is obviously a good example of a penalty that satisfies these criteria
+%JF Mention that ridge is obviously a good example of a penalty that satisfies these criteria. Then provide the rates if we use the ridge penalty?
+%JF Also show that sobolev penalty works too. Show that sobolev translates to a parametric penalty.
+
+Example: The Sobolev penalty is a nonparametric functional.
+However it is known from Green and Silverman, 1994 (CITE) that among all interpolating, twice differentiable functions, natural cubic splines minimize the Sobolev penalty.
+Thus one can actually re-express the following problem with a Sobolev penalty
+\begin{align}
+\|y - \sum_{j=1}^J g^{(j)} \|_T^2 + \sum_{j=1}^{J} \lambda_j \int_0^1 \left(g^{(j)''}(x)\right)^{2} dx
+\end{align}
+to a parametric problem using an $N$-dimensional basis $\eta$ for the set of
+natural cubic splines with knots over $x_T$:
+\begin{align}
+\|y - \sum_{j=1}^J \eta_j(x_j) \theta_{(j)}\|_T^2 + \sum_{j=1}^J \lambda_j \theta_{(j)}^\top \Omega^{(j)} \theta_{(j)}
+\end{align}
+where $N = $ and $\Omega = $.
+The Hessian of the penalized training criterion is
+\begin{align}
+\text{blockdiag} \left (
+N^{(j), \top} N^{(j)} +
+\lambda_j \Omega^{(j)}
+\right )
+\end{align}
+As $\eta$ forms an $N$-dimensional basis, then the Hessian is positive definite and \eqref{eq:smooth_pos_def} is satisfied.
+%JF still not completely sure why - ask noah
 
 Notice that the result assumes that the training criterion is strongly convex at its minimizer. If this is not true, one can augment the penalty function $P_j(\boldsymbol{\theta}^{(j)})$ with a ridge penalty $\| \boldsymbol{\theta}^{(j)} \|_2^2$ so that the training criterion becomes
 \begin{equation}
@@ -463,7 +542,9 @@ Notice that the result assumes that the training criterion is strongly convex at
 \subsubsection{Parametric regression with non-smooth penalties}
 \label{sec:param_nonsmooth}
 
-If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless we find that for many popular non-smooth penalty functions, such as the lasso \citep{tibshirani1996regression} and group lasso \citep{yuan2006model}, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere. To characterize such problems, we begin with the following definitions:
+If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless we find that for many popular non-smooth penalty functions, such as the lasso \citep{tibshirani1996regression} and group lasso \citep{yuan2006model}, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere.
+\todo{cite ourselves}
+To characterize such problems, we begin with the following definitions:
 
 \begin{definition}
 	The differentiable space of function $f:\mathbb{R}^p \mapsto \mathbb{R}$ at $\boldsymbol{\theta}$ is
@@ -503,8 +584,6 @@ Consider $\Lambda_{smooth}$ that satisfies the following conditions:
 	Suppose the intersection $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap\Lambda_{smooth}^{C}$
 	is countable.
 \end{condition}
-For example, the lasso satisfies these conditions since its solution follows a piecewise linear path \citep{efron2004least, tibshirani2011solution}.
-We believe other $L_p$-norm penalties, like the group lasso, also satisfy these conditions.
 
 Equipped with these conditions, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the Lipschitz constant is exactly the same as that in Lemma \ref{lemma:param_add}.
 
@@ -516,15 +595,37 @@ Equipped with these conditions, we can characterize the smoothness of the fitted
 	Suppose $g_j(\boldsymbol{\theta}^{(j)})$ is $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
 	
 	\noindent		
-	Further suppose that $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$.  Also suppose that $L_T\left ( \boldsymbol{\theta} , \boldsymbol{\lambda} \right )$ is convex with respect to $\boldsymbol{\theta}$.
+	Further suppose that $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$.
+	%JF dont see why should be convex
+	Also suppose that $L_T\left ( \boldsymbol{\theta} , \boldsymbol{\lambda} \right )$ is convex with respect to $\boldsymbol{\theta}$.
+	%JF dont see why should be convex
 	
 	Let $U_\lambda$ be an orthonormal matrix with columns forming a basis for the differentiable space of $L_T(\cdot , \boldsymbol{\lambda})$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$. Suppose there exists $m > 0$ such that the Hessian of the penalized training criterion at the minimizer taken with respect to the directions in $U_\lambda$ satisfies 
 	\begin{equation}
 	\left . _{U_\lambda}\nabla_{\theta}^2 L_T(\boldsymbol{\theta}, \boldsymbol{\lambda}) \right |_{\theta = \hat{\theta}(\boldsymbol{\lambda})} \succeq mI.
-	\end{equation}		
+	\end{equation}
+	%JF for all lambda.
 	
 	Suppose $\Lambda_{smooth} \subseteq \Lambda$ satisfies Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2}. Then any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda_{smooth}$ satisfies  \eqref{eq:param_add_lipschitz}.
 \end{lemma}
+
+As an example, we show that the elastic net satisfies these conditions since its solution follows a piecewise linear path (CITE appropriate).
+%JF fix up - copied from other paper
+Let the nonzero indices of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ be denoted $I(\boldsymbol\lambda) = \{i | \hat{\theta}_i(\boldsymbol\lambda) \ne 0 \text{ for } i=1,...,p \}$ and let $\boldsymbol I_{I(\boldsymbol \lambda)}$ be a submatrix of the identity matrix with columns $I(\boldsymbol\lambda)$. Since $|\cdot|$ is not differentiable at zero, the directional derivatives of $||\boldsymbol \theta||_1$ only exist along directions spanned by the columns of $\boldsymbol I_{I(\boldsymbol \lambda)}$. Thus the differentiable space at $\boldsymbol \lambda$ is
+$
+S_{\boldsymbol{\lambda}} = span(\boldsymbol I_{I(\boldsymbol \lambda)})
+\label{eq:en_diff_space}
+$.
+Condition 1: The elastic net solution paths are piecewise linear \citep{zou2003regression}, which means that the nonzero indices of the elastic net estimates stay locally constant for almost every $\boldsymbol{\lambda}$. Therefore, $S_{\boldsymbol{\lambda}}$ as defined in Section~\ref{sec:enet}  is a local optimality space for $L_T(\cdot, \boldsymbol{\lambda})$.
+Also, we need to establish that the $\ell_1$ penalty is twice-continuously differentiable in the directions of $S_{\boldsymbol{\lambda}}$ since the quadratic loss function and the ridge penalty are both smooth. The absolute value function is twice-continuously differentiable everywhere except at zero. Hence the training criterion is smooth when restricted to $S_{\boldsymbol{\lambda}}$.
+
+Condition 2: The elastic net solution paths are piecewise linear \citep{zou2003regression} therefore $\Lambda_{smooth}^c$ is a set of countable $\lambda$, e.g. $\Lambda_{smooth}^c$ has measure zero.
+
+Positive definite: The Hessian matrix of $L_T(\cdot, \boldsymbol{\lambda})$ with respect to $\boldsymbol I_{I(\boldsymbol \lambda)}$ is $\boldsymbol I_{I(\boldsymbol \lambda)}^\top \boldsymbol{X}_{T}^\top \boldsymbol{X}_{T} \boldsymbol I_{I(\boldsymbol \lambda)} + \lambda_2 \boldsymbol{I}$. The first summand is positive semi-definite. As long as $\lambda_2 > 0$, the contribution of the identity matrix ensures the Hessian is positive definite.
+%JF make sure all the variables above are defined!
+
+We believe other $L_p$-norm penalties, like the group lasso, also satisfy these conditions.
+%JF maybe elaborate more. point to our other paper
 
 \subsection{Nonparametric additive models}
 \label{sec:nonparam_smooth}
@@ -547,7 +648,9 @@ where $P_j$ are now penalty functionals. For some problems, e.g. smoothing splin
 	\label{lemma:nonparam_smooth}
 	Suppose $\mathcal{G}_1, ..., \mathcal{G}_J$ be linear spaces of univariate functions.
 	
-	Suppose the penalty functions $P_{j}$ are twice Gateaux differentiable and convex over $\mathcal{G}_j$. Suppose there is a $m > 0$ such that for all $j=1,...,J$, the second Gateaux derivative of the training criterion at $\hat{g}^{(n_T)}_j( \boldsymbol{\lambda} | T)$ satisfies
+	Suppose the penalty functions $P_{j}$ are twice Gateaux differentiable and convex over $\mathcal{G}_j$.
+	%JF again, are you sure need be convex?
+	Suppose there is a $m > 0$ such that for all $j=1,...,J$, the second Gateaux derivative of the training criterion at $\hat{g}^{(n_T)}_j( \boldsymbol{\lambda} | T)$ satisfies
 	\begin{equation}
 	\left \langle 
 	\left . D^2_{g_j} L_T \left ( \left \{ g_j \right \}_{j=1}^J, \boldsymbol{\lambda} \right ) \right |_{g_j= \hat{g}_j( \boldsymbol{\lambda} | T) }
@@ -557,7 +660,10 @@ where $P_j$ are now penalty functionals. For some problems, e.g. smoothing splin
 	\quad \forall h_j \in \mathcal{G}_j,  \|h_j \|_{D^{(n)}} = 1
 	\label{eq:gateuax}
 	\end{equation}
+	%JF for all lambda.
+	%JF this implies that the penalty function must contain the values at the validation point!
 	where $D^2_{g_j}$ is the second Gateaux derivative where both derivatives are taken in the direction of $g_j$.
+	%JF should not be "in the direction". should be "by wrt g_j"
 	
 	Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
 	\begin{equation}
@@ -576,6 +682,15 @@ where $P_j$ are now penalty functionals. For some problems, e.g. smoothing splin
 	\end{align}
 \end{lemma}
 
+The requirement that \eqref{eq:gateuax} holds implies that the values of the nonparametric model must appear in the penalty.
+Note that this is allowed -- we don't actually give the $y$ values for the validation covariates.
+
+Note that \eqref{eq:nonparam_lipshitz_thrm} is over $D^{(n)}$, even though we just need it to be $V$.
+To transform, we can easily relate to two quantities.
+
+An example for this problem is an L2 trend-filtering problem.
+(So a ridge penalty over first-order discrete differences)
+Clearly \eqref{eq:gateuax} is satisfied if $\lambda_j$ are all positive.
 
 \section{Simulations}\label{sec:simulations}
 
