@@ -359,7 +359,7 @@ Suppose that
 \end{align}
 
 
-Let $\tilde{h}$ be the function 
+For any $\sigma>0$, define $\tilde{h}$ be the function 
 \[
 \tilde{h}(n_{T})\ge\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)
 \]
@@ -375,9 +375,10 @@ Then
 \begin{eqnarray*}
  &  & \mathbb{P}_{D^{(n)}}\left(\|\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\\
  & \le & (1+a)\inf_{\lambda\in\Lambda}\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right]\\
- &  & +ac\left(\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\sigma+1\right)+1\right]\frac{(1+a)}{a}+c_{2}\epsilon\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\sigma n_{V}+1\right)}+1\right]^{2}\left(\frac{1+a}{a}\right)^{2}\right)\left[1+\tilde{h}(n_{T})\right]
+ &  & +c\frac{J}{n_{V}}\left[C_{n_{V},\Lambda}+1\right]\left(K\left(\log n_{V}\right)(1+a)+\frac{\left(1+a\right)^{2}}{a}\right)\left[1+\tilde{h}(n_{T})\right]
 \end{eqnarray*}
-\end{thm}
+where $C_{n_{V},\Lambda}=\log\left(c_{3}\Delta_{\Lambda}K\sigma n_{V}+1\right)$
+and $c$ is an absolute constant.\end{thm}
 \begin{proof}
 By Lemma 1, 
 \begin{eqnarray*}
@@ -444,7 +445,7 @@ Plugging the definition of $J_{\delta}(\epsilon)$ back in, the function
 $\epsilon_{q,\delta}$ for $q>1$ and $u\ge1$ is
 \begin{eqnarray*}
 \epsilon_{q,\delta}(u) & = & \psi_{\delta}\left(\frac{2q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\\
- & = & \left[\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\delta+1\right)+1\right]\frac{q^{r+1}(1+a)u}{a}+c_{2}\epsilon\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\delta n_{V}+1\right)}+1\right]^{2}\left(\frac{q^{r+1}(1+a)u}{a}\right)^{2}\right]\vee\frac{1}{n_{V}}.
+ & = & \left[\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\delta+1\right)+1\right]\frac{q^{r+1}(1+a)u}{a}+c_{2}\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\delta n_{V}+1\right)}+1\right]^{2}\left(\frac{q^{r+1}(1+a)u}{a}\right)^{2}\right]\vee\frac{1}{n_{V}}.
 \end{eqnarray*}
 
 
@@ -453,7 +454,7 @@ $\epsilon_{q,\delta}$ for $q>1$ and $u\ge1$ is
 In particular, if we plug in $\delta=2^{k}\sigma$ for any $\sigma>0$
 and $k\ge1$, we have (for a new set of absolute constants)
 \[
-\epsilon_{q,2^{k}\sigma}(u)\le\left[k\left(\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\sigma+1\right)+1\right]\frac{q^{r+1}(1+a)u}{a}+c_{2}\epsilon\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\sigma n_{V}+1\right)}+1\right]^{2}\left(\frac{q^{r+1}(1+a)u}{a}\right)^{2}\right)\right]\vee\frac{1}{n_{V}}.
+\epsilon_{q,2^{k}\sigma}(u)\le\left[k\left(\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\sigma+1\right)+1\right]\frac{q^{r+1}(1+a)u}{a}+c_{2}\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\sigma n_{V}+1\right)}+1\right]^{2}\left(\frac{q^{r+1}(1+a)u}{a}\right)^{2}\right)\right]\vee\frac{1}{n_{V}}.
 \]
 
 
@@ -462,7 +463,7 @@ Plugging this into Lemma 4 with $Q(\lambda|D^{(n_{T})})=\left(y-\hat{g}^{(n_{T})
 we have 
 \begin{eqnarray*}
  &  & \mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)\left[\left(y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}|D^{(n_{T})})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}\right]\right)_{+}\right]\\
- & \le & \frac{ac}{q}\left(\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\sigma+1\right)+1\right]\frac{q^{r}(1+a)}{a}+c_{2}\epsilon\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\sigma n_{V}+1\right)}+1\right]^{2}\left(\frac{q^{r}(1+a)}{a}\right)^{2}\right)\times\\
+ & \le & \frac{ac}{q}\left(\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\sigma+1\right)+1\right]\frac{q^{r}(1+a)}{a}+c_{2}\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\sigma n_{V}+1\right)}+1\right]^{2}\left(\frac{q^{r}(1+a)}{a}\right)^{2}\right)\times\\
  &  & \left(1+\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\right)
 \end{eqnarray*}
 
@@ -471,7 +472,7 @@ Take $q\rightarrow1$ and using the assumption that $\tilde{h}(n_{T})\ge c\sum_{k
 , we get
 \begin{eqnarray*}
  &  & \mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\right]\\
- & \le & ac\left(\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\sigma+1\right)+1\right]\frac{(1+a)}{a}+c_{2}\epsilon\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\sigma n_{V}+1\right)}+1\right]^{2}\left(\frac{1+a}{a}\right)^{2}\right)\left(1+\tilde{h}(n_{T})\right)
+ & \le & ac\left(\frac{\log n_{V}}{n_{V}}c_{0}JK\left[\log\left(c_{1}\Delta_{\Lambda}\sigma+1\right)+1\right]\frac{(1+a)}{a}+c_{2}\frac{J}{n_{V}}\left[\sqrt{\log\left(c_{3}\Delta_{\Lambda}K\sigma n_{V}+1\right)}+1\right]^{2}\left(\frac{1+a}{a}\right)^{2}\right)\left(1+\tilde{h}(n_{T})\right)
 \end{eqnarray*}
 
 
