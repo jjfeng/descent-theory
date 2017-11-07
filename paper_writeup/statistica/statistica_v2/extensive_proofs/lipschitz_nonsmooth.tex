@@ -218,49 +218,50 @@ Suppose Condition 2. Then $\mu_{2J}(\Lambda_{ext})=0$ where $\mu_{J}$
 is the Lebesgue measure in $\mathbb{R}^{2J}$ and $\Lambda_{ext}$
 was defined in Lemma 2.\end{lem}
 \begin{proof}
-Suppose that $\mu_{2J}(\Lambda_{ext})>0$. If this is the case, we
-claim there exists an $\epsilon>0$ and some non-empty box contained
-in $\Lambda_{ext}$ with one corner as $\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(3)}\right)$
-and the other corner as $\left(\boldsymbol{\lambda}^{(2)},\boldsymbol{\lambda}^{(4)}\right)$,
-denoted $\text{Box}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)},\boldsymbol{\lambda}^{(3)},\boldsymbol{\lambda}^{(4)}\right)\subseteq\Lambda_{ext}$,
-such that 
-\begin{equation}
-\inf_{(\lambda',\lambda'')\in\text{Box}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)},\boldsymbol{\lambda}^{(3)},\boldsymbol{\lambda}^{(4)}\right),\lambda'\ne\lambda''}\frac{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\cap\Lambda_{smooth}^{c}\right)}{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\right)}>\epsilon>0.\label{eq:inf_measure}
-\end{equation}
+Suppose that $\mu_{2J}(\Lambda_{ext})>0$. If this is the case, then
+there exists a ball with nonzero radius $r>0$, $B_{r}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)\subseteq\Lambda_{ext}$,
+s.t. $\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\cap\Lambda_{smooth}^{c}\right)>0\forall\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\in B_{r}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)$.
+Since $\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\cap\Lambda_{smooth}^{c}\right)$
+must be positive, we must have $\boldsymbol{\lambda}^{(1)}\ne\boldsymbol{\lambda}^{(2)}$.
+
+Suppose that $\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\cap\Lambda_{smooth}^{c}\right)=\delta>0$.
+We claim that for a sufficiently small radius $r'$, we also have
+have
+\[
+\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\cap\Lambda_{smooth}^{c}\right)>\delta/2>0\forall\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\in B_{r'}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right).
+\]
 
 
-To see why such an $\epsilon$ and box must exist, consider a $\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\in\Lambda_{ext}$
+To see why this claim is true, let us define a monotonically decreasing
+sequence $\left\{ r_{i}\right\} $ such that $\lim_{i\rightarrow\infty}r_{i}=0$.
+By the monotone convergence theorem,
+\[
+\lim_{i\rightarrow\infty}\inf_{\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\in B_{r_{i}}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)}\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\cap\Lambda_{smooth}^{c}\right)=\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\cap\Lambda_{smooth}^{c}\right)=\delta>0.
+\]
+
+
+Therefore by the definition of limits, there is some sufficiently
+large $i'$ such that $r'\equiv r_{i'}$ 
+\[
+\inf_{\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\in B_{r'}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)}\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\cap\Lambda_{smooth}^{c}\right)>\delta/2.
+\]
+
+
+Given our ball is non-empty, there exist points $\left(\boldsymbol{\lambda}^{(3)},\boldsymbol{\lambda}^{(4)}\right),\left(\boldsymbol{\lambda}^{(5)},\boldsymbol{\lambda}^{(6)}\right)\in B_{r'}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)$
 where 
 \[
-\frac{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\cap\Lambda_{smooth}^{c}\right)}{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)}>\delta>0.
+\boldsymbol{\lambda}_{j}^{(3)}\ge\boldsymbol{\lambda}_{j}^{(5)},\boldsymbol{\lambda}_{j}^{(4)}\ge\boldsymbol{\lambda}_{j}^{(6)}\forall j=1,..,J
 \]
-Let $\left\{ B_{i}\right\} $ be a sequence of boxes shrinking monotonically
-(as in $B_{i+1}\subset B_{i}$) towards $\text{Box}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)},\boldsymbol{\lambda}^{(2)}\right)$.
-By the monotone convergence theorem, 
-\begin{eqnarray*}
- &  & \lim_{i\rightarrow\infty}\inf_{(\lambda',\lambda'')\in B_{i},\lambda'\ne\lambda''}\frac{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\cap\Lambda_{smooth}^{c}\right)}{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\right)}\\
- & = & \inf_{(\lambda',\lambda'')\in\text{Box}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)},\boldsymbol{\lambda}^{(2)}\right),\lambda'\ne\lambda''}\frac{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\cap\Lambda_{smooth}^{c}\right)}{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\right)}\\
- & = & \frac{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\cap\Lambda_{smooth}^{c}\right)}{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)}>\delta>0
-\end{eqnarray*}
-since $\inf$ of a function is measurable, the quotient of measurable
-functions is measurable if the denominator is never zero.
-
-By the definition of limits, there must exist a non-empty box $B_{i}$
-in the sequence of monotonically shrinking boxes such that 
+and $\boldsymbol{\lambda}^{(3)}\ne\boldsymbol{\lambda}^{(5)},\boldsymbol{\lambda}^{(4)}\ne\boldsymbol{\lambda}^{(6)}$.
+Then compare the measure of $\Lambda_{smooth}^{c}$ to the measure
+of the convex hull of $\boldsymbol{\lambda}^{(3)},\boldsymbol{\lambda}^{(4)},\boldsymbol{\lambda}^{(5)},\boldsymbol{\lambda}^{(6)}$
+intersected with $\Lambda_{smooth}^{c}$: 
 \[
-\inf_{(\lambda',\lambda'')\in B_{i},\lambda'\ne\lambda''}\frac{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\cap\Lambda_{smooth}^{c}\right)}{\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\right)}>\delta/2>0.
+\mu\left(\Lambda_{smooth}^{c}\right)\ge\mu\left(\cup_{\alpha\in[0,1]}\left(\mathcal{L}\left(\alpha\boldsymbol{\lambda}^{(3)}+(1-\alpha)\boldsymbol{\lambda}^{(5)},\alpha\boldsymbol{\lambda}^{(4)}+(1-\alpha)\boldsymbol{\lambda}^{(6)}\right)\cap\Lambda_{smooth}^{c}\right)\right)>0.
 \]
 
 
-Given that there exists a box $B$ with edge lengths $b_{1}$ and
-$b_{2}$ satisfying \ref{eq:inf_measure}, then 
-\[
-\mu\left(\Lambda_{smooth}^{c}\right)\ge\mu\left(\cup_{(\lambda',\lambda'')\in B}\left(\mathcal{L}\left(\boldsymbol{\lambda}',\boldsymbol{\lambda}''\right)\cap\Lambda_{smooth}^{c}\right)\right)>\epsilon\left(b_{1}\vee b_{2}\right)>0.
-\]
-
-
-This contradicts our assumption that $\mu\left(\Lambda_{smooth}^{c}\right)$
-has measure zero.
+However this is a contradiction of our assumption that $\mu\left(\Lambda_{smooth}^{c}\right)=0$.
 \end{proof}
 Finally, combining Lemma 1, 2, and 3, we can show that the Lipschitz
 condition is satisfied over all of $\Lambda$.
