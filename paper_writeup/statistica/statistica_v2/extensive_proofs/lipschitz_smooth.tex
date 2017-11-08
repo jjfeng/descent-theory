@@ -41,7 +41,7 @@ a unique minimizer $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$
 for every $\boldsymbol{\lambda}\in\Lambda$, e.g. 
 
 \begin{equation}
-\hat{\boldsymbol{\theta}}\left(\boldsymbol{\lambda}|T\right)=\arg\min_{\boldsymbol{\theta}\in\mathbb{R}^{p}}L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}\right)\label{eq:param_add_estimator-1}
+\hat{\boldsymbol{\theta}}\left(\boldsymbol{\lambda}|T\right)=\arg\min_{\boldsymbol{\theta}\in\mathbb{R}^{p}}L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}\right).\label{eq:param_add_estimator-1}
 \end{equation}
 Suppose $L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}\right)$
 is twice-differentiable with respect to $\boldsymbol{\theta}$. Suppose
@@ -56,7 +56,7 @@ training criterion satisfies
 Then, for any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda$,
 we have 
 \begin{equation}
-\left|g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}}|T)\right)-g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}}|T)\right)\right|\le J\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell^{2}(x)\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert _{2}.\label{eq:param_add_lipschitz}
+\left|g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(1)}}|T)\right)-g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda^{(2)}}|T)\right)\right|\le J\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell(x)\|\ell(x)\|_{T}\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert _{2}.\label{eq:param_add_lipschitz}
 \end{equation}
 \end{lem}
 \begin{proof}
@@ -117,7 +117,7 @@ our Lipschitz assumption, we have
 \]
 Thus
 \[
-\left\Vert \frac{\partial}{\partial\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}|T)\right\Vert _{2}\le\frac{m(T)}{\lambda_{\min}}\left\Vert y-g\left(x|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)\right)\right\Vert _{T}\ell(x).
+\left\Vert \frac{\partial}{\partial\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}|T)\right\Vert _{2}\le\frac{m(T)}{\lambda_{\min}}\left\Vert y-g\left(x|\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)\right)\right\Vert _{T}\|\ell(x)\|_{T}.
 \]
 Moreover, by the definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$,
 we have 
@@ -127,21 +127,21 @@ we have
 \end{eqnarray*}
 Therefore
 \[
-\left\Vert \frac{\partial}{\partial\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}|T)\right\Vert _{2}\le\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell(x)
+\left\Vert \frac{\partial}{\partial\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}|T)\right\Vert _{2}\le\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\|\ell(x)\|_{T}
 \]
 and by the Lipschitz assumption again,
 \[
-\left\Vert \frac{\partial}{\partial\lambda}g\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}|T)\right)\right\Vert _{2}\le\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell^{2}(x).
+\left\Vert \frac{\partial}{\partial\lambda}g\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}|T)\right)\right\Vert _{2}\le\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell(x)\|\ell(x)\|_{T}.
 \]
 Finally, by the mean value theorem/inequality, we have 
 \[
-\left|g_{j}\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}\left(\boldsymbol{\lambda}^{(1)}|T\right)\right)-g_{j}\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}\left(\boldsymbol{\lambda}^{(2)}|T\right)\right)\right|\le\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell^{2}(x)\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert _{2}.
+\left|g_{j}\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}\left(\boldsymbol{\lambda}^{(1)}|T\right)\right)-g_{j}\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}\left(\boldsymbol{\lambda}^{(2)}|T\right)\right)\right|\le\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell(x)\|\ell(x)\|_{T}\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert _{2}.
 \]
 By triangle inequality
 \begin{eqnarray*}
 \left|g\left(x\mid\hat{\boldsymbol{\theta}}\left(\boldsymbol{\lambda}^{(1)}|T\right)\right)-g\left(x\mid\hat{\boldsymbol{\theta}}\left(\boldsymbol{\lambda}^{(2)}|T\right)\right)\right| & = & \left|\sum_{j=1}^{J}g_{j}\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}\left(\boldsymbol{\lambda}^{(1)}|T\right)\right)-g_{j}\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}\left(\boldsymbol{\lambda}^{(2)}|T\right)\right)\right|\\
  & \le & \sum_{j=1}^{J}\left|g_{j}\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}\left(\boldsymbol{\lambda}^{(1)}|T\right)\right)-g_{j}\left(x\mid\hat{\boldsymbol{\theta}}^{(j)}\left(\boldsymbol{\lambda}^{(2)}|T\right)\right)\right|\\
- & \le & J\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell^{2}(x)\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert _{2}.
+ & \le & J\frac{m(T)}{\lambda_{\min}}\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}\ell(x)\|\ell(x)\|_{T}\left\Vert \boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\right\Vert _{2}.
 \end{eqnarray*}
 \end{proof}
 
