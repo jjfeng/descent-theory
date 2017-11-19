@@ -137,7 +137,7 @@ We will bound the empirical process term using the following Lemma, which is a s
 
 \begin{lemma}
 	\label{lemma:cor83}
-	Suppose we have dataset $D^{(m)}$ where $\epsilon_1,...,\epsilon_m$ are independent random variables with mean zero and uniformly sub-gaussian with parameters $b$ and $B$. Suppose
+	Suppose $D^{(m)} = \{x_1,...,x_m\}$ are fixed and $\epsilon_1,...,\epsilon_m$ are independent random variables with mean zero and uniformly sub-gaussian with parameters $b$ and $B$. Suppose
 	the model class $\mathcal{F}$ has elements $\sup_{f\in\mathcal{F}}\|f\|_{D^{(m)}}\le R$
 	and satisfies
 	\[
@@ -163,31 +163,36 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 
 \begin{theorem}
 	\label{thrm:train_val_complicated}
+	Consider a set of hyper-parameters $\Lambda$.
+	% ONLY necessary for the validation set
+	Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b$ and $B$.
+	Let training data $T$ be fixed, as well as the covariates of the validation set $X_V$.
 	
-	Consider a set of hyper-parameters $\Lambda$. Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b$ and $B$.
-	Suppose there is a function $\psi:\mathbb{R}\mapsto\mathbb{R}$ and constant $r > 0$ such that
+	Suppose there is a function $\psi(\cdot | T):\mathbb{R}\mapsto\mathbb{R}$ and constant $r > 0$ such that
 	\begin{equation}
 	\label{eq:dudley_bound}
-	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi(R) \quad \forall R>r.
+	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi(R| T) \quad \forall R>r
 	\end{equation}
-	Also, suppose $\psi\left(u\right)/u^{2}$ is non-increasing in $u$ for all $u > r$.
+	
+	Also, suppose $\psi\left(u | T \right)/u^{2}$ is non-increasing in $u$ for all $u > r$.
 	Let $\tilde{\boldsymbol \lambda}$ be defined as in \eqref{eq:tilde_lambda_def}.
 	
-	Then there is a constant $c>0$ only depending on $b$ such that for all $\delta$ satisfying
+	Then there is a constant $c>0$ only depending on $b$ and $B$ such that for all $\delta$ satisfying
 	\begin{equation}
 	\label{eq:train_val_delta_condn}
 	\sqrt{n_V}\delta^{2}
 	\ge
 	c \left ( 
-	\psi(\delta)
+	\psi(\delta| T)
 	\vee 
 	\delta
 	\vee
 	\psi \left (
-	4\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2
+	4\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}
+	\middle | T
 	\right ) 
 	\vee
-	4 \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2
+	4 \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}
 	\right ),
 	\end{equation}
 	we have
@@ -272,11 +277,11 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 
 \begin{lemma}
 	\label{lemma:covering_cube}
-	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$ where $\lambda_{\min} \le \lambda_{\max}$. Suppose $\mathcal{G}(T)$ is $C$-Lipschitz in $\boldsymbol{\lambda}$ with respect to some norm $\| \cdot \|$.
+	Let $\Lambda = [\lambda_{\min}, \lambda_{\max}]^J$ where $\lambda_{\min} \le \lambda_{\max}$. Suppose $\mathcal{G}(T)$ is Lipschitz with function $C(\cdot | T)$ over $\boldsymbol{\lambda}$.
 	Then the entropy of $\mathcal{G}(T)$ with respect to $\| \cdot \|$ is
 	\begin{equation}
 	H\left(u, \mathcal{G}(T),\|\cdot\|\right) \le
-	J \log \left(\frac{4C\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right).
+	J \log \left(\frac{4 \|C(\cdot | T)\| \left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right).
 	\end{equation}
 \end{lemma}
 \begin{proof}
@@ -285,11 +290,11 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 	N\left(u,\Lambda,\|\cdot\|_{2}\right) \le \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u}{u}\right)^{J}.
 	\end{align}
 	Under the Lipschitz assumption, a $\delta$-cover for $\Lambda$
-	is a $C\delta$-cover for $\mathcal{G}(T)$. The covering number for $\mathcal{G}(T)$ wrt $\|\cdot\|_{V}$ is bounded by the covering number for $\Lambda$ as follows
+	is a $\|C(\cdot | T)\|\delta$-cover for $\mathcal{G}(T)$. The covering number for $\mathcal{G}(T)$ wrt $\|\cdot\|$ is bounded by the covering number for $\Lambda$ as follows
 	\begin{eqnarray}
-	N\left(u,\mathcal{G}(T),\|\cdot\|_{V}\right)
-	&\le& N\left(\frac{u}{C},\Lambda,\|\cdot\|_{2}\right)\\
-	&\le& \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u/C}{u/C}\right)^{J}.
+	N\left(u,\mathcal{G}(T),\|\cdot\|\right)
+	&\le& N\left(\frac{u}{\|C(\cdot | T)\|},\Lambda,\|\cdot\|_{2}\right)\\
+	&\le& \left(\frac{4\left(\lambda_{max}-\lambda_{min}\right)+2u/\|C(\cdot | T)\|}{u/\|C(\cdot | T)\|}\right)^{J}.
 	\end{eqnarray}
 \end{proof}
 
@@ -299,35 +304,183 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 	\begin{align}
 	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du 
 	&= \int_{0}^{R} \left ( 
-	J \log \left(\frac{4C_\Lambda\Delta_{\Lambda}+2u}{u}\right)
+	J \log \left(\frac{4 \|C_\Lambda\|_V \Delta_{\Lambda}+2u}{u}\right)
 	\right )^{1/2}
 	du\\
-	& \le J^{1/2}\int_{0}^{R}\left[\log4+\log\left(\frac{8C_\Lambda\Delta_{\Lambda}}{u}\right)\right]^{1/2}du\\
-	& \le RJ^{1/2}\left[\int_{0}^{1}\left(\log4+\log\left(\frac{8C_\Lambda\Delta_{\Lambda}}{R}\right)+J\log\frac{1}{v}\right)dv\right]^{1/2}\\
-	&=
-	R\left[J \left (
-	1+\log \left (32C_\Lambda\Delta_{\Lambda}\right)
-	+ \log\frac{1}{R} 
-	\right )
-	\right]^{1/2},
+	& \le J^{1/2}\int_{0}^{R}\left[
+	\log\left(
+	\frac{4 \|C_\Lambda(\cdot | T)\|_V \Delta_{\Lambda} + 2R }
+	{u}
+	\right)
+	\right]^{1/2}du\\
+	& = J^{1/2}R \int_{0}^{1}\left[
+	\log\left(
+	\frac{4 \|C_\Lambda(\cdot | T)\|_V \Delta_{\Lambda} + 2R }
+	{vR}
+	\right)
+	\right]^{1/2}dv\\
+	& \le J^{1/2}R \int_{0}^{1}
+	\log^{1/2}\left(
+	\frac{4 \|C_\Lambda(\cdot | T)\|_V \Delta_{\Lambda} + 2R}
+	{R}
+	\right)
+	+
+	\log^{1/2}(1/v)
+	dv\\
+	& < J^{1/2}R \left (
+	\log^{1/2}\left(
+	\frac{4 \|C_\Lambda(\cdot | T)\|_V \Delta_{\Lambda} + 2R}
+	{R}
+	\right)
+	+
+	1
+	\right ).
+	% Show fewer steps maybe
 	\end{align}
-	where the second inequality follows from a change of variables and the concavity of the square root function. If we restrict $R > n^{-1}$ and $C_\Lambda \ge 32e/(n \Delta_{\Lambda})$, then 
+	If we restrict $R > n^{-1}$, then for an absolute constant $c$, we have
 	\begin{equation}
 	\label{eq:train_val_entropy}
 	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
 	\le
-	\psi (R) \coloneqq 2 R\left ( J \log(C_\Lambda \Delta_{\Lambda} n) \right )^{1/2}.
+	\psi (R) 
+	\coloneqq c R\left ( J \log(\|C_\Lambda(\cdot |T)\|_V \Delta_{\Lambda} n + 1) \right )^{1/2}.
 	\end{equation}
 	Applying Theorem \ref{thrm:train_val_complicated}, we get our desired result.
 \end{proof}
 
 \subsection{Cross-validation}
 \label{app:cv}
-We now present the proof for Theorem \ref{thrm:kfold}.
-It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which we have reproduced below for convenience.
+As mentioned before, Theorem \ref{thrm:kfold} is an application of Theorem \ref{thrm:jean_cv}, which extends Theorem 3.5 in \citet{lecue2012oracle}.
+Theorem 3.5 in \citet{lecue2012oracle} assumes that there is a single function $J$ that bounds the complexity of the post-training model class $\mathcal{G}(T)$. (need more explanation)
+However the complexity of the post-training model class depends on training data -- for instance, if the noise in the training data were particularly large, the complexity of the post-training model class can be very high.
+In our extension, we rely on the fact that the noise in the dataset are sub-gaussian, so that the complexity of the post-training model class can be controlled with high probability.
+
+For this section, suppose we have a measurable space $(\mathcal{Z}, \mathcal{T})$ and $\mathcal{F}$ is a class of measurable functions from $\mathcal{Z} \mapsto \mathbb{R}$.
+We consider a general, convex loss function $Q: \mathcal{Z} \times \mathcal{F} \mapsto \mathbb{R}$ (rather than the least squares loss considered in the previous section).
+The model-estimation procedure selects functions from the class $\mathcal{F}$.
+The risk function $R$ is defined as...
+
+Our theorem again begins with a result reminiscent of the basic inequality.
+The following lemma is Lemma 3.1 from \citet{lecue2012oracle}.
+\begin{lemma}
+	lemma 3.1
+\end{lemma}
+
+We need to bound the supremum of the shifted empirical process term.
+To do this, we again use techniques from empirical process theory.
+Instead of using metric entropy from the previous section, we use Talagrand's $\gamma$ function, which bounds supremum of stochastic processes using a generic chaining mechanism.
+The $\gamma$ function is defined as follows
+\begin{definition}
+	admissible sequences...
+	talagrand...
+\end{definition}
+
+To prove our result, we first extend Lemma 3.4 in \citet{lecue2012oracle} as follows.
+The proof used in \citet{lecue2012oracle} is actually sufficient, with minor modifications.
+The main point of the following lemma is to restate Lemma 3.4 using notation that clarifies the conditional dependencies and to introduce a new function $h(D^{(n_T)})$ that is a function of the training data and a new bounding function $J_\delta$.
+\begin{lemma}
+Let $\mathcal{Q}(D^{(m)})\equiv\left\{ Q(\lambda|D^{(m)}):\lambda\in\Lambda\right\} $
+and $\mathcal{Q}\equiv\cup_{m\in\mathbb{N}}\cup_{D^{(m)}}\mathcal{Q}(D^{(m)})$.
+
+Suppose there exists $C_{1}>0$ and increasing function $G(\cdot)$
+such that $\forall Q\in\mathcal{Q}$, 
+\[
+\|Q(Z)\|_{L_{2}}\le G\left(\mathbb{P}Q(Z)\right).
+\]
+
+
+Let $n_{T},n_{V}\in\mathbb{N}$ and fix a dataset $D^{(n_{T})}$.
+Suppose there exist functions $D^{(n_{T})}\mapsto h(D^{(n_{T})})\in\mathbb{R}^{+}$
+and $\left\{ \epsilon\mapsto J_{\delta}(\epsilon):\delta>0\right\} $
+and a constant $\epsilon_{\min}>0$ such that for any dataset $D^{(n_{T})}$,
+\[
+h(D^{(n_{T})})\le\delta\implies\frac{\log n_{V}}{\sqrt{n_{V}}}\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)+\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(\epsilon)\forall\epsilon\ge\epsilon_{\min}
+\]
+where $\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})\equiv\left\{ Q\in\mathcal{Q}(D^{(n_{T})}):\|Q(Z)\|_{L_{2}}\le G(\epsilon)\right\} $.
+
+Then there exists some absolute constant $L,c>0$ such that for all
+$\epsilon\ge\epsilon_{\min}$ and for all $u\ge1$,
+\[
+\Pr\left(\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(\epsilon)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta\right)\ge1-L\exp(-cu).
+\]
+\end{lemma}
+
+Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the conditional dependencies and using our new functions $h$ and $J_\delta$.
+\begin{lemma}
+	Let $a>0$. Let $\mathcal{Q}(D^{(m)})\equiv\left\{ Q(\lambda|D^{(m)}):\lambda\in\Lambda\right\} $
+	be a set of measurable functions.
+	
+	Let random variable $Z$ satisfy for all $m\in\mathbb{N}$, any dataset
+	$D^{(m)}$, $\mathbb{P}Q(Z)\ge0\forall Q\in\mathcal{Q}\left(D^{(m)}\right)$.
+	
+	Suppose for any $n_{T},n_{V}\in\mathbb{N}$ and dataset $D^{(n_{T})}$
+	there exists some absolute constant $L,c>0$ such that for all $\epsilon\ge\epsilon_{\min}$
+	and for all $u\ge1$,
+	
+	\[
+	\Pr\left(\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(\epsilon)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta\right)\ge1-L\exp(-cu).
+	\]
+	
+	
+	Suppose every function in $\left\{ J_{\delta}:\delta>0\right\} $
+	is strictly increasing and its inverse is strictly convex.
+	
+	Let $\psi_{\delta}$be the convex conjugate of $J_{\delta}^{-1}$,
+	e.g. $\psi_{\delta}(u)=\sup_{v>0}uv-J_{\delta}^{-1}(v)\forall u>0$.
+	Assume there is a $r\ge1$ such that $x>0\mapsto\psi(x)/x^{r}$ decreases
+	and define for $q>1$ and $u\ge1$,
+	\[
+	\epsilon_{q,\delta}(u)=\psi_{\delta}\left(\frac{2q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)\vee\epsilon_{\min}.
+	\]
+	
+	
+	Then there exists a constant $L_{1}$ that only depends on $L$ such
+	that for every $u\ge1$,
+	\[
+	\Pr\left(\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\le\frac{a\epsilon_{q,\delta}(u/q)}{q}\mid h\left(D^{(n_{T})}\right)\le\delta\right)\ge1-L_{1}\exp(-cu).
+	\]
+	
+	
+	Moreover, assume that $\psi_{\delta}$ increases such that $\psi_{\delta}(\infty)=\infty$.
+	Then there exists a constant $c_{1}$that depends only on $L$ and
+	$c$ such that
+	\[
+	\mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\mid h\left(D^{(n_{T})}\right)\le\delta\right]\le\frac{ac_{1}\epsilon_{q,\delta}(1/q)}{q}.
+	\]
+\end{lemma}
+
+Now we state the following lemma, that will allow us to extend of Theorem 3.5 in \citet{lecue2012oracle}.
+Using a simple chaining argument, we arrive at the following lemma.
+\begin{lemma}
+	\label{lemma:chain}
+Let $a>0$.
+
+Suppose there exists a constant $c_{1}$such that for any $n_{T},n_{V},\delta$
+and $q>1$, we have 
+\[
+\mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\mid h\left(D^{(n_{T})}\right)\le\delta\right]\le\frac{ac_{1}\epsilon_{q,\delta}(1/q)}{q}.
+\]
+
+Then for any $\sigma > 0$, we have
+\[
+\mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\right]
+\le
+\frac{ac}{q}
+\left(
+\epsilon_{q,2\sigma}(1/q)
++\sum_{k=1}^{\infty}\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right)
+\epsilon_{q,2^{k}\sigma}(1/q)
+\right)
+.
+\]
+\end{lemma}
+Obviously the above lemma is only useful if we can show that $h$ is bounded with high probability.
+For instance, in our examples later, $h$ has exponential tails so the upper bound in Lemma~\ref{lemma:chain} is well-controlled.
+
+Putting the three lemmas above together, we have the following result.
 
 \begin{theorem}
-	\label{thrm:mitchell}
+	\label{thrm:jean_cv}
 	Consider a set of hyper-parameters $\Lambda$. Let
 	$$
 	\mathcal{Q} = \{ 
@@ -346,56 +499,67 @@ It is an application of Theorem 3.5 in \citet{lecue2012oracle}, which we have re
 	K_1 \left \| \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) - g^* \right \|_{L_2}.
 	\label{eq:cv_assump2}
 	\end{align}
-	
-	Suppose there is a $d_{\min} \ge 0$ and a strictly increasing function $J$ such that $J^{-1}$ is strictly convex,
-	the convex conjugate $\psi$ of $J^{-1}$ increases, $\psi(\infty ) = \infty$ and there exists $r \ge 1$ such that $\psi(x)/x^r$ decreases and
-	\begin{equation}
-	\label{eq:mitchell_dudley_bound}
-	J(t) \ge \int_0^{2\sqrt{t}} H^{1/2}(u, \mathcal{Q}_t, \| \cdot \|_2) du +
-	\frac{\log n_V}{\sqrt{n_V}} \int_0^{2\|G\|_{L_{\psi_1}}} H(u, \mathcal{Q}_t, \| \cdot \|_\phi) du
-	\quad
-	\forall t > t_{\min}
-	\end{equation}
+	Suppose there is an $\epsilon_{\min} > 0$ and a function $h$ and $J_\delta$ such that
+	\[
+	h(D^{(n_{T})})\le\delta\implies\frac{\log n_{V}}{\sqrt{n_{V}}}\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)+\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(\epsilon)\forall\epsilon\ge\epsilon_{\min}
+	\]
 	where $\mathcal{Q}_t = \{Q \in \mathcal{Q}: \| Q \|_{L_2} \le \sqrt{t} \}$.
 	
-	Suppose that the model-estimation procedure is exchangeable (i.e. any ordering of the same training data produces the same fitted model).
+	Suppose that for all $\delta > 0$, $J_\delta$ is a strictly increasing function and $J_\delta^{-1}(\epsilon)$ is strictly convex,
+	the convex conjugate $\psi_\delta$ of $J^{-1}_\delta$ increases, $\psi_\delta(\infty ) = \infty$ and there exists $r \ge 1$ such that $\psi_\delta(x)/x^r$ decreases.
 	
-	Then there is an absolute constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
+	Consider any $\sigma > 0$. Then there is an absolute constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
 	\begin{align}
 	\begin{split}
-	E_{D^{(n)}} \left \|
-	\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^*
-	\right \|_{L_2}^2
+	E_{D^{(n)}} 
+	\left(
+	R\left(\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) \right )
+	- R (g^*)
+	\right)
 	&\le
 	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda} 
-	E_{D^{(n_T)}} \left \|
-	\hat{g}^{(n_T)} ( \hat{\boldsymbol \lambda} | {D^{(n_T)}} )
-	- g^*
-	\right \|^2_{L_2}\\
-	& + \frac{ac}{q}\left [
-	\psi \left (\frac{2q^{r + 1}(1+a)}{a\sqrt{n_V}} \right ) \vee t_{\min}
-	\right ]
+	E_{D^{(n_T)}}
+	\left(
+	R\left(\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) \right )
+	- R (g^*)
+	\right)
+	\\
+	& +
+	\frac{ac}{q}
+	\left(
+	\epsilon_{q,2\sigma}(1/q)
+	+\sum_{k=1}^{\infty}
+	\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right)
+	\epsilon_{q,2^{k}\sigma}(1/q)
+	\right).
 	\end{split}.
 	\end{align}
 \end{theorem}
 
-To prove Theorem \ref{thrm:kfold}, we will need the following lemma that describes the relationship between Lipschitz functions
+To see why this extension of Theorem 3.5 in \citet{lecue2012oracle} was useful, we now apply it to prove Theorem~\ref{thrm:kfold} where we consider the squared error loss and model-estimation methods where the estimated functions are Lipschitz in the hyper-parameters.
+First we need the following lemma that describes the relationship between Lipschitz functions
 \begin{lemma}
-	Suppose the same conditions as Theorem~\ref{thrm:mitchell}.
+	Suppose the same conditions as Theorem~\ref{thrm:jean_cv}.
 	Suppose norm $\|\cdot \|$ satisfies
 	\begin{align}
 	\| XY \| \le \|X\|_*\|Y\|_*
 	\label{eq:cauchy-like}
 	\end{align}
-	for some norm $\|\cdot \|_*$ for any random variables $X,Y$ and $\sup_{g \in \mathcal G}\|g(x)\|_*, \|\epsilon\|_* < \infty$.
-	Moreover, suppose the Lipschitz assumption that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$, we have
+	for some norm $\|\cdot \|_*$ for any random variables $X,Y$.
+	Moreover, we have for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$
 	\begin{align}
-	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le G(x) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2
+	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
 	\end{align}
-	We have
+	Then for
+	$$
+	\mathcal{Q}_{\epsilon}^{L_2} = \{ 
+	(y - \hat{g}(\boldsymbol{\lambda} | D^{(n_T)}))^2
+	- (y - g^*)^2
+	 : P (\hat{g}(\boldsymbol{\lambda} | D^{(n_T)}) - g^*)^2 \le \sqrt{\epsilon} \}
+	 $$, we have
 	\begin{align}
-	N(\mathcal{Q}, u, \|\cdot \|)
-	\le N \left (\Lambda, \frac{u}{\left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right) \|G(x)\|_*}, \|\cdot \|_{2} \right)
+	N(\mathcal{Q}_{\epsilon}^{L_2}, u, \|\cdot \|)
+	\le N \left (\Lambda, \frac{u}{\left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right) \|C_\Lambda(x|D^{(n_T)})\|_*}, \|\cdot \|_{2} \right)
 	\end{align}
 	\label{lemma:covering_lipschitz}
 \end{lemma}
@@ -404,10 +568,12 @@ To prove Theorem \ref{thrm:kfold}, we will need the following lemma that describ
 & \left \|
 \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
 - \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
-\right \|\\
-& = \left \|
+\right \|
+\label{eq:loss_diff}
+\\
+& = \|
 \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right)
-\left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right ) - \left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right )^2 \right \|\\
+\left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right ) \\ & - \left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right )^2 \|\\
 %JF falling off page
 & \le  \left (2 \|\epsilon\|_* + \left \|g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(2)} | D^{(m)})(x) \right \|_* \right)
 \left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right \|_* \\
@@ -416,55 +582,42 @@ To prove Theorem \ref{thrm:kfold}, we will need the following lemma that describ
 \end{align}
 where we applied \eqref{eq:cauchy-like} in the first inequality.
 
-Applying the Lipschitz assumption, we have
+Applying the Lipschitz assumption, we have that \eqref{eq:loss_diff} is bounded about by
 \begin{align}
-\begin{split}
-& \left \|
-\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
-- \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
-\right \| \\
-& \le  \left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right) \|G(x)\|_* \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
-\end{split}
+\left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right) \|C_\Lambda(x|D^{(n_T)})\|_* \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2
 \end{align}
 \end{proof}
 
 \subsubsection{Proof for Theorem \ref{thrm:kfold}}
 \begin{proof}
-We check that the assumption \eqref{eq:cv_assump1} holds.
-\begin{align}
-& \left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2  \right \|_{L_{\psi_1}} \\
-& = \left \| 2 \epsilon \left (g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x) \right ) + \left( g^*(x) - \hat{g}(\lambda | D^{(m)})(x) \right)^2 \right \|_{L_{\psi_1}} \\
-\label{eq:sum2}
-& \le 3 \left \| \epsilon^2 \vee \left (g^*(x) - \hat{g}(\boldsymbol(\lambda) | D^{(m)})(x) \right )^2 \right \|_{L_{\psi_1}}
-\end{align}
-The last line follows by considering the case where $|\epsilon| > |g^*(x) - \hat{g}(\boldsymbol(\lambda) | D^{(m)})(x)|$ and when the inequality is in the other direction.
-By triangle inequality, we then have
-\begin{align}
-& \left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2  \right \|_{L_{\psi_1}} \\
-& \le 3 \| \epsilon^2 \|_{L_{\psi_1}} + \| \left (g^*(x) - \hat{g}(\boldsymbol(\lambda) | D^{(m)})(x) \right )^2 \|_{L_{\psi_1}} \\
-& = 3 \| \epsilon \|_{L_{\psi_2}}^2 + \| g^*(x) - \hat{g}(\boldsymbol(\lambda) | D^{(m)})(x)  \|_{L_{\psi_2}}^2
-\end{align}
-Since we assumed that $\|\epsilon\|_{L_{\psi_2}}$ and $\|G\|_{L_{\psi_2}}$ are finite, then clearly \eqref{eq:cv_assump1} holds.
-
-Next, we check that assumption \eqref{eq:cv_assump2} holds.
-\begin{align}
-& \left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2  \right \|_{L_2} \\
-& = \left \| 2 \epsilon \left (g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x) \right ) + \left( g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x) \right)^2 \right \|_{L_2} \\
-& \le \left (2 \|\epsilon\|_{L_2} + \|g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x)\|_{L_2} \right) \left \| g^*(x) - \hat{g}(\boldsymbol{\lambda} | D^{(m)})(x) \right \|_{L_2}
-\end{align}
-Since $\|f\|_{L_2} \le c \|f\|_{L_{\psi_2}}$, then clearly \eqref{eq:cv_assump2} holds.
-
-
-	Next we determine $\psi$ in \eqref{eq:mitchell_dudley_bound}. Note that because $\|\cdot\|_\phi \le 2\|\cdot \|_\infty $ and $\| \cdot \|_2 \le \| \cdot \|_\infty$, then both $H(2u,\mathcal{Q}_d,\|\cdot\|_{\phi})$ and $H(u,\mathcal{Q}_d,\|\cdot\|_2)$ are bounded by 
-	$H(u,\mathcal{Q}_d,\|\cdot\|_{\infty})$.
-	By Lemma \ref{lemma:covering_cube}, we know
-	\begin{equation}
-	H(u,\mathcal{Q}_{d}(T),\|\cdot\|_{\infty}) \le J \log\left [
-	\frac{c_0GC\Delta_{\Lambda} + 2u}{u}
-	\right ]
-	\end{equation}
+	Next we determine $J_\delta$.
+	By Lemma \ref{lemma:covering_lipschitz}, we know
+	\begin{align}
+	N(\mathcal{Q}_\epsilon^{L_2}, u, \|\cdot \|_{L_2})
+	& \le N \left (
+	\Lambda, 
+	\frac{u}{
+	\left (2 \|\epsilon\|_{L_2} + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_{L_2} \right) \|C_\Lambda(x|D^{(n_T)})\|_2},
+	\|\cdot \|_{2} \right)\\
+	& \le
+	\left (
+	\frac{
+		c_0 \left (\|\epsilon\|_{L_2} + \sup_{g \in \mathcal G} \left \|g(x) \right \|_{L_2} \right) \|C_\Lambda(x|D^{(n_T)})\|_{L_2} \Delta_{\Lambda} + u
+	}{u}
+	\right )^J
+	\end{align}
 	for an absolute constant $c_0 > 0$.
-	Hence we can let
+	Similarly,
+	\begin{align}
+	N(\mathcal{Q}_\epsilon^{L_2}, u, \|\cdot \|_{L_{\psi_1}})
+	& \le
+	\left (
+	\frac{
+		c_0 \left (\|\epsilon\|_{L_2} + \sup_{g \in \mathcal G} \left \|g(x) \right \|_{L_{\psi_2}} \right) \|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_2}} \Delta_{\Lambda} + u
+	}{u}
+	\right )^J
+	\end{align}
+	Hence we have
 	\begin{equation}
 	\psi(d) \coloneqq
 	\sqrt{d}K_{n,1}

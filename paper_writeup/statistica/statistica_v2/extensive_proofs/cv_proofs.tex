@@ -185,45 +185,51 @@ Note that
 
 \begin{lem}
 Covering number bounds with Lipschitz functions
+
+Suppose there exists a function $G(x|D^{(n_{T})})$ and constants
+$c,r>0$ such that for any $m\in\mathbb{N}$ and any dataset $D^{(m)}$,
+we have 
+\begin{align}
+\left|\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right|\le G(x|D^{(n_{T})})\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
+\end{align}
+
+
+and 
+\[
+\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le c\left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r}.
+\]
+
+
+For $\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})\equiv\left\{ Q\in\mathcal{Q}(D^{(n_{T})}):\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\le\sqrt{\epsilon},\boldsymbol{\lambda}\in\Lambda\right\} $,
+we have 
+\begin{align}
+N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{2}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}},\|\cdot\|_{2}\right)
+\end{align}
+and
+\begin{align}
+N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right).
+\end{align}
 \end{lem}
-Suppose norm $\|\cdot\|$ satisfies 
-\begin{align}
-\|XY\|\le\|X\|_{*}\|Y\|_{*}\label{eq:cauchy-like}
-\end{align}
-for some norm $\|\cdot\|_{*}$ for any random variables $X,Y$ and
-$\sup_{g\in\mathcal{G}}\|g(x)\|_{*},\|\epsilon\|_{*}<\infty$. Moreover,
-suppose the Lipschitz assumption that for any $m\in\mathbb{N}$ and
-any dataset $D^{(m)}$, we have 
-\begin{align}
-\left|\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right|\le G(x)\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
-\end{align}
-
-
-We have 
-\begin{align}
-N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|\right)\le N\left(\Lambda,\frac{u}{\left(\sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\left\Vert \sqrt{Q-(y-g^{*})^{2}}\right\Vert _{*}\right)\|G(x)\|_{*}},\|\cdot\|_{2}\right)
-\end{align}
-
 \begin{proof}
-Via simple rearrangements of expressions, triangle inequality, and
-the Cauchy-schwarz-like assumption above, we have
+First let us consider a general norm $\|\cdot\|$ such that $\|XY\|\le\|X\|_{*}\|Y\|_{*}$.
+(For the norm $\|\cdot\|_{L_{\psi_{1}}}$, $\|\cdot\|_{*}=\|\cdot\|_{L_{\psi_{2}}}$.)
+We bound the distance between functions $q\in\mathcal{Q}_{\epsilon}^{L_{2}}$
+with respect to the norm $\|\cdot\|$ as follows:
+
 \begin{align}
  & \left\Vert \left(y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}-\left(y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}\right\Vert \\
  & =\left\Vert \left(y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)\right)\left(\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right)-\left(\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right)^{2}\right\Vert \\
 %
- & \le\left\Vert y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(m)})(x)+y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(m)})(x)\right\Vert _{*}\left\Vert \hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right\Vert _{*}\\
- & \le\left(\left\Vert y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(m)})(x)\right\Vert _{*}+\left\Vert y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(m)})(x)\right\Vert _{*}\right)\left\Vert \hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right\Vert _{*}\\
- & \le2\left(\sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\left\Vert \sqrt{Q-(y-g^{*})^{2}}\right\Vert _{*}\right)\left\Vert \hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right\Vert _{*}
-\end{align}
-where we applied (\ref{eq:cauchy-like}) in the first inequality.
-
-Applying the Lipschitz assumption, we have 
-\begin{align}
-\begin{split} & \left\Vert \left(y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}-\left(y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}\right\Vert \\
- & \le\left(\sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\left\Vert \sqrt{Q-(y-g^{*})^{2}}\right\Vert _{*}\right)\|G(x)\|_{*}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
-\end{split}
+ & \le\left\Vert 2\epsilon+g^{*}-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(m)})(x)+g^{*}-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(m)})(x)\right\Vert _{*}\left\Vert \hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right\Vert _{*}\\
+ & \le\left(\|2\epsilon\|_{*}+\left\Vert g^{*}-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(m)})(x)\right\Vert _{*}+\left\Vert g^{*}-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(m)})(x)\right\Vert _{*}\right)\left\Vert \hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right\Vert _{*}\\
+ & \le2\left(\|\epsilon\|_{*}+\sup_{\lambda\in\Lambda:\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\le\sqrt{\epsilon}}\left\Vert g^{*}-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}|D^{(m)})(x)\right\Vert _{*}\right)\left\Vert \hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right\Vert _{*}\\
+ & \le2\left(\|\epsilon\|_{*}+\sup_{\lambda\in\Lambda:\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\le\sqrt{\epsilon}}\left\Vert g^{*}-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}|D^{(m)})(x)\right\Vert _{*}\right)\|G(x)\|_{*}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
 \end{align}
 
+
+For $\|\cdot\|_{L_{2}}$, the upper bound reduces to $2\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x)\|_{L_{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.$
+
+For $\|\cdot\|_{L_{\psi_{1}}}$, the upper bound reduces to $2\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x)\|_{L_{\psi_{2}}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.$
 \end{proof}
 For this to be useful for bounding the $\gamma$-function from Talagrand,
 we need to check that a Cauchy-Schwarz-like inequality also holds
@@ -280,150 +286,89 @@ from LM and Talagrand that (for an absolute constant $c$?)
 \begin{lem}
 $\gamma$-function from Talagrand for Lipschitz functions
 
-Suppose there is a function $G(x|D^{(n_{T})})$ such that 
-\[
-\left|\hat{g}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)-\hat{g}(\boldsymbol{\lambda}^{(2)}|D^{(n_{T})})(x)\right|\le G(x|D^{(n_{T})})\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
-\]
-
-
-Let $\epsilon>0$. Let $\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})\equiv\left\{ Q\in\mathcal{Q}(D^{(n_{T})}):\|Q(Z)\|_{L_{2}}\le\sqrt{\epsilon}\right\} $.
-Suppose $\|\epsilon\|_{L_{2}},\|\epsilon\|_{L_{\psi_{2}}}\le K$ where
-$\epsilon$ is the random noise. Then there is an absolute constant
-$c>0$ such that
-\begin{eqnarray*}
-\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right) & \le & c\sqrt{\epsilon J}\left[\sqrt{\log\left(\frac{\Delta_{\Lambda}\left(\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+\sqrt{\epsilon}}{\sqrt{\epsilon}}\right)}+1\right].
-\end{eqnarray*}
-
-
-Moreover, if $\|Q(Z)\|_{L_{\psi_{2}}}\le C_{1}\|Q(Z)\|_{L_{2}}$,
-then
-
-\begin{eqnarray*}
-\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & cJC_{1}\sqrt{\epsilon}\left[\log\left(\frac{\Delta_{\Lambda}\left(\sqrt{C_{1}}\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+C_{1}\sqrt{\epsilon}}{C_{1}\sqrt{\epsilon}}\right)+1\right].
-\end{eqnarray*}
-\end{lem}
-\begin{proof}
-First, we bound the diameters of the function space. 
-\begin{eqnarray*}
-\text{Diam}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right) & = & \sup_{Q_{1},Q_{2}\in\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})}\|Q_{1}-Q_{2}\|_{L_{2}}\\
- & \le & 2\sup_{Q_{1}\in\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})}\|Q_{1}\|_{L_{2}}\\
- & = & 2\sqrt{\epsilon}
-\end{eqnarray*}
-
-
-and
-\begin{eqnarray*}
-\text{Diam}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & 2\sup_{Q_{1},Q_{2}\in\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})}\|Q\|_{L_{\psi_{1}}}\\
- & \le & 2c\sup_{Q_{1},Q_{2}\in\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})}\|Q\|_{L_{\psi_{2}}}\\
- & \le & 2C_{1}c\sqrt{\epsilon}
-\end{eqnarray*}
-
-
-where $c$ is an absolute constant.
-
-Let $\Delta_{\Lambda}=\lambda_{max}-\lambda_{min}$.
-
-We plug in the results from the covering number lemmas above. To do
-this, we first calculate the constant in the denominator: for the
-$\gamma_{2}$-function, we need to bound the dual norm of $L_{2}$
-, which is the $L_{2}$-norm itself:
-
-\begin{eqnarray*}
-\sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\left\Vert \sqrt{Q-(y-g^{*})^{2}}\right\Vert _{L_{2}} & = & \sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\sqrt{\left\Vert Q-(y-g^{*})^{2}\right\Vert _{L_{1}}}\\
- & \le & \sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\sqrt{\|Q\|_{L_{1}}+\left\Vert (y-g^{*})^{2}\right\Vert _{L_{1}}}\\
- & \le & \sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\sqrt{\|Q\|_{L_{1}}}+K\\
- & \le & \epsilon^{1/4}+K
-\end{eqnarray*}
-where the last line follows from the relation that $\|Q\|_{L_{1}}\le\|Q\|_{L_{2}}$.
-(Apologies for the notation. The first term is the radius and the
-second term is the noise.)
-
-For the $\gamma_{1}$-function, we need to bound the dual norm of
-$\psi_{1}$, which is $\psi_{2}$.
-\begin{eqnarray*}
-\sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\left\Vert \sqrt{Q-(y-g^{*})^{2}}\right\Vert _{L_{\psi_{2}}} & \le & \sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\sqrt{\|Q\|_{L_{\psi_{2}}}}+\left\Vert \epsilon\right\Vert _{L_{\psi_{2}}}\\
- & \le & \sup_{Q\in\mathcal{Q}_{\epsilon}^{L_{2}}}\sqrt{C_{1}\|Q\|_{L_{2}}}+K\\
- & \le & \sqrt{C_{1}}\epsilon^{1/4}+K
-\end{eqnarray*}
-where the assumption that $\|Q(Z)\|_{L_{\psi_{2}}}\le C_{1}\|Q(Z)\|_{L_{2}}$
-was applied in the second line.
-
-Now let us compute the $\gamma_{2}$-function.
-
-\begin{eqnarray*}
-\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right) & \le & c\int_{0}^{2\sqrt{\epsilon}}\sqrt{\log N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{2}}\right)}du\\
- & \le & c\int_{0}^{2\sqrt{\epsilon}}\sqrt{\log N\left(\Lambda,\frac{u}{\left(\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{2}}},\|\cdot\|_{2}\right)}du\\
- & \le & c\int_{0}^{2\sqrt{\epsilon}}\sqrt{J\log\left(\frac{4\Delta_{\Lambda}\left(\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+2u}{u}\right)}du\\
- & \le & c\sqrt{J}\int_{0}^{2\sqrt{\epsilon}}\sqrt{\log\left(\frac{4\Delta_{\Lambda}\left(\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+4\sqrt{\epsilon}}{u}\right)}du\\
- & \le & 2c\sqrt{\epsilon J}\int_{0}^{1}\sqrt{\log\left(\frac{4\Delta_{\Lambda}\left(\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+4\sqrt{\epsilon}}{2\sqrt{\epsilon}v}\right)}dv
-\end{eqnarray*}
-
-
-where the second to last line is bcause $u\le2\sqrt{\epsilon}$ and
-the $\log$ function is monotonic and the last line follows from a
-change of variables. Now because $\sqrt{a+b}\le\sqrt{a}+\sqrt{b}$
-for $a,b>0$, we have
-\begin{eqnarray*}
-\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right) & \le & 2c\sqrt{\epsilon J}\int_{0}^{1}\sqrt{\log\left(\frac{4\Delta_{\Lambda}\left(\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+4\sqrt{\epsilon}}{2\sqrt{\epsilon}}\right)}+\sqrt{\log\frac{1}{v}}dv\\
- & \le & 2c\sqrt{\epsilon J}\left[\sqrt{\log\left(\frac{4\Delta_{\Lambda}\left(\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+4\sqrt{\epsilon}}{2\sqrt{\epsilon}}\right)}+\frac{\sqrt{\pi}}{2}\right].
-\end{eqnarray*}
-
-
-Now let's bound the $\gamma_{1}$-function. 
-
-Then
-\begin{eqnarray*}
-\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c\int_{0}^{2C_{1}c_{0}\sqrt{\epsilon}}\log N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)du\\
- & \le & c\int_{0}^{2C_{1}c_{0}\sqrt{\epsilon}}\log N\left(\Lambda,\frac{u}{\left(\sqrt{C_{1}}\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right)du\\
- & \le & c\int_{0}^{2C_{1}c_{0}\sqrt{\epsilon}}J\log\left(\frac{4\Delta_{\Lambda}\left(\sqrt{C_{1}}\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2u}{u}\right)du\\
- & \le & cJ\int_{0}^{2C_{1}c_{0}\sqrt{\epsilon}}\log\left(\frac{4\Delta_{\Lambda}\left(\sqrt{C_{1}}\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+4C_{1}c_{0}\sqrt{\epsilon}}{u}\right)du\\
- & \le & 2c_{0}JC_{1}c\sqrt{\epsilon}\int_{0}^{1}\log\left(\frac{2\Delta_{\Lambda}\left(\sqrt{C_{1}}\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2C_{1}c_{0}\sqrt{\epsilon}}{C_{1}c_{0}\sqrt{\epsilon}v}\right)dv\\
- & = & 2c_{0}JC_{1}c\sqrt{\epsilon}\int_{0}^{1}\log\left(\frac{2\Delta_{\Lambda}\left(\sqrt{C_{1}}\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2C_{1}c_{0}\sqrt{\epsilon}}{C_{1}c_{0}\sqrt{\epsilon}}\right)+\log\frac{1}{v}dv\\
- & = & 2c_{0}JC_{1}c\sqrt{\epsilon}\left[\log\left(\frac{2\Delta_{\Lambda}\left(\sqrt{C_{1}}\epsilon^{1/4}+K\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2C_{1}c_{0}\sqrt{\epsilon}}{C_{1}c_{0}\sqrt{\epsilon}}\right)+1\right]
-\end{eqnarray*}
-by the same set of arguments as above.
-
-Now we combine these bounds on the $\gamma$-functions and Lemma 2
-(also Lemma 3.4 in LM) to get the following corollary.\end{proof}
-\begin{cor}
-Let $h(D^{(n_{T})})=c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}$ for an
-absolute constant $c$ and 
-\begin{eqnarray*}
-J_{\delta}(\epsilon) & = & \sqrt{\epsilon}\left(\frac{\log n_{V}}{\sqrt{n_{V}}}c_{0}JC_{1}\left[\log\left(\Delta_{\Lambda}n_{V}\left(\sqrt{C_{1}}+K\right)\delta+1\right)+1\right]+c_{1}\sqrt{J}\left[\sqrt{\log\left(\Delta_{\Lambda}n_{V}K\delta+1\right)}+1\right]\right).
-\end{eqnarray*}
-Then for all $D^{(n_{T})}$ such that $h(D^{(n_{T})})=c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\le\delta$,
-we have $\forall\epsilon\ge1/n_{V}$
-\[
-\frac{\log n_{V}}{\sqrt{n_{V}}}\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)+\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(\epsilon).
-\]
-\end{cor}
-\begin{thm}
-Suppose that $\|\epsilon\|_{L_{2}},\|\epsilon\|_{L_{\psi_{2}}}\le K$. 
-
-Suppose the following two conditions: first, for any $m\in\mathbb{N}$
-and dataset $D^{(m)}$, we have
-
-\[
-\left\Vert \left(y-\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}\right\Vert _{L_{2}}\le K_{2}\left\Vert g^{*}(x)-\hat{g}(\boldsymbol{\lambda}|D^{(m)})(x)\right\Vert _{L_{2}}
-\]
-
-
-and second, there is a constant $C_{1}>0$ such that for any $m\in\mathbb{N}$
-and dataset $D^{(m)}$, we have
-\[
-\left\Vert \left(y-\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}\right\Vert _{L_{\psi_{1}}}\le C_{1}\left\Vert g^{*}(x)-\hat{g}(\boldsymbol{\lambda}|D^{(m)})(x)\right\Vert _{L_{2}}.
-\]
-
-
-Suppose that 
+Suppose there exists a function $G(x|D^{(n_{T})})$ and constants
+$c,r>0$ such that for any $m\in\mathbb{N}$ and any dataset $D^{(m)}$,
+we have 
 \begin{align}
 \left|\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right|\le G(x|D^{(n_{T})})\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
 \end{align}
 
 
+and 
+\[
+\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le c\left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r}.
+\]
+
+
+For $\Lambda$, let $\Delta_{\Lambda}=\lambda_{max}-\lambda_{min}$. 
+
+Let $\epsilon>0$. Let $\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})\equiv\left\{ Q\in\mathcal{Q}(D^{(n_{T})}):\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\le\sqrt{\epsilon},\boldsymbol{\lambda}\in\Lambda\right\} $.
+Then there is an absolute constant $c>0$ such that
+\begin{eqnarray*}
+\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right) & \le & 2c\sqrt{\epsilon J}\left[\sqrt{\log\left(\frac{4\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\|G(x|D^{(n_{T})})\|_{L_{2}}}{\sqrt{\epsilon}}+4\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{2}}+2\right)}+\frac{\sqrt{\pi}}{2}\right].
+\end{eqnarray*}
+
+
+If for any $D^{(n_{T})}$, we have that $\forall Q\in\mathcal{Q}(D^{(n_{T})}),\|Q\|_{L_{\psi_{1}}}\le K$,
+then
+
+\begin{eqnarray*}
+\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\right)+\frac{r}{2}\log\left(c\epsilon+1\right)+1\right].
+\end{eqnarray*}
+\end{lem}
+\begin{proof}
+We first bound $\gamma_{2}$ function. The diameter is by assumption
+\begin{eqnarray*}
+\text{Diam}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right) & = & 2\sqrt{\epsilon}.
+\end{eqnarray*}
+
+
+We plug in the results from the covering number lemmas above.
+
+\begin{eqnarray*}
+\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right) & \le & c\int_{0}^{2\sqrt{\epsilon}}\sqrt{\log N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{2}}\right)}du\\
+ & \le & c\int_{0}^{2\sqrt{\epsilon}}\sqrt{\log N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}},\|\cdot\|_{2}\right)}du\\
+ & \le & c\int_{0}^{2\sqrt{\epsilon}}\sqrt{J\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+2u}{u}\right)}du\\
+ & \le & c\sqrt{J}\int_{0}^{2\sqrt{\epsilon}}\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+4\sqrt{\epsilon}}{u}\right)}du\\
+ & = & 2c\sqrt{\epsilon J}\int_{0}^{1}\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+4\sqrt{\epsilon}}{2\sqrt{\epsilon}v}\right)}dv\\
+ & \le & 2c\sqrt{\epsilon J}\int_{0}^{1}\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+4\sqrt{\epsilon}}{2\sqrt{\epsilon}}\right)}+\sqrt{\log\frac{1}{v}}dv\\
+ & = & 2c\sqrt{\epsilon J}\left[\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}+4\sqrt{\epsilon}}{2\sqrt{\epsilon}}\right)}+\frac{\sqrt{\pi}}{2}\right]
+\end{eqnarray*}
+
+
+Now let's bound the $\gamma_{1}$-function. 
+\begin{eqnarray*}
+\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c\int_{0}^{K}\log N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)du\\
+ & \le & c\int_{0}^{K}\log N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right)du\\
+ & \le & c\int_{0}^{K}J\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2u}{u}\right)du\\
+ & \le & cJ\int_{0}^{K}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{u}\right)du\\
+ & = & cJK\int_{0}^{1}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{Kv}\right)dv\\
+ & = & cJK\int_{0}^{1}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{K}\right)+\log\frac{1}{v}dv\\
+ & = & cJK\left[\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{K}\right)+1\right]
+\end{eqnarray*}
+by the same set of arguments as above. We can reduce $\gamma_{1}$
+to be a bit easier to handle:
+\begin{eqnarray*}
+\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(c+1\right)\left(\epsilon^{r/2}+1\right)\right)+1\right]\\
+ & \le & c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(c+1\right)\right)+\frac{r}{2}\log\left(\epsilon+1\right)+1\right]
+\end{eqnarray*}
+
+
+Now we combine these bounds on the $\gamma$-functions and Lemma 2
+(also Lemma 3.4 in LM) to get the following corollary.\end{proof}
+\begin{cor}
+We have the following bound. For all $\epsilon>1/n_{V}$ and $\delta\ge\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}$,
+we have
+\[
+\mathcal{J}_{\delta}(\epsilon)=\frac{\log n_{V}}{\sqrt{n_{V}}}c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\delta}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(c+1\right)\right)+\frac{r}{2}\log\left(\epsilon+1\right)+1\right]+c_{2}\sqrt{\epsilon J}\left[\sqrt{\log\left(\Delta_{\Lambda}\left[\|\epsilon\|_{L_{2}}\delta n_{v}+1\right]+1\right)}+1\right]
+\]
+as a bound for the quantity above.\end{cor}
+\begin{thm}
+Suppose all the stuff before.
+
 For any $\sigma>0$, define $\tilde{h}$ be the function 
 \[
-\tilde{h}(n_{T})\ge\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)
+\tilde{h}(n_{T})\ge\sum_{k=1}^{\infty}k\Pr\left(\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)
 \]
 
 
@@ -432,15 +377,14 @@ where $c$ is an absolute constant.
 (The bound $\tilde{h}(n_{T})\ge\int\left(\log_{2}\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}/\sigma\right)\right)^{2}d\mu\left(D^{(n_{T})}\right)$
 also works.)
 
-Then
+Then there exist constant $c_{1}>0$ such that
 
 \begin{eqnarray*}
  &  & \mathbb{P}_{D^{(n)}}\left(\|\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\\
  & \le & (1+a)\inf_{\lambda\in\Lambda}\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right]\\
- &  & +c\frac{(1+a)^{2}}{a}\frac{J}{n_{V}}\left(\left(\log n_{V}\right)\sqrt{\frac{J}{n_{V}}}C_{1}\left[\log\left(\Delta_{\Lambda}n_{V}\left(\sqrt{C_{1}}+K\right)\sigma+1\right)+1\right]+\left[\sqrt{\log\left(\Delta_{\Lambda}n_{V}K\sigma+1\right)}+1\right]\right)^{2}\left(1+\tilde{h}(n_{T})\right)
+ &  & +c_{1}\frac{\left(1+a\right)^{2}}{a}\frac{J\log n_{V}}{n_{V}}K\left[\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)+K\frac{J\log n_{V}}{n_{V}}\right]\left(1+\tilde{h}(n_{T})\right)
 \end{eqnarray*}
-where $C_{\Lambda}=\log\left(\Delta_{\Lambda}K\sigma+1\right)$ and
-$c$ is an absolute constant.\end{thm}
+\end{thm}
 \begin{proof}
 By Lemma 1, 
 \begin{eqnarray*}
@@ -453,60 +397,63 @@ By Lemma 1,
 We need to bound the second term on the RHS. We would like to use
 Lemma 4.
 
-Plug in $C_{2}=c_{0}K,C_{\psi_{2}}=c_{1}K,D_{\psi_{1}}=c_{2}K$ for
-absolute constants $c_{0},c_{1},c_{2}$ into $J_{\delta}(\epsilon)$
-defined in Corollary 9. For other absolute constants, 
+From Corollary 9, we know that $\mathcal{J}_{\delta}(\epsilon)$ has
+the form $\mathcal{J}_{\delta}(\epsilon)=A_{0,\delta}+A_{1}\log(\epsilon+1)+A_{2,\delta}\sqrt{\epsilon}$.
+
+$\mathcal{J}_{\delta}$ is strictly increasing and as $\mathcal{J}_{\delta}$
+is strictly concave, then $\mbox{\ensuremath{\mathcal{J}}}_{\delta}^{-1}$
+is strictly convex.
+
+It is difficult to calculate a closed-form for $\psi_{\delta}$. Therefore
+we will argue that all the assumptions on $\psi_{\delta}$ are satisfied.
+In particular, we need to show that $x\mapsto\psi_{\delta}(x)/x^{r}$
+decreases for some $r\ge1$.
+
+To see this, we use the fact that $\log(\epsilon+1)\le\sqrt{\epsilon}$
+for all $\epsilon>0$. This implies that 
 \begin{eqnarray*}
- &  & J_{\delta}(\epsilon)\\
- & = & \sqrt{\epsilon}\left(\frac{\log n_{V}}{\sqrt{n_{V}}}c_{0}JC_{1}\left[\log\left(\Delta_{\Lambda}n_{V}\left(\sqrt{C_{1}}+K\right)\delta+1\right)+1\right]+c_{1}\sqrt{J}\left[\sqrt{\log\left(\Delta_{\Lambda}n_{V}K\delta+1\right)}+1\right]\right).\\
- & = & c_{\delta}\sqrt{\epsilon}
+\psi_{\delta}(u) & = & \sup_{v>0}uv-\mathcal{J}_{\delta}^{-1}(v)\\
+ & = & \sup_{w>0}u\mathcal{J}_{\delta}(w)-w\\
+ & = & \sup_{w>0}u\left[A_{0,\delta}+A_{1}\log(w+1)+A_{2,\delta}\sqrt{w}\right]-w\\
+ & \le & \sup_{w>0}u\left[A_{0,\delta}+\left(A_{1}+A_{2,\delta}\right)\sqrt{w}\right]-w\\
+ & \le & A_{0,\delta}u+\frac{\left(A_{1}+A_{2,\delta}\right)^{2}}{4}u^{2}
 \end{eqnarray*}
 
 
-Now we calculate the convex conjugate of $J_{\delta}^{-1}$, where
-$J_{\delta}$ is defined in Corollary 9. So $J_{\delta}$ is strictly
-increasing and $J_{\delta}^{-1}(v)=\left(\frac{v}{c_{\delta}}\right)^{2}$
-is strictly convex. Then $\psi_{\delta}(u)=\sup_{v>0}uv-\left(\frac{v}{c_{\delta}}\right)^{2}=\frac{c_{\delta}^{2}u^{2}}{4}$
-for $u>0$. Note that $\psi_{\delta}(\infty)=\infty$ and $\psi_{\delta}(x)/x^{r}$
-decreases for $r>2$.
+Thus $\psi_{\delta}(u)/u^{2}$ decreases and so we choose $r=2$.
 
-Plugging the definition of $J_{\delta}(\epsilon)$ back in, the function
-$\epsilon_{q,\delta}$ for $q>1$ and $u\ge1$ is
+Let $q\rightarrow1$. Then
+
 \begin{eqnarray*}
-\epsilon_{q,\delta}(u) & = & \psi_{\delta}\left(\frac{2q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\\
- & = & \left[c_{\delta}^{2}\left(\frac{q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)^{2}\right]\vee\frac{1}{n_{V}}.
+\lim_{q\rightarrow1}\epsilon_{q,\delta}(1/q) & = & \psi_{\delta}\left(\frac{2(1+a)}{a}\frac{1}{\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\\
+ & \le & \left[\left(\frac{2(1+a)}{a}\right)\frac{\log n_{V}}{n_{V}}c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\delta}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(c+1\right)\right)+1\right]+\frac{\left(\frac{\log n_{V}}{\sqrt{n_{V}}}c_{1}JK+c_{2}\sqrt{J}\left[\sqrt{\log\left(\Delta_{\Lambda}\left[\|\epsilon\|_{L_{2}}\delta n_{v}+1\right]+1\right)}+1\right]\right)^{2}}{4}\left(\frac{2(1+a)}{a}\frac{u}{\sqrt{n_{V}}}\right)^{2}\right]\\
+ & \le & c_{0}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\left[K^{2}\frac{J\log n_{V}}{n_{V}}+K\log\left(\Delta_{\Lambda}\delta\|\epsilon\|_{L_{\psi_{2}}}c\right)\right]
 \end{eqnarray*}
 
 
-(more new absolute constants above)
+where the last line assumes that the elements in the $\log$ terms
+are all larger than one, $K,c\ge1$.
 
-In particular, if we plug in $\delta=2^{k}\sigma$ for any $\sigma>0$
-and $k\ge1$, we have (for a new set of absolute constants)
+Finally, let's do the summation: 
 \begin{eqnarray*}
-\epsilon_{q,2^{k}\sigma}(u) & \le & \left[kc_{\delta}^{2}\frac{(1+a)^{2}}{a^{2}}\frac{q^{2r+2}u^{2}}{n_{V}}\right]\vee\frac{1}{n_{V}}.
+ &  & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\epsilon_{1,2^{k}\sigma}(1)\\
+ & = & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\left[c_{1}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\left[K^{2}\frac{J\log n_{V}}{n_{V}}+kK\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)\right]\right]\\
+ & \le & c_{1}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\left[K^{2}\frac{J\log n_{V}}{n_{V}}+K\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)\right]\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\\
+ & \le & c_{1}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\left[K^{2}\frac{J\log n_{V}}{n_{V}}+K\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)\right]\tilde{h}(n_{T})
 \end{eqnarray*}
 
 
-Plugging this into Lemma 4 with $Q(\lambda|D^{(n_{T})})=\left(y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}|D^{(n_{T})})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}$
-, the function class defined appropriately, and $h(D^{(n_{T})})=c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}$
-we have 
+Now let's finally plug in all the terms.
 \begin{eqnarray*}
- &  & \mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)\left[\left(y-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}|D^{(n_{T})})(x)\right)^{2}-\left(y-g^{*}(x)\right)^{2}\right]\right)_{+}\right]\\
- & \le & c\frac{(1+a)^{2}}{a}\frac{q^{2r-1}J}{n_{V}}\left(\log n_{V}\sqrt{\frac{J}{n_{V}}}C_{1}\left[\log\left(\Delta_{\Lambda}n_{V}\left(\sqrt{C_{1}}+K\right)\sigma+1\right)+1\right]+\left[\sqrt{\log\left(\Delta_{\Lambda}n_{V}K\sigma+1\right)}+1\right]\right)^{2}\times\\
- &  & \left(1+\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\right)
+ &  & \mathbb{P}_{D^{(n)}}\left(\|\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\\
+ & \le & (1+a)\inf_{\lambda\in\Lambda}\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right]\\
+ &  & +c_{2}\frac{\left(1+a\right)^{2}}{a}\frac{J\log n_{V}}{n_{V}}K\left[\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)+K\frac{J\log n_{V}}{n_{V}}\right]\left(1+\tilde{h}(n_{T})\right)
 \end{eqnarray*}
 
-
-Take $q\rightarrow1$ and using the assumption that $\tilde{h}(n_{T})\ge c\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)$
-, we get
-\begin{eqnarray*}
- &  & \mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\right]\\
- & \le & ck\frac{(1+a)^{2}}{a}\frac{J}{n_{V}}\left(\log n_{V}\sqrt{\frac{J}{n_{V}}}C_{1}\left[\log\left(\Delta_{\Lambda}n_{V}\left(\sqrt{C_{1}}+K\right)\sigma+1\right)+1\right]+\left[\sqrt{\log\left(\Delta_{\Lambda}n_{V}K\sigma+1\right)}+1\right]\right)^{2}\left(1+\tilde{h}(n_{T})\right)
-\end{eqnarray*}
-
-
-The integral bound provided in the theorem might be easier to reason
-with. To derive it, note that for any positive function $h$
+\end{proof}
+Note that in certain cases, the integral bound provided in the theorem
+might be easier to reason with. To derive it, note that for any positive
+function $h$
 \begin{eqnarray*}
 \sum_{k=1}^{\infty}k\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right) & = & \sum_{k=1}^{\infty}k\int1\left\{ h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right\} d\mu\left(D^{(n_{T})}\right)\\
  & = & \int1\left\{ \log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)\ge1\right\} \sum_{k=1}^{\log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)}kd\mu\left(D^{(n_{T})}\right)\\
@@ -514,7 +461,7 @@ with. To derive it, note that for any positive function $h$
  & \le & \int\left(\log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)\right)^{2}d\mu\left(D^{(n_{T})}\right).
 \end{eqnarray*}
 
-\end{proof}
+
 The bound 
 \[
 \tilde{h}(n_{T})\ge\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\approx\int\left(\log_{2}\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}/\sigma\right)\right)^{2}d\mu\left(D^{(n_{T})}\right)
