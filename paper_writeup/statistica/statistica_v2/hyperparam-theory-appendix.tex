@@ -391,17 +391,21 @@ such that $\forall Q\in\mathcal{Q}$,
 
 Let $n_{T},n_{V}\in\mathbb{N}$ and fix a dataset $D^{(n_{T})}$.
 Suppose there exist functions $D^{(n_{T})}\mapsto h(D^{(n_{T})})\in\mathbb{R}^{+}$
-and $\left\{ \epsilon\mapsto J_{\delta}(\epsilon):\delta>0\right\} $
-and a constant $\epsilon_{\min}>0$ such that for any dataset $D^{(n_{T})}$,
+and $\left\{ w \mapsto J_{\delta}(w) :\delta>0\right\} $
+and a constant $w_{\min}>0$ such that for any dataset $D^{(n_{T})}$ and any $w \ge w_{\min}$,
 \[
-h(D^{(n_{T})})\le\delta\implies\frac{\log n_{V}}{\sqrt{n_{V}}}\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)+\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(\epsilon)\forall\epsilon\ge\epsilon_{\min}
+h(D^{(n_{T})})\le\delta\implies\frac{\log n_{V}}{\sqrt{n_{V}}}\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(w)
 \]
-where $\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})})\equiv\left\{ Q\in\mathcal{Q}(D^{(n_{T})}):\|Q(Z)\|_{L_{2}}\le G(\epsilon)\right\} $.
+where $\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})})\equiv\left\{ Q\in\mathcal{Q}(D^{(n_{T})}):\|Q(Z)\|_{L_{2}}\le G(w)\right\}$.
 
 Then there exists some absolute constant $L,c>0$ such that for all
-$\epsilon\ge\epsilon_{\min}$ and for all $u\ge1$,
+$w\ge w_{\min}$ and all $u\ge1$,
 \[
-\Pr\left(\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(\epsilon)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta\right)\ge1-L\exp(-cu).
+\Pr\left(
+\sup_{Q\in\mathcal{Q}(D^{(n_{T})}): PQ \le w}
+\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta
+\right)
+\ge1-L\exp(-cu).
 \]
 \end{lemma}
 
@@ -411,41 +415,51 @@ Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the condition
 	be a set of measurable functions.
 	
 	Let random variable $Z$ satisfy for all $m\in\mathbb{N}$, any dataset
-	$D^{(m)}$, $\mathbb{P}Q(Z)\ge0\forall Q\in\mathcal{Q}\left(D^{(m)}\right)$.
+	$D^{(m)}$, for all $Q\in\mathcal{Q}\left(D^{(m)}\right)$, $\mathbb{P}Q(Z)\ge 0 $.
 	
 	Suppose for any $n_{T},n_{V}\in\mathbb{N}$ and dataset $D^{(n_{T})}$
-	there exists some absolute constant $L,c>0$ such that for all $\epsilon\ge\epsilon_{\min}$
+	there exists some absolute constant $L,c>0$ such that for all $w\ge w_{\min}$
 	and for all $u\ge1$,
-	
 	\[
-	\Pr\left(\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(\epsilon)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta\right)\ge1-L\exp(-cu).
+	\Pr\left(
+	\sup_{Q\in\mathcal{Q}(D^{(n_{T})}): PQ \le w}
+	\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta\right)
+	\ge 1-L\exp(-cu).
 	\]
 	
 	
 	Suppose every function in $\left\{ J_{\delta}:\delta>0\right\} $
 	is strictly increasing and its inverse is strictly convex.
-	
-	Let $\psi_{\delta}$be the convex conjugate of $J_{\delta}^{-1}$,
-	e.g. $\psi_{\delta}(u)=\sup_{v>0}uv-J_{\delta}^{-1}(v)\forall u>0$.
+	Let $\psi_{\delta}$ be the convex conjugate of $J_{\delta}^{-1}$,
+	e.g. $\psi_{\delta}(u)=\sup_{v>0}uv-J_{\delta}^{-1}(v)$ for all $u>0$.
 	Assume there is a $r\ge1$ such that $x>0\mapsto\psi(x)/x^{r}$ decreases
 	and define for $q>1$ and $u\ge1$,
 	\[
-	\epsilon_{q,\delta}(u)=\psi_{\delta}\left(\frac{2q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)\vee\epsilon_{\min}.
+	\tilde \psi_{q,\delta}(u)=\psi_{\delta}\left(\frac{2q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)\vee w_{\min}.
 	\]
 	
 	
 	Then there exists a constant $L_{1}$ that only depends on $L$ such
 	that for every $u\ge1$,
 	\[
-	\Pr\left(\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\le\frac{a\epsilon_{q,\delta}(u/q)}{q}\mid h\left(D^{(n_{T})}\right)\le\delta\right)\ge1-L_{1}\exp(-cu).
+	\Pr\left(
+	\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}
+	\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
+	\le \frac{a \tilde{\psi}_{q,\delta}(u/q)}{q}\mid h\left(D^{(n_{T})}\right)\le\delta
+	\right)
+	\ge 1-L_{1}\exp(-cu).
 	\]
 	
 	
 	Moreover, assume that $\psi_{\delta}$ increases such that $\psi_{\delta}(\infty)=\infty$.
-	Then there exists a constant $c_{1}$that depends only on $L$ and
-	$c$ such that
+	Then there exists a constant $c_{1}$ that depends only on $L$ and $c$ such that
 	\[
-	\mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\mid h\left(D^{(n_{T})}\right)\le\delta\right]\le\frac{ac_{1}\epsilon_{q,\delta}(1/q)}{q}.
+	\mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}
+	\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
+	\middle |
+	h\left(D^{(n_{T})}\right)\le\delta
+	\right]
+	\le\frac{ac_{1} \tilde{\psi}_{q,\delta}(1/q)}{q}.
 	\]
 \end{lemma}
 
@@ -453,23 +467,25 @@ Now we state the following lemma, that will allow us to extend of Theorem 3.5 in
 Using a simple chaining argument, we arrive at the following lemma.
 \begin{lemma}
 	\label{lemma:chain}
-Let $a>0$.
-
-Suppose there exists a constant $c_{1}$such that for any $n_{T},n_{V},\delta$
-and $q>1$, we have 
+Consider any $a>0$.
+Suppose there exists a constant $c_{1}$ such that for any $n_{T},n_{V} \in \mathbb{N}$, $\delta>0$,
+and $q>1$, we have
 \[
-\mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\mid h\left(D^{(n_{T})}\right)\le\delta\right]\le\frac{ac_{1}\epsilon_{q,\delta}(1/q)}{q}.
+\mathbb{P}\left[
+\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
+\middle | 
+h\left(D^{(n_{T})}\right)\le\delta\right]
+\le\frac{ac_{1}\epsilon_{q,\delta}(1/q)}{q}.
 \]
-
 Then for any $\sigma > 0$, we have
 \[
 \mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\right]
 \le
 \frac{ac}{q}
 \left(
-\epsilon_{q,2\sigma}(1/q)
+\tilde{\psi}_{q,2\sigma}(1/q)
 +\sum_{k=1}^{\infty}\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right)
-\epsilon_{q,2^{k}\sigma}(1/q)
+\tilde{\psi}_{q,2^{k}\sigma}(1/q)
 \right)
 .
 \]
@@ -481,31 +497,32 @@ Putting the three lemmas above together, we have the following result.
 
 \begin{theorem}
 	\label{thrm:jean_cv}
-	Consider a set of hyper-parameters $\Lambda$. Let
+	Consider a set of hyper-parameters $\Lambda$. Consider a loss function $Q:(\mathcal{Z}, \mathcal{G}) \mapsto \mathbb{R}$ with convex risk function $R: \mathcal{G} \mapsto \mathbb{R}$. Let
 	$$
 	\mathcal{Q} = \{ 
-	\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}|D^{(n_T)}) \right) ^2 
-	- \left (y - g^* \right) ^2 
-	: \boldsymbol{\lambda} \in \Lambda \}.
+	Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) : \boldsymbol{\lambda} \in \Lambda \}.
 	$$
-	
-	Suppose there exist a constant $K_0, K_1 \ge 0$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$, the following two inequalities hold
+	Suppose there exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$, the following two inequalities hold
 	\begin{align}
-	\left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) \right) ^2 
-	- \left (y - g^* \right) ^2  \right \|_{L_{\psi_1}} & \le K_0
+	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) \right \|_{L_{\psi_1}} & \le K_0
 	\label{eq:cv_assump1}\\
-	\left \| \left (y - \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) \right) ^2 
-	- \left (y - g^* \right) ^2  \right \|_{L_2} & \le 
-	K_1 \left \| \hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)}) - g^* \right \|_{L_2}.
+	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2} & \le 
+	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
 	\label{eq:cv_assump2}
 	\end{align}
-	Suppose there is an $\epsilon_{\min} > 0$ and a function $h$ and $J_\delta$ such that
+	Suppose there is an $w_{\min} > 0$ and
+	% JF: is this the right notation for a training set?
+	functions $h: {\mathcal{Z}}^{(n_T)} \mapsto \mathbb{R}$
+	and $J_\delta: \mathbb{R}\mapsto \mathbb{R}$ such that
+	for all $w \ge w_{\min}$,
 	\[
-	h(D^{(n_{T})})\le\delta\implies\frac{\log n_{V}}{\sqrt{n_{V}}}\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)+\gamma_{2}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(\epsilon)\forall\epsilon\ge\epsilon_{\min}
+	h(D^{(n_{T})})\le\delta\implies
+	\frac{\log n_{V}}{\sqrt{n_{V}}}
+	\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)
+	+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(w)
 	\]
-	where $\mathcal{Q}_t = \{Q \in \mathcal{Q}: \| Q \|_{L_2} \le \sqrt{t} \}$.
-	
-	Suppose that for all $\delta > 0$, $J_\delta$ is a strictly increasing function and $J_\delta^{-1}(\epsilon)$ is strictly convex,
+	where $\mathcal{Q}_w = \{Q \in \mathcal{Q}: \| Q \|_{L_2} \le w^{1/2\kappa} \}$.
+	Moreover, suppose that for all $\delta > 0$, $J_\delta$ is a strictly increasing function, $J_\delta^{-1}(\epsilon)$ is strictly convex,
 	the convex conjugate $\psi_\delta$ of $J^{-1}_\delta$ increases, $\psi_\delta(\infty ) = \infty$ and there exists $r \ge 1$ such that $\psi_\delta(x)/x^r$ decreases.
 	
 	Consider any $\sigma > 0$. Then there is an absolute constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
@@ -527,13 +544,14 @@ Putting the three lemmas above together, we have the following result.
 	& +
 	\frac{ac}{q}
 	\left(
-	\epsilon_{q,2\sigma}(1/q)
+	\tilde{\psi}_{q,2\sigma}(1/q)
 	+\sum_{k=1}^{\infty}
 	\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right)
-	\epsilon_{q,2^{k}\sigma}(1/q)
+	\tilde{\psi}_{q,2^{k}\sigma}(1/q)
 	\right).
-	\end{split}.
+	\end{split}
 	\end{align}
+	where $\tilde{\psi}_{q, \delta}(u) = \psi_\delta\left(\frac{2q^{r+1}(1 + a)u}{a\sqrt{n_V}}\right) \vee w_{\min}$ for all $u > 0$.
 \end{theorem}
 
 To see why this extension of Theorem 3.5 in \citet{lecue2012oracle} was useful, we now apply it to prove Theorem~\ref{thrm:kfold} where we consider the squared error loss and model-estimation methods where the estimated functions are Lipschitz in the hyper-parameters.
@@ -550,16 +568,24 @@ First we need the following lemma that describes the relationship between Lipsch
 	\begin{align}
 	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
 	\end{align}
-	Then for
+	Let $\epsilon > 0$. For
 	$$
 	\mathcal{Q}_{\epsilon}^{L_2} = \{ 
 	(y - \hat{g}(\boldsymbol{\lambda} | D^{(n_T)}))^2
 	- (y - g^*)^2
-	 : P (\hat{g}(\boldsymbol{\lambda} | D^{(n_T)}) - g^*)^2 \le \sqrt{\epsilon} \}
-	 $$, we have
+	 : P (\hat{g}(\boldsymbol{\lambda} | D^{(n_T)}) - g^*)^2 \le \epsilon , \boldsymbol{\lambda} \in \Lambda \},
+	$$
+	we have
 	\begin{align}
-	N(\mathcal{Q}_{\epsilon}^{L_2}, u, \|\cdot \|)
-	\le N \left (\Lambda, \frac{u}{\left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right) \|C_\Lambda(x|D^{(n_T)})\|_*}, \|\cdot \|_{2} \right)
+	N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{2}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}},\|\cdot\|_{2}\right).
+	\end{align}
+	Moreover, if there is some $k > 0$ such that
+	\begin{align}
+	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le c\left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{k},
+	\end{align}
+	then we also have
+	\begin{align}
+	N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right).
 	\end{align}
 	\label{lemma:covering_lipschitz}
 \end{lemma}
