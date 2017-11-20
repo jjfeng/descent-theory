@@ -554,64 +554,75 @@ Putting the three lemmas above together, we have the following result.
 	where $\tilde{\psi}_{q, \delta}(u) = \psi_\delta\left(\frac{2q^{r+1}(1 + a)u}{a\sqrt{n_V}}\right) \vee w_{\min}$ for all $u > 0$.
 \end{theorem}
 
-To see why this extension of Theorem 3.5 in \citet{lecue2012oracle} was useful, we now apply it to prove Theorem~\ref{thrm:kfold} where we consider the squared error loss and model-estimation methods where the estimated functions are Lipschitz in the hyper-parameters.
+To see why this extension of Theorem 3.5 in \citet{lecue2012oracle} was useful, we now apply it to prove Theorem~\ref{thrm:kfold} where we consider the squared error loss $Q((x,y), g) = (y - g(x))^2$ and model-estimation methods where the estimated functions are Lipschitz in the hyper-parameters.
 First we need the following lemma that describes the relationship between Lipschitz functions
 \begin{lemma}
 	Suppose the same conditions as Theorem~\ref{thrm:jean_cv}.
-	Suppose norm $\|\cdot \|$ satisfies
-	\begin{align}
-	\| XY \| \le \|X\|_*\|Y\|_*
-	\label{eq:cauchy-like}
-	\end{align}
-	for some norm $\|\cdot \|_*$ for any random variables $X,Y$.
-	Moreover, we have for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$
+	Suppose for any $n_T \in \mathbb{N}$ and any dataset $D^{(n_T)}$, we have
 	\begin{align}
 	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
 	\end{align}
-	Let $\epsilon > 0$. For
-	$$
-	\mathcal{Q}_{\epsilon}^{L_2} = \{ 
-	(y - \hat{g}(\boldsymbol{\lambda} | D^{(n_T)}))^2
-	- (y - g^*)^2
-	 : P (\hat{g}(\boldsymbol{\lambda} | D^{(n_T)}) - g^*)^2 \le \epsilon , \boldsymbol{\lambda} \in \Lambda \},
-	$$
-	we have
+	Let $w > 0$ and define 
+	$\mathcal{Q}_{w}^{L_{2}} = \{g^* - \hat{g}(\boldsymbol{\lambda}|D^{(n_{T})}) : P (g^* - \hat{g}(\boldsymbol{\lambda}|D^{(n_{T})}))^2 < w\}$.
+	Then
 	\begin{align}
-	N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{2}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{2}}+\sqrt{\epsilon}\right)\|G(x|D^{(n_{T})})\|_{L_{2}}},\|\cdot\|_{2}\right).
+	N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{2}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)
+		\|C_\Lambda(x|D^{(n_{T})})\|_{L_{2}}},\|\cdot\|_{2}\right).
 	\end{align}
-	Moreover, if there is some $k > 0$ such that
+	Moreover, if there is some $r > 0$ such that
 	\begin{align}
-	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le c\left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{k},
+	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le c\left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r},
 	\end{align}
 	then we also have
 	\begin{align}
-	N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right).
+	N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+cw^{r/2}\right)
+		\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right).
 	\end{align}
 	\label{lemma:covering_lipschitz}
 \end{lemma}
 \begin{proof}
+Let us first consider a general norm $\|\cdot \|$ such that for any random variables $X, Y$, we have $\|XY\| \le \|X\|_* \|Y\|_*$.
+Then for all $\boldsymbol{\lambda} \in \Lambda$ such that
+$P (g^* - \hat{g}(\boldsymbol{\lambda} | D^{n_T}))^2 \le w$, we have
 \begin{align}
 & \left \|
+Q(\cdot , \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x))
+- Q(\cdot , \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x))
+\right \|\\
+& = \left \|
 \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
 - \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
 \right \|
 \label{eq:loss_diff}
 \\
-& = \|
-\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right)
-\left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right ) \\ & - \left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right )^2 \|\\
-%JF falling off page
-& \le  \left (2 \|\epsilon\|_* + \left \|g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(2)} | D^{(m)})(x) \right \|_* \right)
-\left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right \|_* \\
-& \le  \left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right)
-\left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right \|_*
+%& = \|
+%\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right)
+%\left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right ) \\ & - \left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right )^2 \|\\
+%%JF falling off page
+& \le
+\left \|2\epsilon + g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x)
++ g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(2)} | D^{(n_T)})(x) \right \|_* \\
+& \quad \left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right \|_* \\
+& \le  \left (2 \|\epsilon\|_* +
+2 \sup_{\lambda \in \Lambda: P(g^* - \hat{g}(\boldsymbol{\lambda} | D^{n_T}))^2 \le w} 
+\left \| g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) \right \|_* 
+\right)
+\left \|C_\Lambda (x | D^{(n_T)}) \right \|_*
+\|\boldsymbol{\lambda}^{(2)} - \boldsymbol{\lambda}^{(1)} \|_2
 \end{align}
-where we applied \eqref{eq:cauchy-like} in the first inequality.
 
-Applying the Lipschitz assumption, we have that \eqref{eq:loss_diff} is bounded about by
-\begin{align}
-\left (2 \|\epsilon\|_* + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_* \right) \|C_\Lambda(x|D^{(n_T)})\|_* \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2
-\end{align}
+For $\|\cdot \| = \|\cdot\|_{L_{2}}$, the upper bound reduces to
+$$
+2\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)
+\|C_\Lambda (x | D^{(n_T)})\|_{L_{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}$$
+as the $L_2$ norm is its own dual norm.
+
+For $\|\cdot \| = \|\cdot\|_{L_{\psi_{1}}}$, the upper bound reduces to 
+$$
+2\left(\|\epsilon\|_{L_{\psi_{2}}}+cw^{r/2}\right)
+\|C_\Lambda (x | D^{(n_T)})\|_{L_{\psi_{2}}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+$$
+as the dual of the $L_{\psi_1}$ norm is $L_{\psi_2}$.
 \end{proof}
 
 \subsubsection{Proof for Theorem \ref{thrm:kfold}}
