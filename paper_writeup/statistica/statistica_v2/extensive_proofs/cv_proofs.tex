@@ -301,8 +301,8 @@ from LM and Talagrand that (for an absolute constant $c$?)
 \begin{lem}
 $\gamma$-function from Talagrand for Lipschitz functions
 
-Suppose there exists a function $G(x|D^{(n_{T})})$ and constants
-$c,r>0$ such that for any $m\in\mathbb{N}$ and any dataset $D^{(m)}$,
+Suppose there exists a function $G(x|D^{(n_{T})})$ and some $K_{2}\ge1$
+and $r>0$ such that for any $m\in\mathbb{N}$ and any dataset $D^{(m)}$,
 we have 
 \begin{align}
 \left|\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)-\hat{g}^{(n_{T})}(\boldsymbol{\lambda}^{(1)}|D^{(n_{T})})(x)\right|\le G(x|D^{(n_{T})})\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
@@ -311,7 +311,7 @@ we have
 
 and 
 \[
-\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le c\left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r}.
+\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le K_{2}\left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r}.
 \]
 
 
@@ -325,10 +325,11 @@ Then there is an absolute constant $c>0$ such that
 
 
 If for any $D^{(n_{T})}$, we have that $\forall Q\in\mathcal{Q}(D^{(n_{T})}),\|Q\|_{L_{\psi_{1}}}\le K$,
-then
+then there is a constant $\tilde{c}$ dependent of $K_{2},K,\|\epsilon\|_{\psi_{2}}$
+such that
 
 \begin{eqnarray*}
-\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\right)+\frac{r}{2}\log\left(c\epsilon+1\right)+1\right].
+\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c_{1}JK\left[\log\left(\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\tilde{c}+1\right)+\frac{r}{2}\log\left(\epsilon+1\right)+1\right].
 \end{eqnarray*}
 \end{lem}
 \begin{proof}
@@ -354,32 +355,35 @@ We plug in the results from the covering number lemmas above.
 Now let's bound the $\gamma_{1}$-function. 
 \begin{eqnarray*}
 \gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c\int_{0}^{K}\log N\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)du\\
- & \le & c\int_{0}^{K}\log N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right)du\\
- & \le & c\int_{0}^{K}J\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2u}{u}\right)du\\
- & \le & cJ\int_{0}^{K}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{u}\right)du\\
- & = & cJK\int_{0}^{1}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{Kv}\right)dv\\
- & = & cJK\int_{0}^{1}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{K}\right)+\log\frac{1}{v}dv\\
- & = & cJK\left[\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{K}\right)+1\right]
+ & \le & c\int_{0}^{K}\log N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+K_{2}\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right)du\\
+ & \le & c\int_{0}^{K}J\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+K_{2}\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2u}{u}\right)du\\
+ & \le & cJ\int_{0}^{K}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+K_{2}\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{u}\right)du\\
+ & = & cJK\int_{0}^{1}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+K_{2}\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{Kv}\right)dv\\
+ & = & cJK\int_{0}^{1}\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+K_{2}\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{K}\right)+\log\frac{1}{v}dv\\
+ & = & cJK\left[\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+K_{2}\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{K}\right)+1\right]
 \end{eqnarray*}
 by the same set of arguments as above. We can reduce $\gamma_{1}$
 to be a bit easier to handle. If $c\ge1$, then
 \begin{eqnarray*}
-\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c_{1}JK\left[\log\left(c\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(\epsilon^{r/2}+1\right)\right)+1\right]\\
- & \le & c_{1}JK\left[\log\left(c\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\right)+\frac{r}{2}\log\left(\epsilon+1\right)+1\right]
+\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c_{1}JK\left[\log\left(\frac{K_{2}\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)+K}{K}\left(\epsilon+1\right)^{r/2}\right)+1\right]\\
+ & = & c_{1}JK\left[\log\left(\frac{K_{2}\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)+K}{K}\right)+\frac{r}{2}\log\left(\epsilon+1\right)+1\right]
 \end{eqnarray*}
 
 
 Now we combine these bounds on the $\gamma$-functions and Lemma 2
 (also Lemma 3.4 in LM) to get the following corollary.\end{proof}
 \begin{cor}
-We have the following bound. For all $\epsilon>1/n_{V}$ and $\delta\ge\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}$,
-we have
+We have the following bound. For all $\epsilon>1/n_{V}$ and $\delta\ge\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}$
+and $\Delta_{\Lambda}\ge1$ , we have
+
 \[
-\mathcal{J}_{\delta}(\epsilon)=\frac{\log n_{V}}{\sqrt{n_{V}}}c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\delta}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(c+1\right)\right)+\frac{r}{2}\log\left(\epsilon+1\right)+1\right]+c_{2}\sqrt{\epsilon J}\left[\sqrt{\log\left(\Delta_{\Lambda}\left[\|\epsilon\|_{L_{2}}\delta n_{v}+1\right]+1\right)}+1\right]
+\mathcal{J}_{\delta}(\epsilon)=\frac{\log n_{V}}{\sqrt{n_{V}}}c_{1}JK\left[\log\left(\Delta_{\Lambda}\delta\tilde{c}+1\right)+1\right]+c_{2}\frac{\log n_{V}}{\sqrt{n_{V}}}JKr\log\left(\epsilon+1\right)+c_{3}\sqrt{\epsilon J}\left[\sqrt{\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\delta n_{v}+1\right)}+1\right]
 \]
 as a bound for the quantity above.\end{cor}
 \begin{thm}
 Suppose all the stuff before.
+
+Define $\Delta_{\Lambda}=\left(\lambda_{\max}-\lambda_{\min}\right)\vee1.$
 
 Suppose there exists a function $\tilde{h}$ such that 
 \[

@@ -45,6 +45,7 @@
 \newtheorem{example}{Example}
 \newtheorem{remark}{Remark}
 \newtheorem{condition}{Condition}
+\newtheorem{assump}{Assumption}
 
 \pagestyle{fancy}
 
@@ -333,41 +334,72 @@ The $\psi_\alpha$-norm measures the exponential tail behavior of a random variab
 We will use it to bound the tail behavior of functions in the function class $\mathcal{G}$ and the random variable/noise $\epsilon$.
 In addition, note that the $L_2$-norm is a special case of the Orlicz norm with the function $\psi(x) = x^2$.
 
-Now on to the theorem.
+First, our assumptions:
+\begin{assump}
+	\label{assump:tail_margin}
+	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$,
+	\begin{align}
+	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) \right \|_{L_{\psi_1}} & \le K_0
+	\label{eq:cv_assump1}\\
+	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2} & \le 
+	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
+	\label{eq:cv_assump2}
+	\end{align}
+\end{assump}
+
+\begin{assump}
+	\label{assump:lipschitz}
+	Suppose for any $n_T \in \mathbb{N}$ and any dataset $D^{(n_T)}$, we have
+	\begin{align}
+	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
+	\end{align}
+\end{assump}
+
+\begin{assump}
+	\label{assump:l2_psi2}
+	There is some $r > 0, K_2 \ge 1$ such that
+	\begin{align}
+	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le K_2 \left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r},
+	\end{align}
+\end{assump}
 
 \begin{theorem}
 	\label{thrm:kfold}
-	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$.
-	Let $G(x)$ be an envelope function such that $\sup_{g \in \mathcal{G}} |g (x)| \le G(x)$ and $\|G\|_{L_{\psi_2}} <\infty$.
+	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = (\lambda_{\max} - \lambda_{\min}) \vee 1$.
 	Suppose random variables $\epsilon_i$ are independent with expectation zero, satisfy $\|\epsilon\|_{L_{\psi_2}} <\infty$, and are independent of $X$.
+	Suppose Assumptions~\ref{assump:tail_margin}, \ref{assump:lipschitz}, \ref{assump:l2_psi2}.
 
-Consider the setting of averaged version of $K$-fold cross-validation where $K \ge 2$ and the datasets are of size $n$ where $n$ is divisible by $K$.
-Let $n_V = n/K = n_V$ and $n_T = n - n_V$.
+	Consider the setting of averaged version of $K$-fold cross-validation where $K \ge 2$ and the datasets are of size $n$ where $n$ is divisible by $K$.
+	Let $n_V = n/K = n_V$ and $n_T = n - n_V$.
 
-Suppose for any dataset $D^{(n_T)}$, $\hat g (\boldsymbol{\lambda} | D^{(n_T)})$ satisfies for any $x$
-\begin{align}
-\left | \hat g (\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) - \hat g (\boldsymbol{\lambda}^{(2)} | D^{(n_T)})(x) \right |
-\le G(x) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
-\end{align}
-
-	Then there is an absolute constant $c > 0$ such that for all $a > 0$,
-	\begin{align*}
-	&
-	E_{D^{(n)}}
-	\left \| \bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) - g^* \right \|^2 
-	\\
-	&\le
-	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda}  
-	E_{D^{(n_T)}}
-	\left \| \hat{g}^{(n_T)}(\boldsymbol \lambda | D^{(n_T)}) - g^* \right \|^2 
-	+ \textcolor{red}{c \frac{(1+a)^2}{a} \frac{J G \log (GC_\Lambda \Delta_{\Lambda} ) \log n_V }{n_V}.}
-	\end{align*}
-	%JF inf not min
+	Suppose there exists a function $\tilde{h}$ and some $\sigma_0 > 0$ such that
+	\begin{align}
+	\tilde{h}(n_{T})
+	\ge
+	\sum_{k=1}^{\infty}
+	k\Pr\left(\|C_\Lambda(\cdot |D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma_{0}\right).
+	\end{align}
+	Then there exists an absolute constant $c_{1}>0$
+	and a constant $\tilde{c}>0$ that depends on $K_0,K_{2},r,\|\epsilon\|_{\psi_{2}}$
+	such that
+	\begin{align}
+	\begin{split}
+	\mathbb{P}_{D^{(n)}}\left(
+	\|
+	\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})(x)
+	-g^{*}(x)
+	\|_{L_{2}}^{2}\right)
+	& \le	(1+a)
+	\inf_{\lambda\in\Lambda}
+	\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right] \\
+	& + c_{1} \frac{\left(1+a\right)^{2}}{a}
+	\frac{J\log n_{V}}{n_{V}}
+	\tilde{c}\log\left(\tilde{c}\frac{\left(1+a\right)}{a}\Delta_{\Lambda}J\sigma_{0}+1\right)
+	\left(1+\tilde{h}(n_{T})\right).
+	\end{split}
+	\label{eq:cv_lipschitz_oracle_ineq}
+	\end{align}
 \end{theorem}
-
-$\|G\|_{L_{\psi_2}} < \infty$ is a joint condition on $X$ and $\mathcal{G}$....
-
-$\|\epsilon\|_{L_{\psi_2}} < \infty$ states that $\epsilon$ is sub-gaussian.
 
 As we can see, Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are quite similar. The upper bounds in both theorems depend on the oracle error and a near-parametric term. For parametric model-estimation procedures, tuning hyper-parameters incurs a similar cost as the model-estimation procedure itself. In semi- and non-parametric regression settings, tuning hyper-parameters is a relatively ``cheap'' and incurs an error that is negligible asymptotically.
 

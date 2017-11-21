@@ -42,7 +42,6 @@
 \pagestyle{fancy}
 
 \newtheorem{condition}{Condition}
-\newtheorem{assump}{Assumption}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagestyle{fancy}
@@ -365,6 +364,8 @@ The risk function $R$ is defined as...
 
 Our theorem again begins with a result reminiscent of the basic inequality.
 The following lemma is Lemma 3.1 from \citet{lecue2012oracle}.
+
+From henceforth, $c_i > 0$ denotes absolute constants, that may not necessarily be the same if they share the same subscript.
 \begin{lemma}
 	lemma 3.1
 \end{lemma}
@@ -505,29 +506,23 @@ Putting the three lemmas above together, we have the following result.
 	\mathcal{Q} = \{ 
 	Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) : \boldsymbol{\lambda} \in \Lambda \}.
 	$$
-	Suppose there exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$, the following two inequalities hold
-	\begin{align}
-	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) \right \|_{L_{\psi_1}} & \le K_0
-	\label{eq:cv_assump1}\\
-	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2} & \le 
-	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
-	\label{eq:cv_assump2}
-	\end{align}
+	
+	Suppose Assumption~\ref{assump:tail_margin}.
 	Suppose there is an $w_{\min} > 0$ and
 	% JF: is this the right notation for a training set?
 	functions $h: {\mathcal{Z}}^{(n_T)} \mapsto \mathbb{R}$
-	and $J_\delta: \mathbb{R}\mapsto \mathbb{R}$ such that
+	and $\mathcal{J}_\delta: \mathbb{R}\mapsto \mathbb{R}$ such that
 	for all $w \ge w_{\min}$,
 	\begin{align}
 	\label{eq:h_to_J}
 	h(D^{(n_{T})})\le\delta\implies
 	\frac{\log n_{V}}{\sqrt{n_{V}}}
 	\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)
-	+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(w)
+	+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le \mathcal{J}_{\delta}(w)
 	\end{align}
 	where $\mathcal{Q}_w = \{Q \in \mathcal{Q}: \| Q \|_{L_2} \le w^{1/2\kappa} \}$.
-	Moreover, suppose that for all $\delta > 0$, $J_\delta$ is a strictly increasing function, $J_\delta^{-1}(\epsilon)$ is strictly convex,
-	the convex conjugate $\psi_\delta$ of $J^{-1}_\delta$ increases, $\psi_\delta(\infty ) = \infty$ and there exists $r \ge 1$ such that $\psi_\delta(x)/x^r$ decreases.
+	Moreover, suppose that for all $\delta > 0$, $J_\delta$ is a strictly increasing function, $\mathcal{J}_\delta^{-1}(\epsilon)$ is strictly convex,
+	the convex conjugate $\psi_\delta$ of $\mathcal{J}^{-1}_\delta$ increases, $\psi_\delta(\infty ) = \infty$ and there exists $r \ge 1$ such that $\psi_\delta(x)/x^r$ decreases.
 	
 	Consider any $\sigma > 0$. Then there is an absolute constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
 	\begin{align}
@@ -553,28 +548,13 @@ Putting the three lemmas above together, we have the following result.
 	\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right)
 	\tilde{\psi}_{q,2^{k}\sigma}(1/q)
 	\right).
+	\label{eq:cv_oracle_ineq}
 	\end{split}
 	\end{align}
 	where $\tilde{\psi}_{q, \delta}(u) = \psi_\delta\left(\frac{2q^{r+1}(1 + a)u}{a\sqrt{n_V}}\right) \vee w_{\min}$ for all $u > 0$.
 \end{theorem}
 
 To see why this extension of Theorem 3.5 in \citet{lecue2012oracle} was useful, we now apply it to prove Theorem~\ref{thrm:kfold} where we consider the squared error loss $Q((x,y), g) = (y - g(x))^2$ and model-estimation methods where the estimated functions are Lipschitz in the hyper-parameters.
-
-\begin{assump}
-	\label{assump:lipschitz}
-	Suppose for any $n_T \in \mathbb{N}$ and any dataset $D^{(n_T)}$, we have
-	\begin{align}
-	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
-	\end{align}
-\end{assump}
-
-\begin{assump}
-	\label{assump:l2_psi2}
-	There is some $r > 0, K_2 \ge 1$ such that
-	\begin{align}
-	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le K_2 \left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r},
-	\end{align}
-\end{assump}
 
 First we need the following lemma that describes the relationship between Lipschitz functions
 \begin{lemma}
@@ -661,23 +641,20 @@ $$
 \left[\sqrt{
 \log\left(
 \Delta_{\Lambda}\|C_\Lambda(x|D^{(n_{T})})\|_{L_{2}}
-\left(
 \frac{\|\epsilon\|_{L_{2}}}{\sqrt{w}} + 1
-\right)
-+1
 \right)
 }
 +1\right].
 $$
-Moreover, if we have that $\forall Q\in\mathcal{Q}(D^{(n_{T})}),\|Q\|_{L_{\psi_{1}}}\le K$, then there is an absolute constant $c_1 > 0$ such that
-$$
-\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)	\le
-c_1 J K \left[\log\left(
-\frac{\Delta_{\Lambda}
-	\left(\|\epsilon\|_{L_{\psi_{2}}} + K_2 w^{r/2}\right)
-	\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K} + 1 \right)
-+1\right].
-$$
+Moreover, if we have that $\forall Q\in\mathcal{Q}(D^{(n_{T})}),\|Q\|_{L_{\psi_{1}}}\le K$, then there is an absolute constant $c_1 > 0$ and a constant $\tilde{c}$ that depends on $K_2, \|\epsilon\|_{L_{\psi_2}}, K$ such that
+\begin{align}
+\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)
+& \le c_{1}JK\left[
+\log\left(
+	\Delta_{\Lambda}\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}} \tilde{c}+1
+\right)
++\frac{r}{2}\log\left(w+1\right)+1\right].
+\end{align}
 \end{lemma}
 
 \begin{proof}
@@ -705,22 +682,21 @@ $$
 	\end{align}
 \end{proof}
 
-Using the above lemma, we can now define our functions $h$ and $J_\delta$.
+Using the above lemma, we can now define our functions $h$ and $\mathcal{J}_\delta$.
 Let
 \begin{align}
 h(D^{(n_T)}) = \|C_\Lambda(x|D^{(n_T)})\|_{\psi_1}.
 \end{align}
-In addition, let us suppose that $\delta \ge 1$.
-Then for absolute constants, define
+and
 \begin{align}
 \begin{split}
 \label{eq:j_delta}
 \mathcal{J}_{\delta}(w) & =
-\frac{\log n_{V}}{\sqrt{n_{V}}}c_{2}JK\left[
-\log\left(\frac{\Delta_{\Lambda}\delta K_2}{K} \left ( \|\epsilon\|_{L_{\psi_{2}}}+K \right )\right)
-+\frac{r}{2}\log\left(w+1\right)
-\right]\\
-& +c_{3}\sqrt{w J}\left[\sqrt{\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\delta n_{v}+1\right)}+1\right].
+c_{1} \frac{\log n_{V}}{\sqrt{n_{V}}}
+JK\left[\log\left(\Delta_{\Lambda}\delta\tilde{c}+1\right)+1\right]\\
+& +c_{2}\frac{\log n_{V}}{\sqrt{n_{V}}}JKr\log\left(\epsilon+1\right)\\
+& +c_{3}\sqrt{\epsilon}\sqrt{J}
+\left[\sqrt{\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\delta n_{v}+1\right)}+1\right].
 \end{split}
 \end{align}
 
@@ -730,7 +706,81 @@ Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 	As defined in \eqref{eq:j_delta}, $J_\delta(w)$ is clearly a valid bound for \eqref{eq:h_to_J} for all $w \ge 1/n_V$.
 	Moreover, $\mathcal{J}_{\delta}(\epsilon)$ is strictly increasing and concave in $\epsilon$.
 	This implies that $\mathcal{J}_{\delta}^{-1}$ is strictly convex.
-	
+	We will now find an upper bound of $\psi_{\delta}(u)$.
+	For notational simplicity, we write
+	$
+	\mathcal{J}_{\delta}(\epsilon)=A_{0}+A_{1}\log(\epsilon+1)+A_{2}\sqrt{\epsilon}
+	$
+	where $A_{\cdot}$ match the coefficients in \eqref{eq:j_delta}.
+	Using the fact that use the fact that $\log(w+1)\le\left(\log w+1\right)1\left\{ w\ge1\right\} +c1\left\{ w<1\right\}$
+	for all $w>0$ and $c\ge\log2$,
+	then
+	\begin{align}
+	\psi_{\delta}(u)&=\sup_{v>0}uv-\mathcal{J}_{\delta}^{-1}(v)\\
+	&= \sup_{w>0}u\mathcal{J}_{\delta}(w)-w\\
+	&= uA_{0}+\sup_{w>0}\left\{ uA_{1}\left(\left(\log w+1\right)1\left\{ w\ge1\right\} +c1\left\{ w<1\right\} \right)+uA_{2}\sqrt{w}-w\right\} \\
+	&\le uA_{0}+\max\left\{
+	\sup_{w>0} \left(uA_{1}\left(\log w+1\right)+uA_{2}\sqrt{w}-w\right),
+	\sup_{w>0} \left(uA_{1}c+uA_{2}\sqrt{w}-w \right)
+	\right\} 
+	\end{align}
+	We can easily solve for the first term in the $\max$ by setting its derivative to zero.
+	It is maximized at 
+	$$
+	\tilde w = \frac{uA_{2}}{4}+\sqrt{\left(\frac{uA_{2}}{4}\right)^{2}+uA_{1}}.
+	% \le\frac{uA_{2}}{2}+\sqrt{uA_{1}}
+	$$
+	Thus the first term in the $\max$ is at most
+	$$
+	\sup_{w>0} \left(uA_{1}\left(\log w+1\right)+uA_{2}\sqrt{w}-w\right)
+	\le
+	uA_{1}\log\tilde{w}+\left(\frac{uA_{2}}{2}\right)^{2}.
+	$$
+	The second term in the $\max$ is equal to
+	$$
+	uA_{1}c+\left(\frac{uA_{2}}{2}\right)^{2}.
+	$$
+	So as long as we choose $c\ge2\log\left(\frac{uA_{2}}{2}+\sqrt{uA_{1}}\right)\vee\log2$,
+	then
+	\begin{align}
+	\psi_{\delta}(u)
+	& \le u\left[A_{0}+A_{1}2\log\left(\frac{uA_{2}}{2}+\sqrt{uA_{1}}\right)\right]+\left(\frac{u}{2}A_{2}\right)^{2}\\
+	& \le c_{2}u\frac{\log n_{V}}{\sqrt{n_{V}}}J\tilde{c}\log\left(\tilde{c}J\Delta_{\Lambda}u\delta\log n_{v}+1\right)+c_{3}u^{2}J\left[\log\left(\tilde{c}\Delta_{\Lambda}\delta n_{v}+1\right)+1\right]
+	\end{align}
+	for some constant $\tilde{c}$ that only depends on $r, K, K_2, \|\epsilon\|_{L_{\psi_2}}$.
+	From above, we see that $\psi_{\delta}(u)/u^2$ decreases.
+	Now let us determine $\tilde{\psi}_{q, \delta}(1/q)$ as $q \rightarrow 1$.
+	We have
+	\begin{align}
+	\lim_{q\rightarrow1}\epsilon_{q,\delta}(1/q)
+	& = \psi_{\delta}\left(\frac{2(1+a)}{a}\frac{1}{\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\\
+	& \le c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\tilde{c}\log\left(\frac{\left(1+a\right)}{a}\tilde{c}\Delta_{\Lambda}J\delta+1\right)
+	\end{align}
+	Now we are ready to calculate the summation in \eqref{eq:cv_oracle_ineq}.
+	\begin{align}
+	& \sum_{k=1}^{\infty}\Pr\left(
+	\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}}
+	\ge 2^{k} \sigma_{0}
+	\right)
+	\tilde{\psi}_{1,2^{k}\sigma_0}(1)\\
+	& \le
+	c_{5}
+	\left(\frac{1+a}{a}\right)^{2}
+	\frac{J\log n_{V}}{n_{V}}
+	\tilde{c}
+	\log\left(\frac{\left(1+a\right)}{a}\tilde{c}\Delta_{\Lambda}J\sigma_{0}+1\right)
+	\sum_{k=1}^{\infty}
+	k \Pr\left(\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}} \ge 2^{k} \sigma_0\right) \\
+	& \le
+	c_{5}
+	\left(\frac{1+a}{a}\right)^{2}
+	\frac{J\log n_{V}}{n_{V}}
+	\tilde{c}
+	\log\left(\frac{\left(1+a\right)}{a}\tilde{c}\Delta_{\Lambda}J\sigma_{0}+1\right)
+	\tilde{h}(n_{T}).
+	\label{eq:sum_prob_bound}
+	\end{align}
+	Taking $q \rightarrow 1$ in \eqref{eq:cv_oracle_ineq} and plugging in \eqref{eq:sum_prob_bound}, we get our desired result.
 \end{proof}
 
 \subsection{Penalized regression for additive models}
