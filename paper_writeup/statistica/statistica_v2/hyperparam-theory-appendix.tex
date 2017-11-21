@@ -712,7 +712,11 @@ Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 	\mathcal{J}_{\delta}(\epsilon)=A_{0}+A_{1}\log(\epsilon+1)+A_{2}\sqrt{\epsilon}
 	$
 	where $A_{\cdot}$ match the coefficients in \eqref{eq:j_delta}.
-	Using the fact that use the fact that $\log(w+1)\le\left(\log w+1\right)1\left\{ w\ge1\right\} +c1\left\{ w<1\right\}$
+	Using the fact that
+	\begin{align}
+	\log(w+1)\le\left(\log w+1\right)1\left\{ w\ge1\right\} +c1\left\{ w<1\right\}
+	\label{eq:log_bound}
+	\end{align}
 	for all $w>0$ and $c\ge\log2$,
 	then
 	\begin{align}
@@ -737,14 +741,18 @@ Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 	uA_{1}\log\tilde{w}+\left(\frac{uA_{2}}{2}\right)^{2}.
 	$$
 	The second term in the $\max$ is equal to
-	$$
+	$
 	uA_{1}c+\left(\frac{uA_{2}}{2}\right)^{2}.
-	$$
-	So as long as we choose $c\ge2\log\left(\frac{uA_{2}}{2}+\sqrt{uA_{1}}\right)\vee\log2$,
+	$
+	So as long as we choose $c\ge \log\left(\frac{uA_{2}}{2}+\sqrt{uA_{1}}\right)\vee\log2$ in \eqref{eq:log_bound},
 	then
 	\begin{align}
 	\psi_{\delta}(u)
-	& \le u\left[A_{0}+A_{1}2\log\left(\frac{uA_{2}}{2}+\sqrt{uA_{1}}\right)\right]+\left(\frac{u}{2}A_{2}\right)^{2}\\
+	& \le u\left[
+	A_{0}+
+	A_{1} \log\left(\frac{uA_{2}}{2}+\sqrt{uA_{1}}\right)
+	\right]
+	+\left(\frac{u}{2}A_{2}\right)^{2}\\
 	& \le c_{2}u\frac{\log n_{V}}{\sqrt{n_{V}}}J\tilde{c}\log\left(\tilde{c}J\Delta_{\Lambda}u\delta\log n_{v}+1\right)+c_{3}u^{2}J\left[\log\left(\tilde{c}\Delta_{\Lambda}\delta n_{v}+1\right)+1\right]
 	\end{align}
 	for some constant $\tilde{c}$ that only depends on $r, K, K_2, \|\epsilon\|_{L_{\psi_2}}$.
@@ -752,25 +760,31 @@ Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 	Now let us determine $\tilde{\psi}_{q, \delta}(1/q)$ as $q \rightarrow 1$.
 	We have
 	\begin{align}
-	\lim_{q\rightarrow1}\epsilon_{q,\delta}(1/q)
+	\lim_{q\rightarrow1}\tilde{\psi}_{q,\delta}(1/q)
 	& = \psi_{\delta}\left(\frac{2(1+a)}{a}\frac{1}{\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\\
 	& \le c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\tilde{c}\log\left(\frac{\left(1+a\right)}{a}\tilde{c}\Delta_{\Lambda}J\delta+1\right)
 	\end{align}
 	Now we are ready to calculate the summation in \eqref{eq:cv_oracle_ineq}.
 	\begin{align}
-	& \sum_{k=1}^{\infty}\Pr\left(
-	\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}}
-	\ge 2^{k} \sigma_{0}
+	& \lim_{q \rightarrow 1} \left(
+	\tilde{\psi}_{q,2\sigma_0}(1/q)
+	+\sum_{k=1}^{\infty}
+	\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right)
+	\tilde{\psi}_{q,2^{k}\sigma_0}(1/q)
 	\right)
-	\tilde{\psi}_{1,2^{k}\sigma_0}(1)\\
+	\\
 	& \le
 	c_{5}
 	\left(\frac{1+a}{a}\right)^{2}
 	\frac{J\log n_{V}}{n_{V}}
 	\tilde{c}
 	\log\left(\frac{\left(1+a\right)}{a}\tilde{c}\Delta_{\Lambda}J\sigma_{0}+1\right)
+	\left(
+	1 + 
 	\sum_{k=1}^{\infty}
-	k \Pr\left(\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}} \ge 2^{k} \sigma_0\right) \\
+	k \Pr\left(\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}} \ge 2^{k} \sigma_0\right)
+	\right)
+	\\
 	& \le
 	c_{5}
 	\left(\frac{1+a}{a}\right)^{2}
