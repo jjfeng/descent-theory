@@ -41,6 +41,9 @@
 
 \pagestyle{fancy}
 
+\newtheorem{condition}{Condition}
+\newtheorem{assump}{Assumption}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagestyle{fancy}
 \def\n{\noindent}
@@ -515,12 +518,13 @@ Putting the three lemmas above together, we have the following result.
 	functions $h: {\mathcal{Z}}^{(n_T)} \mapsto \mathbb{R}$
 	and $J_\delta: \mathbb{R}\mapsto \mathbb{R}$ such that
 	for all $w \ge w_{\min}$,
-	\[
+	\begin{align}
+	\label{eq:h_to_J}
 	h(D^{(n_{T})})\le\delta\implies
 	\frac{\log n_{V}}{\sqrt{n_{V}}}
 	\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)
 	+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(w)
-	\]
+	\end{align}
 	where $\mathcal{Q}_w = \{Q \in \mathcal{Q}: \| Q \|_{L_2} \le w^{1/2\kappa} \}$.
 	Moreover, suppose that for all $\delta > 0$, $J_\delta$ is a strictly increasing function, $J_\delta^{-1}(\epsilon)$ is strictly convex,
 	the convex conjugate $\psi_\delta$ of $J^{-1}_\delta$ increases, $\psi_\delta(\infty ) = \infty$ and there exists $r \ge 1$ such that $\psi_\delta(x)/x^r$ decreases.
@@ -555,13 +559,27 @@ Putting the three lemmas above together, we have the following result.
 \end{theorem}
 
 To see why this extension of Theorem 3.5 in \citet{lecue2012oracle} was useful, we now apply it to prove Theorem~\ref{thrm:kfold} where we consider the squared error loss $Q((x,y), g) = (y - g(x))^2$ and model-estimation methods where the estimated functions are Lipschitz in the hyper-parameters.
-First we need the following lemma that describes the relationship between Lipschitz functions
-\begin{lemma}
-	Suppose the same conditions as Theorem~\ref{thrm:jean_cv}.
+
+\begin{assump}
+	\label{assump:lipschitz}
 	Suppose for any $n_T \in \mathbb{N}$ and any dataset $D^{(n_T)}$, we have
 	\begin{align}
 	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
 	\end{align}
+\end{assump}
+
+\begin{assump}
+	\label{assump:l2_psi2}
+	There is some $r > 0, K_2 \ge 1$ such that
+	\begin{align}
+	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le K_2 \left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r},
+	\end{align}
+\end{assump}
+
+First we need the following lemma that describes the relationship between Lipschitz functions
+\begin{lemma}
+	Suppose the same conditions as Theorem~\ref{thrm:jean_cv}.
+	Suppose Assumptions~\ref{assump:lipschitz} and \ref{assump:l2_psi2}.
 	Let $w > 0$ and define 
 	$\mathcal{Q}_{w}^{L_{2}} = \{g^* - \hat{g}(\boldsymbol{\lambda}|D^{(n_{T})}) : P (g^* - \hat{g}(\boldsymbol{\lambda}|D^{(n_{T})}))^2 < w\}$.
 	Then
@@ -569,13 +587,9 @@ First we need the following lemma that describes the relationship between Lipsch
 	N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{2}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)
 		\|C_\Lambda(x|D^{(n_{T})})\|_{L_{2}}},\|\cdot\|_{2}\right).
 	\end{align}
-	Moreover, if there is some $r > 0$ such that
-	\begin{align}
-	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le c\left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r},
-	\end{align}
 	then we also have
 	\begin{align}
-	N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+cw^{r/2}\right)
+	N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)\le N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{\psi_{2}}}+ L_2 w^{r/2}\right)
 		\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right).
 	\end{align}
 	\label{lemma:covering_lipschitz}
@@ -619,62 +633,104 @@ as the $L_2$ norm is its own dual norm.
 
 For $\|\cdot \| = \|\cdot\|_{L_{\psi_{1}}}$, the upper bound reduces to 
 $$
-2\left(\|\epsilon\|_{L_{\psi_{2}}}+cw^{r/2}\right)
+2\left(\|\epsilon\|_{L_{\psi_{2}}}+L_2 w^{r/2}\right)
 \|C_\Lambda (x | D^{(n_T)})\|_{L_{\psi_{2}}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
 $$
 as the dual of the $L_{\psi_1}$ norm is $L_{\psi_2}$.
 \end{proof}
 
-\subsubsection{Proof for Theorem \ref{thrm:kfold}}
+Now we proceed to bound Talagrand's $\gamma$ function. Via simple calculations, one can show that there is an absolute constant $c > 0$ such that
+\begin{align}
+\gamma_{\alpha}(T,D)\le c\int_{0}^{\text{Diam}(T,d)}\left(\log N(T,\epsilon,d)\right)^{1/\alpha}d\epsilon
+\label{eq:bound_gamma}
+\end{align}
+(cite talgrand).
+Combining the above bound with Lemma~\ref{lemma:covering_lipschitz} gives us the following lemma.
+
+\begin{lemma}
+Suppose Assumptions~\ref{assump:lipschitz} and \ref{assump:l2_psi2} hold.
+Define $\mathcal{Q}_w^{L_2}$ as before.
+For $\Lambda$, let $\Delta_{\Lambda}=(\lambda_{\max}-\lambda_{\min}) \vee 1$.
+Let $w>0$.
+Let $\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})})$ be defined as before.
+Then there is an absolute constants $c_0 >0$
+such that
+$$
+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)
+\le	c_0 \sqrt{w J}
+\left[\sqrt{
+\log\left(
+\Delta_{\Lambda}\|C_\Lambda(x|D^{(n_{T})})\|_{L_{2}}
+\left(
+\frac{\|\epsilon\|_{L_{2}}}{\sqrt{w}} + 1
+\right)
++1
+\right)
+}
++1\right].
+$$
+Moreover, if we have that $\forall Q\in\mathcal{Q}(D^{(n_{T})}),\|Q\|_{L_{\psi_{1}}}\le K$, then there is an absolute constant $c_1 > 0$ such that
+$$
+\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)	\le
+c_1 J K \left[\log\left(
+\frac{\Delta_{\Lambda}
+	\left(\|\epsilon\|_{L_{\psi_{2}}} + K_2 w^{r/2}\right)
+	\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K} + 1 \right)
++1\right].
+$$
+\end{lemma}
+
 \begin{proof}
-	Next we determine $J_\delta$.
-	By Lemma \ref{lemma:covering_lipschitz}, we know
+	By definition of $\mathcal{Q}_{w}^{L_{2}}$, we have $\text{Diam}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)	=	2\sqrt{w}.$
+	Using Lemma~\ref{lemma:covering_lipschitz} and \eqref{eq:bound_gamma}, we have
 	\begin{align}
-	N(\mathcal{Q}_\epsilon^{L_2}, u, \|\cdot \|_{L_2})
-	& \le N \left (
-	\Lambda, 
-	\frac{u}{
-	\left (2 \|\epsilon\|_{L_2} + 6 \sup_{g \in \mathcal G} \left \|g(x) \right \|_{L_2} \right) \|C_\Lambda(x|D^{(n_T)})\|_2},
-	\|\cdot \|_{2} \right)\\
-	& \le
-	\left (
-	\frac{
-		c_0 \left (\|\epsilon\|_{L_2} + \sup_{g \in \mathcal G} \left \|g(x) \right \|_{L_2} \right) \|C_\Lambda(x|D^{(n_T)})\|_{L_2} \Delta_{\Lambda} + u
-	}{u}
-	\right )^J
+	\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)
+	& \le	c\int_{0}^{2\sqrt{w}}\sqrt{\log N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{2}}\right)}du \\
+	& \le	c\int_{0}^{2\sqrt{w}}\sqrt{\log N\left(\Lambda,\frac{u}{2\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}},\|\cdot\|_{2}\right)}du \\
+	& \le	c\int_{0}^{2\sqrt{w}}\sqrt{J\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}+2u}{u}\right)}du\\
+%	& \le	c\sqrt{J}\int_{0}^{2\sqrt{w}}\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}+4\sqrt{w}}{u}\right)}du \\
+%	& =	2c\sqrt{\epsilon J}\int_{0}^{1}\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}+4\sqrt{w}}{2\sqrt{w}v}\right)}dv\\
+%	& \le	2c\sqrt{w J}\int_{0}^{1}\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}+4\sqrt{w}}{2\sqrt{w}}\right)}+\sqrt{\log\frac{1}{v}}dv\\
+	& \le	2c\sqrt{w J}\left[\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}+4\sqrt{w}}{2\sqrt{w}}\right)}+\frac{\sqrt{\pi}}{2}\right]
 	\end{align}
-	for an absolute constant $c_0 > 0$.
-	Similarly,
+	Using very similar logic, we have
 	\begin{align}
-	N(\mathcal{Q}_\epsilon^{L_2}, u, \|\cdot \|_{L_{\psi_1}})
-	& \le
-	\left (
-	\frac{
-		c_0 \left (\|\epsilon\|_{L_2} + \sup_{g \in \mathcal G} \left \|g(x) \right \|_{L_{\psi_2}} \right) \|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_2}} \Delta_{\Lambda} + u
-	}{u}
-	\right )^J
+	\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)
+	&\le c\int_{0}^{2K}\log N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)du\\
+	& \le 2cJK\left[
+	\log\left(
+	\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+K_2w^{r/2}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_{2}}}+2K}
+	{K}
+	\right)+1\right]
 	\end{align}
-	Hence we have
-	\begin{equation}
-	\psi(d) \coloneqq
-	\sqrt{d}K_{n,1}
-	+
-	\frac{K_{n,2}}{\sqrt{n_V}} 
-	\end{equation}
-	for $$K_{n,1} = \left[J\left(1+\log\left(c_1\sqrt{n_V} GC \Delta_{\Lambda} \right)\right)\right]^{1/2}$$ 
-	and 
-	$$K_{n,2} = \log n_V 2GJ\left(1+\log\left(c_1 GC \Delta_{\Lambda} \right)\right)$$
-	where $c_1 > 0$ is an absolute constant.
+\end{proof}
+
+Using the above lemma, we can now define our functions $h$ and $J_\delta$.
+Let
+\begin{align}
+h(D^{(n_T)}) = \|C_\Lambda(x|D^{(n_T)})\|_{\psi_1}.
+\end{align}
+In addition, let us suppose that $\delta \ge 1$.
+Then for absolute constants, define
+\begin{align}
+\begin{split}
+\label{eq:j_delta}
+\mathcal{J}_{\delta}(w) & =
+\frac{\log n_{V}}{\sqrt{n_{V}}}c_{2}JK\left[
+\log\left(\frac{\Delta_{\Lambda}\delta K_2}{K} \left ( \|\epsilon\|_{L_{\psi_{2}}}+K \right )\right)
++\frac{r}{2}\log\left(w+1\right)
+\right]\\
+& +c_{3}\sqrt{w J}\left[\sqrt{\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\delta n_{v}+1\right)}+1\right].
+\end{split}
+\end{align}
+
+Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
+\begin{proof}[Proof for Theorem~\ref{thrm:kfold}]
+	We will combine our previous results with Theorem~\ref{thrm:jean_cv}.
+	As defined in \eqref{eq:j_delta}, $J_\delta(w)$ is clearly a valid bound for \eqref{eq:h_to_J} for all $w \ge 1/n_V$.
+	Moreover, $\mathcal{J}_{\delta}(\epsilon)$ is strictly increasing and concave in $\epsilon$.
+	This implies that $\mathcal{J}_{\delta}^{-1}$ is strictly convex.
 	
-	$\psi(d)$ is a valid upper bound in \eqref{eq:mitchell_dudley_bound}  for all $d > n_V^{-1}$.
-	
-	We can show that the convex conjugate of $\psi^{-1}$ is
-	\begin{equation}
-	\label{eq:convex_conjugate}
-	\psi^*(z) = \frac{z^2 K_{n,1}^2}{4} + \frac{z K_{n,2}}{\sqrt{n_V}}.
-	\end{equation}	
-	
-	Plugging in \eqref{eq:convex_conjugate} into Theorem \ref{thrm:mitchell} and taking $q \rightarrow 1$ gives us the result in Theorem \ref{thrm:kfold}.
 \end{proof}
 
 \subsection{Penalized regression for additive models}

@@ -118,7 +118,7 @@ and for all $u\ge1$,
 Suppose every function in $\left\{ J_{\delta}:\delta>0\right\} $
 is strictly increasing and its inverse is strictly convex.
 
-Let $\psi_{\delta}$be the convex conjugate of $J_{\delta}^{-1}$,
+Let $\psi_{\delta}$ be the convex conjugate of $J_{\delta}^{-1}$,
 e.g. $\psi_{\delta}(u)=\sup_{v>0}uv-J_{\delta}^{-1}(v)\forall u>0$.
 Assume there is a $r\ge1$ such that $x>0\mapsto\psi(x)/x^{r}$ decreases
 and define for $q>1$ and $u\ge1$,
@@ -169,7 +169,22 @@ By a simple chaining argument, we have
 \end{eqnarray*}
 
 \end{proof}
-To see why the lemma above is useful, we will now walk through the
+Let us combine the results from above to get the following theorem.
+\begin{thm}
+Suppose all the stuff before.
+
+Consider any $\sigma>0$.
+
+Then there exist constant $c_{1}>0$ such that
+
+\begin{eqnarray*}
+ &  & \mathbb{P}_{D^{(n)}}\left(\|\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\\
+ & \le & (1+a)\inf_{\lambda\in\Lambda}\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right]\\
+ &  & +\frac{ac\epsilon_{q,2\sigma}(1/q)}{q}+\sum_{k=1}^{\infty}\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right)\frac{ac\epsilon_{q,2^{k}\sigma}(1/q)}{q}
+\end{eqnarray*}
+
+\end{thm}
+To see why the theorem above is useful, we will now walk through the
 case where the fitted functions are Lipschitz in the hyper-parameters.
 We will see that the chaining argument shows that all we need to do
 is to control the following sum 
@@ -347,10 +362,10 @@ Now let's bound the $\gamma_{1}$-function.
  & = & cJK\left[\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{\psi_{2}}}+c\epsilon^{r/2}\right)\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}+2K}{K}\right)+1\right]
 \end{eqnarray*}
 by the same set of arguments as above. We can reduce $\gamma_{1}$
-to be a bit easier to handle:
+to be a bit easier to handle. If $c\ge1$, then
 \begin{eqnarray*}
-\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(c+1\right)\left(\epsilon^{r/2}+1\right)\right)+1\right]\\
- & \le & c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(c+1\right)\right)+\frac{r}{2}\log\left(\epsilon+1\right)+1\right]
+\gamma_{1}\left(\mathcal{Q}_{\epsilon}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right) & \le & c_{1}JK\left[\log\left(c\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(\epsilon^{r/2}+1\right)\right)+1\right]\\
+ & \le & c_{1}JK\left[\log\left(c\left(\frac{\Delta_{\Lambda}\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\right)+\frac{r}{2}\log\left(\epsilon+1\right)+1\right]
 \end{eqnarray*}
 
 
@@ -377,14 +392,17 @@ where $c$ is an absolute constant.
 (The bound $\tilde{h}(n_{T})\ge\int\left(\log_{2}\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}/\sigma\right)\right)^{2}d\mu\left(D^{(n_{T})}\right)$
 also works.)
 
-Then there exist constant $c_{1}>0$ such that
+Then there exist constant $c_{1}>0$ and a constant $c_{2}>0$ that
+depends on $K_{2},K,r,\|\epsilon\|_{\psi_{2}}$ such that
 
 \begin{eqnarray*}
  &  & \mathbb{P}_{D^{(n)}}\left(\|\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\\
  & \le & (1+a)\inf_{\lambda\in\Lambda}\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right]\\
- &  & +c_{1}\frac{\left(1+a\right)^{2}}{a}\frac{J\log n_{V}}{n_{V}}K\left[\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)+K\frac{J\log n_{V}}{n_{V}}\right]\left(1+\tilde{h}(n_{T})\right)
+ &  & +c_{1}\frac{\left(1+a\right)^{2}}{a}\frac{J\log n_{V}}{n_{V}}c_{2}\log\left(c_{2}\frac{\left(1+a\right)}{a}\Delta_{\Lambda}J+1\right)\left(1+\tilde{h}(n_{T})\right).
 \end{eqnarray*}
-\end{thm}
+
+
+Suppose $K\ge1$.\end{thm}
 \begin{proof}
 By Lemma 1, 
 \begin{eqnarray*}
@@ -409,45 +427,98 @@ we will argue that all the assumptions on $\psi_{\delta}$ are satisfied.
 In particular, we need to show that $x\mapsto\psi_{\delta}(x)/x^{r}$
 decreases for some $r\ge1$.
 
-To see this, we use the fact that $\log(\epsilon+1)\le\sqrt{\epsilon}$
-for all $\epsilon>0$. This implies that 
+To see this, we use the fact that $\log(w+1)\le\left(\log w+1\right)1\left\{ w\ge1\right\} +c1\left\{ w<1\right\} $
+for all $w>0$ for any $c\ge\log2$. This implies that 
 \begin{eqnarray*}
 \psi_{\delta}(u) & = & \sup_{v>0}uv-\mathcal{J}_{\delta}^{-1}(v)\\
  & = & \sup_{w>0}u\mathcal{J}_{\delta}(w)-w\\
- & = & \sup_{w>0}u\left[A_{0,\delta}+A_{1}\log(w+1)+A_{2,\delta}\sqrt{w}\right]-w\\
- & \le & \sup_{w>0}u\left[A_{0,\delta}+\left(A_{1}+A_{2,\delta}\right)\sqrt{w}\right]-w\\
- & \le & A_{0,\delta}u+\frac{\left(A_{1}+A_{2,\delta}\right)^{2}}{4}u^{2}
+ & = & \sup_{w>0}\left\{ u\left[A_{0,\delta}+A_{1}\log(w+1)+A_{2,\delta}\sqrt{w}\right]-w\right\} \\
+ & = & uA_{0,\delta}+\sup_{w>0}\left\{ uA_{1}\left(\left(\log w+1\right)1\left\{ w\ge1\right\} +c1\left\{ w<1\right\} \right)+uA_{2,\delta}\sqrt{w}-w\right\} \\
+ & = & uA_{0,\delta}+\max\left\{ \sup_{w\ge1}uA_{1}\left(\log w+1\right)+uA_{2,\delta}\sqrt{w}-w,\sup_{0<w<1}uA_{1}c+uA_{2,\delta}\sqrt{w}-w\right\} \\
+ & \le & uA_{0,\delta}+\max\left\{ \sup_{w>0}uA_{1}\left(\log w+1\right)+uA_{2,\delta}\sqrt{w}-w,\sup_{w>0}uA_{1}c+uA_{2,\delta}\sqrt{w}-w\right\} 
 \end{eqnarray*}
 
 
-Thus $\psi_{\delta}(u)/u^{2}$ decreases and so we choose $r=2$.
+The first term in the $\max$ is maximized at $\hat{w}$ where 
+\begin{eqnarray*}
+\frac{uA_{1}}{\hat{w}}+\frac{uA_{2,\delta}}{2}\frac{1}{\sqrt{\hat{w}}}-1=0 & \iff & -\hat{w}+\frac{uA_{2,\delta}}{2}\sqrt{\hat{w}}+uA_{1}=0\\
+ & \iff & \sqrt{\hat{w}}=\frac{-\frac{uA_{2,\delta}}{2}-\sqrt{\left(\frac{uA_{2,\delta}}{2}\right)^{2}+4uA_{1}}}{-2}=\frac{uA_{2,\delta}}{4}+\sqrt{\left(\frac{uA_{2,\delta}}{4}\right)^{2}+uA_{1}}
+\end{eqnarray*}
+
+
+As 
+\[
+\sqrt{\hat{w}}=\frac{uA_{2,\delta}}{4}+\sqrt{\left(\frac{uA_{2,\delta}}{4}\right)^{2}+uA_{1}}\le\frac{uA_{2,\delta}}{2}+\sqrt{uA_{1}}
+\]
+then 
+\begin{eqnarray*}
+\sup_{w>0}uA_{1}\left(\log w+1\right)+uA_{2,\delta}\sqrt{w}-w & \le & uA_{1}\left(\log\hat{w}+1\right)+uA_{2,\delta}\left(\frac{uA_{2,\delta}}{2}+\sqrt{uA_{1}}\right)-\left(\frac{uA_{2,\delta}}{2}+\sqrt{uA_{1}}\right)^{2}\\
+ & = & uA_{1}\left(\log\hat{w}+1\right)+\left(\frac{uA_{2,\delta}}{2}-\sqrt{uA_{1}}\right)\left(\frac{uA_{2,\delta}}{2}+\sqrt{uA_{1}}\right)\\
+ & = & uA_{1}\log\hat{w}+\left(\frac{uA_{2,\delta}}{2}\right)^{2}.
+\end{eqnarray*}
+
+
+The second term in the $\max$ is maximized at $\hat{w}$ where 
+\[
+\frac{uA_{2,\delta}}{2}\frac{1}{\sqrt{\hat{w}}}-1=0\iff\sqrt{\hat{w}}=\frac{uA_{2,\delta}}{2}
+\]
+
+
+Thus
+\[
+\sup_{w>0}uA_{1}c+uA_{2,\delta}\sqrt{w}-w=uA_{1}c+\left(\frac{uA_{2,\delta}}{2}\right)^{2}.
+\]
+
+
+As long as $c\ge2\log\left(\frac{uA_{2,\delta}}{2}+\sqrt{uA_{1}}\right)\vee\log2$,
+then since
+
+\begin{eqnarray*}
+A_{0} & = & \frac{\log n_{V}}{\sqrt{n_{V}}}c_{2}JK\log\left(\frac{\Delta_{\Lambda}\delta K_{2}}{K}\left(\|\epsilon\|_{L_{\psi_{2}}}+K\right)\right)\\
+ & A_{1}= & \frac{\log n_{V}}{\sqrt{n_{V}}}c_{2}JK\frac{r}{2}\\
+ & A_{2}= & c_{3}\sqrt{J}\left[\sqrt{\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\delta n_{v}+1\right)}+1\right]
+\end{eqnarray*}
+
+
+we have
+\[
+\log\left(\frac{uA_{2,\delta}}{2}+\sqrt{uA_{1}}\right)\le c\log\left(uJ\left[\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\delta n_{v}+1\right)+1+Kr\right]\right)
+\]
+\begin{eqnarray*}
+\psi_{\delta}(u) & \le & u\left[A_{0,\delta}+A_{1}2\log\left(\frac{uA_{2,\delta}}{2}+\sqrt{uA_{1}}\right)\right]+\left(\frac{u}{2}A_{2,\delta}\right)^{2}\\
+ & \le & c_{2}u\frac{\log n_{V}}{\sqrt{n_{V}}}JK\left(1+r\right)\log\left(\left(1+r\right)J\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}u\delta\log n_{v}+1\right)\\
+ &  & +c_{3}u^{2}J\left[\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\delta n_{v}+1\right)+1\right]
+\end{eqnarray*}
+
+
+Thus $\psi_{\delta}(u)/u^{2}$ decreases. So we set $r=2$. (second
+line follows from lots of rearranging and simplifying)
 
 Let $q\rightarrow1$. Then
 
 \begin{eqnarray*}
-\lim_{q\rightarrow1}\epsilon_{q,\delta}(1/q) & = & \psi_{\delta}\left(\frac{2(1+a)}{a}\frac{1}{\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\\
- & \le & \left[\left(\frac{2(1+a)}{a}\right)\frac{\log n_{V}}{n_{V}}c_{1}JK\left[\log\left(\left(\frac{\Delta_{\Lambda}\delta}{K}+1\right)\left(\|\epsilon\|_{L_{\psi_{2}}}+1\right)\left(c+1\right)\right)+1\right]+\frac{\left(\frac{\log n_{V}}{\sqrt{n_{V}}}c_{1}JK+c_{2}\sqrt{J}\left[\sqrt{\log\left(\Delta_{\Lambda}\left[\|\epsilon\|_{L_{2}}\delta n_{v}+1\right]+1\right)}+1\right]\right)^{2}}{4}\left(\frac{2(1+a)}{a}\frac{u}{\sqrt{n_{V}}}\right)^{2}\right]\\
- & \le & c_{0}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\left[K^{2}\frac{J\log n_{V}}{n_{V}}+K\log\left(\Delta_{\Lambda}\delta\|\epsilon\|_{L_{\psi_{2}}}c\right)\right]
+ &  & \lim_{q\rightarrow1}\epsilon_{q,\delta}(1/q)\\
+ & = & \psi_{\delta}\left(\frac{2(1+a)}{a}\frac{1}{\sqrt{n_{V}}}\right)\vee\frac{1}{n_{V}}\\
+ & \le & c_{2}\frac{1+a}{a}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\left(1+r\right)J\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}\frac{1+a}{a}\delta\right)\\
+ &  & +c_{3}\left(\frac{1+a}{a}\right)^{2}\frac{J}{n_{V}}\left[\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{2}}\delta n_{v}+1\right)+1\right]\\
+ & \le & c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J\delta+1\right)
 \end{eqnarray*}
 
-
-where the last line assumes that the elements in the $\log$ terms
-are all larger than one, $K,c\ge1$.
 
 Finally, let's do the summation: 
 \begin{eqnarray*}
  &  & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\epsilon_{1,2^{k}\sigma}(1)\\
- & = & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\left[c_{1}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\left[K^{2}\frac{J\log n_{V}}{n_{V}}+kK\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)\right]\right]\\
- & \le & c_{1}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\left[K^{2}\frac{J\log n_{V}}{n_{V}}+K\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)\right]\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\\
- & \le & c_{1}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}\left[K^{2}\frac{J\log n_{V}}{n_{V}}+K\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)\right]\tilde{h}(n_{T})
+ & = & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\left[kc_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J\sigma+1\right)\right]\\
+ & \le & \left[c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J\sigma+1\right)\right]\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\\
+ & \le & \left[c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J\sigma+1\right)\right]\tilde{h}(n_{T})
 \end{eqnarray*}
 
 
-Now let's finally plug in all the terms.
+Now let's finally plug in all the terms with $\sigma=1$. Then
 \begin{eqnarray*}
  &  & \mathbb{P}_{D^{(n)}}\left(\|\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\\
  & \le & (1+a)\inf_{\lambda\in\Lambda}\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right]\\
- &  & +c_{2}\frac{\left(1+a\right)^{2}}{a}\frac{J\log n_{V}}{n_{V}}K\left[\log\left(\Delta_{\Lambda}\|\epsilon\|_{L_{\psi_{2}}}c\right)+K\frac{J\log n_{V}}{n_{V}}\right]\left(1+\tilde{h}(n_{T})\right)
+ &  & +c_{2}\frac{\left(1+a\right)^{2}}{a}\left[\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J+1\right)\right]\left(1+\tilde{h}(n_{T})\right).
 \end{eqnarray*}
 
 \end{proof}
@@ -455,7 +526,8 @@ Note that in certain cases, the integral bound provided in the theorem
 might be easier to reason with. To derive it, note that for any positive
 function $h$
 \begin{eqnarray*}
-\sum_{k=1}^{\infty}k\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right) & = & \sum_{k=1}^{\infty}k\int1\left\{ h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right\} d\mu\left(D^{(n_{T})}\right)\\
+ &  & \sum_{k=1}^{\infty}k\Pr\left(h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right)\\
+ & = & \sum_{k=1}^{\infty}k\int1\left\{ h\left(D^{(n_{T})}\right)\ge2^{k}\sigma\right\} d\mu\left(D^{(n_{T})}\right)\\
  & = & \int1\left\{ \log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)\ge1\right\} \sum_{k=1}^{\log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)}kd\mu\left(D^{(n_{T})}\right)\\
  & = & \int1\left\{ \log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)\ge1\right\} \frac{1}{2}\left(\log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)\right)\left(\log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)+1\right)d\mu\left(D^{(n_{T})}\right)\\
  & \le & \int\left(\log_{2}\left(h\left(D^{(n_{T})}\right)/\sigma\right)\right)^{2}d\mu\left(D^{(n_{T})}\right).
