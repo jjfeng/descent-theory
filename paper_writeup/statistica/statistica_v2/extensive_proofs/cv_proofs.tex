@@ -381,13 +381,11 @@ as a bound for the quantity above.\end{cor}
 \begin{thm}
 Suppose all the stuff before.
 
-For any $\sigma>0$, define $\tilde{h}$ be the function 
+Suppose there exists a function $\tilde{h}$ such that 
 \[
-\tilde{h}(n_{T})\ge\sum_{k=1}^{\infty}k\Pr\left(\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)
+\tilde{h}(n_{T})\ge\sum_{k=1}^{\infty}k\Pr\left(\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma_{0}\right)
 \]
 
-
-where $c$ is an absolute constant.
 
 (The bound $\tilde{h}(n_{T})\ge\int\left(\log_{2}\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}/\sigma\right)\right)^{2}d\mu\left(D^{(n_{T})}\right)$
 also works.)
@@ -505,16 +503,16 @@ Let $q\rightarrow1$. Then
 \end{eqnarray*}
 
 
-Finally, let's do the summation: 
+Finally, let's do the summation with $\sigma=\sigma_{0}$. Then 
 \begin{eqnarray*}
- &  & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\epsilon_{1,2^{k}\sigma}(1)\\
- & = & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\left[kc_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J\sigma+1\right)\right]\\
- & \le & \left[c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J\sigma+1\right)\right]\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\\
- & \le & \left[c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J\sigma+1\right)\right]\tilde{h}(n_{T})
+ &  & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\right)\epsilon_{1,2^{k}}(1)\\
+ & = & \sum_{k=1}^{\infty}\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma\right)\left[kc_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J+1\right)\right]\\
+ & \le & \left[c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J+1\right)\right]\sum_{k=1}^{\infty}k\Pr\left(c\|G(x|D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\right)\\
+ & \le & \left[c_{4}\left(\frac{1+a}{a}\right)^{2}\frac{J\log n_{V}}{n_{V}}K\left(1+r\right)\log\left(\frac{\left(1+a\right)\left(1+r\right)}{a}\Delta_{\Lambda}K_{2}K\|\epsilon\|_{L_{\psi_{2}}}J+1\right)\right]\tilde{h}(n_{T})
 \end{eqnarray*}
 
 
-Now let's finally plug in all the terms with $\sigma=1$. Then
+Now let's finally plug in all the terms. Then
 \begin{eqnarray*}
  &  & \mathbb{P}_{D^{(n)}}\left(\|\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\\
  & \le & (1+a)\inf_{\lambda\in\Lambda}\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right]\\
