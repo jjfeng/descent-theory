@@ -765,7 +765,8 @@ Now we walk through a simple example with ridge penalties.
 	Thus we finally reach our Lipschitz result: the fitted function $\hat{g}(\boldsymbol{\lambda})$ is Lipschitz with the constant
 	%JF notation needs fixing!
 	\begin{align}
-	C_{\Lambda, D^{(n_T)}}(x) = \kappa_{4, \infty} J c_{x} \|y\|_2
+	C_{\Lambda, D^{(n_T)}}(x)
+	= \kappa_{4, \infty} J c_{x} \|y\|_2
 	\quad \forall x \in [0,1]^J.
 	\label{eq:sobolev_lipschitz}
 	\end{align}
@@ -777,10 +778,10 @@ Now we walk through a simple example with ridge penalties.
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
 	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
 	& + O_p\left (
-	\frac{J \kappa \log(C_{\Lambda, D^{(n_T)}} n + 1)}{n_{V}}
+	\frac{J \kappa \log(\kappa_{4, \infty} J c_{x} \|y\|_2 n + 1)}{n_{V}}
 	\right ) \\
 	& + O_p\left(
-	\sqrt{\frac{J \kappa \log(C_{\Lambda, D^{(n_T)}}  n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+	\sqrt{\frac{J \kappa \log(\kappa_{4, \infty} J c_{x} \|y\|_2 n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
 	\right ).
 	\end{split}
 	\end{align}
