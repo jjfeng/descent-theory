@@ -607,68 +607,85 @@ Now we walk through a simple example with ridge penalties.
 	\label{eq:smoothing_spline}
 	\end{align}
 	where the functional penalty here is typically known as the Sobolev penalty (CITE?).
-	For this example, we suppose that the $x_{ij}$ in the training set are uniformly spaced in the interval from 0 to 1.
-	The covariates in the validation set can be arbitrarily spaced.
 	In the univariate case, it is well-known that the solution to the smoothing spline problem is a natural cubic spline \citep{green1993nonparametric}.
 	One can easily extend this result to show that the solution to \eqref{eq:smoothing_spline} is the sum of natural cubic splines.
-	Thus we can re-express \eqref{eq:smoothing_spline} as
+	For this example, suppose there is a $\delta > 0$ such that the covariates in the training set are chosen such that
+	$$
+	\min_{j=1,...,J} \min_{k,\ell \in D^{(n_T)}, x_{kj} \ne x_{\ell j} } |x_{kj} - x_{\ell j}| \ge \delta.
+	$$
+	We can re-express \eqref{eq:smoothing_spline} using vectors $g_j$ where $g_j(x_{ij})$ indicate the $j$-th function's value at $x_{ij}$.
+	Suppose there are $n_j$ unique values for covariate $j$ in the training set.
+	Then \eqref{eq:smoothing_spline} is equivalent to solving
 	\begin{align}
-	\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
-	& = \argmin_{g \equiv \sum_{j=1}^J g_j \in \mathbb{R}^{n_T}}
+	\{\hat{g}_j(\boldsymbol{\lambda}) \}
+	& \in \argmin_{g_1 \in \mathbb{R}^{n_1} ,...,g_J \in \mathbb{R}^{n_J}}
 	\frac{1}{2} \sum_{i\in D^{(n_T)}}
 	\left(
-	y_i - \sum_{j=1}^J g_{ji}
+	y_i - \sum_{j=1}^J g_{j}(x_i)
 	\right)^2
-	+ \sum_{j=1}^{J} \frac{\lambda_j}{n_T-1} g_j^\top K g_j
+	+ \sum_{j=1}^{J} \lambda_j g_j^\top K_j g_j
 	\label{eq:sobolev_rewrite}
 	\end{align}
-	where the matrix $K$ is a positive semi-definite matrix defined in \citet{green1993nonparametric}.
-	We can also rewrite this problem using matrix notation
+	where the matrices $K_j$ are positive semi-definite matrices dependent on the set of unique $j$-th covariate values.
+	The exact construction for $K_j$ is given in \citet{green1993nonparametric}.
+	We can also rewrite this problem using matrix notation.
+	Let $M$ be the binary matrix where each row of $M$, denoted $M_i$, is constructed such that $M_i g = \sum_{j=1}^J g_{j}(x_i)$.
+	Then using matrix notation, we have
 	\begin{align}
-	\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
-	& = \argmin_{g \equiv \sum_{j=1}^J g_j \in \mathbb{R}^n}
+	\hat{g}(\boldsymbol{\lambda})
+	& \in \argmin_{g \in \mathbb{R}^{n_1 + ... + n_J}}
 	\frac{1}{2}
 	\left \|
-	y - I^{(J)} g
+	y - M g
 	\right \|^2
 	+ g^\top
 	\diag \left (
 	\left \{
-	\frac{\lambda_j}{n_T-1} K
-	\right \} \right ) g
+	\lambda_j K_j
+	\right \} \right ) g.
+	\label{eq:matrix_sobolev}
 	\end{align}
-	where $I^{(J)}$ is a concatenation of $J$ identity matrices.
-	One can show (using properties of generalized inverse matrices/projection matrices) that the unique solution to \eqref{eq:smoothing_spline} is
+	Now suppose that there are a sufficient number of training observations and the covariates are sampled in such a way such that $M$ has rank $n$.
+	Then \eqref{eq:matrix_sobolev} has a unique minimizer:
 	\begin{align}
-	\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
-	= I^{(J)}
-	\left (
-	I^{(J)\top} I^{(J)} + \diag \left (
+	\hat{g}(\boldsymbol{\lambda}) = \left(
+	M^\top M + \diag \left (
 	\left \{
-	\frac{\lambda_j}{n_T-1} K
-	\right \}\right )
-	\right )^- I^{(J), \top} y
+	\lambda_j K_j
+	\right \} \right )
+	\right )^{-1} M^\top y
 	\end{align}
-	where $A^-$ is defined as a generalized inverse of $A$.
 	
-	To apply Theorem~\ref{thrm:train_val}, we need to be able to characterize how the natural spline $\hat{g}(\boldsymbol{\lambda})$ that interpolates $\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}$ varies with $\boldsymbol{\lambda}$.
+	To apply Theorem~\ref{thrm:train_val}, we need to be able to characterize how the natural splines $\hat{g}_j(\boldsymbol{\lambda})(\cdot)$ that interpolates $\hat{g}_j(\boldsymbol{\lambda})$ varies with $\boldsymbol{\lambda}$.
 	To do this, recall that any piecewise cubic polynomial can be expressed using a B-spline basis of order 4.
-	Then $\hat{g}(\boldsymbol{\lambda})$ can expressed as a linear combination of the normalized B-spline basis functions $B_{jm}(x | D^{(n_T)})$ for the knot sequence $x_{ij}$:
+	Then for each $j$, $\hat{g}_j(\boldsymbol{\lambda})$ can expressed as a linear combination of the normalized B-spline basis functions $B_{jm}(x)$ for a knot sequence based on the sampled $j$-th covariates:
 	\begin{align}
-	\hat{g}(\boldsymbol{\lambda})
-	= \sum_{j=1}^J \sum_{m=1}^{N_j} B_{jm}(x | D^{(n_T)}) \hat{\theta}_{jm}(\boldsymbol{\lambda}).
+	\hat{g}_j(\boldsymbol{\lambda})(x)
+	= \sum_{m=1}^{N_j} B_{jm}(x | D^{(n_T)}) \hat{\theta}_{jm}(\boldsymbol{\lambda}).
 	\end{align}
-	Using a normalized B-spline basis is convenient as DeBoor(CITE) showed that for any $x, x' \in [0,1]^J$ and any normalized B-spline basis, there exists a number $\kappa_{4, \infty}$ such that
+	Using a normalized B-spline basis is convenient as \citet{de1975local} proved that B-splines of order $k$ have condition number $\kappa_{k, \infty}$: for any knot sequence $t$ and any $N \ge 1$ normalized B-splines functions, define
 	\begin{align}
+	\sup_{N \ge 1} \sup_t 
 	\frac{
-		g_j(x' | \boldsymbol{\theta})}{
-		g_j(x | \boldsymbol{\theta})}
-	\le
-	\kappa_{4, \infty}.
+	\sup_{\|a\|_\infty = 1} \| \sum_{n=1}^N a_n B_n(x) \|_\infty
+	}{
+	\inf_{\|a\|_\infty = 1} \| \sum_{n=1}^N a_n B_n(x) \|_\infty
+	}
+	= \kappa_{k, \infty}
+	\le 2k9^{k-1}.
 	\label{eq:cond_b_spline}
 	\end{align}
+%	Thus for any $x, x' \in [0,1]^J$ and any normalized B-spline basis, we have
+%	\begin{align}
+%	\frac{
+%		g_j(x' | \boldsymbol{\theta})}{
+%		g_j(x | \boldsymbol{\theta})}
+%	\le
+%	\kappa_{4, \infty}.
+%	\label{eq:cond_b_spline}
+%	\end{align}
 	%JF check wording pelase
-	$\kappa_{4, \infty}$ is also called the $L_\infty$-condition number for B-splines.
+%	$\kappa_{4, \infty}$ is also called the $L_\infty$-condition number for B-splines.
 	Using the result in \eqref{eq:cond_b_spline}, we can bound the difference between fitted functions at $\boldsymbol{\lambda}, \boldsymbol{\lambda}' \in \Lambda$ by
 	\begin{align}
 	\left | \hat{g}(\boldsymbol{\lambda})(x) - \hat{g}(\boldsymbol{\lambda}')(x) \right |
@@ -677,117 +694,81 @@ Now we walk through a simple example with ridge penalties.
 	\hat{\theta}_{jm}(\boldsymbol{\lambda}) - \hat{\theta}_{jm}(\boldsymbol{\lambda}')
 	\right)
 	\right| \\
-	& \le \kappa_{4, \infty}
-	\min_{i \in D^{(n_T)}} \left|
-	\sum_{j=1}^J \sum_{m=1}^{N_j} B_{jm}(x_i | D^{(n_T)}) \left(
+	& \le \sum_{j=1}^J \left|
+	\sum_{m=1}^{N_j} B_{jm}(x | D^{(n_T)}) \left(
 	\hat{\theta}_{jm}(\boldsymbol{\lambda}) - \hat{\theta}_{jm}(\boldsymbol{\lambda}')
 	\right)
 	\right| \\
 	& \le \kappa_{4, \infty}
+	\sum_{j=1}^J
 	\min_{i \in D^{(n_T)}} \left|
-	\hat{g}(\boldsymbol{\lambda})(x_i)
-	- \hat{g}(\boldsymbol{\lambda}')(x_i)
+	\sum_{m=1}^{N_j} B_{jm}(x_{ij} | D^{(n_T)}) \left(
+	\hat{\theta}_{jm}(\boldsymbol{\lambda}) - \hat{\theta}_{jm}(\boldsymbol{\lambda}')
+	\right)
+	\right| \\
+	& \le \kappa_{4, \infty}
+	\sum_{j=1}^J
+	\min_{i \in D^{(n_T)}} \left|
+	\hat{g}_j(\boldsymbol{\lambda})(x_{ij})
+	- \hat{g}_j(\boldsymbol{\lambda}')(x_{ij})
 	\right|\\
 	& \le \kappa_{4, \infty}
-	\min_{i \in D^{(n_T)}} \left\|
-	\sup_{\lambda\in \Lambda} \nabla_{\lambda} \hat{g}(\boldsymbol{\lambda})(x_i)
+	\sum_{j=1}^J
+	\min_{i \in D^{(n_T)}}
+	\sup_{\lambda\in \Lambda} \left\|
+	\nabla_{\lambda} \hat{g}_j(\boldsymbol{\lambda})(x_{ij})
 	\right \|_2
 	\left\|
 	\boldsymbol{\lambda} - \boldsymbol{\lambda}'
 	\right\|_2
 	\end{align}
-	We can bound the gradient of the fitted values with respect to $\boldsymbol{\lambda}$ using the derivative of projection matrices \citep{zhang2017matrix}.
-	First, note that
+	Using the closed form solution for $\hat{g}(\boldsymbol{\lambda})$, we can bound the gradient of the fitted values with respect to $\boldsymbol{\lambda}$ using Cauchy-Schwarz:
 	\begin{align}
-	\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
-	= \left(
-	\begin{matrix}
-	\boldsymbol{I} & \boldsymbol{0}
-	\end{matrix}
-	\right)
-	P_\lambda
+	\frac{\partial}{\partial\lambda_j} \hat{g}(\boldsymbol{\lambda})(x_{ij})
+	\le
 	\left(
-	\begin{matrix}
-	y \\
-	\boldsymbol{0}
-	\end{matrix}
-	\right)
-	\end{align}
-	where $P_\lambda$ is the projection matrix
-	\begin{align}
-	P_\lambda = A(\boldsymbol{\lambda})
+	M^\top M + \diag \left (
+	\left \{
+	\lambda_j K_j
+	\right \}_{j=1:J} \right )
+	\right )^{-1}
+	K_j
 	\left(
-	I^{(J)\top}I^{(J)} + \diag \left (\frac{\lambda_j}{n_T-1} K \right )
-	\right)^-
-	A^\top(\boldsymbol{\lambda})
+	M^\top M + \diag \left (
+	\left \{
+	\lambda_j K_j
+	\right \}_{j=1:J} \right )
+	\right )^{-1}
+	M^\top y
 	\end{align}
-	and \begin{align}
-	A(\boldsymbol{\lambda}) = \left(
-	\begin{matrix}
-	I^{(J)} \\
-	\diag \left (\sqrt{
-	\frac{\lambda_j}{n_T - 1}
-	} K^{1/2} \right )
-	\end{matrix}
-	\right)
-	\end{align}
-	Then $\frac{\partial}{\partial \lambda_j} P_\lambda = Z_\lambda + Z_\lambda^\top$ where
+	Then
 	\begin{align}
-	Z_\lambda =
-	(I - P_\lambda)
+	\left\|
+	\frac{\partial}{\partial\lambda_j} \hat{g}(\boldsymbol{\lambda})(x_{ij})
+	\right \|_2
+	& \le
+	\left\|
 	\left(
-	\begin{matrix}
-	\boldsymbol{0} \\
-	\diag(\{\boldsymbol{0}, ..., \boldsymbol{0},
-	\sqrt{\frac{\lambda_j}{n_T - 1}} K^{1/2},
-	\boldsymbol{0}, ...,\boldsymbol{0}\})
-	\end{matrix}
-	\right)
-	A(\boldsymbol{\lambda})^-.
+	M^\top M + \diag \left (
+	\left \{
+	\lambda_j K_j
+	\right \} \right )
+	\right )^{-1}
+	\right \|_2^2
+	\|K_j\|_2
+	\|M\|_2 \|y\|_2 \\
+	& \le c_{x} \|y\|_2
+	\label{eq:bound_grad}
 	\end{align}
-	Thus
-	\begin{align}
-	\frac{\partial}{\partial \lambda_j} \hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
-	= \left(
-	\begin{matrix}
-	\boldsymbol{I} & \boldsymbol{0}
-	\end{matrix}
-	\right)
-	\left( Z_\lambda + Z_\lambda^\top \right )
-	\left(
-	\begin{matrix}
-	y \\
-	\boldsymbol{0}
-	\end{matrix}
-	\right).
-	\end{align}
-	Using Cauchy-Schwarz (\textcolor{red}{is this right terminology?}), we have for any $x_i \in D^{(n_T)}$
-	\begin{align}
-	\sup_{\lambda\in \Lambda}
-	\left |
-	\frac{\partial}{\partial \lambda_j} \hat{g}(\boldsymbol{\lambda})(x_i)
-	\right |
-	\le \sqrt{\frac{n_T - 1}{\lambda_{\min}}}
-	\left \|K^{1/2} \right \|_2
-	\|A(\boldsymbol{\lambda})^-\|_2
-	\|y\|_2.
-	\end{align}
-	The spectral norm of $A(\boldsymbol{\lambda})^-$ is bounded above by the minimum non-zero singular value of $A(\boldsymbol{\lambda})$.
-	Since $A(\boldsymbol{\lambda})$ is a concatenation of matrices, its minimum non-zero singular value is bounded below by the minimum non-zero singular value of the submatrix $I^{(J)}$.
-	It is easy to show that the singular values of $I^{(J)}$ are all equal to $\sqrt{J}$.
+	where $c_{x}$ is a constant only dependent on the covariates chosen in the training set.
+	
 	Thus we finally reach our Lipschitz result: the fitted function $\hat{g}(\boldsymbol{\lambda})$ is Lipschitz with the constant
 	%JF notation needs fixing!
 	\begin{align}
-	C_{\Lambda, D^{(n_T)}}(x) = C_{\Lambda, D^{(n_T)}} \sqrt{\frac{n_T - 1}{\lambda_{\min}}}
-	\quad \forall x \in [0,1]^J
+	C_{\Lambda, D^{(n_T)}}(x) = \kappa_{4, \infty} J c_{x} \|y\|_2
+	\quad \forall x \in [0,1]^J.
 	\label{eq:sobolev_lipschitz}
 	\end{align}
-	where
-	$$ C_{\Lambda, D^{(n_T)}} = \kappa_{4, \infty} \sqrt{\frac{n_T - 1}{\lambda_{\min}}}
-	\left \|K^{1/2} \right \|_2
-	\|A(\boldsymbol{\lambda})^-\|_2
-	\|y\|_2.
-	$$
 	
 	As in the previous example, suppose that the penalty parameters are tuned over $\Lambda = \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ using a training-validation split with $\lambda_{\min} = n^{-\kappa}$ for some $\kappa \ge 1$ and $\lambda_{\max} = 1$.
 	We plug in \eqref{eq:sobolev_lipschitz} to Theorem~\ref{thrm:train_val} to get that the following holds with high probability
