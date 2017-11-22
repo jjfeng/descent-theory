@@ -46,6 +46,7 @@
 \newtheorem{remark}{Remark}
 \newtheorem{condition}{Condition}
 \newtheorem{assump}{Assumption}
+\DeclareMathOperator{\diag}{diag}
 
 \pagestyle{fancy}
 
@@ -541,20 +542,30 @@ We begin with the simple case where the penalty functions are smooth. The follow
 	\end{equation}
 \end{lemma}
 
-Let us walk through a simple example with ridge penalties.
+%JF lol this is so out of place
+Notice that the result assumes that the training criterion is strongly convex at its minimizer. If this is not true, one can augment the penalty function $P_j(\boldsymbol{\theta}^{(j)})$ with a ridge penalty $\| \boldsymbol{\theta}^{(j)} \|_2^2$ so that the training criterion becomes
+\begin{equation}
+\label{eq:param_add_models_ridge}
+\frac{1}{2} \left  \| y -  g(\boldsymbol{\theta}) \right \|^2_T 
++ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2_2 \right ).
+\end{equation}
+
+Now we walk through a simple example with ridge penalties.
 \begin{example}[Multiple ridge penalties]
 	Consider the following training objective
 	\begin{align}
 	L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right) 
 	\coloneqq 
 	\frac{1}{2}
-	\sum_{i=1}^n \left(y_i -  \sum_{j=1}^J x_{i}^{(j)} \boldsymbol{\theta}^{(j)} \right )^2
+	\sum_{i\in D^{(n_T)}}
+	\left(y_i -  \sum_{j=1}^J x_{i}^{(j)} \boldsymbol{\theta}^{(j)} \right )^2
 	+ \sum_{j=1}^J \lambda_j \|\boldsymbol{\theta}^{(j)}\|_2^2
 	\end{align}
 	where $x_{i}^{(j)}$ is a vector of length $p_j$.
 	%JF add explanation why we want to consider this example
 	Suppose the penalty parameters are tuned over $\Lambda = \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ using a training-validation split with $\lambda_{\min} = n^{-\kappa}$ for some $\kappa \ge 1$ and $\lambda_{\max} = 1$.
 	Every function $g_j(x)$ is Lipschitz with $\ell_j(x) = \|x\|_2$.
+	Let $\ell(x) = \sum_{j=1}^J \|x^{(j)}\|_2$.
 	By Lemma~\ref{lemma:param_add}, for any training dataset $D^{(n_T)}$, the function $g(x | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz with function
 	\begin{align}
 	C_\Lambda \left ( x | D^{(n_T)} \right ) =
@@ -567,9 +578,8 @@ Let us walk through a simple example with ridge penalties.
 	\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}
 	\left(
 	\max_{j \in 1:J} \sqrt{\sum_{i \in D^{(n_T)}} \|x_i^{(j)} \|_2^2}
-	\right)$$
-	and $\ell(x) = \sum_{j=1}^J \|x^{(j)}\|_2$.
-	By Theorem~\ref{thrm:train_val}, for some absolute constant $c > 0$, we have with high probability
+	\right).$$
+	By Theorem~\ref{thrm:train_val}, we have with high probability
 	\begin{align}
 	\begin{split}
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
@@ -585,34 +595,215 @@ Let us walk through a simple example with ridge penalties.
 \end{example}
 
 \begin{example}[Sobolev penalties]
-	The Sobolev penalty is a nonparametric functional.
-	However it is known from Green and Silverman, 1994 (CITE) that among all interpolating, twice differentiable functions, natural cubic splines minimize the Sobolev penalty.
-	Thus one can actually re-express the following problem with a Sobolev penalty
+	Let us now consider a generalization of the classic smoothing spline problem to a multivariate setting where we fit functions that are univariate additive models:
 	\begin{align}
-	\|y - \sum_{j=1}^J g^{(j)} \|_T^2 + \sum_{j=1}^{J} \lambda_j \int_0^1 \left(g^{(j)''}(x)\right)^{2} dx
+	\hat{g}(\boldsymbol{\lambda})
+	= \argmin_{g \equiv \sum_{j=1}^J g_j}
+	\frac{1}{2} \sum_{i\in D^{(n_T)}}
+	\left(
+	y_i - \sum_{j=1}^J g_j(x_{ij})
+	\right)^2
+	+ \sum_{j=1}^{J} \lambda_j \int_0^1 \left(g_j^{''}(x)\right)^{2} dx
+	\label{eq:smoothing_spline}
 	\end{align}
-	to a parametric problem using an $N$-dimensional basis $\eta$ for the set of
-	natural cubic splines with knots over $x_T$:
+	where the functional penalty here is typically known as the Sobolev penalty (CITE?).
+	For this example, we suppose that the $x_{ij}$ in the training set are uniformly spaced in the interval from 0 to 1.
+	The covariates in the validation set can be arbitrarily spaced.
+	In the univariate case, it is well-known that the solution to the smoothing spline problem is a natural cubic spline \citep{green1993nonparametric}.
+	One can easily extend this result to show that the solution to \eqref{eq:smoothing_spline} is the sum of natural cubic splines.
+	Thus we can re-express \eqref{eq:smoothing_spline} as
 	\begin{align}
-	\|y - \sum_{j=1}^J \eta_j(x_j) \theta_{(j)}\|_T^2 + \sum_{j=1}^J \lambda_j \theta_{(j)}^\top \Omega^{(j)} \theta_{(j)}
+	\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
+	& = \argmin_{g \equiv \sum_{j=1}^J g_j \in \mathbb{R}^{n_T}}
+	\frac{1}{2} \sum_{i\in D^{(n_T)}}
+	\left(
+	y_i - \sum_{j=1}^J g_{ji}
+	\right)^2
+	+ \sum_{j=1}^{J} \frac{\lambda_j}{n_T-1} g_j^\top K g_j
+	\label{eq:sobolev_rewrite}
 	\end{align}
-	where $N = $ and $\Omega = $.
-	The Hessian of the penalized training criterion is
+	where the matrix $K$ is a positive semi-definite matrix defined in \citet{green1993nonparametric}.
+	We can also rewrite this problem using matrix notation
 	\begin{align}
-	\text{blockdiag} \left (
-	N^{(j), \top} N^{(j)} +
-	\lambda_j \Omega^{(j)}
-	\right )
+	\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
+	& = \argmin_{g \equiv \sum_{j=1}^J g_j \in \mathbb{R}^n}
+	\frac{1}{2}
+	\left \|
+	y - I^{(J)} g
+	\right \|^2
+	+ g^\top
+	\diag \left (
+	\left \{
+	\frac{\lambda_j}{n_T-1} K
+	\right \} \right ) g
 	\end{align}
-	As $\eta$ forms an $N$-dimensional basis, then the Hessian is positive definite and \eqref{eq:smooth_pos_def} is satisfied.
+	where $I^{(J)}$ is a concatenation of $J$ identity matrices.
+	One can show (using properties of generalized inverse matrices/projection matrices) that the unique solution to \eqref{eq:smoothing_spline} is
+	\begin{align}
+	\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
+	= I^{(J)}
+	\left (
+	I^{(J)\top} I^{(J)} + \diag \left (
+	\left \{
+	\frac{\lambda_j}{n_T-1} K
+	\right \}\right )
+	\right )^- I^{(J), \top} y
+	\end{align}
+	where $A^-$ is defined as a generalized inverse of $A$.
+	
+	To apply Theorem~\ref{thrm:train_val}, we need to be able to characterize how the natural spline $\hat{g}(\boldsymbol{\lambda})$ that interpolates $\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}$ varies with $\boldsymbol{\lambda}$.
+	To do this, recall that any piecewise cubic polynomial can be expressed using a B-spline basis of order 4.
+	Then $\hat{g}(\boldsymbol{\lambda})$ can expressed as a linear combination of the normalized B-spline basis functions $B_{jm}(x | D^{(n_T)})$ for the knot sequence $x_{ij}$:
+	\begin{align}
+	\hat{g}(\boldsymbol{\lambda})
+	= \sum_{j=1}^J \sum_{m=1}^{N_j} B_{jm}(x | D^{(n_T)}) \hat{\theta}_{jm}(\boldsymbol{\lambda}).
+	\end{align}
+	Using a normalized B-spline basis is convenient as DeBoor(CITE) showed that for any $x, x' \in [0,1]^J$ and any normalized B-spline basis, there exists a number $\kappa_{4, \infty}$ such that
+	\begin{align}
+	\frac{
+		g_j(x' | \boldsymbol{\theta})}{
+		g_j(x | \boldsymbol{\theta})}
+	\le
+	\kappa_{4, \infty}.
+	\label{eq:cond_b_spline}
+	\end{align}
+	%JF check wording pelase
+	$\kappa_{4, \infty}$ is also called the $L_\infty$-condition number for B-splines.
+	Using the result in \eqref{eq:cond_b_spline}, we can bound the difference between fitted functions at $\boldsymbol{\lambda}, \boldsymbol{\lambda}' \in \Lambda$ by
+	\begin{align}
+	\left | \hat{g}(\boldsymbol{\lambda})(x) - \hat{g}(\boldsymbol{\lambda}')(x) \right |
+	& = \left|
+	\sum_{j=1}^J \sum_{m=1}^{N_j} B_{jm}(x | D^{(n_T)}) \left(
+	\hat{\theta}_{jm}(\boldsymbol{\lambda}) - \hat{\theta}_{jm}(\boldsymbol{\lambda}')
+	\right)
+	\right| \\
+	& \le \kappa_{4, \infty}
+	\min_{i \in D^{(n_T)}} \left|
+	\sum_{j=1}^J \sum_{m=1}^{N_j} B_{jm}(x_i | D^{(n_T)}) \left(
+	\hat{\theta}_{jm}(\boldsymbol{\lambda}) - \hat{\theta}_{jm}(\boldsymbol{\lambda}')
+	\right)
+	\right| \\
+	& \le \kappa_{4, \infty}
+	\min_{i \in D^{(n_T)}} \left|
+	\hat{g}(\boldsymbol{\lambda})(x_i)
+	- \hat{g}(\boldsymbol{\lambda}')(x_i)
+	\right|\\
+	& \le \kappa_{4, \infty}
+	\min_{i \in D^{(n_T)}} \left\|
+	\sup_{\lambda\in \Lambda} \nabla_{\lambda} \hat{g}(\boldsymbol{\lambda})(x_i)
+	\right \|_2
+	\left\|
+	\boldsymbol{\lambda} - \boldsymbol{\lambda}'
+	\right\|_2
+	\end{align}
+	We can bound the gradient of the fitted values with respect to $\boldsymbol{\lambda}$ using the derivative of projection matrices \citep{zhang2017matrix}.
+	First, note that
+	\begin{align}
+	\hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
+	= \left(
+	\begin{matrix}
+	\boldsymbol{I} & \boldsymbol{0}
+	\end{matrix}
+	\right)
+	P_\lambda
+	\left(
+	\begin{matrix}
+	y \\
+	\boldsymbol{0}
+	\end{matrix}
+	\right)
+	\end{align}
+	where $P_\lambda$ is the projection matrix
+	\begin{align}
+	P_\lambda = A(\boldsymbol{\lambda})
+	\left(
+	I^{(J)\top}I^{(J)} + \diag \left (\frac{\lambda_j}{n_T-1} K \right )
+	\right)^-
+	A^\top(\boldsymbol{\lambda})
+	\end{align}
+	and \begin{align}
+	A(\boldsymbol{\lambda}) = \left(
+	\begin{matrix}
+	I^{(J)} \\
+	\diag \left (\sqrt{
+	\frac{\lambda_j}{n_T - 1}
+	} K^{1/2} \right )
+	\end{matrix}
+	\right)
+	\end{align}
+	Then $\frac{\partial}{\partial \lambda_j} P_\lambda = Z_\lambda + Z_\lambda^\top$ where
+	\begin{align}
+	Z_\lambda =
+	(I - P_\lambda)
+	\left(
+	\begin{matrix}
+	\boldsymbol{0} \\
+	\diag(\{\boldsymbol{0}, ..., \boldsymbol{0},
+	\sqrt{\frac{\lambda_j}{n_T - 1}} K^{1/2},
+	\boldsymbol{0}, ...,\boldsymbol{0}\})
+	\end{matrix}
+	\right)
+	A(\boldsymbol{\lambda})^-.
+	\end{align}
+	Thus
+	\begin{align}
+	\frac{\partial}{\partial \lambda_j} \hat{g}(\boldsymbol{\lambda})|_{D^{(n_T)}}
+	= \left(
+	\begin{matrix}
+	\boldsymbol{I} & \boldsymbol{0}
+	\end{matrix}
+	\right)
+	\left( Z_\lambda + Z_\lambda^\top \right )
+	\left(
+	\begin{matrix}
+	y \\
+	\boldsymbol{0}
+	\end{matrix}
+	\right).
+	\end{align}
+	Using Cauchy-Schwarz (\textcolor{red}{is this right terminology?}), we have for any $x_i \in D^{(n_T)}$
+	\begin{align}
+	\sup_{\lambda\in \Lambda}
+	\left |
+	\frac{\partial}{\partial \lambda_j} \hat{g}(\boldsymbol{\lambda})(x_i)
+	\right |
+	\le \sqrt{\frac{n_T - 1}{\lambda_{\min}}}
+	\left \|K^{1/2} \right \|_2
+	\|A(\boldsymbol{\lambda})^-\|_2
+	\|y\|_2.
+	\end{align}
+	The spectral norm of $A(\boldsymbol{\lambda})^-$ is bounded above by the minimum non-zero singular value of $A(\boldsymbol{\lambda})$.
+	Since $A(\boldsymbol{\lambda})$ is a concatenation of matrices, its minimum non-zero singular value is bounded below by the minimum non-zero singular value of the submatrix $I^{(J)}$.
+	It is easy to show that the singular values of $I^{(J)}$ are all equal to $\sqrt{J}$.
+	Thus we finally reach our Lipschitz result: the fitted function $\hat{g}(\boldsymbol{\lambda})$ is Lipschitz with the constant
+	%JF notation needs fixing!
+	\begin{align}
+	C_{\Lambda, D^{(n_T)}}(x) = C_{\Lambda, D^{(n_T)}} \sqrt{\frac{n_T - 1}{\lambda_{\min}}}
+	\quad \forall x \in [0,1]^J
+	\label{eq:sobolev_lipschitz}
+	\end{align}
+	where
+	$$ C_{\Lambda, D^{(n_T)}} = \kappa_{4, \infty} \sqrt{\frac{n_T - 1}{\lambda_{\min}}}
+	\left \|K^{1/2} \right \|_2
+	\|A(\boldsymbol{\lambda})^-\|_2
+	\|y\|_2.
+	$$
+	
+	As in the previous example, suppose that the penalty parameters are tuned over $\Lambda = \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ using a training-validation split with $\lambda_{\min} = n^{-\kappa}$ for some $\kappa \ge 1$ and $\lambda_{\max} = 1$.
+	We plug in \eqref{eq:sobolev_lipschitz} to Theorem~\ref{thrm:train_val} to get that the following holds with high probability
+	\begin{align}
+	\begin{split}
+	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
+	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
+	& + O_p\left (
+	\frac{J \kappa \log(C_{\Lambda, D^{(n_T)}} n + 1)}{n_{V}}
+	\right ) \\
+	& + O_p\left(
+	\sqrt{\frac{J \kappa \log(C_{\Lambda, D^{(n_T)}}  n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+	\right ).
+	\end{split}
+	\end{align}
 \end{example}
-
-Notice that the result assumes that the training criterion is strongly convex at its minimizer. If this is not true, one can augment the penalty function $P_j(\boldsymbol{\theta}^{(j)})$ with a ridge penalty $\| \boldsymbol{\theta}^{(j)} \|_2^2$ so that the training criterion becomes
-\begin{equation}
-\label{eq:param_add_models_ridge}
-\frac{1}{2} \left  \| y -  g(\boldsymbol{\theta}) \right \|^2_T 
-+ \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2_2 \right ).
-\end{equation}
 
 \subsubsection{Parametric regression with non-smooth penalties}
 \label{sec:param_nonsmooth}
