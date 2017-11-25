@@ -40,7 +40,7 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 \pagestyle{fancy}
-
+\newtheorem{assump}{Assumption}
 \newtheorem{condition}{Condition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -497,6 +497,20 @@ Then for any $\sigma > 0$, we have
 Obviously the above lemma is only useful if we can show that $h$ is bounded with high probability.
 For instance, in our examples later, $h$ has exponential tails so the upper bound in Lemma~\ref{lemma:chain} is well-controlled.
 
+\begin{assump}
+	%JF renumber this to assumption 4?
+	\label{assump:tail_margin_general}
+	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$,
+	\begin{align}
+	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) \right \|_{L_{\psi_1}} & \le K_0
+	\label{eq:cv_assump1}\\
+	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2}
+	& \le 
+	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
+	\label{eq:cv_assump2}
+	\end{align}
+\end{assump}
+
 Putting the three lemmas above together, we have the following result.
 
 \begin{theorem}
@@ -507,7 +521,7 @@ Putting the three lemmas above together, we have the following result.
 	Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) : \boldsymbol{\lambda} \in \Lambda \}.
 	$$
 	
-	Suppose Assumption~\ref{assump:tail_margin}.
+	Suppose Assumption~\ref{assump:tail_margin_general}.
 	Suppose there is an $w_{\min} > 0$ and
 	% JF: is this the right notation for a training set?
 	functions $h: {\mathcal{Z}}^{(n_T)} \mapsto \mathbb{R}$

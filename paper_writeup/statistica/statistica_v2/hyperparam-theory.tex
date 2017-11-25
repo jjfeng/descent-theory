@@ -342,10 +342,24 @@ First, our assumptions:
 	\label{assump:tail_margin}
 	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$,
 	\begin{align}
-	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) \right \|_{L_{\psi_1}} & \le K_0
+	\left \|
+	\left(
+	y - \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})(x)
+	\right)^2
+	- \left(
+	y - g^*(x)
+	\right)^2 \right \|_{L_{\psi_1}} & \le K_0
 	\label{eq:cv_assump1}\\
-	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2} & \le 
-	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
+	\left \|
+	\left(
+	y - \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})(x)
+	\right)^2
+	- \left(
+	y - g^*(x)
+	\right)^2
+	\right \|_{L_2}
+	& \le 
+	K_1 \|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}^{1/\kappa}.
 	\label{eq:cv_assump2}
 	\end{align}
 \end{assump}
@@ -360,9 +374,12 @@ First, our assumptions:
 
 \begin{assump}
 	\label{assump:l2_psi2}
-	There is some $r > 0, K_2 \ge 1$ such that
+	%JF what is the ordering of conditions here?!
+	For any $n_T \in \mathbb{N}$,
+	there is some $r \ge 0, K_2 \ge 1$ such that for any dataset $D^{(n_T)}$, we have
 	\begin{align}
-	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}\le K_2 \left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r},
+	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}
+	\le K_2 \left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r},
 	\end{align}
 \end{assump}
 
@@ -609,179 +626,94 @@ Now we walk through a simple example with ridge penalties.
 	where the functional penalty here is typically known as the Sobolev penalty (CITE?).
 	In the univariate case, it is well-known that the solution to the smoothing spline problem is a natural cubic spline \citep{green1993nonparametric}.
 	One can easily extend this result to show that the solution to \eqref{eq:smoothing_spline} is the sum of natural cubic splines.
-	For this example, suppose there is a $\delta > 0$ such that the covariates in the training set are chosen such that
-	$$
-	\min_{j=1,...,J} \min_{k,\ell \in D^{(n_T)}, x_{kj} \ne x_{\ell j} } |x_{kj} - x_{\ell j}| \ge \delta.
-	$$
-	We can re-express \eqref{eq:smoothing_spline} using vectors $g_j$ where $g_j(x_{ij})$ indicate the $j$-th function's value at $x_{ij}$.
-	Suppose there are $n_j$ unique values for covariate $j$ in the training set.
-	Then \eqref{eq:smoothing_spline} is equivalent to solving
+	
+	In this example, let us suppose that for $j = 1,...,J$, the covariates in the training set take on values in $\{\frac{1}{k}, ..., 1\}$.
+	Thus covariates along each axis are equally spaced.
+	Let $\boldsymbol{\theta}$ be the concatenation of vectors $\boldsymbol{\theta}_j \in \mathbb{R}^{k}$, where $\boldsymbol{\theta}_{ij}$ represents the value of the natural spline $g_j$ at $i/k$.
+	For each $j$, define matrix $M_{j}(D^{(n_T)}) \in \mathbb{R}^{n_T \times k}$ such that its $i$th row $M_{ij}(D^{(n_T)})$ satisfies $g_j(x_{ij}) = M_{ij}(D^{(n_T)}) \boldsymbol{\theta}_j$.
+	Let $M(D^{(n_T)})$ be concatenation of matrices $M_{j}(D^{(n_T)})$.
+	Let us suppose that the $n_T$ training points were chosen such that $M^\top(D^{(n_T)})M(D^{(n_T)})$ has rank $kJ$ with minimum eigenvalue $m(D^{(n_T)}) >0$.
+	
+	Using matrix notation, we can re-express \eqref{eq:smoothing_spline}
 	\begin{align}
-	\{\hat{g}_j(\boldsymbol{\lambda}) \}
-	& \in \argmin_{g_1 \in \mathbb{R}^{n_1} ,...,g_J \in \mathbb{R}^{n_J}}
-	\frac{1}{2} \sum_{i\in D^{(n_T)}}
-	\left(
-	y_i - \sum_{j=1}^J g_{j}(x_i)
-	\right)^2
-	+ \sum_{j=1}^{J} \lambda_j g_j^\top K_j g_j
-	\label{eq:sobolev_rewrite}
-	\end{align}
-	where the matrices $K_j$ are positive semi-definite matrices dependent on the set of unique $j$-th covariate values.
-	The exact construction for $K_j$ is given in \citet{green1993nonparametric}.
-	We can also rewrite this problem using matrix notation.
-	Let $M$ be the binary matrix where each row of $M$, denoted $M_i$, is constructed such that $M_i g = \sum_{j=1}^J g_{j}(x_i)$.
-	Then using matrix notation, we have
-	\begin{align}
-	\hat{g}(\boldsymbol{\lambda})
-	& \in \argmin_{g \in \mathbb{R}^{n_1 + ... + n_J}}
+	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	& = \argmin_{\boldsymbol{\theta} \in \mathbb{R}^{kJ}}
 	\frac{1}{2}
 	\left \|
-	y - M g
+	y - M(D^{(n_T)}) \boldsymbol{\theta}
 	\right \|^2
-	+ g^\top
+	+ \boldsymbol{\theta}^\top
 	\diag \left (
 	\left \{
-	\lambda_j K_j
-	\right \} \right ) g.
+	\lambda_j K
+	\right \} \right ) \boldsymbol{\theta}.
 	\label{eq:matrix_sobolev}
 	\end{align}
-	Now suppose that there are a sufficient number of training observations and the covariates are sampled in such a way such that $M$ has rank $n$.
-	Then \eqref{eq:matrix_sobolev} has a unique minimizer:
+	where $K = QR^{-1}Q^\top$ \citep{green1993nonparametric}.
+	$Q$ is a banded $k \times (k-2)$ matrix with zeros except for the entries
+	$$
+	q_{i-1,i} = k, q_{i-1,i} = -2k, q_{i + 1,i} = k.
+	$$
+	$R$ is a banded $(k-2) \times (k-2)$ matrix with zeros everywhere except for entries
+	$$
+	r_{ii} = \frac{2}{3k}, r_{i, i+ 1} = r_{i+ 1, i} = \frac{1}{6k}.
+	$$
+	$R$ is a strictly diagonal dominant matrix and therefore positive-definite.
+	$K$ is therefore positive semi-definite.
+
+	To apply Theorem~\ref{thrm:train_val}, we need to be able to characterize how the natural spline $\hat{g}_j(\boldsymbol{\lambda})(\cdot)$ varies with $\boldsymbol{\lambda}$.
+	To accomplish this, we use Theorem 2.1 in \citet{green1993nonparametric} which states that the second derivatives at each of the covariates $\{1/k, ..., 1\}$ is equal to $\hat{\gamma}_j = R^{-1} Q^\top \hat{g}_j$.
+	Then the value of the natural spline at any point $t$ is given by
 	\begin{align}
-	\hat{g}(\boldsymbol{\lambda}) = \left(
-	M^\top M + \diag \left (
-	\left \{
-	\lambda_j K_j
-	\right \} \right )
-	\right )^{-1} M^\top y
+	g_j(t) = \frac{(t - t_L) g_R + ...}{h} + ...
 	\end{align}
-	
-	To apply Theorem~\ref{thrm:train_val}, we need to be able to characterize how the natural splines $\hat{g}_j(\boldsymbol{\lambda})(\cdot)$ that interpolates $\hat{g}_j(\boldsymbol{\lambda})$ varies with $\boldsymbol{\lambda}$.
-	To do this, recall that any piecewise cubic polynomial can be expressed using a B-spline basis of order 4.
-	Then for each $j$, $\hat{g}_j(\boldsymbol{\lambda})$ can expressed as a linear combination of the normalized B-spline basis functions $B_{jm}(x)$ for a knot sequence based on the sampled $j$-th covariates:
+	Thus we have the Lipschitz relation
 	\begin{align}
-	\hat{g}_j(\boldsymbol{\lambda})(x)
-	= \sum_{m=1}^{N_j} B_{jm}(x | D^{(n_T)}) \hat{\theta}_{jm}(\boldsymbol{\lambda}).
-	\end{align}
-	Using a normalized B-spline basis is convenient as \citet{de1975local} proved that B-splines of order $k$ have condition number $\kappa_{k, \infty}$: for any knot sequence $t$ and any $N \ge 1$ normalized B-splines functions, define
-	\begin{align}
-	\sup_{N \ge 1} \sup_t 
-	\frac{
-	\sup_{\|a\|_\infty = 1} \| \sum_{n=1}^N a_n B_n(x) \|_\infty
-	}{
-	\inf_{\|a\|_\infty = 1} \| \sum_{n=1}^N a_n B_n(x) \|_\infty
-	}
-	= \kappa_{k, \infty}
-	\le 2k9^{k-1}.
-	\label{eq:cond_b_spline}
-	\end{align}
-%	Thus for any $x, x' \in [0,1]^J$ and any normalized B-spline basis, we have
-%	\begin{align}
-%	\frac{
-%		g_j(x' | \boldsymbol{\theta})}{
-%		g_j(x | \boldsymbol{\theta})}
-%	\le
-%	\kappa_{4, \infty}.
-%	\label{eq:cond_b_spline}
-%	\end{align}
-	%JF check wording pelase
-%	$\kappa_{4, \infty}$ is also called the $L_\infty$-condition number for B-splines.
-	Using the result in \eqref{eq:cond_b_spline}, we can bound the difference between fitted functions at $\boldsymbol{\lambda}, \boldsymbol{\lambda}' \in \Lambda$ by
-	\begin{align}
-	\left | \hat{g}(\boldsymbol{\lambda})(x) - \hat{g}(\boldsymbol{\lambda}')(x) \right |
-	& = \left|
-	\sum_{j=1}^J \sum_{m=1}^{N_j} B_{jm}(x | D^{(n_T)}) \left(
-	\hat{\theta}_{jm}(\boldsymbol{\lambda}) - \hat{\theta}_{jm}(\boldsymbol{\lambda}')
-	\right)
-	\right| \\
-	& \le \sum_{j=1}^J \left|
-	\sum_{m=1}^{N_j} B_{jm}(x | D^{(n_T)}) \left(
-	\hat{\theta}_{jm}(\boldsymbol{\lambda}) - \hat{\theta}_{jm}(\boldsymbol{\lambda}')
-	\right)
-	\right| \\
-	& \le \kappa_{4, \infty}
-	\sum_{j=1}^J
-	\min_{i \in D^{(n_T)}} \left|
-	\sum_{m=1}^{N_j} B_{jm}(x_{ij} | D^{(n_T)}) \left(
-	\hat{\theta}_{jm}(\boldsymbol{\lambda}) - \hat{\theta}_{jm}(\boldsymbol{\lambda}')
-	\right)
-	\right| \\
-	& \le \kappa_{4, \infty}
-	\sum_{j=1}^J
-	\min_{i \in D^{(n_T)}} \left|
-	\hat{g}_j(\boldsymbol{\lambda})(x_{ij})
-	- \hat{g}_j(\boldsymbol{\lambda}')(x_{ij})
-	\right|\\
-	& \le \kappa_{4, \infty}
-	\sum_{j=1}^J
-	\min_{i \in D^{(n_T)}}
-	\sup_{\lambda\in \Lambda} \left\|
-	\nabla_{\lambda} \hat{g}_j(\boldsymbol{\lambda})(x_{ij})
-	\right \|_2
-	\left\|
-	\boldsymbol{\lambda} - \boldsymbol{\lambda}'
-	\right\|_2
-	\end{align}
-	Using the closed form solution for $\hat{g}(\boldsymbol{\lambda})$, we can bound the gradient of the fitted values with respect to $\boldsymbol{\lambda}$ using Cauchy-Schwarz:
-	\begin{align}
-	\frac{\partial}{\partial\lambda_j} \hat{g}(\boldsymbol{\lambda})(x_{ij})
-	\le
-	\left(
-	M^\top M + \diag \left (
-	\left \{
-	\lambda_j K_j
-	\right \}_{j=1:J} \right )
-	\right )^{-1}
-	K_j
-	\left(
-	M^\top M + \diag \left (
-	\left \{
-	\lambda_j K_j
-	\right \}_{j=1:J} \right )
-	\right )^{-1}
-	M^\top y
-	\end{align}
-	Then
-	\begin{align}
-	\left\|
-	\frac{\partial}{\partial\lambda_j} \hat{g}(\boldsymbol{\lambda})(x_{ij})
-	\right \|_2
+	& \left | \hat{g}_j(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) - \hat{g}_j(\boldsymbol{\lambda}^{(2)} | D^{(n_T)})(x) \right | \\
 	& \le
-	\left\|
+	\left \|
+	\left . \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(1)} | D^{(n_T)}) - \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(2)} | D^{(n_T)}) \right |_{D^{(n_T)}}
+	\right \|_\infty
 	\left(
-	M^\top M + \diag \left (
-	\left \{
-	\lambda_j K_j
-	\right \} \right )
-	\right )^{-1}
-	\right \|_2^2
-	\|K_j\|_2
-	\|M\|_2 \|y\|_2 \\
-	& \le c_{x} \|y\|_2
-	\label{eq:bound_grad}
+	1 + \frac{c}{k^2} \sup_{\|a\|_\infty = 1} \|R^{-1} Q^\top a\|_\infty
+	\right)\\
+	& \le
+	\left \|
+	\left . \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(1)} | D^{(n_T)}) - \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(2)} | D^{(n_T)}) \right |_{D^{(n_T)}}
+	\right \|_2
+	\ell(x).
 	\end{align}
-	where $c_{x}$ is a constant only dependent on the covariates chosen in the training set.
-	
-	Thus we finally reach our Lipschitz result: the fitted function $\hat{g}(\boldsymbol{\lambda})$ is Lipschitz with the constant
-	%JF notation needs fixing!
+	where $\ell$ is the constant function
 	\begin{align}
-	C_{\Lambda, D^{(n_T)}}(x)
-	= \kappa_{4, \infty} J c_{x} \|y\|_2
-	\quad \forall x \in [0,1]^J.
-	\label{eq:sobolev_lipschitz}
+	\ell \equiv 1 + \frac{c}{k^2} \sup_{\|a\|_\infty = 1} \|R^{-1} Q^\top a\|_\infty.
+	\label{eq:sobolev_ell}
 	\end{align}
+	Moreover, the Hessian of the objective function is
+	\begin{align}
+	M(D^{(n_T)})^\top M(D^{(n_T)}) + \diag \left (
+	\left \{
+	\lambda_j K
+	\right \} \right )
+	\end{align}
+	which has minimum eigenvalue $m(D^{(n_T)})$ for all $\boldsymbol{\lambda} \in \Lambda$.
 	
 	As in the previous example, suppose that the penalty parameters are tuned over $\Lambda = \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ using a training-validation split with $\lambda_{\min} = n^{-\kappa}$ for some $\kappa \ge 1$ and $\lambda_{\max} = 1$.
+	From Lemma~\ref{lemma:param_add}, we then have
+	\begin{align}
+	C_{\Lambda}(x|D^{(n_T)}) = n^{\kappa + 1} \frac{J^2}{m(D^{(n_T)})} C_{D^{(n_T)}}
+	\label{eq:sobolev_lipschitz}
+	\end{align}
+	where $C = \ell^2 \sqrt{\frac{1}{2} \|\epsilon\|_T^2  + C_\Lambda^*}$.
 	We plug in \eqref{eq:sobolev_lipschitz} to Theorem~\ref{thrm:train_val} to get that the following holds with high probability
 	\begin{align}
 	\begin{split}
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
 	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
 	& + O_p\left (
-	\frac{J \kappa \log(\kappa_{4, \infty} J c_{x} \|y\|_2 n + 1)}{n_{V}}
+	\frac{J (\kappa + 1) \log( J (m(D^{(n_T)}))^{-1} C_{D^{(n_T)}} n + 1)}{n_{V}}
 	\right ) \\
 	& + O_p\left(
-	\sqrt{\frac{J \kappa \log(\kappa_{4, \infty} J c_{x} \|y\|_2 n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+	\sqrt{\frac{J (\kappa + 1) \log(J (m(D^{(n_T)}))^{-1} C_{D^{(n_T)}} n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
 	\right ).
 	\end{split}
 	\end{align}
