@@ -587,12 +587,13 @@ Now we walk through a simple example with ridge penalties.
 	\begin{align}
 	C_\Lambda \left ( x | D^{(n_T)} \right ) =
 	n^{2\kappa}
-	C_{\Lambda, D^{(n_T)}}
+	C^*_{D^{(n_T)}}
 	\ell(x)
 	\end{align}
 	where $$
-	C_{\Lambda, D^{(n_T)}} = 
-	\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}
+	C^*_{D^{(n_T)}} = 
+	\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}
+	+\sum_{j=1}^J \|\boldsymbol{\theta}^{*,(j)}\|_2^2}
 	\left(
 	\max_{j \in 1:J} \sqrt{\sum_{i \in D^{(n_T)}} \|x_i^{(j)} \|_2^2}
 	\right).$$
@@ -602,10 +603,10 @@ Now we walk through a simple example with ridge penalties.
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
 	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
 	& + O_p\left (
-	\frac{J \kappa \log(C_{\Lambda, D^{(n_T)}} \|\ell(\cdot)\|_V n + 1)}{n_{V}}
+	\frac{J \kappa \log(C^*_{D^{(n_T)}} \|\ell(\cdot)\|_V n + 1)}{n_{V}}
 	\right ) \\
 	& + O_p\left(
-	\sqrt{\frac{J \kappa \log(C_{\Lambda, D^{(n_T)}} \|\ell(\cdot)\|_V n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+	\sqrt{\frac{J \kappa \log(C^*_{D^{(n_T)}} \|\ell(\cdot)\|_V n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
 	\right ).
 	\end{split}
 	\end{align}
@@ -642,7 +643,9 @@ Now we walk through a simple example with ridge penalties.
 	\left \|
 	y - M(D^{(n_T)}) \boldsymbol{\theta}
 	\right \|^2
-	+ \boldsymbol{\theta}^\top
+	+
+	\frac{1}{2}
+	\boldsymbol{\theta}^\top
 	\diag \left (
 	\left \{
 	\lambda_j K
@@ -662,12 +665,34 @@ Now we walk through a simple example with ridge penalties.
 	$K$ is therefore positive semi-definite.
 
 	To apply Theorem~\ref{thrm:train_val}, we need to be able to characterize how the natural spline $\hat{g}_j(\boldsymbol{\lambda})(\cdot)$ varies with $\boldsymbol{\lambda}$.
-	To accomplish this, we use Theorem 2.1 in \citet{green1993nonparametric} which states that the second derivatives at each of the covariates $\{1/k, ..., 1\}$ is equal to $\hat{\gamma}_j = R^{-1} Q^\top \hat{g}_j$.
-	Then the value of the natural spline at any point $t$ is given by
+	To accomplish this, we use Theorem 2.1 in \citet{green1993nonparametric} which states that the second derivative of $\hat{g}_j$ at covariates $\{1/k, ..., 1\}$ is equal to $\hat{\boldsymbol{\gamma}}_j = R^{-1} Q^\top \hat{\boldsymbol{\theta}}_j$.
+	Moreover, we can calculate the value of the natural spline at any point $x$ using $\hat{\boldsymbol{\theta}}_j$ and $\hat{\boldsymbol{\gamma}}_j$.
+	Let $\tau = \lfloor kx \rfloor$.
+	From section 2.4.1 in \citet{green1993nonparametric}, we have
 	\begin{align}
-	g_j(t) = \frac{(t - t_L) g_R + ...}{h} + ...
+	\begin{split}
+	\hat{g}_j(\boldsymbol{\lambda} | D^{(n_T)})(x) &
+	=
+	\left(
+	(kx - \tau) \hat{\theta}_{j,\tau + 1}(\boldsymbol{\lambda} | D^{(n_T)})
+	+ ((\tau + 1) - kx) \hat{\theta}_{j, \tau}(\boldsymbol{\lambda} | D^{(n_T)})
+	\right)\\
+	& \quad - \frac{1}{6}
+	\left (t - \frac{\tau}{k} \right )
+	\left (\frac{\tau + 1}{k} - t \right)\\
+	& \quad \times
+	\{
+	\left(
+	1 + (kx - \tau) \hat{\gamma}_{j,\tau + 1}(\boldsymbol{\lambda} | D^{(n_T)})
+	\right)
+	\left(
+	1 + ((\tau + 1) - kx) \hat{\gamma}_{j,\tau}(\boldsymbol{\lambda} | D^{(n_T)})
+	\right)
+	\}.
+	\end{split}
 	\end{align}
-	Thus we have the Lipschitz relation
+	Using the above equation, we can show that $\hat{g}_j(\boldsymbol{\lambda} | D^{(n_T)})(x)$ is Lipschitz in $\boldsymbol{\lambda}$ for any $x$.
+	In particular, we have the Lipschitz relation
 	\begin{align}
 	& \left | \hat{g}_j(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) - \hat{g}_j(\boldsymbol{\lambda}^{(2)} | D^{(n_T)})(x) \right | \\
 	& \le
@@ -675,7 +700,7 @@ Now we walk through a simple example with ridge penalties.
 	\left . \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(1)} | D^{(n_T)}) - \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(2)} | D^{(n_T)}) \right |_{D^{(n_T)}}
 	\right \|_\infty
 	\left(
-	1 + \frac{c}{k^2} \sup_{\|a\|_\infty = 1} \|R^{-1} Q^\top a\|_\infty
+	1 + \frac{1}{6 k^2} \sup_{\|a\|_\infty = 1} \|R^{-1} Q^\top a\|_\infty
 	\right)\\
 	& \le
 	\left \|
@@ -685,35 +710,50 @@ Now we walk through a simple example with ridge penalties.
 	\end{align}
 	where $\ell$ is the constant function
 	\begin{align}
-	\ell \equiv 1 + \frac{c}{k^2} \sup_{\|a\|_\infty = 1} \|R^{-1} Q^\top a\|_\infty.
+	\ell \equiv 1 + \frac{1}{6 k^2} \sup_{\|a\|_\infty = 1} \|R^{-1} Q^\top a\|_\infty.
 	\label{eq:sobolev_ell}
 	\end{align}
-	Moreover, the Hessian of the objective function is
+	Moreover, the Hessian of the objective function
 	\begin{align}
 	M(D^{(n_T)})^\top M(D^{(n_T)}) + \diag \left (
 	\left \{
 	\lambda_j K
 	\right \} \right )
 	\end{align}
-	which has minimum eigenvalue $m(D^{(n_T)})$ for all $\boldsymbol{\lambda} \in \Lambda$.
+	has minimum eigenvalue $m(D^{(n_T)})$ for all $\boldsymbol{\lambda} \in \Lambda$ as $K$ is positive semi-definite.
 	
 	As in the previous example, suppose that the penalty parameters are tuned over $\Lambda = \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ using a training-validation split with $\lambda_{\min} = n^{-\kappa}$ for some $\kappa \ge 1$ and $\lambda_{\max} = 1$.
 	From Lemma~\ref{lemma:param_add}, we then have
 	\begin{align}
-	C_{\Lambda}(x|D^{(n_T)}) = n^{\kappa + 1} \frac{J^2}{m(D^{(n_T)})} C_{D^{(n_T)}}
+	C_{\Lambda}(x|D^{(n_T)}) = n^{\kappa + 1} \frac{J^2}{m(D^{(n_T)})} C^*_{D^{(n_T)}}
 	\label{eq:sobolev_lipschitz}
 	\end{align}
-	where $C = \ell^2 \sqrt{\frac{1}{2} \|\epsilon\|_T^2  + C_\Lambda^*}$.
+	where
+	$$
+	C^*_{D^{(n_T)}} =
+	\ell^2
+	\sqrt{\frac{1}{2} \|\epsilon\|_T^2  + \sum_{j=1}^J \int_0^1 (g_j^{*''}(x))^2 dx }.
+	$$
 	We plug in \eqref{eq:sobolev_lipschitz} to Theorem~\ref{thrm:train_val} to get that the following holds with high probability
 	\begin{align}
 	\begin{split}
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
 	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
 	& + O_p\left (
-	\frac{J (\kappa + 1) \log( J (m(D^{(n_T)}))^{-1} C_{D^{(n_T)}} n + 1)}{n_{V}}
+	\frac{
+		J (\kappa + 1)
+		\log( J (m(D^{(n_T)}))^{-1} C^*_{D^{(n_T)}} n + 1)
+	}{n_{V}}
 	\right ) \\
 	& + O_p\left(
-	\sqrt{\frac{J (\kappa + 1) \log(J (m(D^{(n_T)}))^{-1} C_{D^{(n_T)}} n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+	\sqrt{
+		\frac{
+			J (\kappa + 1) \log(J (m(D^{(n_T)}))^{-1} C^*_{D^{(n_T)}} n + 1)
+		}{n_{V}}
+		\left\Vert
+		g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)
+		\right\Vert_{V}^2
+	}
 	\right ).
 	\end{split}
 	\end{align}
