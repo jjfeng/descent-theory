@@ -359,7 +359,9 @@ First, our assumptions:
 	\right)^2
 	\right \|_{L_2}
 	& \le 
-	K_1 \|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}^{1/\kappa}.
+	K_1 \left \|
+	g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})
+	\right \|_{L_{2}}^{1/\kappa}.
 	\label{eq:cv_assump2}
 	\end{align}
 \end{assump}
@@ -374,12 +376,15 @@ First, our assumptions:
 
 \begin{assump}
 	\label{assump:l2_psi2}
-	%JF what is the ordering of conditions here?!
-	For any $n_T \in \mathbb{N}$,
-	there is some $r \ge 0, K_2 \ge 1$ such that for any dataset $D^{(n_T)}$, we have
+	Suppose there is some $r \ge 0, K_2 \ge 1$ such that for any $n_T \in \mathbb{N}$ and any dataset $D^{(n_T)}$, we have
 	\begin{align}
-	\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{\psi_{2}}}
-	\le K_2 \left(\|g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})\|_{L_{2}}\right)^{r},
+	\left \|
+	g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})
+	\right \|_{L_{\psi_{2}}}
+	\le K_2
+	\left( \left \|
+	g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})
+	\right \|_{L_{2}}\right)^{r}.
 	\end{align}
 \end{assump}
 
@@ -549,11 +554,15 @@ We begin with the simple case where the penalty functions are smooth. The follow
 	\begin{equation}
 	\label{eq:param_add_lipschitz}
 	C_\Lambda(x | T) =
-	\frac{\max_{j=1:J} \|\ell_j\|_T}{m(T) \lambda_{min}}
-	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
-	\left(
-	\sum_{j=1}^J \ell_j(x)
-	\right)
+	\frac{1}{m(T) \lambda_{min}}
+	\sqrt{
+		\left(
+		\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}
+		\right)
+		\left(
+		\sum_{j=1}^J  \|\ell_j\|_T^2 \ell_j^2(x_j)
+		\right)
+	}
 	\end{equation}
 \end{lemma}
 
@@ -585,27 +594,37 @@ Now we walk through a simple example with ridge penalties.
 	\begin{align}
 	C_\Lambda \left ( x | D^{(n_T)} \right ) =
 	n^{2\kappa}
-	C^*_{D^{(n_T)}}
-	\ell(x)
+	\sqrt{
+		C^*_{D^{(n_T)}}
+		\left(
+		\sum_{j = 1}^J \left \|\|x^{(j)} \|_2 \right \|_T^2 \|x_j\|_2^2
+		\right)
+	}
 	\end{align}
 	where $$
 	C^*_{D^{(n_T)}} = 
-	\sqrt{\|\epsilon\|_{T}^{2}
-	+2\sum_{j=1}^J \|\boldsymbol{\theta}^{*,(j)}\|_2^2}
-	\left(
-	\max_{j \in 1:J} \sqrt{\sum_{i \in D^{(n_T)}} \|x_i^{(j)} \|_2^2}
-	\right).$$
+	\|\epsilon\|_{T}^{2}
+	+2\sum_{j=1}^J \|\boldsymbol{\theta}^{*,(j)}\|_2^2
+	.$$
 	By Theorem~\ref{thrm:train_val}, we have with high probability
 	%JF update this to match appendix!
 	\begin{align}
 	\begin{split}
-	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
+	& \left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 \\
 	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
-	& + O_p\left (
-	\frac{J \kappa \log(C^*_{D^{(n_T)}} \|\ell(\cdot)\|_V n + 1)}{n_{V}}
+	& \quad + O_p\left (
+	\frac{J \kappa \log \left (
+		C^*_{D^{(n_T)}} \left(
+		\sum_{j = 1}^J \left \|\|x^{(j)} \|_2 \right \|_T^2 \left \|\|x_j\|_2 \right \|_V^2
+		\right) n + 1
+		\right )}{n_{V}}
 	\right ) \\
-	& + O_p\left(
-	\sqrt{\frac{J \kappa \log(C^*_{D^{(n_T)}} \|\ell(\cdot)\|_V n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+	&\quad + O_p\left(
+	\sqrt{\frac{J \kappa \log \left (
+			C^*_{D^{(n_T)}} \left(
+			\sum_{j = 1}^J \left \|\|x^{(j)} \|_2 \right \|_T^2 \left \|\|x_j\|_2 \right \|_V^2
+			\right) n + 1
+			\right )}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
 	\right ).
 	\end{split}
 	\end{align}
@@ -843,7 +862,8 @@ Equipped with these conditions, we can characterize the smoothness of the fitted
 	Suppose $\Lambda_{smooth} \subseteq \Lambda$ satisfies Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2}. Then any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda_{smooth}$ satisfies  \eqref{eq:param_add_lipschitz}.
 \end{lemma}
 
-\begin{example}[Multiple elastic nets]
+\begin{example}[Multiple elastic nets, training validation split]
+	\label{ex:elastic_net_tv}
 	The elastic net penalty is a combination of the lasso and ridge penalty.
 	Let us consider the following example with multiple elastic net penalties
 	\begin{align}
@@ -854,6 +874,7 @@ Equipped with these conditions, we can characterize the smoothness of the fitted
 	\| \boldsymbol{\theta}^{(j)}\|_1
 	+ \frac{w}{2} \| \boldsymbol{\theta}^{(j)}\|_2^2
 	\right).
+	\label{eq:elastic_net_ex}
 	\end{align}
 	Here we treat $w$ as some fixed parameter as Lemma~\ref{lemma:nonsmooth} considers additive penalties.
 	For each $j = 1,...,J$, let the nonzero indices of $\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})$ be denoted $I^{(j)}(\boldsymbol\lambda) = \{i | \hat{\theta}_i(\boldsymbol\lambda) \ne 0 \text{ for } i=1,...,p_j \}$ and let $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$ be a submatrix of the identity matrix with columns $I^{(j)}(\boldsymbol\lambda)$.
@@ -906,6 +927,7 @@ Equipped with these conditions, we can characterize the smoothness of the fitted
 	\right \|_T^2
 	\|x^{(j)}\|_2^2
 	}
+	\label{eq:elastic_lipschitz}
 	\end{align}
 	where $$
 	C^*_{D^{(n_T)}} = 
@@ -949,6 +971,127 @@ Equipped with these conditions, we can characterize the smoothness of the fitted
 
 We believe other $L_p$-norm penalties, like the group lasso, also satisfy these conditions.
 %JF maybe elaborate more. point to our other paper
+
+\begin{example}[Multiple elastic nets, cross-validation]
+	In the previous example, we only considered a training/validation split.
+	Here we would like to consider applying Theorem~\ref{thrm:kfold} which provides an oracle inequality for average modified cross-validation.
+	%JF check wording of CV method above.
+	We consider a similar setup as that in \citet{lecue2012oracle}.
+	For simplicity, we suppose that $X$ is drawn uniformly from a sphere of radius $R > 0$ in $\mathbb{R}^p$.
+	Then $X$ is a log-concave vector and
+	$$
+	\sup_{\|a\|_\infty = 1} \left\| \langle X, a \rangle \right \|_{L_{\psi_2}} < c_R
+	$$
+	for some constant $c_R > 0$.
+	In addition, the noise $\epsilon$ is $\psi_2$.
+	As shown in \citet{lecue2012oracle}, \eqref{eq:cv_assump2} is satisfied.
+	To satisfy \eqref{eq:cv_assump1}, our fitting procedure for $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ entails a thresholding operation reminiscent of that in \citet{lecue2012oracle}.
+	In particular, we first solve \eqref{eq:elastic_net_ex} to obtain $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ and then threshold any covariates that are over some constant $K_0'$: for $i = 1,...,p$,
+	\begin{align}
+	\hat{\boldsymbol{\theta}}_{thres, i}(\boldsymbol{\lambda})
+	= \hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda}) \wedge K_0'.
+	\end{align}
+	Now we can show that \eqref{eq:cv_assump1} is also satisfied:
+	\begin{align}
+	\left \|
+	\left(
+	y - X\theta
+	\right)^2
+	- \left(
+	y - X\theta^*
+	\right)^2 \right \|_{L_{\psi_1}}
+	& =
+	\left \|
+	\langle X, \theta - \theta^* \rangle^2
+	+ 2\epsilon \langle X, \theta - \theta^* \rangle
+	\right \|_{L_{\psi_1}}\\
+	&
+	\le
+	2 \left\| \langle X, \theta - \theta^* \rangle \right \|_{L_{\psi_2}}^2
+	+ 8 \|\epsilon\|_{L_{\psi_2}}^2\\
+	&
+	\le
+	2 \|\theta - \theta^*\|_\infty^2
+	\sup_{\|a\|_\infty = 1} \left\| \langle X, a \rangle \right \|_{L_{\psi_2}}^2
+	+ 8 \|\epsilon\|_{L_{\psi_2}}^2\\
+	& \le 2
+	(\|\theta^*\|_\infty + K_0')^2 c_R^2
+	+ 8 \|\epsilon\|_{L_{\psi_2}}^2.
+	\end{align}
+	So the two results above show that Assumption~\ref{assump:tail_margin} is satisfied.
+	In Example~\ref{ex:elastic_net_tv}, we showed that the Lipschitz assumption is satisfied for the non-thresholded fitted parameters.
+	The Lipschitz relation is preserved under the thresholding operation, so Assumption~\ref{assump:lipschitz} is satisfied with the constant function
+	\begin{align}
+	C_\Lambda(x | D^{(n_T)})
+	=
+	R^2
+	\sqrt{J}
+	\left (
+	\|\epsilon\|_{T}
+	\vee \sqrt{2\sum_{j=1}^J
+	\|\boldsymbol{\theta}^{*,(j)}\|_1
+	+ \frac{w}{2}\|\boldsymbol{\theta}^{*,(j)}\|_2^2}
+	\right ).
+	\end{align}
+	Finally, since we are thresholding the fitted parameters, Assumption~\ref{assump:l2_psi2} is satisfied with $r = 0$:
+	\begin{align}
+	\left\| \langle X, \theta - \theta^* \rangle \right \|_{L_{\psi_2}}
+	\le
+	(\|\theta^*\|_\infty + K_0')
+	\sup_{\|a\|_\infty = 1} \left\| \langle X, a \rangle \right \|_{L_{\psi_2}}.
+	\end{align}
+	
+	Now we are ready to apply Theorem~\ref{thrm:kfold}.
+	Notice that
+	$\left \| C_\Lambda(\cdot | D^{(n_T)}) \right \|_{L_{\psi_2}}^2$
+	is a sub-Gaussian random variable.
+	Thus
+	\begin{align}
+	1 + \sum_{k = 1}^\infty k \Pr \left (
+	\| C_\Lambda(\cdot | D^{(n_T)}) \|_{L_{\psi_2}}^2 \ge 2^k c
+	\right )
+	& \le
+	1 + \sum_{k = 1}^\infty k \Pr \left (
+	\| \epsilon\|_T^2 \ge 2^k c
+	\right )\\
+	& < c_{\tilde{h}}
+	\end{align}
+	for some constants $c$ and $c_{\tilde{h}}$ that depend on $\|\epsilon\|_{L_{\psi_{2}}}$, $R$, $J$, and $\boldsymbol{\theta}^*$.
+	Now suppose $\lambda_{\max} = 1$ and $\lambda_{\min} = n^{-\kappa}$.
+	Then for any $a > 0$, we have
+	\begin{align}
+	\begin{split}
+	\mathbb{P}_{D^{(n)}}
+	\left \|
+	X \left(
+	\bar{\boldsymbol{\theta}}(\hat{\boldsymbol{\lambda}}|D^{(n)})
+	- \boldsymbol{\theta}^*
+	\right)
+	\right \|_{L_{2}}^{2}
+	& \le	(1+a)
+	\inf_{\lambda\in\Lambda}
+	\left[
+	\mathbb{P}_{D^{(n_{T})}}
+	\left \|
+	X \left(
+	\bar{\boldsymbol{\theta}}(\hat{\boldsymbol{\lambda}}|D^{(n_T)})
+	- \boldsymbol{\theta}^*
+	\right)
+	\right \|_{L_{2}}^{2}
+	\right] \\
+	& + \tilde{c} \frac{\left(1+a\right)^{2}}{a}
+	\frac{J\log n_{V}}{n_{V}}
+	\log\left(\frac{\left(1+a\right)}{a} J +1\right)
+	c_{\tilde{h}}
+	\end{split}
+	\end{align}
+	for some constant $\tilde{c} > 0$.
+	
+	From this example, we see that the extended version of Theorem~\ref{thrm:kfold} allows us to characterize the performance of tuning penalty parameters over a continuous range, rather than the finite set considered in \citet{lecue2012oracle}.
+	This is valuable in the case where there are many penalty parameters and instead of searching over a finite grid, it is more typical to search via a continuous optimization procedure like some hill-climbing procedure or Bayesian optimization.
+	
+	Unfortunately, we were unable to remove the thresholding step from the example, as Assumption~\ref{assump:tail_margin} requires the estimators to have a bounded $\psi_1$ norm. We hope to address this in future research.
+\end{example}
 
 \subsection{Nonparametric additive models}
 \label{sec:nonparam_smooth}

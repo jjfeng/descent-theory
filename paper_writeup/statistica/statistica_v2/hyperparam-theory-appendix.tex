@@ -381,36 +381,37 @@ The $\gamma$ function is defined as follows
 
 To prove our result, we first extend Lemma 3.4 in \citet{lecue2012oracle} as follows.
 The proof used in \citet{lecue2012oracle} is actually sufficient, with minor modifications.
-The main point of the following lemma is to restate Lemma 3.4 using notation that clarifies the conditional dependencies and to introduce a new function $h(D^{(n_T)})$ that is a function of the training data and a new bounding function $J_\delta$.
+The main point of the following lemma is to restate Lemma 3.4 using notation that clarifies the conditional dependencies and to introduce two new functions $h$ and $J_\delta$.
 \begin{lemma}
 Let $\mathcal{Q}(D^{(m)})\equiv\left\{ Q(\lambda|D^{(m)}):\lambda\in\Lambda\right\} $
 and $\mathcal{Q}\equiv\cup_{m\in\mathbb{N}}\cup_{D^{(m)}}\mathcal{Q}(D^{(m)})$.
-
 Suppose there exists $C_{1}>0$ and increasing function $G(\cdot)$
 such that $\forall Q\in\mathcal{Q}$, 
 \[
 \|Q(Z)\|_{L_{2}}\le G\left(\mathbb{P}Q(Z)\right).
 \]
-
-
-Let $n_{T},n_{V}\in\mathbb{N}$ and fix a dataset $D^{(n_{T})}$.
-Suppose there exist functions $D^{(n_{T})}\mapsto h(D^{(n_{T})})\in\mathbb{R}^{+}$
-and $\left\{ w \mapsto J_{\delta}(w) :\delta>0\right\} $
+Let $n_{T},n_{V}\in\mathbb{N}$.
+Suppose there exists a function $h$ that maps training data $D^{(n_T)}$ to $\mathbb{R}^+$,
+functions $J_\delta :\mathbb{R}^+ \mapsto \mathbb{R}^+$ indexed by $\delta > 0$,
 and a constant $w_{\min}>0$ such that for any dataset $D^{(n_{T})}$ and any $w \ge w_{\min}$,
-\[
+\begin{align}
 h(D^{(n_{T})})\le\delta\implies\frac{\log n_{V}}{\sqrt{n_{V}}}\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(w)
-\]
+\end{align}
 where $\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})})\equiv\left\{ Q\in\mathcal{Q}(D^{(n_{T})}):\|Q(Z)\|_{L_{2}}\le G(w)\right\}$.
 
-Then there exists some absolute constant $L,c>0$ such that for all
+Then there exists absolute constants $L,c>0$ such that for all
 $w\ge w_{\min}$ and all $u\ge1$,
-\[
+\begin{align}
 \Pr\left(
 \sup_{Q\in\mathcal{Q}(D^{(n_{T})}): PQ \le w}
-\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta
+\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}
+\le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}
+\middle | h\left(D^{(n_{T})}\right)
+\le \delta
 \right)
-\ge1-L\exp(-cu).
-\]
+\ge
+1-L\exp(-cu).
+\end{align}
 \end{lemma}
 
 Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the conditional dependencies and using our new functions $h$ and $J_\delta$.
@@ -628,9 +629,10 @@ as the $L_2$ norm is its own dual norm.
 For $\|\cdot \| = \|\cdot\|_{L_{\psi_{1}}}$, the upper bound reduces to 
 $$
 2\left(\|\epsilon\|_{L_{\psi_{2}}}+L_2 w^{r/2}\right)
-\|C_\Lambda (x | D^{(n_T)})\|_{L_{\psi_{2}}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+\|C_\Lambda (x | D^{(n_T)})\|_{L_{\psi_{2}}}
+\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
 $$
-as the dual of the $L_{\psi_1}$ norm is $L_{\psi_2}$.
+as the dual of the $L_{\psi_1}$ norm is $L_{\psi_2}$ (and we applied Assumption~\ref{assump:l2_psi2}).
 \end{proof}
 
 Now we proceed to bound Talagrand's $\gamma$ function. Via simple calculations, one can show that there is an absolute constant $c > 0$ such that
