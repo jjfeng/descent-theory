@@ -47,7 +47,7 @@
 \newtheorem{condition}{Condition}
 \newtheorem{assump}{Assumption}
 \DeclareMathOperator{\diag}{diag}
-
+\DeclareMathOperator{\spann}{span}
 \pagestyle{fancy}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -794,34 +794,20 @@ In particular, we need $\Lambda_{smooth}$ to satisfy the following conditions:
 		\item For all $\boldsymbol{\lambda}'\in B(\boldsymbol{\lambda})$, the training criterion $L_{T}(\cdot, \boldsymbol{\lambda}')$ is twice differentiable with respect to $\boldsymbol{\theta}$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}'|T)$
 		along directions in the product space
 		\begin{align}
-		\begin{split}
+%		\begin{split}
 		\Omega^{L_T(\cdot, \boldsymbol{\lambda})} \left (\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}|T \right) \right) =
-		& \Omega^{L_{T}(
-			\cdot,
-			\boldsymbol{\theta}^{(2)}, ...
-			\boldsymbol{\theta}^{(J)}, \boldsymbol{\lambda})}
-			\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)\right)\\
-		& \times
-		\Omega^{L_{T}(
-			\boldsymbol{\theta}^{(1)},
-			\cdot,
-			\boldsymbol{\theta}^{(3)}, ...
-			\boldsymbol{\theta}^{(J)},
-			\boldsymbol{\lambda})
-		}
-		\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)\right)\\
-		& \times
+		& \Omega^{P_1(\cdot)}
+			\left(\hat{\boldsymbol{\theta}}^{(1)}(\boldsymbol{\lambda} | T)\right)
+		\times
+%		\Omega^{P_2(\cdot)}
+%		\left(\hat{\boldsymbol{\theta}}^{(2)}(\boldsymbol{\lambda} | T)\right)
+%		\times
 		...
 		\times
-		\Omega^{L_{T}(
-			\boldsymbol{\theta}^{(1)},
-			\boldsymbol{\theta}^{(2)}, ...
-			\boldsymbol{\theta}^{(J - 1)},
-			\cdot,
-			\boldsymbol{\lambda})}
-		\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)\right)
+		\Omega^{P_J(\cdot)}
+		\left(\hat{\boldsymbol{\theta}}^{(J)}(\boldsymbol{\lambda} | T)\right)
 		.
-		\end{split}
+%		\end{split}
 		\end{align}
 		\item $\Omega^{L_T(\cdot, \boldsymbol{\lambda})} \left (\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}|T \right) \right)$ is a local optimality space for $L_T\left(\cdot,\boldsymbol{\lambda}\right)$ over $B(\boldsymbol{\lambda})$.
 	\end{itemize}
@@ -857,20 +843,109 @@ Equipped with these conditions, we can characterize the smoothness of the fitted
 	Suppose $\Lambda_{smooth} \subseteq \Lambda$ satisfies Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2}. Then any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda_{smooth}$ satisfies  \eqref{eq:param_add_lipschitz}.
 \end{lemma}
 
-As an example, we show that the elastic net satisfies these conditions since its solution follows a piecewise linear path (CITE appropriate).
-%JF fix up - copied from other paper
-Let the nonzero indices of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ be denoted $I(\boldsymbol\lambda) = \{i | \hat{\theta}_i(\boldsymbol\lambda) \ne 0 \text{ for } i=1,...,p \}$ and let $\boldsymbol I_{I(\boldsymbol \lambda)}$ be a submatrix of the identity matrix with columns $I(\boldsymbol\lambda)$. Since $|\cdot|$ is not differentiable at zero, the directional derivatives of $||\boldsymbol \theta||_1$ only exist along directions spanned by the columns of $\boldsymbol I_{I(\boldsymbol \lambda)}$. Thus the differentiable space at $\boldsymbol \lambda$ is
-$
-S_{\boldsymbol{\lambda}} = span(\boldsymbol I_{I(\boldsymbol \lambda)})
-\label{eq:en_diff_space}
-$.
-Condition 1: The elastic net solution paths are piecewise linear \citep{zou2003regression}, which means that the nonzero indices of the elastic net estimates stay locally constant for almost every $\boldsymbol{\lambda}$. Therefore, $S_{\boldsymbol{\lambda}}$ as defined in Section~\ref{sec:enet}  is a local optimality space for $L_T(\cdot, \boldsymbol{\lambda})$.
-Also, we need to establish that the $\ell_1$ penalty is twice-continuously differentiable in the directions of $S_{\boldsymbol{\lambda}}$ since the quadratic loss function and the ridge penalty are both smooth. The absolute value function is twice-continuously differentiable everywhere except at zero. Hence the training criterion is smooth when restricted to $S_{\boldsymbol{\lambda}}$.
-
-Condition 2: The elastic net solution paths are piecewise linear \citep{zou2003regression} therefore $\Lambda_{smooth}^c$ is a set of countable $\lambda$, e.g. $\Lambda_{smooth}^c$ has measure zero.
-
-Positive definite: The Hessian matrix of $L_T(\cdot, \boldsymbol{\lambda})$ with respect to $\boldsymbol I_{I(\boldsymbol \lambda)}$ is $\boldsymbol I_{I(\boldsymbol \lambda)}^\top \boldsymbol{X}_{T}^\top \boldsymbol{X}_{T} \boldsymbol I_{I(\boldsymbol \lambda)} + \lambda_2 \boldsymbol{I}$. The first summand is positive semi-definite. As long as $\lambda_2 > 0$, the contribution of the identity matrix ensures the Hessian is positive definite.
-%JF make sure all the variables above are defined!
+\begin{example}[Multiple elastic nets]
+	The elastic net penalty is a combination of the lasso and ridge penalty.
+	Let us consider the following example with multiple elastic net penalties
+	\begin{align}
+	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	=\argmin_{\theta^{(j)} \in \mathbb{R}^{p_j}, j = 1,...,J}
+	\frac{1}{2} \left \| y - \sum_{j=1}^J \boldsymbol{X}^{(j)} \boldsymbol{\theta}^{(j)} \right \|_T^2
+	+ \sum_{j=1}^J \lambda_j \left(
+	\| \boldsymbol{\theta}^{(j)}\|_1
+	+ \frac{w}{2} \| \boldsymbol{\theta}^{(j)}\|_2^2
+	\right).
+	\end{align}
+	Here we treat $w$ as some fixed parameter as Lemma~\ref{lemma:nonsmooth} considers additive penalties.
+	For each $j = 1,...,J$, let the nonzero indices of $\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})$ be denoted $I^{(j)}(\boldsymbol\lambda) = \{i | \hat{\theta}_i(\boldsymbol\lambda) \ne 0 \text{ for } i=1,...,p_j \}$ and let $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$ be a submatrix of the identity matrix with columns $I^{(j)}(\boldsymbol\lambda)$.
+	With the above notation, we can now check that Conditions~\ref{condn:nonsmooth1} and \ref{condn:nonsmooth2} are satisfied.
+	\begin{itemize}
+		\item[] \textbf{Condition~\ref{condn:nonsmooth1}}: Since the absolute value function $|\cdot|$ is twice-continuously differentiable everywhere except at zero, the directional derivatives of $||\boldsymbol \theta^{(j)}||_1$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ only exist along directions spanned by the columns of $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$.
+		Thus the penalized training loss $L_T(\cdot, \boldsymbol{\lambda})$ is twice differentiable with respect to the directions in the space
+		\begin{align}
+		\Omega^{L_T(\cdot, \lambda)}(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T))
+		= \spann(I_{I^{(1)}(\boldsymbol \lambda)}) \times ... \times \spann(I_{I^{(J)}(\boldsymbol \lambda)}).
+		\label{eq:en_diff_space}
+		\end{align}
+		%JF this isn't a formal proof as they only has a single elastic net. Maybe we should mention this!
+		Moreover, the elastic net solution paths are piecewise linear \citep{zou2003regression}, which means that the nonzero indices of the elastic net estimates stay locally constant for almost every $\boldsymbol{\lambda}$. Therefore, \eqref{eq:en_diff_space} is also a local optimality space for $L_T(\cdot, \boldsymbol{\lambda})$.
+		\item[] \textbf{Condition~\ref{condn:nonsmooth2}}: The elastic net solution paths are piecewise linear \citep{zou2003regression} therefore $\Lambda_{smooth}^c$ is a set of countable $\lambda$, e.g. $\Lambda_{smooth}^c$ has measure zero.
+	\end{itemize}
+	Before we can apply Lemma~\ref{lemma:nonsmooth}, we must also show that the Hessian of the penalized training loss has a minimum eigenvalue bounded away from zero.
+	Consider the following orthogonal basis of \eqref{eq:en_diff_space} at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$: $U(\boldsymbol{\lambda}) = \{U^{(j)}(\boldsymbol{\lambda})\}_{j = 1}^J$ where
+	\begin{align}
+	U^{(j)} =
+	\left(
+	\begin{matrix}
+	\boldsymbol{0} \\
+	I_{I^{(j)}(\boldsymbol \lambda)}\\
+	\boldsymbol{0}
+	\end{matrix}
+	\right)
+	\quad \forall j = 1,...,J.
+	\end{align}
+	The Hessian matrix of $L_T(\cdot, \boldsymbol{\lambda})$ with respect to directions $U(\boldsymbol{\lambda})$ is
+	$$
+	\boldsymbol U(\boldsymbol{\lambda})^\top \boldsymbol{X}_{T}^\top \boldsymbol{X}_{T} \boldsymbol U(\boldsymbol{\lambda}) + \lambda_1 w \boldsymbol{I}
+	$$
+	where $\boldsymbol{X}_{T} = (\boldsymbol{X}^{(1)} ... \boldsymbol{X}^{(J)})$
+	and $\boldsymbol{I}$ is the identity matrix with length equal to the number of nonzero elements in $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$.
+	The first summand is positive semi-definite.
+	Since $\lambda_1 > \lambda_{\min}$, the Hessian has a minimum eigenvalue of $\lambda_{\min}$.
+	
+	Suppose the penalty parameters are tuned over $\Lambda = \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ using a training-validation split with $\lambda_{\min} = n^{-\kappa}$ for some $\kappa \ge 1$ and $\lambda_{\max} = 1$.
+	Similar to the ridge example, every function $g_j(x^{(j)})$ is Lipschitz with $\ell_j(x^{(j)}) = \|x^{(j)}\|_2$.
+	Finally, applying Lemma~\ref{lemma:nonsmooth}, for any training dataset $D^{(n_T)}$, the function $g(x | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz with function
+	\begin{align}
+	C_\Lambda \left ( x | D^{(n_T)} \right ) =
+	\frac{n^{2\kappa}}{w}
+	\sqrt{
+	C^*_{D^{(n_T)}}
+	\sum_{j = 1}^J
+	\left \|
+	\|x^{(j)} \|_2
+	\right \|_T^2
+	\|x^{(j)}\|_2^2
+	}
+	\end{align}
+	where $$
+	C^*_{D^{(n_T)}} = 
+	\|\epsilon\|_{T}^{2}
+		+2\sum_{j=1}^J
+		\left (
+		\|\boldsymbol{\theta}^{*,(j)}\|_1
+		+ \frac{w}{2}\|\boldsymbol{\theta}^{*,(j)}\|_2^2
+		\right )
+	.$$
+	By Theorem~\ref{thrm:train_val}, we have with high probability
+	\begin{align}
+	\begin{split}
+	&\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2\\
+	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
+	& + O_p\left (
+	\frac{J \kappa
+	\log \left (
+	C^*_{D^{(n_T)}}
+	\left (
+	\sum_{j=1}^J
+	\left \| \|x^{(j)}\|_2 \right \|_T^2 \left \| \|x^{(j)}\|_2 \right \|_V^2
+	\right )
+	w^{-1} n + 1
+	\right )}{n_{V}}
+	\right ) \\
+	& + O_p\left(
+	\sqrt{\frac{J \kappa
+		\log \left (
+		C^*_{D^{(n_T)}}
+		\left (
+		\sum_{j=1}^J
+		\left \| \|x^{(j)}\|_2 \right \|_T^2 \left \| \|x^{(j)}\|_2 \right \|_V^2
+		\right )
+		w^{-1} n + 1
+		\right )}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+	\right ).
+	\end{split}
+	\end{align}
+\end{example}
 
 We believe other $L_p$-norm penalties, like the group lasso, also satisfy these conditions.
 %JF maybe elaborate more. point to our other paper
