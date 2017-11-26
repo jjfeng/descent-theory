@@ -1044,7 +1044,7 @@ We believe other $L_p$-norm penalties, like the group lasso, also satisfy these 
 	Now we are ready to apply Theorem~\ref{thrm:kfold}.
 	Notice that
 	$\left \| C_\Lambda(\cdot | D^{(n_T)}) \right \|_{L_{\psi_2}}^2$
-	is a sub-Gaussian random variable.
+	is a sub-exponential random variable.
 	Thus
 	\begin{align}
 	1 + \sum_{k = 1}^\infty k \Pr \left (
@@ -1054,9 +1054,11 @@ We believe other $L_p$-norm penalties, like the group lasso, also satisfy these 
 	1 + \sum_{k = 1}^\infty k \Pr \left (
 	\| \epsilon\|_T^2 \ge 2^k c
 	\right )\\
+	& \le
+	1 + \sum_{k = 1}^\infty k \exp(- c_0 2^k c n_T / \|\epsilon\|^2_{L_{\psi_{2}}} ) \\
 	& < c_{\tilde{h}}
 	\end{align}
-	for some constants $c$ and $c_{\tilde{h}}$ that depend on $\|\epsilon\|_{L_{\psi_{2}}}$, $R$, $J$, and $\boldsymbol{\theta}^*$.
+	for some absolute constant $c_0 > 0$ and constants $c, c_{\tilde{h}}$ that depend on $\|\epsilon\|_{L_{\psi_{2}}}$, $R$, $J$, and $\boldsymbol{\theta}^*$.
 	Now suppose $\lambda_{\max} = 1$ and $\lambda_{\min} = n^{-\kappa}$.
 	Then for any $a > 0$, we have
 	\begin{align}
