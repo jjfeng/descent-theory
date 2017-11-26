@@ -545,6 +545,7 @@ We begin with the simple case where the penalty functions are smooth. The follow
 	\noindent
 	Then for any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$,
 	Assumption~\ref{assump:lipschitz} is satisfied with
+	%JF update this to match appendix!
 	\begin{equation}
 	\label{eq:param_add_lipschitz}
 	C_\Lambda(x | T) =
@@ -557,7 +558,7 @@ We begin with the simple case where the penalty functions are smooth. The follow
 \end{lemma}
 
 %JF lol this is so out of place
-Notice that the result assumes that the training criterion is strongly convex at its minimizer. If this is not true, one can augment the penalty function $P_j(\boldsymbol{\theta}^{(j)})$ with a ridge penalty $\| \boldsymbol{\theta}^{(j)} \|_2^2$ so that the training criterion becomes
+Notice that the result assumes that the training criterion is strongly convex at its minimizer. If this is not true, one can augment the penalty function $P_j(\boldsymbol{\theta}^{(j)})$ with a ridge penalty $\| \boldsymbol{\theta}^{(j)} \|_2^2$ with a fixed $w > 0$ so that the training criterion becomes
 \begin{equation}
 \label{eq:param_add_models_ridge}
 \frac{1}{2} \left  \| y -  g(\boldsymbol{\theta}) \right \|^2_T 
@@ -595,6 +596,7 @@ Now we walk through a simple example with ridge penalties.
 	\max_{j \in 1:J} \sqrt{\sum_{i \in D^{(n_T)}} \|x_i^{(j)} \|_2^2}
 	\right).$$
 	By Theorem~\ref{thrm:train_val}, we have with high probability
+	%JF update this to match appendix!
 	\begin{align}
 	\begin{split}
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
@@ -734,6 +736,7 @@ Now we walk through a simple example with ridge penalties.
 	\sqrt{\|\epsilon\|_T^2  + 2 \sum_{j=1}^J \int_0^1 (g_j^{*''}(x))^2 dx }.
 	$$
 	We plug in \eqref{eq:sobolev_lipschitz} to Theorem~\ref{thrm:train_val} to get that the following holds with high probability
+	%JF update this to match appendix!
 	\begin{align}
 	\begin{split}
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2

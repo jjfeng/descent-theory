@@ -816,57 +816,45 @@ Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 We now show that penalized regression problems for additive models satisfies the Lipschitz condition.
 \subsubsection{Proof for Lemma \ref{lemma:param_add}}
 \begin{proof}
-	We will use the notation $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) \coloneqq \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)$. By the gradient optimality conditions, we have for all $j=1:J$ 
+	We will use the notation $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) \coloneqq \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)$. By the gradient optimality conditions, we have
 	\begin{equation}
 	\label{eq:grad_opt}
-	\left.\nabla_{\theta^{(j)}} \left [
+	\left.\nabla_{\theta} \left [
 	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
 	\right ]
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}=0.
 	\end{equation}
 	
-	Now we implicitly differentiate with respect to $\boldsymbol{\lambda}$ 
+	After implicitly differentiating with respect to $\boldsymbol{\lambda}$, we have
 	\begin{equation}
 	\label{eq:implicit_diff}
-	\nabla_{\lambda}\left\{ \left.\nabla_{\theta^{(j)}}
+	\nabla_{\lambda}\left\{ \left.\nabla_{\theta}
 	\left [
 	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
 	\right ]
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0.
 	\end{equation}
-%	
-%	Define the following matrices:
-%	\begin{align*}
-%		H = \left.\nabla_{\theta}^2
-%		L_T(\boldsymbol{\theta}, \boldsymbol{\lambda})
-%		\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda | T)}
-%	\end{align*}
-%	
-%	\[
-%	M: \text{column } M_j = \left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
-%	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
-%	\]
 	From the product rule and chain rule, we can then write the system of equations in \eqref{eq:implicit_diff} as
 	\begin{equation}
 	\label{eq:param_matrix}
-	\left . \nabla_{\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
+	\left . \nabla_{\lambda}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
 	= -
 	\left (
 	\left.\nabla_{\theta}^2
 	L_T(\boldsymbol{\theta}, \boldsymbol{\lambda})
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda | T)} 
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)} 
 	\right)^{-1}
-	\left [
-	\boldsymbol {0} ...\boldsymbol {0}
-	\left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
-	\boldsymbol {0} ... \boldsymbol {0}
-	\right ]
+	\left \{
+	\left.
+	\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
+	\right \}_{j=1:J}
 	.
 	\end{equation}
-	Note that
-	$$
+	Now consider any $j$ in $1,...,J$.
+	Since
+	\begin{align}
 	\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
 	= \left[
 	\begin{matrix*}
@@ -874,44 +862,59 @@ We now show that penalized regression problems for additive models satisfies the
 	\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)}) \\
 	\boldsymbol {0}
 	\end{matrix*}
-	\right].
-	$$
-	Therefore we bound the norm of $\left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}$ by rearranging \eqref{eq:grad_opt} and using the Cauchy-Schwarz inequality:
+	\right],
+	\label{eq:grad_pen}
+	\end{align}
+	we can bound the norm of \eqref{eq:grad_pen} by rearranging \eqref{eq:grad_opt} and using the Cauchy-Schwarz inequality:
 	\begin{align*}
-		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
-		& \le  \frac{1}{\lambda_{min}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}
+		\left\Vert \left.\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
+		& = \left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
+		\\
+		&
+		\le  \frac{1}{\lambda_{min}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}
 		\left \|
 		\left\Vert
 		\nabla_{\theta^{(j)}}g_{j}(x|\boldsymbol{\theta}^{(j)})
 		\right\Vert_{2}
 		\right \|_T.
 	\end{align*}
-	Since $g_j$ is Lipschitz, then
+	Since $g_j$ is Lipschitz by assumption, then
 	\begin{align}
 	\left\Vert
 	\nabla_{\theta^{(j)}}g_{j}(x|\boldsymbol{\theta}^{(j)})
 	\right\Vert_{2}
-	\le \ell_j(x)
+	\le \ell_j(x).
 	\end{align}
 	Also, by the definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$, we have
-	\begin{align*}
+	\begin{align}
 	\frac{1}{2}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}
 	& \le \frac{1}{2}\left\Vert \epsilon \right \Vert_T^2 + C^*_{\Lambda}.
-	\end{align*}
+	\end{align}
 	Hence
 	\begin{align}
-	\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
+	\left\Vert \left.\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
 	& \le \frac{\|\ell_j\|_T}{\lambda_{min}}
 	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}.
 	\end{align}
-	Plugging in the results from above and the assumption that the Hessian of the objective function is has a minimum eigenvalue of $m(T)$, then the norm of $\nabla_\lambda \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is bounded by
+	Plugging in the results from above and using the assumption that the Hessian of the objective function has a minimum eigenvalue of $m(T)$, we have for all 
 	\begin{align}
+	\left .
+	\nabla_{\lambda_k}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
+	& = \boldsymbol{0}
+	\text{ if } j\ne k
+	\\
 	\left \|
 	\left .
-	\nabla_{\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda} | T)
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
+	\nabla_{\lambda_j}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
 	\right \|_2
+	& = \left \|
+	\left .
+	\nabla_{\lambda_j}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
+	\right \|_2
+	\\
 	& \le \frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
 	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}.
 	\end{align}
@@ -922,35 +925,141 @@ We now show that penalized regression problems for additive models satisfies the
 	& \le
 	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
 	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
-	\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
+	\left |\boldsymbol{\lambda}^{(1)}_j-\boldsymbol{\lambda}^{(2)}_j \right |.
 	\end{align}
-	Finally the result \eqref{eq:param_add_lipschitz} follows as  $g_j(\boldsymbol{\theta})$ are Lipschitz in $\boldsymbol{\theta}$:
+	Finally we combine the above results to get
 	\begin{align}
-	\left |
+	& \left |
 	g \left (x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)})\right )
 	- g \left (x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right )
-	\right |
+	\right |\\
 	& \le
 	\sum_{j=1}^J
 	\left |
 	g_j \left (x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)})\right )
 	- g_j \left (x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right )
 	\right | \\
-	& \le \sum_{j=1}^J \ell_j(x)
+	& \le \sum_{j=1}^J \ell_j(x_j)
+	\left\Vert \hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}^{(1)})
+	-\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}^{(2)})\right\Vert _{2}\\
+	& \le \sum_{j=1}^J \ell_j(x_j)
 	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
 	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
-	\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}\\
+	\left |\boldsymbol{\lambda}^{(1)}_j-\boldsymbol{\lambda}^{(2)}_j\right |\\
 	& \le
-	\frac{\max_{j=1:J} \|\ell_j\|_T}{m(T) \lambda_{min}}
-	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
-	\left(
-	\sum_{j=1}^J \ell_j(x)
-	\right)
-	\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+	\frac{1}{m(T) \lambda_{min}}
+	\sqrt{
+		\left(
+		\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}
+		\right)
+		\left(
+		\sum_{j=1}^J \|\ell_j\|_T^2 \ell_j^2(x_j)
+		\right)
+	}
+	\left \|
+	\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}
+	\right \|_{2}
 	\end{align}
 \end{proof}
 
 \subsubsection{Proof for Lemma \ref{lemma:nonsmooth}}
+
+Before proving Lemma~\ref{lemma:nonsmooth}, we need to introduce some notation.
+Let $\mathcal{L}(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)})$
+be the line segment connecting $\boldsymbol{\lambda}^{(1)}$ and $\boldsymbol{\lambda}^{(2)}$.
+Let $\mu_{1}(z)$ be the 1-dimensional Lebesgue measure in the direction
+of $z$ (so if $z$ is a continuous line segment, $\mu_{1}(z)=\|z\|_{2}$;
+if $z$ is composed of multiple line segments $z_{i}$, then $\mu(z)=\sum\mu(z_{i})$).
+
+Before proving the Lipschitz property over all of $\Lambda$, we show that the fitted function is Lipschitz over $\Lambda_{smooth}$.
+
+\begin{lemma}
+	Suppose that $g_j(x|\boldsymbol{\theta})$ satisfies the Lipschitz
+	condition in Lemma~\ref{lemma:param_add}.
+	Let $T\equiv D^{(n_{T})}$ be a fixed set of training data. Suppose
+	the penalized loss function $L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}\right)$
+	has a unique minimizer $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$
+	for every $\boldsymbol{\lambda}\in\Lambda$. Let $\boldsymbol{U}_{\lambda}$
+	be an orthonormal matrix with columns forming a basis for the differentiable
+	space of $L_{T}(\cdot,\boldsymbol{\lambda})$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$.
+	Suppose there exists a constant $m(T)>0$ such that the Hessian of
+	the penalized training criterion at the minimizer taken with respect
+	to the directions in $\boldsymbol{U}_{\lambda}$ satisfies 
+	\begin{equation}
+	\left._{U_{\lambda}}\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta},\boldsymbol{\lambda})\right|_{\theta=\hat{\theta}(\boldsymbol{\lambda})}\succeq m(T)\boldsymbol{I}\quad\forall\boldsymbol{\lambda}\in\Lambda
+	\end{equation}
+	where \textup{$\boldsymbol{I}$ is the identity matrix.} Suppose $\Lambda_{smooth}\subseteq\Lambda$
+	satisfies Condition 1. Define 
+	\[
+	\Lambda_{ext}=\left\{ (\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}):\mu_{1}\left(\mathcal{L}(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)})\cap\Lambda_{smooth}^{c}\right)>0\right\} .
+	\]
+	Then any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda_{ext}^{c}$
+	satisfies the same Lipschitz condition as in Lemma~\ref{lemma:param_add}; that is, it satisfies \eqref{eq:param_add_lipschitz}.
+\end{lemma}
+\begin{proof}
+	Consider any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$.
+	From Condition 1, every point $\boldsymbol{\lambda}\in\Lambda_{smooth}$
+	is the center of a ball $B(\boldsymbol{\lambda})$ with nonzero radius
+	where the differentiable space within $B(\boldsymbol{\lambda})$ is
+	constant. By Condition 2, there must exist
+	a countable set of points $\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}
+	\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ where $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in \cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}
+	$ such that the union of their differentiable neighborhoods cover $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+	entirely: 
+	\[
+	\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\subseteq\cup_{i=1}^{\infty}B\left(\boldsymbol{\ell}^{(i)}\right).
+	\]
+	Consider the intersections of boundaries of the differentiable neighborhoods
+	with the line segment: 
+	\[
+	P=\left(\cup_{i=1}^{\infty}B\left(\boldsymbol{\ell}^{(i)}\right)\right)\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}).
+	\]
+	Every point $p\in P$ can be expressed as $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
+	for some $\alpha_{p}\in[0,1]$. So points in $P$ can ordered by increasing
+	$\alpha_{p}$ to get the sequence $\boldsymbol{p}^{(1)},\boldsymbol{p}^{(2)},...$.
+	By Condition 1, the differentiable space of the training criterion
+	is also constant over $\mathcal{L}\left(\boldsymbol{p}^{(i)},\boldsymbol{p}^{(i+1)}\right)$
+	since each of these sub-segments are contained in some $B(\boldsymbol{\ell}^{(i)})$
+	for $i\in\mathbb{N}$.
+	
+	%JF Check the thing about the differentiable space. I'm scared of the directions getting mixed so we can't just separate out each \theta_j anymore...
+	Let the differentiable space over the interior of line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
+	be denoted $\Omega_{i}$. By Condition 1, the differentiable space
+	is also a local optimality space. Let $U^{(i)}$ be an orthonormal
+	basis of $\Omega_{i}$. For each $i$, we can express $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$
+	for all $\boldsymbol{\lambda}\in\mbox{Int}\left\{ \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)\right\} $
+	as 
+	\[
+	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)=U^{(i)}\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda}|T)
+	\]
+	\[
+	\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda}|T)=\arg\min_{\beta}L_{T}(U^{(i)}\boldsymbol{\beta},\boldsymbol{\lambda}).
+	\]
+	Apply the Lemma~\ref{lemma:param_add} with $\Lambda=\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$,
+	and modify the proofs to take directional derivatives along the columns
+	of $U^{(i)}$ instead. Then there is a Lipschitz constant $c>0$ independent
+	of $i$ such that for all $i=1,2...$, such that 
+	\[
+	\left\Vert \boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)}|T)-\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)}|T)\right\Vert _{2}\le c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}.
+	\]
+	
+	
+	We can sum these inequalities by the triangle inequality as follows:
+	\begin{align*}
+	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}|T)-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}|T)\right\Vert _{2} & \le\sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
+	& \le\sum_{i=1}^{\infty}c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}\\
+	& =c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
+	\end{align*}
+	
+	
+	Finally, by the Lipschitz assumption, we have that 
+	\[
+	\left|g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}|T)\right)-g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}|T)\right)\right|\le c\ell(x)\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
+	\]
+	
+\end{proof}
+
+
 
 \begin{proof}
 	Consider any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$. 
