@@ -548,14 +548,11 @@ We begin with the simple case where the penalty functions are smooth. The follow
 	\begin{equation}
 	\label{eq:param_add_lipschitz}
 	C_\Lambda(x | T) =
-	\left (
-	\frac{1}{m(T)\lambda_{\min}}
-	\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}+C_{\Lambda}^{*}}
-	\right )
+	\frac{\max_{j=1:J} \|\ell_j\|_T}{m(T) \lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
 	\left(
-	\max_{j \in 1:J} \|\ell_j(\cdot)\|_T
+	\sum_{j=1}^J \ell_j(x)
 	\right)
-	\sum_{j=1}^J \ell_j(x).
 	\end{equation}
 \end{lemma}
 
@@ -592,8 +589,8 @@ Now we walk through a simple example with ridge penalties.
 	\end{align}
 	where $$
 	C^*_{D^{(n_T)}} = 
-	\sqrt{\frac{1}{2}\|\epsilon\|_{T}^{2}
-	+\sum_{j=1}^J \|\boldsymbol{\theta}^{*,(j)}\|_2^2}
+	\sqrt{\|\epsilon\|_{T}^{2}
+	+2\sum_{j=1}^J \|\boldsymbol{\theta}^{*,(j)}\|_2^2}
 	\left(
 	\max_{j \in 1:J} \sqrt{\sum_{i \in D^{(n_T)}} \|x_i^{(j)} \|_2^2}
 	\right).$$
@@ -612,7 +609,7 @@ Now we walk through a simple example with ridge penalties.
 	\end{align}
 \end{example}
 
-\begin{example}[Sobolev penalties]
+\begin{example}[Multiple sobolev penalties]
 	Let us now consider a generalization of the classic smoothing spline problem to a multivariate setting where we fit functions that are univariate additive models:
 	\begin{align}
 	\hat{g}(\boldsymbol{\lambda})
@@ -657,10 +654,12 @@ Now we walk through a simple example with ridge penalties.
 	$$
 	q_{i-1,i} = k, q_{i-1,i} = -2k, q_{i + 1,i} = k.
 	$$
+	%JF provide indices for these matrices
 	$R$ is a banded $(k-2) \times (k-2)$ matrix with zeros everywhere except for entries
 	$$
 	r_{ii} = \frac{2}{3k}, r_{i, i+ 1} = r_{i+ 1, i} = \frac{1}{6k}.
 	$$
+	%JF provide indices for these matrices
 	$R$ is a strictly diagonal dominant matrix and therefore positive-definite.
 	$K$ is therefore positive semi-definite.
 
@@ -732,7 +731,7 @@ Now we walk through a simple example with ridge penalties.
 	$$
 	C^*_{D^{(n_T)}} =
 	\ell^2
-	\sqrt{\frac{1}{2} \|\epsilon\|_T^2  + \sum_{j=1}^J \int_0^1 (g_j^{*''}(x))^2 dx }.
+	\sqrt{\|\epsilon\|_T^2  + 2 \sum_{j=1}^J \int_0^1 (g_j^{*''}(x))^2 dx }.
 	$$
 	We plug in \eqref{eq:sobolev_lipschitz} to Theorem~\ref{thrm:train_val} to get that the following holds with high probability
 	\begin{align}
@@ -763,7 +762,7 @@ Now we walk through a simple example with ridge penalties.
 \label{sec:param_nonsmooth}
 
 If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless we find that for many popular non-smooth penalty functions, such as the lasso \citep{tibshirani1996regression} and group lasso \citep{yuan2006model}, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere.
-\todo{cite ourselves}
+%JF cite ourselves
 To characterize such problems, we begin with the following definitions:
 
 \begin{definition}
@@ -783,9 +782,8 @@ To characterize such problems, we begin with the following definitions:
 	\end{equation}
 \end{definition}
 %JF clarify this sentence
-We are interested in the set $\Lambda_{smooth} \subseteq \Lambda$ in which the fitted functions are well-behaved.
-Consider $\Lambda_{smooth}$ that satisfies the following conditions:
-
+We also need to characterize the subset of penalty parameters $\Lambda_{smooth} \subseteq \Lambda$ where the fitted functions are well-behaved.
+In particular, we need $\Lambda_{smooth}$ to satisfy the following conditions:
 \begin{condition}
 	\label{condn:nonsmooth1}
 	For every $\boldsymbol{\lambda} \in \Lambda_{smooth}$, there exists a ball $B(\boldsymbol{\lambda})$ with nonzero radius centered at $\boldsymbol{\lambda}$ such that
@@ -797,18 +795,15 @@ Consider $\Lambda_{smooth}$ that satisfies the following conditions:
 \end{condition}
 \begin{condition}
 	\label{condn:nonsmooth2}
-	For every $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$, let the line segment between the two points be denoted 
-	$$
-	\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})=\left\{ \alpha\boldsymbol{\lambda^{(1)}}+(1-\alpha)\boldsymbol{\lambda^{(2)}}:\alpha\in[0,1]\right\} 
-	$$
-	Suppose the intersection $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})\cap\Lambda_{smooth}^{C}$
-	is countable.
+	Let $\mu$ be the Lebesgue measure in $\mathbb{R}^{J}$.
+	$\Lambda_{smooth}^c \coloneqq \Lambda \setminus \Lambda_{smooth}$ has measure zero: $\mu(\Lambda_{smooth}^c) = 0$.
 \end{condition}
 
 Equipped with these conditions, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the Lipschitz constant is exactly the same as that in Lemma \ref{lemma:param_add}.
 
 \begin{lemma}
 	\label{lemma:nonsmooth}
+	%JF update the whole damn thing
 	Define $\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda} | T\right )$ as in \eqref{eq:param_add_estimator}.
 	
 	\noindent

@@ -834,62 +834,120 @@ We now show that penalized regression problems for additive models satisfies the
 	\right ]
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0.
 	\end{equation}
-	
-	Define the following matrices:
-	\begin{align*}
-		S = \left.\nabla_{\theta}\left [
-		\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}
-		\right ]
-		\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda | T)}
-	\end{align*}
-	\todo{S is the second deriv!}
-	\[
-	D=\left.diag\left(\left\{ \nabla_{\boldsymbol{\theta}^{(j)}}^{2}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})\right\} _{j=1}^{J}\right)\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
-	\]
-	
-	
-	\[
-	M: \text{column } M_j = \left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
-	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
-	\]
+%	
+%	Define the following matrices:
+%	\begin{align*}
+%		H = \left.\nabla_{\theta}^2
+%		L_T(\boldsymbol{\theta}, \boldsymbol{\lambda})
+%		\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda | T)}
+%	\end{align*}
+%	
+%	\[
+%	M: \text{column } M_j = \left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
+%	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
+%	\]
 	From the product rule and chain rule, we can then write the system of equations in \eqref{eq:implicit_diff} as
 	\begin{equation}
 	\label{eq:param_matrix}
-	\left(\begin{array}{cccc}
-	\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{1}(\boldsymbol{\lambda}) & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{2}(\boldsymbol{\lambda}) & ... & \nabla_{\lambda}\hat{\boldsymbol{\theta}}_{p}(\boldsymbol{\lambda})\end{array}\right)=-M^{\top}\left(S+D\right)^{-1}.
+	\left . \nabla_{\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
+	= -
+	\left (
+	\left.\nabla_{\theta}^2
+	L_T(\boldsymbol{\theta}, \boldsymbol{\lambda})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda | T)} 
+	\right)^{-1}
+	\left [
+	\boldsymbol {0} ...\boldsymbol {0}
+	\left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
+	\boldsymbol {0} ... \boldsymbol {0}
+	\right ]
+	.
 	\end{equation}
-	We now bound each column in $M$. From the \eqref{eq:grad_opt} and Cauchy Schwarz, we have 
+	Note that
+	$$
+	\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
+	= \left[
+	\begin{matrix*}
+	\boldsymbol {0} \\
+	\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)}) \\
+	\boldsymbol {0}
+	\end{matrix*}
+	\right].
+	$$
+	Therefore we bound the norm of $\left. \nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}$ by rearranging \eqref{eq:grad_opt} and using the Cauchy-Schwarz inequality:
 	\begin{align*}
-		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le  \frac{1}{\lambda_{min}\sqrt{n_{T}}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}\sqrt{\sum_{i=1}^{n_{T}}\left\Vert \nabla_{\theta^{(j)}}g_{j}(x_{i}|\boldsymbol{\theta}^{(j)})\right\Vert _{2}^{2}}.
+		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
+		& \le  \frac{1}{\lambda_{min}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}
+		\left \|
+		\left\Vert
+		\nabla_{\theta^{(j)}}g_{j}(x|\boldsymbol{\theta}^{(j)})
+		\right\Vert_{2}
+		\right \|_T.
 	\end{align*}
-	\todo{the sqrt nT got lost later on!}
-	
-	The norm of the gradients of $g_j$ can be bounded since $g_j$ is Lipschitz. Also, by definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$, we have
+	Since $g_j$ is Lipschitz, then
+	\begin{align}
+	\left\Vert
+	\nabla_{\theta^{(j)}}g_{j}(x|\boldsymbol{\theta}^{(j)})
+	\right\Vert_{2}
+	\le \ell_j(x)
+	\end{align}
+	Also, by the definition of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$, we have
 	\begin{align*}
-	\frac{1}{2}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}\left(\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})\right) & \le \frac{1}{2}\left\Vert y-g(\boldsymbol{\theta}^{*})\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j),*})\\
-	& \le C_{\theta^{*},\Lambda}.
+	\frac{1}{2}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}^{2}
+	& \le \frac{1}{2}\left\Vert \epsilon \right \Vert_T^2 + C^*_{\Lambda}.
 	\end{align*}
-	
-	Hence for all $j=1,...,J$
+	Hence
 	\begin{align}
-	\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert  & \le \frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}.
+	\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
+	& \le \frac{\|\ell_j\|_T}{\lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}.
 	\end{align}
-	
-	Now we bound the norm of $\nabla_\lambda \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$. From \eqref{eq:param_matrix}, we have for all $j=1,...,J$
+	Plugging in the results from above and the assumption that the Hessian of the objective function is has a minimum eigenvalue of $m(T)$, then the norm of $\nabla_\lambda \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is bounded by
 	\begin{align}
-	\|\nabla_{\lambda}\hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda})\| & =  \|M^{\top}\left(S+D\right)^{-1}e_{k}\|\\
-	& \le \sum_{j=1}^{J}\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert _{2}\left\Vert \left(S+D\right)^{-1}\right\Vert _{2}\\
-	& \le  J\left(\frac{L}{\lambda_{min}}\sqrt{2C_{\theta^{*},\Lambda}}\right)\frac{1}{m}
+	\left \|
+	\left .
+	\nabla_{\lambda}\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda} | T)
+	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda|T)}
+	\right \|_2
+	& \le \frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}.
 	\end{align}
-	\todo{make this calculate differently}
-	where the last line follows from the fact that $(S + D)^{-1} \succeq m^{-1}I$.
-	\todo{typo in the matrix ineq}
-	Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ must be Lipschitz:
-	\begin{equation}
-	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}')\right\Vert _{2}\le\frac{LJ^{3/2}\sqrt{2C_{\theta^{*},\Lambda}}}{m\lambda_{min}}\|\boldsymbol{\lambda}-\boldsymbol{\lambda}'\|_{2}.
-	\end{equation}
-	Finally the result \eqref{eq:param_add_lipschitz} clearly follows since $g_j(\boldsymbol{\theta})$ are Lipschitz in $\boldsymbol{\theta}$ with respect to $\| \cdot \|_\infty$.
-	\todo{is it wrt infty norm? do we want to assume this?}
+	Since the norm of the gradient is bounded, $\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})$ must be Lipschitz:
+	\begin{align}
+	\left\Vert \hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}^{(1)})
+	-\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}^{(2)})\right\Vert _{2}
+	& \le
+	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
+	\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
+	\end{align}
+	Finally the result \eqref{eq:param_add_lipschitz} follows as  $g_j(\boldsymbol{\theta})$ are Lipschitz in $\boldsymbol{\theta}$:
+	\begin{align}
+	\left |
+	g \left (x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)})\right )
+	- g \left (x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right )
+	\right |
+	& \le
+	\sum_{j=1}^J
+	\left |
+	g_j \left (x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)})\right )
+	- g_j \left (x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})\right )
+	\right | \\
+	& \le \sum_{j=1}^J \ell_j(x)
+	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
+	\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}\\
+	& \le
+	\frac{\max_{j=1:J} \|\ell_j\|_T}{m(T) \lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
+	\left(
+	\sum_{j=1}^J \ell_j(x)
+	\right)
+	\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+	\end{align}
 \end{proof}
 
 \subsubsection{Proof for Lemma \ref{lemma:nonsmooth}}
