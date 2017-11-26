@@ -791,8 +791,38 @@ In particular, we need $\Lambda_{smooth}$ to satisfy the following conditions:
 	\label{condn:nonsmooth1}
 	For every $\boldsymbol{\lambda} \in \Lambda_{smooth}$, there exists a ball $B(\boldsymbol{\lambda})$ with nonzero radius centered at $\boldsymbol{\lambda}$ such that
 	\begin{itemize}
-		\item For all $\boldsymbol{\lambda}'\in B(\boldsymbol{\lambda})$, the training criterion $L_{T}$ is twice differentiable at $(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}'|T), \boldsymbol{\lambda}')$
-		along directions in $\Omega^{L_{T}(\cdot,\cdot)}\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T), \boldsymbol{\lambda}\right)$.
+		\item For all $\boldsymbol{\lambda}'\in B(\boldsymbol{\lambda})$, the training criterion $L_{T}(\cdot, \boldsymbol{\lambda}')$ is twice differentiable with respect to $\boldsymbol{\theta}$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}'|T)$
+		along directions in the product space
+		\begin{align}
+		\begin{split}
+		\Omega^{L_T(\cdot, \boldsymbol{\lambda})} \left (\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}|T \right) \right) =
+		& \Omega^{L_{T}(
+			\cdot,
+			\boldsymbol{\theta}^{(2)}, ...
+			\boldsymbol{\theta}^{(J)}, \boldsymbol{\lambda})}
+			\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)\right)\\
+		& \times
+		\Omega^{L_{T}(
+			\boldsymbol{\theta}^{(1)},
+			\cdot,
+			\boldsymbol{\theta}^{(3)}, ...
+			\boldsymbol{\theta}^{(J)},
+			\boldsymbol{\lambda})
+		}
+		\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)\right)\\
+		& \times
+		...
+		\times
+		\Omega^{L_{T}(
+			\boldsymbol{\theta}^{(1)},
+			\boldsymbol{\theta}^{(2)}, ...
+			\boldsymbol{\theta}^{(J - 1)},
+			\cdot,
+			\boldsymbol{\lambda})}
+		\left(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)\right)
+		.
+		\end{split}
+		\end{align}
 		\item $\Omega^{L_T(\cdot, \boldsymbol{\lambda})} \left (\hat{\boldsymbol \theta}\left(\boldsymbol{\lambda}|T \right) \right)$ is a local optimality space for $L_T\left(\cdot,\boldsymbol{\lambda}\right)$ over $B(\boldsymbol{\lambda})$.
 	\end{itemize}
 \end{condition}

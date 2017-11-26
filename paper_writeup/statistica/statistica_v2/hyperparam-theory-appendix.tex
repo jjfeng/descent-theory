@@ -38,7 +38,7 @@
 \setcounter{lemma}{3}
 \setcounter{definition}{3}
 \DeclareMathOperator*{\argmin}{arg\,min}
-
+\DeclareMathOperator*{\conv}{Conv}
 \pagestyle{fancy}
 \newtheorem{assump}{Assumption}
 \newtheorem{condition}{Condition}
@@ -989,147 +989,239 @@ Before proving the Lipschitz property over all of $\Lambda$, we show that the fi
 	\left._{U_{\lambda}}\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta},\boldsymbol{\lambda})\right|_{\theta=\hat{\theta}(\boldsymbol{\lambda})}\succeq m(T)\boldsymbol{I}\quad\forall\boldsymbol{\lambda}\in\Lambda
 	\end{equation}
 	where \textup{$\boldsymbol{I}$ is the identity matrix.} Suppose $\Lambda_{smooth}\subseteq\Lambda$
-	satisfies Condition 1. Define 
-	\[
-	\Lambda_{ext}=\left\{ (\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}):\mu_{1}\left(\mathcal{L}(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)})\cap\Lambda_{smooth}^{c}\right)>0\right\} .
-	\]
-	Then any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda_{ext}^{c}$
+	satisfies Condition 1. Define
+	\begin{align}
+	\Lambda_{ext}=\left\{ (\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}):\mu_{1}\left(\mathcal{L}(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)})\cap\Lambda_{smooth}^{c}\right)>0\right\}.
+	\label{eq:lambda_ext}
+	\end{align}
+	Then any $(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)})\in\Lambda_{ext}^{c}$
 	satisfies the same Lipschitz condition as in Lemma~\ref{lemma:param_add}; that is, it satisfies \eqref{eq:param_add_lipschitz}.
+	\label{lemma:lipschitz_lambda_ext_c}
 \end{lemma}
 \begin{proof}
-	Consider any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$.
 	From Condition 1, every point $\boldsymbol{\lambda}\in\Lambda_{smooth}$
 	is the center of a ball $B(\boldsymbol{\lambda})$ with nonzero radius
 	where the differentiable space within $B(\boldsymbol{\lambda})$ is
-	constant. By Condition 2, there must exist
-	a countable set of points $\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}
-	\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ where $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in \cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}
-	$ such that the union of their differentiable neighborhoods cover $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
+	constant.
+
+	Now consider any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in \Lambda_{ext}$.
+	By \eqref{eq:lambda_ext}, there must exist a countable set of points $\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}
+	\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ where
+	$\cup_{i=1}^{\infty} \boldsymbol{\ell}^{(i)} \subset \Lambda_{smooth}$,
+	$\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in \cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}$,
+	and the union of their differentiable neighborhoods cover $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$
 	entirely: 
 	\[
 	\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\subseteq\cup_{i=1}^{\infty}B\left(\boldsymbol{\ell}^{(i)}\right).
 	\]
 	Consider the intersections of boundaries of the differentiable neighborhoods
 	with the line segment: 
-	\[
-	P=\left(\cup_{i=1}^{\infty}B\left(\boldsymbol{\ell}^{(i)}\right)\right)\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}).
-	\]
+	\begin{align}
+	P =
+	\cup_{i=1}^{\infty}
+	\left[
+	bd \left (
+	B\left(\boldsymbol{\ell}^{(i)}\right)
+	\right )
+	\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})
+	\right].
+	\end{align}
 	Every point $p\in P$ can be expressed as $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
-	for some $\alpha_{p}\in[0,1]$. So points in $P$ can ordered by increasing
-	$\alpha_{p}$ to get the sequence $\boldsymbol{p}^{(1)},\boldsymbol{p}^{(2)},...$.
+	for some $\alpha_{p}\in[0,1]$.
+	We can order the points in $P$ by increasing $\alpha_{p}$ to get the sequence $\boldsymbol{p}^{(1)},\boldsymbol{p}^{(2)},...$.
+
 	By Condition 1, the differentiable space of the training criterion
-	is also constant over $\mathcal{L}\left(\boldsymbol{p}^{(i)},\boldsymbol{p}^{(i+1)}\right)$
+	is constant over $\mathcal{L}\left(\boldsymbol{p}^{(i)},\boldsymbol{p}^{(i+1)}\right)$
 	since each of these sub-segments are contained in some $B(\boldsymbol{\ell}^{(i)})$
 	for $i\in\mathbb{N}$.
-	
-	%JF Check the thing about the differentiable space. I'm scared of the directions getting mixed so we can't just separate out each \theta_j anymore...
-	Let the differentiable space over the interior of line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
-	be denoted $\Omega_{i}$. By Condition 1, the differentiable space
-	is also a local optimality space. Let $U^{(i)}$ be an orthonormal
-	basis of $\Omega_{i}$. For each $i$, we can express $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$
+	Moreover, the differentiable space over the interior of line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$ can be decomposed as the product of differentiable spaces, which we denote as
+	\begin{align}
+	\Omega_{i}^{(1)} \times ... \times \Omega_{i}^{(J)}.
+	\label{eq:diff_space_product}
+	\end{align}
+	By Condition 1, \eqref{eq:diff_space_product} is also a local optimality space.
+	Let $U^{(i,j)}$ be an orthonormal basis of $\Omega_{i}^{(j)}$ for $j = 1,...,J$.
+	For each $i$, we can express $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$
 	for all $\boldsymbol{\lambda}\in\mbox{Int}\left\{ \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)\right\} $
 	as 
 	\[
-	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)=U^{(i)}\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda}|T)
+	\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}|T)
+	=U^{(i,j)}\hat{\boldsymbol{\beta}}^{(j)}(\boldsymbol{\lambda}|T)
 	\]
 	\[
-	\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda}|T)=\arg\min_{\beta}L_{T}(U^{(i)}\boldsymbol{\beta},\boldsymbol{\lambda}).
+	\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda}|T)
+	= \left (
+	\begin{matrix}
+	\hat{\boldsymbol{\beta}}^{(1)}(\boldsymbol{\lambda}|T)
+	& ... &
+	\hat{\boldsymbol{\beta}}^{(J)}(\boldsymbol{\lambda}|T)
+	\end{matrix}
+	\right )
+	=\arg\min_{\beta}L_{T}
+	\left (
+	\{U^{(i,j)}\boldsymbol{\beta}^{(j)} \}_{j=1}^J,
+	\boldsymbol{\lambda}
+	\right ).
 	\]
 	Apply the Lemma~\ref{lemma:param_add} with $\Lambda=\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$,
 	and modify the proofs to take directional derivatives along the columns
-	of $U^{(i)}$ instead. Then there is a Lipschitz constant $c>0$ independent
-	of $i$ such that for all $i=1,2...$, such that 
-	\[
-	\left\Vert \boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)}|T)-\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)}|T)\right\Vert _{2}\le c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}.
-	\]
-	
-	
-	We can sum these inequalities by the triangle inequality as follows:
+	of $U^{(i)} = (U^{(i,1)}, ..., U^{(i,J)})$ instead.
+	Then there is a Lipschitz constant $c_j>0$ independent of $i$ such that for all $i=1,2...$, such that 
+	\begin{align}
+	\left\Vert
+	\boldsymbol{\hat{\beta}}^{(j)}(\boldsymbol{p}^{(i)}|T)
+	-\boldsymbol{\hat{\beta}}^{(j)}(\boldsymbol{p}^{(i)}|T)
+	\right\Vert _{2}
+	\le c_j \left |{p}^{(i)}-{p}^{(i+1)}_j\right |.
+	\end{align}
+	We can sum these inequalities by the triangle inequality:
 	\begin{align*}
-	\left\Vert \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}|T)-\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}|T)\right\Vert _{2} & \le\sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
-	& \le\sum_{i=1}^{\infty}c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}\\
-	& =c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
+	\left\Vert
+	\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}^{(1)}|T)
+	-\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda}^{(2)}|T)
+	\right\Vert _{2}
+	& \le
+	\sum_{i=1}^{\infty}
+	\left \|
+	\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{p}^{(i)}|T)
+	-\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{p}^{(i + 1)}|T)
+	\right \|_{2}\\
+	& \le
+	c_j
+	\sum_{i=1}^{\infty} 
+	\left |
+	{p}^{(i)}_j-{p}^{(i+1)}_j
+	\right |\\
+	& = c_j \left |{\lambda}^{(1)}_j - {\lambda}^{(2)}_j\right |.
 	\end{align*}
-	
-	
-	Finally, by the Lipschitz assumption, we have that 
+	Finally, following the same logic as in the proof of Lemma~\ref{lemma:param_add}, we have by the Lipschitz assumption that
 	\[
-	\left|g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}|T)\right)-g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}|T)\right)\right|\le c\ell(x)\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
+	\left|g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}|T)\right)-g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}|T)\right)\right|
+	\le
+	\sqrt{\sum_{j=1}^J c_j^2 \ell_j^2(x_j)}
+	\left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|_{2}.
 	\]
-	
 \end{proof}
 
-
+In order to extend the result in Lemma~\ref{lemma:lipschitz_lambda_ext_c} to all of $\Lambda$, we need to show that $\Lambda_{ext}$ is a set with measure zero.
+\begin{lemma}
+Suppose Condition~\ref{condn:nonsmooth2}.
+Then $\mu_{2J}(\Lambda_{ext})=0$ where $\mu_{2J}$ is the Lebesgue measure in $\mathbb{R}^{2J}$ and $\Lambda_{ext}$ was defined in \eqref{eq:lambda_ext}.
+\label{lemma:ext_measure_zero}
+\end{lemma}
 
 \begin{proof}
-	Consider any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{smooth}$. 
-	From Condition \ref{condn:nonsmooth1}, every point $\boldsymbol{\lambda} \in \Lambda_{smooth}$ is the center of a ball $B(\boldsymbol{\lambda})$ with nonzero radius where the differentiable space within $B(\boldsymbol{\lambda})$ is constant.
-	Hence by Condition \ref{condn:nonsmooth2}, it can be shown that there must exist a countable
-	set of points $\bar{\boldsymbol{\ell}} 
-	%=\cup_{i=1}^{\infty}\boldsymbol{\ell}^{(i)}
-	\subset\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ where $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \bar{\boldsymbol{\ell}}$
-	such that the union of their differentiable neighborhoods cover  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$ entirely:
-	\[
-	\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right) \subseteq \cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell}).
-	%\mu_{1}\left(\cup_{i=1}^{\infty}B(\boldsymbol{\ell}^{(i)})
-	%\mu_{1}\left(\cup_{\ell \in \bar{\boldsymbol{\ell}}}B(\boldsymbol{\ell})
-	%\cap\mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right)=\left\Vert \mathcal{L}\left(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\right)\right\Vert _{2}
-	\]
-	%where $\mu_{1}$ is the Lebesgue measure over  $\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}})$.
-	
-	Consider the intersections of boundaries of the differentiable neighborhoods with the line segment:
-	\[
-	P=
-	\left ( 
-	\cup_{\ell \in \bar{\boldsymbol{\ell}}}
-	\mbox{Bd}B\left(\boldsymbol{\ell}\right)
-	\right )
-	\cap\mathcal{L}(\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}).
-	\]
-	Every point $p\in P$ can be expressed as $\alpha_{p}\boldsymbol{\lambda^{(1)}}+(1-\alpha_{p})\boldsymbol{\lambda^{(2)}}$
-	for some $\alpha_{p}\in[0,1]$. So points in $P$ can ordered by increasing $\alpha_{p}$ to get the sequence $\boldsymbol{p}^{(1)}, \boldsymbol{p}^{(2)}, ... $.
-	By Condition \ref{condn:nonsmooth1}, the differentiable space of the training criterion
-	is also constant over $\mathcal{L}\left(\boldsymbol{p}^{(i)},\boldsymbol{p}^{(i+1)}\right)$ since each of these sub-segments are a subset of $B(\boldsymbol{\ell})$ for some $\boldsymbol{\ell} \in \bar{\boldsymbol{\ell}}$. 
-	
-	Let the differentiable
-	space over the interior of line segment $\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$
-	be denoted $\Omega_{i}$. 
-	By Condition \ref{condn:nonsmooth1}, the differentiable space is also a local optimality
-	space. Let $U^{(i)}$ be an orthonormal basis of $\Omega_{i}$. For
-	each $i$, we can express $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)$ for
-	all $\boldsymbol{\lambda}\in\mbox{Int}\left\{ \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)\right\} $
-	as
-	\[
-	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)=U^{(i)}\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)
-	\]
-	\[
-	\hat{\boldsymbol{\beta}}(\boldsymbol{\lambda} | T)=\arg\min_{\beta}L_{T}(U^{(i)}\boldsymbol{\beta},\boldsymbol{\lambda}).
-	\]
-	Apply Lemma \ref{lemma:param_add} with $\Lambda= \mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$, and modify the proofs to take directional derivatives
-	along the columns of $U^{(i)}$ instead. Then there is a constant
-	constant $c>0$ independent of $i$ such that for all $i=1,2...$,
-	such that
-	\[
-	\left\Vert 
-	\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)} | T)
-	-\boldsymbol{\hat{\beta}}(\boldsymbol{p}^{(i)} | T)
-	\right\Vert _{2}
-	\le 
-	c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}.
-	\]
-	
-	
-	Finally, we can sum these inequalities. By the triangle inequality,
-	\begin{align*}
-	\left\Vert 
-	\hat{\theta}(\boldsymbol{\lambda}^{(1)} |T)
-	- \hat{\theta}(\boldsymbol{\lambda}^{(2)} |T)
-	\right\Vert _{2} 
-	& \le \sum_{i=1}^{\infty}\|\boldsymbol{\hat{\theta}}_{p^{(i)}}-\boldsymbol{\hat{\theta}}_{p^{(i+1)}}\|_{2}\\
-	& \le \sum_{i=1}^{\infty}
-	c\|\boldsymbol{p}^{(i)}-\boldsymbol{p}^{(i+1)}\|_{2}\\
-	& = c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
-	\end{align*}
+	Suppose for contradiction that $\mu_{2J}(\Lambda_{ext})>0$.
+	If this is the case, then there exists a ball $B_{r}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)$ contained in $\Lambda_{ext}$ with nonzero radius $r>0$ centered at $\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)$
+	where $\boldsymbol{\lambda}^{(1)} \ne \boldsymbol{\lambda}^{(2)}$ and
+	\begin{align}
+	\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\cap\Lambda_{smooth}^{c}\right) >0
+	\quad \forall\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\in B_{r}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right).
+	\end{align}
+	Suppose that $\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\cap\Lambda_{smooth}^{c}\right)=\delta>0$.
+	We claim that for a sufficiently small radius $r'$, we also have
+	\begin{align}
+	\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\cap\Lambda_{smooth}^{c}\right)>\delta/2>0
+	\quad \forall
+	\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)
+	\in B_{r'}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right).
+	\end{align}
+	To see why this claim is true, let us define a monotonically decreasing
+	sequence $\left\{ r_{i}\right\} $ where $r_{i} > 0$ for all $i \in \mathbb{N}$ and $\lim_{i\rightarrow\infty}r_{i}=0$.
+	By the monotone convergence theorem,
+	\begin{align}
+	\lim_{i\rightarrow\infty}\inf_{\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\in B_{r_{i}}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)}\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\cap\Lambda_{smooth}^{c}\right)=\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\cap\Lambda_{smooth}^{c}\right)=\delta>0.
+	\end{align}
+	By the definition of limits, there is some sufficiently
+	large $i'$ such that for $r'\coloneqq r_{i'} > 0$, we have
+	\begin{align}
+	\inf_{\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\in B_{r'}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)}\mu_{1}\left(\mathcal{L}\left(\boldsymbol{\lambda}^{'},\boldsymbol{\lambda}^{''}\right)\cap\Lambda_{smooth}^{c}\right)>\delta/2.
+	\end{align}
+	Given our ball is non-empty, there exist points $\left(\boldsymbol{\lambda}^{(3)},\boldsymbol{\lambda}^{(4)}\right),\left(\boldsymbol{\lambda}^{(5)},\boldsymbol{\lambda}^{(6)}\right)\in B_{r'}\left(\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)\right)$
+	where 
+	\begin{align}
+	{\lambda}_{j}^{(3)} > {\lambda}_{j}^{(5)},
+	{\lambda}_{j}^{(4)} > {\lambda}_{j}^{(6)}
+	\quad \forall j=1,..,J.
+	\end{align}
+	For any $\alpha \in (0,1)$, the line
+	\begin{align}
+	\mathcal{L}_\alpha =
+	\mathcal{L}\left(\alpha\boldsymbol{\lambda}^{(3)}+(1-\alpha)\boldsymbol{\lambda}^{(5)},\alpha\boldsymbol{\lambda}^{(4)}+(1-\alpha)\boldsymbol{\lambda}^{(6)}\right)
+	\end{align}
+	has
+	\begin{align}
+	\mu_1\left(
+	\mathcal{L}_\alpha
+	\cap
+	\Lambda_{smooth}^{c}
+	\right)
+	> \delta/2.
+	\end{align}
+	As the lines $\mathcal{L}_\alpha$ do not intersect for $\alpha \in (0,1)$, then
+	\begin{align}
+	\mu\left(
+	\cup_{\alpha\in[0,1]}
+	\left(
+	\mathcal{L}_\alpha
+	\cap\Lambda_{smooth}^{c}
+	\right)\right)
+	= \int_{0}^{1} \mu_1\left(
+	\mathcal{L}_\alpha
+	\cap
+	\Lambda_{smooth}^{c}
+	\right) d\alpha
+	> \delta/2
+	\end{align}
+	Thus
+	\begin{align}
+	\mu\left(\Lambda_{smooth}^{c}\right)
+	\ge
+	\mu\left(
+	\cup_{\alpha\in[0,1]}
+	\left(
+	\mathcal{L}_\alpha
+	\cap\Lambda_{smooth}^{c}
+	\right)\right)
+	>\delta/2.
+	\end{align}
+	However this is a contradiction of our assumption that $\mu\left(\Lambda_{smooth}^{c}\right)=0$.
+\end{proof}
+
+Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_measure_zero}, we can show that the Lipschitz condition is satisfied over all of $\Lambda$.
+
+\begin{proof}[Proof for Lemma~\ref{lemma:nonsmooth}]
+	Since we already showed Lemma~\ref{lemma:lipschitz_lambda_ext_c}, it suffices to show that the Lipschitz condition is satisfied for any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{ext}$.
+	Lemma~\ref{lemma:ext_measure_zero} states that $\mu_{2J}(\Lambda_{ext}) = 0$, which means that there exists a sequence
+	$\left(\boldsymbol{\lambda}^{(1,i)},\boldsymbol{\lambda}^{(2,i)}\right)\in\Lambda_{ext}^{c}$
+	such that $\lim_{i\rightarrow\infty}\left(\boldsymbol{\lambda}^{(1,i)},\boldsymbol{\lambda}^{(2,i)}\right)=\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)$.
+	As $L_T$ is continuous and we have assumed that there exists a unique minimizer of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ for all $\boldsymbol{\lambda} \in \Lambda$, then $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is continuous in $\boldsymbol{\lambda}$ over all $\Lambda$.
+	As $g(x | \boldsymbol{\theta})$ is also continuous in $\boldsymbol{\theta}$, then for any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda$,
+	we have
+	\begin{align}
+		\left |
+		g\left(
+		x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)})
+		\right)
+		-
+		g\left(
+		x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})
+		\right)
+		\right |
+		& = \lim_{i\rightarrow\infty}
+		\left |
+		g\left(
+		x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1,i)})
+		\right)
+		-
+		g\left(
+		x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2,i)})
+		\right)
+		\right |\\
+		& \le \lim_{i\rightarrow\infty}c\|\boldsymbol{\lambda}^{(1,i)}-\boldsymbol{\lambda}^{(2,i)}\|_{2}\\
+		& = c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+	\end{align}
+	where $c$ is the Lipschitz constant in Lemma~\ref{lemma:lipschitz_lambda_ext_c}.
 \end{proof}
 
 \subsubsection{Proof for Lemma \ref{lemma:nonparam_smooth}}
