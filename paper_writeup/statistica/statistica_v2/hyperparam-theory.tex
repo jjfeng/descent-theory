@@ -734,11 +734,11 @@ Now we walk through a simple example with ridge penalties.
 	\end{split}
 	\label{eq:kkt_sobolev}
 	\end{align}
-	where $K^{(1/2)} = (K_1^{1/2} ... K_J^{1/2})$, $I$ is the $n\times n$ identity matrix, and $\tilde{I}$ is $J$ copies of $I$ stacked vertically.
+	where $K^{(1/2)} = (K_1^{1/2} ... K_J^{1/2})$ and $I$ is the $n\times n$ identity matrix.
 
 	To apply Theorem~\ref{thrm:train_val}, we need to characterize how $\hat{g}(\boldsymbol{\lambda})(\cdot)$ varies with $\boldsymbol{\lambda}$.
-	Though we can use Lemma~\ref{lemma:param_add} to determine the Lipschitz factor, it is simpler to derive bounds using the closed form solutions in \eqref{eq:kkt_sobolev}.
-	In particular, we have
+	Since we have the closed form solution to \eqref{eq:kkt_sobolev}, we will use it directly to come up with bounds for the Lipschitz factor $C_\Lambda(x | D^{(n_T)})$.
+	Using \eqref{eq:kkt_sobolev}, we have that
 	\begin{align}
 	\left \|
 	\nabla_{\lambda} \hat{g}(\boldsymbol{\lambda})(\boldsymbol{x})
