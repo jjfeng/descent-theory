@@ -644,11 +644,11 @@ Now we walk through a simple example with ridge penalties.
 	+ \sum_{j=1}^{J} \lambda_j \int_0^1 \left(g_j^{''}(x)\right)^{2} dx
 	\label{eq:smoothing_spline}
 	\end{align}
-	where the functional penalty here is typically known as the Sobolev penalty (CITE?).
+	where the functional penalty here is typically known as the Sobolev penalty.
 	(Suppose functions only range from 0 to 1.)
 	Again, let us assume that $\lambda_{\min} = n^{-\kappa}$ and $\lambda_{\max} = 1$.
-	In the univariate case, it is well-known that the solution to the smoothing spline problem is a natural cubic spline \citep{green1993nonparametric}.
-	One can easily extend this result to show that the solution to \eqref{eq:smoothing_spline} is the sum of natural cubic splines (cite GAM paper).
+	In the univariate case, it is well-known that the solution to the smoothing spline problem is a natural cubic spline \citep{green1993nonparametric, o1986automatic}.
+	One can easily extend this result to show that the solution to \eqref{eq:smoothing_spline} is the sum of natural cubic splines \citep{buja1989linear}.
 
 	The solution to \eqref{eq:smoothing_spline} turns out to be equivalent to a finite-dimensional problem.
 	Since the solution to \eqref{eq:smoothing_spline} must be the sum of natural cubic splines, we can parameterize the space using a Reproducing Kernel Hilbert Space with inner product
@@ -662,7 +662,7 @@ Now we walk through a simple example with ridge penalties.
 	+ \frac{1}{3}
 	(s \wedge t)^3
 	\end{align}
-	(CITE).
+	\citep{heckman2012theory}.
 	Then one can instead solve for \eqref{eq:smoothing_spline} over the functions $g$ of the form
 	\begin{align}
 	g(x_1,..., x_J) = \alpha_0 + \sum_{j=1}^J g_j(x_j)
