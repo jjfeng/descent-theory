@@ -643,137 +643,175 @@ Now we walk through a simple example with ridge penalties.
 	\label{eq:smoothing_spline}
 	\end{align}
 	where the functional penalty here is typically known as the Sobolev penalty (CITE?).
+	(Suppose functions only range from 0 to 1.)
+	Again, let us assume that $\lambda_{\min} = n^{-\kappa}$ and $\lambda_{\max} = 1$.
 	In the univariate case, it is well-known that the solution to the smoothing spline problem is a natural cubic spline \citep{green1993nonparametric}.
-	One can easily extend this result to show that the solution to \eqref{eq:smoothing_spline} is the sum of natural cubic splines.
-	
-	In this example, let us suppose that for $j = 1,...,J$, the covariates in the training set take on values in $\{\frac{1}{k}, ..., 1\}$.
-	Thus covariates along each axis are equally spaced.
-	Let $\boldsymbol{\theta}$ be the concatenation of vectors $\boldsymbol{\theta}_j \in \mathbb{R}^{k}$, where $\boldsymbol{\theta}_{ij}$ represents the value of the natural spline $g_j$ at $i/k$.
-	For each $j$, define matrix $M_{j}(D^{(n_T)}) \in \mathbb{R}^{n_T \times k}$ such that its $i$th row $M_{ij}(D^{(n_T)})$ satisfies $g_j(x_{ij}) = M_{ij}(D^{(n_T)}) \boldsymbol{\theta}_j$.
-	Let $M(D^{(n_T)})$ be concatenation of matrices $M_{j}(D^{(n_T)})$.
-	Let us suppose that the $n_T$ training points were chosen such that $M^\top(D^{(n_T)})M(D^{(n_T)})$ has rank $kJ$ with minimum eigenvalue $m(D^{(n_T)}) >0$.
-	
-	Using matrix notation, we can re-express \eqref{eq:smoothing_spline}
+	One can easily extend this result to show that the solution to \eqref{eq:smoothing_spline} is the sum of natural cubic splines (cite GAM paper).
+
+	The solution to \eqref{eq:smoothing_spline} turns out to be equivalent to a finite-dimensional problem.
+	Since the solution to \eqref{eq:smoothing_spline} must be the sum of natural cubic splines, we can parameterize the space using a Reproducing Kernel Hilbert Space with inner product
 	\begin{align}
+	\langle f, g \rangle = \int_{0}^1 f^{''}(x) g^{''}(x) dx
+	\end{align}
+	and the reproducing kernel
+	\begin{align}
+	R(s, t) = st(s \wedge t)
+	+ \frac{s + t}{2} (s \wedge t)^2
+	+ \frac{1}{3}
+	(s \wedge t)^3
+	\end{align}
+	(CITE).
+	Then one can instead solve for \eqref{eq:smoothing_spline} over the functions $g$ of the form
+	\begin{align}
+	g(x_1,..., x_J) = \alpha_0 + \sum_{j=1}^J g_j(x_j)
+	\end{align}
+	where the functions $g_j$ are split into a linear component and an orthogonal non-linear component
+	\begin{align}
+	g_j(x_j) = \alpha_{1j} x_j + \sum_{i=1}^n \theta_{ij} R(x_{ij}, x_j).
+	\end{align}
+	For notational simplicity, we will also denote $\vec{R}(x | D)_{ij} = R(x_{ij}, x_j)$.
+
+	Using this finite-dimensional representation, we find that
+	\begin{align}
+	\int_{0}^1 \left(g_j^{''}(x)\right)^{2} dx
+	= \sum_{u = 1}^n \sum_{v=1}^n \theta_{uj} \theta{vj} R(x_{uj}, x_{vj})
+	= \theta_j^\top K_j \theta_j
+	\label{eq:sobolev_finite}
+	\end{align}
+	where the matrix $K_j$ has elements
+	$
+	K_{j, (u, v)} = R(x_{uj}, x_{vj}).
+	$
+	Since any $g_j$ with non-zero $\boldsymbol{\theta}_j$ will have a positive Sobolev penalty, then the matrix $K_j$ must be positive definite.
+	Using the formulation above, we re-express \eqref{eq:smoothing_spline} as the finite-dimensional problem
+	\begin{align}
+	\hat{\alpha_0}(\boldsymbol{\lambda}),
+	\hat{\boldsymbol{\alpha}_1}(\boldsymbol{\lambda}),
 	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
-	& = \argmin_{\boldsymbol{\theta} \in \mathbb{R}^{kJ}}
+	& = \argmin_{\alpha_0, \boldsymbol{\alpha}_1, \boldsymbol{\theta}}
 	\frac{1}{2}
 	\left \|
-	y - M(D^{(n_T)}) \boldsymbol{\theta}
+	\boldsymbol{y} -
+	\alpha_0 \boldsymbol{1}
+	- X \boldsymbol{\alpha}_1
+	- K \boldsymbol{\theta}
 	\right \|^2
 	+
 	\frac{1}{2}
 	\boldsymbol{\theta}^\top
 	\diag \left (
 	\left \{
-	\lambda_j K
+	\lambda_j K_j
 	\right \} \right ) \boldsymbol{\theta}.
 	\label{eq:matrix_sobolev}
 	\end{align}
-	where $K = QR^{-1}Q^\top$ \citep{green1993nonparametric}.
-	$Q$ is a banded $k \times (k-2)$ matrix with zeros except for the entries
-	$$
-	q_{i-1,i} = k, q_{i-1,i} = -2k, q_{i + 1,i} = k.
-	$$
-	%JF provide indices for these matrices
-	$R$ is a banded $(k-2) \times (k-2)$ matrix with zeros everywhere except for entries
-	$$
-	r_{ii} = \frac{2}{3k}, r_{i, i+ 1} = r_{i+ 1, i} = \frac{1}{6k}.
-	$$
-	%JF provide indices for these matrices
-	$R$ is a strictly diagonal dominant matrix and therefore positive-definite.
-	$K$ is therefore positive semi-definite.
+	where the matrix $K = (K_1 ... K_J)$.
+	In order to make the fitted functions $\hat{g}_j$ identifiable, we add the usual constraint that $\sum_{i=1}^n g_j(x_{ij}) = 0$ for all $j$.
+	We also assume that $X^\top X$ is nonsingular to ensure that there is a unique $\hat{\alpha}_1$.
 
-	To apply Theorem~\ref{thrm:train_val}, we need to be able to characterize how the natural spline $\hat{g}_j(\boldsymbol{\lambda})(\cdot)$ varies with $\boldsymbol{\lambda}$.
-	To accomplish this, we use Theorem 2.1 in \citet{green1993nonparametric} which states that the second derivative of $\hat{g}_j$ at covariates $\{1/k, ..., 1\}$ is equal to $\hat{\boldsymbol{\gamma}}_j = R^{-1} Q^\top \hat{\boldsymbol{\theta}}_j$.
-	Moreover, we can calculate the value of the natural spline at any point $x$ using $\hat{\boldsymbol{\theta}}_j$ and $\hat{\boldsymbol{\gamma}}_j$.
-	Let $\tau = \lfloor kx \rfloor$.
-	From section 2.4.1 in \citet{green1993nonparametric}, we have
+	The KKT conditions then gives us
 	\begin{align}
+	\hat{\alpha}_0 &= \frac{1}{n}\sum_{i=1}^n y_i \\
+	\hat{\boldsymbol{\alpha}}_1(\boldsymbol{\lambda})
+	& = (X^\top X)^{-1} X^\top
+	(
+	\boldsymbol{y} - \hat{\alpha}_0 \boldsymbol{1}
+	- K \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	)\\
 	\begin{split}
-	\hat{g}_j(\boldsymbol{\lambda} | D^{(n_T)})(x) &
-	=
+	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	& =
+	\diag(K_j^{-1/2})
 	\left(
-	(kx - \tau) \hat{\theta}_{j,\tau + 1}(\boldsymbol{\lambda} | D^{(n_T)})
-	+ ((\tau + 1) - kx) \hat{\theta}_{j, \tau}(\boldsymbol{\lambda} | D^{(n_T)})
-	\right)\\
-	& \quad - \frac{1}{6}
-	\left (t - \frac{\tau}{k} \right )
-	\left (\frac{\tau + 1}{k} - t \right)\\
-	& \quad \times
-	\{
-	\left(
-	1 + (kx - \tau) \hat{\gamma}_{j,\tau + 1}(\boldsymbol{\lambda} | D^{(n_T)})
-	\right)
-	\left(
-	1 + ((\tau + 1) - kx) \hat{\gamma}_{j,\tau}(\boldsymbol{\lambda} | D^{(n_T)})
-	\right)
-	\}.
+	K^{(1/2)\top}
+	(I - X (X^\top X)^{-1} X^\top)
+	K^{(1/2)} + \diag(\lambda_j I)
+	\right)^{-1}
+	K^{(1/2)\top} \\
+	& \quad \times (I - X (X^\top X)^{-1} X^\top)
+	(I - \frac{1}{n}\boldsymbol{1} \boldsymbol{1}^\top)
+	\boldsymbol{y}
 	\end{split}
+	\label{eq:kkt_sobolev}
 	\end{align}
-	Using the above equation, we can show that $\hat{g}_j(\boldsymbol{\lambda} | D^{(n_T)})(x)$ is Lipschitz in $\boldsymbol{\lambda}$ for any $x$.
-	In particular, we have the Lipschitz relation
+	where $K^{(1/2)} = (K_1^{1/2} ... K_J^{1/2})$, $I$ is the $n\times n$ identity matrix, and $\tilde{I}$ is $J$ copies of $I$ stacked vertically.
+
+	To apply Theorem~\ref{thrm:train_val}, we need to characterize how $\hat{g}(\boldsymbol{\lambda})(\cdot)$ varies with $\boldsymbol{\lambda}$.
+	Though we can use Lemma~\ref{lemma:param_add} to determine the Lipschitz factor, it is simpler to derive bounds using the closed form solutions in \eqref{eq:kkt_sobolev}.
+	In particular, we have
 	\begin{align}
-	& \left | \hat{g}_j(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) - \hat{g}_j(\boldsymbol{\lambda}^{(2)} | D^{(n_T)})(x) \right | \\
-	& \le
 	\left \|
-	\left . \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(1)} | D^{(n_T)}) - \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(2)} | D^{(n_T)}) \right |_{D^{(n_T)}}
-	\right \|_\infty
-	\left(
-	1 + \frac{1}{6 k^2} \sup_{\|a\|_\infty = 1} \|R^{-1} Q^\top a\|_\infty
-	\right)\\
-	& \le
-	\left \|
-	\left . \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(1)} | D^{(n_T)}) - \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}^{(2)} | D^{(n_T)}) \right |_{D^{(n_T)}}
+	\nabla_{\lambda} \hat{g}(\boldsymbol{\lambda})(\boldsymbol{x})
 	\right \|_2
-	\ell(x).
+	& =
+	\left \|
+	\boldsymbol{x}^\top
+	\nabla_{\lambda} \hat{\boldsymbol{\alpha}}_1(\boldsymbol{\lambda})
+	+ \vec{R}(\boldsymbol{x} | D)^\top
+	\nabla_{\lambda} \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	\right \|_2\\
+	& \le
+	\|\boldsymbol{x}\|_2
+	\frac{c_{D^{(n_T)}}^2}{\lambda_{\min}^2}
+	+ \|\vec{R}(\boldsymbol{x} | D)^\top\|_2
+	\frac{c_{D^{(n_T)}}}{\lambda_{\min}^2}
 	\end{align}
-	where $\ell$ is the constant function
+%	\left\|
+%	\nabla_{\lambda} \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+%	\right \|_2
+%	& \le \frac{c_{D^{(n_T)}}}{\lambda_{\min}^2}
+%	% (\|\epsilon\|_T + \|f^*\|_T)
+%	\\
+%	\left\|
+%	\nabla_{\lambda} \hat{\boldsymbol{\alpha}_1}(\boldsymbol{\lambda})
+%	\right \|_2
+%	& =
+%	\left\|
+%	(X^\top X)^{-1} X^\top K \nabla_{\lambda} \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+%	\right\|_2 \\
+%	& \le
+%	c_{D^{(n_T)}}
+%	\left\|
+%	\nabla_{\lambda} \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+%	\right \|_2
+%	\end{align}
+	for a constant $c_{D^{(n_T)}} > 0$ that depends on the training data.
+	As $\lambda_{\min} = n^{-\kappa}$, we have that $\hat{g}(\boldsymbol{x}|\boldsymbol{\lambda})$ is Lipschitz with
 	\begin{align}
-	\ell \equiv 1 + \frac{1}{6 k^2} \sup_{\|a\|_\infty = 1} \|R^{-1} Q^\top a\|_\infty.
-	\label{eq:sobolev_ell}
-	\end{align}
-	Moreover, the Hessian of the objective function
-	\begin{align}
-	M(D^{(n_T)})^\top M(D^{(n_T)}) + \diag \left (
-	\left \{
-	\lambda_j K
-	\right \} \right )
-	\end{align}
-	has minimum eigenvalue $m(D^{(n_T)})$ for all $\boldsymbol{\lambda} \in \Lambda$ as $K$ is positive semi-definite.
-	
-	As in the previous example, suppose that the penalty parameters are tuned over $\Lambda = \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ using a training-validation split with $\lambda_{\min} = n^{-\kappa}$ for some $\kappa \ge 1$ and $\lambda_{\max} = 1$.
-	From Lemma~\ref{lemma:param_add}, we then have
-	\begin{align}
-	C_{\Lambda}(x|D^{(n_T)}) = n^{\kappa + 1} \frac{J^2}{m(D^{(n_T)})} C^*_{D^{(n_T)}}
+	C_\Lambda(\boldsymbol{x} | D^{(n_T)})
+	=
+	c_{D^{(n_T)}}
+	% \left (\|\epsilon\|_T + \|f^*\|_T \right )
+	n^{2\kappa}
+	\left(
+	c_{D^{(n_T)}} \|\boldsymbol{x}\|_2
+	+ \|\vec{R}(\boldsymbol{x}| D^{(n_T)}) \|_2
+	\right).
 	\label{eq:sobolev_lipschitz}
 	\end{align}
-	where
-	$$
-	C^*_{D^{(n_T)}} =
-	\ell^2
-	\sqrt{\|\epsilon\|_T^2  + 2 \sum_{j=1}^J \int_0^1 (g_j^{*''}(x))^2 dx }.
-	$$
-	We plug in \eqref{eq:sobolev_lipschitz} to Theorem~\ref{thrm:train_val} to get that the following holds with high probability
+	
+	We plug in \eqref{eq:sobolev_lipschitz} to Theorem~\ref{thrm:train_val} to get that with high probability, we have
 	%JF update this to match appendix!
 	\begin{align}
 	\begin{split}
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
 	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
-	& + O_p\left (
-	\frac{
-		J (\kappa + 1)
-		\log( J (m(D^{(n_T)}))^{-1} C^*_{D^{(n_T)}} n + 1)
-	}{n_{V}}
-	\right ) \\
-	& + O_p\left(
+	& + O_p \left(\frac{J\log \left (n
+		\left \|
+		\|\boldsymbol{x}\|_2
+		+ \|\vec{R}(\boldsymbol{x}| D^{(n_T)}) \|_2
+		\right \|_V
+		\right )}{n_{V}} \right)
+	\\
+	& + O_p \left(
 	\sqrt{
-		\frac{
-			J (\kappa + 1) \log(J (m(D^{(n_T)}))^{-1} C^*_{D^{(n_T)}} n + 1)
-		}{n_{V}}
-		\left\Vert
-		g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)
-		\right\Vert_{V}^2
+		\frac{J\log \left (n
+			\left \|
+			\|\boldsymbol{x}\|_2
+			+ \|\vec{R}(\boldsymbol{x}| D^{(n_T)}) \|_2
+			\right \|_V
+			\right )}{n_{V}}
+		\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}}| T) \right \Vert^2_{V}
 	}
 	\right ).
 	\end{split}
