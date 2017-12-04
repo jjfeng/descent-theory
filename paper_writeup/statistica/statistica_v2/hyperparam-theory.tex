@@ -48,6 +48,7 @@
 \newtheorem{assump}{Assumption}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\spann}{span}
+\newcommand{\textred}[1]{\textcolor{red}{#1}}
 \pagestyle{fancy}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -139,12 +140,16 @@ Many model-estimation procedures can be formulated as selecting a model from som
 %JF:  I would like to divide by number of obs in T
 where $P_j$ are penalty functions and $\lambda_j$ are penalty parameters. As suggested by the notation in \eqref{eq:intro_pen_reg}, the penalty parameters are the hyper-parameters in this model-estimation procedure.
 
-Given a set of possible hyper-parameters $\Lambda$, for a given training dataset $T$ and norm $\|\cdot\|$, there is some oracle hyper-parameter $\tilde{\boldsymbol{\lambda}} \in \Lambda$ that minimizes the difference between the fitted model $\hat{g}\left(\boldsymbol{\lambda|}T\right)$ and the true model:
+%JF english, man...
+Given a set of possible hyper-parameters $\Lambda$, a training dataset $T$, and norm $\|\cdot\|$, there exist oracle hyper-parameters $\tilde{\Lambda} \subseteq \Lambda$ that minimize the difference between the fitted model $\hat{g}\left(\boldsymbol{\lambda|}T\right)$ and the true model:
 %JF: is reviewer2 referring to this?
 \[
-\tilde{\boldsymbol{\lambda}} = \argmin_{\lambda \in \Lambda} \left\|g^{*} - \hat{g}\left(\boldsymbol{\lambda|}T\right)\right\|^2.
+\tilde{\Lambda} = \argmin_{\lambda \in \Lambda} \left\|g^{*} - \hat{g}\left(\boldsymbol{\lambda|}T\right)\right\|^2.
 \]
-$\tilde{\boldsymbol{\lambda}}$ is unknown and often estimated using a single training/validation split or cross-validation. The basic idea is to fit models on a random partition of the observed data and evaluate their error on the remaining data. The final hyper-parameters $\hat{\boldsymbol{\lambda}}$ are the minimizer of the error on this validation set. For a more complete review of cross-validation, refer to \citet{arlot2010survey}.
+$\tilde{\Lambda}$ is unknown and so a sample-splitting procedure is often used to find a $\hat{\boldsymbol{\lambda}}$ in $\tilde{\Lambda}$.
+The basic idea is to fit models on a random partition of the observed data and evaluate their error on the remaining data.
+The final hyper-parameters $\hat{\boldsymbol{\lambda}}$ are chosen to minimize the error on this validation set.
+For a more complete review of cross-validation, refer to \citet{arlot2010survey}.
 
 The performance of split-sample validation procedures is typically characterized by an oracle inequality that bounds the generalization error of the expected model selected from the validation set procedure. For $\Lambda$ that are finite, oracle inequalities have been established for a single training/validation split \citep{gyorfi2006distribution} and a general cross-validation framework \citep{van2003unified, van2004asymptotic}. To handle $\Lambda$ over a continuous range, one can use entropy-based approaches \citep{lecue2012oracle}.
 %JF: I would like to add reasons for why we want to think about a continuous range because people don't typically think about this.
@@ -154,26 +159,27 @@ The goal of this paper is to characterize the performance of models when the hyp
 To show these results, we prove that finite-sample oracle inequalities of the form
 \begin{equation}
 \label{thrm:intro_oracle_ineq}
-\left \| g^* - \hat{g}\left (\hat{\boldsymbol{\lambda}}, T \right ) \right \|^2
+\left \| g^* - \hat{g} (\hat{\boldsymbol{\lambda}} | T ) \right \|^2
 \le
 (1+a)
-\underbrace{\inf_{\lambda \in \Lambda} \left \| g^* - \hat{g}\left (\boldsymbol{\lambda} , T \right ) \right \|^2}_{\text{Oracle error}}
-+ \delta\left(J,n\right)
+\underbrace{\inf_{\lambda \in \Lambda} \left \| g^* - \hat{g}\left (\boldsymbol{\lambda} \middle | T \right ) \right \|^2}_{\text{Oracle error}}
++ \delta \left(J,n\right)
 \end{equation}
-are satisfied with high probability, where $\| \cdot \|$ is some norm;
 %JF: Is review2 referring to this?!
-$a$ is some nonnegative constant; and $\delta(J,n)$ is a function of the number of hyper-parameters $J$ to tune and the number of validation samples $n$.
-Under the assumption that the model-estimation procedure is smoothly parameterized by the hyper-parameters, we find that $\delta$ scales linearly in $J$. So for parametric model-estimation procedures, the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself.
+are satisfied with high probability for norm $\| \cdot \|$, constant $a \ge 0$, and remainder $\delta(J,n)$ that depends on the number of tuned hyper-parameters $J$ and the number of samples $n$.
+Under the assumption that the model -estimation procedure is \textred{Lipschitz} in the hyper-parameters, we find that $\delta$ scales linearly in $J$.
 % be careful here as some reviewer wants to argue log J also happens when you add parameters to the model itself
-For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle error and the number of hyper-parameters can actually grow without affecting the asymptotic convergence rate.
+\textred{So for parametric model-estimation procedures, the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself.}
+For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle error and \textred{the number of hyper-parameters can actually grow without affecting the asymptotic convergence rate}.
 
-In this paper, we also specialize these results to penalized regression models of the form \eqref{eq:intro_pen_reg}. We show that the fitted model is indeed smoothly parameterized by the penalty parameters so our oracle inequalities apply. Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-way combinations. Adding more penalties may lead to better models.
+In this paper, we also specialize these results to penalized regression models of the form \eqref{eq:intro_pen_reg}. We show that the fitted model is indeed \textred{Lipschitz} in the penalty parameters so our oracle inequalities apply. Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-way combinations. Adding more penalties may lead to better models.
 
 During our literature search, we found few theoretical results addressing the relationship between the number of hyper-parameters and generalization error of the selected model. 
 Much of the previous work only considered tuning a one-dimensional hyper-parameter over a finite $\Lambda$, proving asymptotic optimality \citep{van2004asymptotic} and finite-sample oracle inequalities \citep{van2003unified, gyorfi2006distribution}. Others have addressed split-sample validation for specific penalized regression problems with a single penalty parameter, such as linear model selection \citep{li1987asymptotic, shao1997asymptotic, golub1979generalized, chetverikov2016cross, chatterjee2015prediction}. Only \citet{lecue2012oracle} has a result that is relevant to answering our question of interest by using techniques from empirical process theory. A potential reason for this dearth of literature is that, historically, tuning multiple hyper-parameters has been computationally difficult. However, there have been many proposals recently for overcoming this computational hurdle \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
 %JF: cite myself? cite more recent snoek?
 
-Section \ref{sec:main_results} presents oracle inequalities for model-estimation procedures that are smoothly parameterized by the hyper-parameters. These results answer our question regarding how the number of hyper-parameters affects the model error.
+Section \ref{sec:main_results} presents oracle inequalities for model-estimation procedures that are \textred{Lipschit} in the hyper-parameters.
+These results answer our question regarding how the number of hyper-parameters affects the model error.
 Section \ref{sec:examples} applies these results to penalized regression models.
 Section \ref{sec:simulations} provides a simulation study to support our theoretical results.
 Section \ref{sec:discussion} discusses our findings and potential future work.
@@ -185,56 +191,62 @@ Oracle inequalities for general model-estimation procedures and proofs for all t
 
 In this section, we establish oracle inequalities for models where the hyper-parameters are tuned by a single training/validation split and cross-validation. We first introduce some notation and formalize the model-estimation procedure. 
 
-Let $D^{(n)}$ denote a dataset with $n$ samples from the model \eqref{true_model}. The model-estimation procedure accepts some hyper-parameter of dimension $J$ and training data of size $n_T$ to output a fitted model from some model class $\mathcal{G}$. This can be formulated as an operator $\hat{g}^{(n_T)}(\cdot | D^{(n_T)})$ that maps a hyper-parameter vector $\boldsymbol{\lambda}$ from some set $\Lambda \subseteq \mathbb{R}^J$ to a function in $\mathcal{G}$.
+Let $D^{(n)}$ denote a dataset with $n$ samples from the model \eqref{true_model}. The model-estimation procedure $\hat{g}$ is a set of functions $\{\hat{g}^{(n_T)}\}$ where $\hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})$ maps hyper-parameter $\boldsymbol{\lambda} \in \Lambda \subseteq \mathbb{R}^J$ and training data $D^{(n_T)}$ to a function in $\mathcal{G}$.
 
-In this section, we focus on model-estimation procedures that are Lipschitz.
+In this \textred{paper}, we focus on model-estimation procedures that are Lipschitz.
 \begin{definition}
 	\label{def:smooth_funcs}
-	Let $\mathcal{F}$ be a function class from $\mathcal{X} \subseteq \mathbb{R}^p \mapsto \mathbb{R}$. Let $\Lambda \subseteq \mathbb{R}^J$.
-	The operator $\hat{f}: \Lambda \mapsto \mathcal{F}$ is Lipschitz with function $C:\mathcal{X} \mapsto \mathbb{R}$ in $\boldsymbol{\lambda}$ over $\Lambda$ if for all $\boldsymbol{x} \in \mathcal{X}$
+	Let $\mathcal{G}$ be a function class from $\mathcal{X} \subseteq \mathbb{R}^p \mapsto \mathbb{R}$.
+	Let $\Lambda \subseteq \mathbb{R}^J$.
+	The operator $g: \Lambda \mapsto \mathcal{F}$ is $C_\Lambda$-Lipschitz in $\boldsymbol{\lambda}$ over $\Lambda$ if there is some function $C_{\Lambda}:\mathcal{X} \mapsto \mathbb{R}^+$ such that for all $\boldsymbol{x} \in \mathcal{X}$,
 	\begin{equation}
-	\left | \hat{f}(\boldsymbol \lambda)(\boldsymbol{x}) - \hat{f}(\boldsymbol \lambda ')(\boldsymbol{x}) \right |
+	\left | g(\boldsymbol \lambda)(\boldsymbol{x}) - g(\boldsymbol \lambda ')(\boldsymbol{x}) \right |
 	\le
-	C(\boldsymbol{x}) \| \boldsymbol \lambda - \boldsymbol \lambda' \|_2 
+	C_{\Lambda}(\boldsymbol{x}) \| \boldsymbol \lambda - \boldsymbol \lambda' \|_2 
 	\quad
 	\forall \boldsymbol \lambda,\boldsymbol \lambda' \in \Lambda.
 	\label{eq:smooth_funcs}
 	\end{equation}
 \end{definition}
-We hypothesize that many model-estimation procedures satisfy this Lipschitz assumption since such procedures are well-behaved.
-%JF: reviewer said reword
-Section \ref{sec:examples} shows that penalized regression models indeed satisfy this assumption. The following results in Sections~\ref{sec:single} and \ref{sec:cv} show that the contribution to the error from tuning multiple hyper-parameters for such procedures is roughly parametric. Hence for semi- or non-parametric model-estimation procedures, the error from tuning a fixed number of hyper-parameters is negligible. From these results, we can specify a bound on the rate at which the number of hyper-parameters can grow without asymptotically increasing the generalization error of the selected model.
+%JF: reviewer said reword - is this better?
+We believe that many model-estimation procedures satisfy this Lipschitz assumption as procedures that are well-behaved in their hyper-parameters tend to be easier to use and thereby more popular.
+For instance, we show in Section \ref{sec:examples} that penalized regression models indeed satisfy this assumption.
+In the following sections, we show that the contribution to the error from tuning multiple hyper-parameters for such procedures is roughly parametric.
+%JF removing sentences cause it seems repetitive
+%Hence for semi- and non-parametric model-estimation procedures, the error from tuning a fixed number of hyper-parameters is negligible.
+%Moreover, we can specify an upper bound on the rate at which the number of hyper-parameters can grow without asymptotically increasing the generalization error of the selected model.
 
 \subsection{A Single Training/Validation Split}\label{sec:single}
 
-For a single training/validation split, the dataset $D^{(n)}$ is randomly partitioned into a training set $T = (X_T, Y_T)$ and validation set $V = (X_V, Y_V)$ with $n_T$ and $n_V$ observations, respectively. The selected hyper-parameter $\hat{\boldsymbol{\lambda}}$ is the minimizer of the validation loss
+When tuning hyper-parameters using a single training/validation split, the dataset $D^{(n)}$ is randomly partitioned into a training set $T = (X_T, Y_T)$ and validation set $V = (X_V, Y_V)$ with $n_T$ and $n_V$ observations, respectively.
+The selected hyper-parameter $\hat{\boldsymbol{\lambda}}$ is a minimizer of the validation loss
 \begin{equation}
 \label{eq:train_val_lambda}
-\hat{\boldsymbol \lambda} = \argmin_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}^{(n_T)}( \boldsymbol \lambda | T) \right \|_{V}^{2}
+\hat{\boldsymbol \lambda} \in \argmin_{\boldsymbol{\lambda} \in\Lambda} \frac{1}{2} \left \| y-\hat{g}^{(n_T)}( \boldsymbol \lambda | T) \right \|_{V}^{2}
 \end{equation}
-where $\| h \|^2_{V}=\frac{1}{n_V}\sum_{i\in V} h^2(x_i, y_i)$ for any function $h$. 
+where $\| h \|^2_{V}=\frac{1}{n_V}\sum_{(x_i, y_i)\in V} h^2(x_i, y_i)$ for any function $h$.
 
-We now present a finite-sample oracle inequality for the single training/validation split assuming the model-estimation procedure is Lipschitz. Our oracle inequality is sharp, i.e. $a=0$ in \eqref{thrm:intro_oracle_ineq}, unlike most other work \citep{gyorfi2006distribution, lecue2012oracle, van2003unified}.
-Also this theorem holds with very few assumptions (with the tradeoff of only being able to conclude things about the validation points) -- at least mention this somewhere.
+We now present a finite-sample oracle inequality for the single training/validation split assuming the model-estimation procedure is Lipschitz.
+Our oracle inequality is sharp, i.e. $a=0$ in \eqref{thrm:intro_oracle_ineq}, unlike most other work \citep{gyorfi2006distribution, lecue2012oracle, van2003unified}.
+This theorem requires minimal assumptions -- it only requires that $\epsilon$ are sub-gaussian random variables and that the model-estimation procedure is Lipschitz.
+The tradeoff is that our oracle inequality only characterizes the fitted model at the validation covariates.
 Note that the result below is a special case of Theorem \ref{thrm:train_val_complicated} in Appendix \ref{appendix:train_val}, which applies to general model-estimation procedures.
 \begin{theorem}
 	\label{thrm:train_val}
 	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$.
 	% ONLY necessary for the validation set
-	Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameters $b$ and $B$:
+	Suppose independent random variables $\epsilon_i$ associated with the validation data $(x_i, y_i) \in V$ have expectation zero and are uniformly sub-Gaussian with parameters $b$ and $B$:
 	$$
-	\max_{i=1,...,n} B^2 \left ( \mathbb{E} e^{|\epsilon_i|^2/B^2} - 1 \right ) \le b^2.
+	\max_{i: (x_i, y_i) \in V} B^2 \left ( \mathbb{E} e^{|\epsilon_i|^2/B^2} - 1 \right ) \le b^2.
 	$$
-	
 	Let training data $T$ be fixed, as well as the covariates of the validation set $X_V$.
-	
-	Now suppose there exists a function $C_\Lambda: \mathbb{R}^p \mapsto \mathbb{R}$ such that $\hat g^{(n_T)}(\boldsymbol{\lambda} |D^{(n_T)})$ is Lipschitz with $C_\Lambda(\cdot)$ over $\Lambda$.
-	Let
+	Let the oracle risk be denoted
 	\begin{equation}
-	\tilde{\boldsymbol \lambda} = \argmin_{\lambda \in \Lambda} \left \| g^*-\hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \|_{V}^{2}.
+	\tilde{R}(X_V|T) = \argmin_{\lambda \in \Lambda} \left \| g^*-\hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \|_{V}^{2}.
 	\label{eq:tilde_lambda_def}
 	\end{equation}
 	
+	Now suppose there exists a function $C_\Lambda: \mathbb{R}^p \mapsto \mathbb{R}$ such that $\hat g^{(n_T)}(\boldsymbol{\lambda} |D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\boldsymbol{\lambda}$ over $\Lambda$.
 	Then there is a constant $c>0$ only depending on $b$ and $B$ such that for all $\delta$ satisfying
 	\begin{equation}
 	\delta^{2}
@@ -242,41 +254,40 @@ Note that the result below is a special case of Theorem \ref{thrm:train_val_comp
 	c \left (
 	\frac{J \log(\|C_\Lambda(\cdot |T)\|_V \Delta_{\Lambda} n + 1)}{n_{V}}
 	\vee 
-	\sqrt{\frac{J \log(\|C_\Lambda(\cdot |T)\|_V \Delta_{\Lambda} n + 1)}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+	\sqrt{\frac{J \log(\|C_\Lambda(\cdot |T)\|_V \Delta_{\Lambda} n + 1)}{n_{V}}
+		\tilde{R}(X_V|T)}
 	\right )
 	\label{thrm:train_val_delta}
 	\end{equation}
 	we have
 	\begin{align}
-	& Pr\left(
+	Pr\left(
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 -
-	\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
+	\tilde{R}(X_V|T)
 	\ge\delta^2
 	\middle | 
 	T, X_V
-	\right )\\
-	&\le c\exp\left(-\frac{n_{V}\delta^{4}}{
-		c^{2}
-		\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
-	}\right) \\
-	& +c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right).
+	\right )
+	&\le c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2} \tilde{R}(X_V|T)}\right)
+	+ c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right).
 	\end{align}
 	
 \end{theorem}
 
-Theorem \ref{thrm:train_val} states that with high probability, the difference between the true model and the selected model is bounded above by the difference between the true model and the oracle model plus $\delta^2$. Hence $\delta^2$ can be thought of as the error incurred during the hyper-parameter selection process. As seen in \eqref{thrm:train_val_delta}, it is the maximum of two terms: a near-parametric term and a geometric mean of the near-parametric term and the oracle error. To see this more clearly, we express Theorem \ref{thrm:train_val} using asymptotic notation.
+Theorem \ref{thrm:train_val} states that with high probability, the difference between the true model and the selected model is bounded above by the difference between the true model and the oracle model plus $\delta^2$. Hence $\delta^2$ can be thought of as the error incurred during the hyper-parameter selection process. As seen in \eqref{thrm:train_val_delta}, it is the maximum of two terms: a near-parametric term and the geometric mean of the near-parametric term and the oracle risk. To see this more clearly, we express Theorem \ref{thrm:train_val} using asymptotic notation.
 \begin{corollary}
 	\label{corr:train_val}
 	Under the assumptions given in Theorem \ref{thrm:train_val}, we have
 	\begin{align}
 	%JF please update
-	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 &\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
+	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 &
+	\le \min_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( {\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
 	& + O_p \left(\frac{J\log (n \|C_\Lambda\|_V \Delta_{\Lambda} )}{n_{V}} \right) 
 	\label{eq:asym_train_val_theorem1} \\
 	& + O_p \left(
 	\sqrt{
 		\frac{J \log (n \|C_\Lambda\|_V \Delta_{\Lambda} )}{n_{V}}
-		\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}}| T) \right \Vert^2_{V}
+		\min_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( {\boldsymbol{\lambda}} | T) \right \Vert^2_{V}
 	}
 	\right ).
 	\label{eq:asym_train_val_theorem2}

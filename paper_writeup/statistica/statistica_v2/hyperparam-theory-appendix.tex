@@ -98,28 +98,29 @@ $\ $\par \fontsize{12}{14pt plus.8pt minus .6pt}\selectfont
 
 \section{Appendix}\label{sec:proofs}
 
-We will use the following notation: for functions $f$ and $g$ and a dataset $D$ with $m$ samples, we denote the inner product of $f$ and $g$ at covariates $D$ as $\langle f,g \rangle_{D} = \frac{1}{m} \sum_{x_i \in D} f(x_i) g(x_i) $.
+We will use the following notation: for functions $f$ and $g$ and a dataset $D$ with $m$ samples, we denote the inner product of $f$ and $g$ at covariates $D$ as $\langle f,g \rangle_{D} = \frac{1}{m} \sum_{(x_i, y_i) \in D} f(x_i, y_i) g(x_i, y_i) $.
 
 \subsection{A single training/validation split}
 \label{appendix:train_val}
 
-Theorem \ref{thrm:train_val} is a special case of Theorem \ref{thrm:train_val_complicated}, which applies to general model-estimation procedures. The proof is based on the inequality below. Inequalities of this form are often called ``basic inequalities'', since they are derived directly from the definition. In this ``basic inequality'' we see that the quantity of interest, the difference in the error of the selected model and the oracle model, is bounded by an empirical process term.
+Theorem \ref{thrm:train_val} is a special case of Theorem \ref{thrm:train_val_complicated}, which applies to general model-estimation procedures. The proof is based on the so-called ``basic inequality'' below.
 
-\begin{lemma}{Basic inequality}
+\begin{lemma}
+	For any $\tilde{\boldsymbol{\lambda}} \in \tilde{\Lambda}$, we have
 	\begin{equation}
 	\label{thrm:basic_ineq}
 	\left \| g^* - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \|^2_V 
 	- \left \| g^* - \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) \right \|^2_V
 	\le 
-	\left \langle \epsilon, \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \rangle_V
+	2 \left \langle \epsilon, \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \rangle_V
 	\end{equation}
 \end{lemma}
 
 \begin{proof}
-	By definition,
+	The desired result can be attained by rearranging the definition of $\hat{\boldsymbol{\lambda}}$
 	\begin{equation}
-	\left \| y - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \|^2_V \le 
-	\left \| y - \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) \right \|^2_V.
+	\left \| y - \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}}|T) \right \|^2_V \le
+	\min_{\tilde{\boldsymbol{\lambda}} \in \tilde{\Lambda}} \left \| y - \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}}|T) \right \|^2_V.
 	\end{equation}
 \end{proof}
 
@@ -140,17 +141,17 @@ We will bound the empirical process term using the following Lemma, which is a s
 \begin{lemma}
 	\label{lemma:cor83}
 	Suppose $D^{(m)} = \{x_1,...,x_m\}$ are fixed and $\epsilon_1,...,\epsilon_m$ are independent random variables with mean zero and uniformly sub-gaussian with parameters $b$ and $B$. Suppose
-	the model class $\mathcal{F}$ has elements $\sup_{f\in\mathcal{F}}\|f\|_{D^{(m)}}\le R$
-	and satisfies
+	the model class $\mathcal{F}$ satisfies $\sup_{f\in\mathcal{F}}\|f\|_{D^{(m)}}\le R$
+	and
 	\[
-	\psi(R)\ge\int_{0}^{R}H^{1/2}(u,\mathcal{F},\|\cdot\|_{D^{(m)}})du.
+	\int_{0}^{R}H^{1/2}(u,\mathcal{F},\|\cdot\|_{D^{(m)}})du \le \mathcal{J} (R).
 	\]
 	
 	
 	There is a constant $a > 0$ dependent only on $b$ and $B$ such that
 	for all $\delta>0$ satisfying
 	\[
-	\sqrt{m}\delta\ge a(\psi(R)\vee R),
+	\sqrt{m}\delta\ge a(\mathcal{J} (R)\vee R),
 	\]
 	we have 
 	\[
@@ -166,64 +167,76 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 \begin{theorem}
 	\label{thrm:train_val_complicated}
 	Consider a set of hyper-parameters $\Lambda$.
-	% ONLY necessary for the validation set
-	Suppose independent random variables $\epsilon_1, ... \epsilon_n$ have expectation zero and are uniformly sub-Gaussian with parameter $b$ and $B$.
 	Let training data $T$ be fixed, as well as the covariates of the validation set $X_V$.
-	
-	Suppose there is a function $\psi(\cdot | T):\mathbb{R}\mapsto\mathbb{R}$ and constant $r > 0$ such that
+	Let the oracle risk be denoted
 	\begin{equation}
-	\label{eq:dudley_bound}
-	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le\psi(R| T) \quad \forall R>r
+	\tilde{R}(X_V|T) = \argmin_{\lambda \in \Lambda} \left \| g^*-\hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \|_{V}^{2}.
+	\label{eq:tilde_lambda_def}
 	\end{equation}
 	
-	Also, suppose $\psi\left(u | T \right)/u^{2}$ is non-increasing in $u$ for all $u > r$.
-	Let $\tilde{\boldsymbol \lambda}$ be defined as in \eqref{eq:tilde_lambda_def}.
-	
+	Suppose independent random variables $\epsilon_i$ for validation set $V$ have expectation zero and are uniformly sub-Gaussian with parameter $b$ and $B$.
+	Suppose there is a function $\mathcal{J} (\cdot | T):\mathbb{R}\mapsto\mathbb{R}$ and constant $r > 0$ such that
+	\begin{equation}
+	\label{eq:dudley_bound}
+	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du\le \mathcal{J} (R| T) \quad \forall R>r
+	\end{equation}
+	Also, suppose $\mathcal{J} \left(u | T \right)/u^{2}$ is non-increasing in $u$ for all $u > r$.
+
 	Then there is a constant $c>0$ only depending on $b$ and $B$ such that for all $\delta$ satisfying
 	\begin{equation}
 	\label{eq:train_val_delta_condn}
 	\sqrt{n_V}\delta^{2}
 	\ge
 	c \left ( 
-	\psi(\delta| T)
+	\mathcal{J}(\delta| T)
 	\vee 
 	\delta
 	\vee
-	\psi \left (
-	4\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}
-	\middle | T
+	\mathcal{J} \left (\tilde{R}(X_V|T)\middle | T
 	\right ) 
 	\vee
-	4 \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}
-	\right ),
+	4 \tilde{R}(X_V|T) \right ),
 	\end{equation}
 	we have
-	\begin{align*}
-		& Pr\left(
+	\begin{align}
+		Pr\left(
 		\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 -
-		\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
+		\tilde{R}(X_V|T)
 		\ge\delta^2
 		\middle | 
 		T, X_V
-		\right )\\
+		\right )
 		&\le c\exp\left(-\frac{n_{V}\delta^{4}}{
 			c^{2}
-			\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
+			\tilde{R}(X_V|T)
 		}\right) 
 		+c\exp\left(-\frac{n_{V}\delta^{2}}{c^{2}}\right).
-	\end{align*}
+	\end{align}
 \end{theorem}
 
 \begin{proof}
+	Consider any $\tilde{\boldsymbol{\lambda}} \in \tilde{\Lambda}$.
 	We will use the simplified notation $\hat{g}(\hat{\boldsymbol{\lambda}}) \coloneqq \hat{g}^{(n_T)}(\hat{\boldsymbol{\lambda}} | T)$ and $\hat{g}(\tilde{\boldsymbol{\lambda}}) \coloneqq \hat{g}^{(n_T)}(\tilde{\boldsymbol{\lambda}} | T)$. In addition, the following probabilities are all conditional on $X_V$ and $T$ but we leave them out for readability.
 	\begin{align}
-	&  Pr\left(\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\ge\delta^{2}\right) \label{eq:train_val_prob}\\
-	& = \sum_{s=0}^{\infty}Pr\left(2^{2s}\delta^{2}\le\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}-\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\le2^{2s+2}\delta^{2}\right) 
+	& \Pr\left(
+	\left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}
+	- \tilde{R}(X_V|T)
+	\ge \delta^2
+	\right) \label{eq:train_val_prob}\\
+	& = \sum_{s=0}^{\infty}
+	\Pr\left(
+	2^{2s}\delta^{2}
+	\le \left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}
+	-\tilde{R}(X_V|T)
+	\le 2^{2s+2}\delta^{2}\right) 
 	\label{eq:peeled} \\
-	&\le \sum_{s=0}^{\infty} Pr\left(2^{2s}\delta^{2}\le2\left\langle \epsilon,\hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\right. \label{eq:peel_ineq}\\
+	&\le \sum_{s=0}^{\infty}
+	\Pr\left(
+	2^{2s}\delta^{2}
+	\le 2\left\langle \epsilon,\hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\rangle _{V}\right. \label{eq:peel_ineq}\\
 	& \qquad  \left.\wedge \left\Vert \hat{g}(\hat{\boldsymbol{\lambda}})-\hat{g}(\tilde{\boldsymbol{\lambda}})\right\Vert_{V}^{2}\le2^{2s+2}\delta^{2}+ 2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right| \right ),
 	\end{align}
-	where we applied the basic inequality in the last inequality.
+	where we applied the basic inequality \eqref{thrm:basic_ineq} in the last line.
 	Each summand in \eqref{eq:peel_ineq} can be bounded by splitting the event into the cases where either $2^{2s+2} \delta^2$ or $2\left|\left\langle \hat{g}(\tilde{\boldsymbol{\lambda}})-\hat{g}(\hat{\boldsymbol{\lambda}}),\hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\rangle _{V}\right|$ is larger. Splitting up the probability and applying Cauchy Schwarz gives us the following bound for \eqref{eq:train_val_prob}
 	\begin{align}
 	& Pr\left(
@@ -266,9 +279,9 @@ We are now ready to prove the oracle inequality. It uses a standard peeling argu
 	a\exp\left(-n_{V}\frac{2^{4s-2}\delta^{4}}{4a^{2}2^{2s+3}\delta^{2}}\right).
 	\end{align}
 	
-	Putting this all together, there is a constant $c$ such that \eqref{eq:train_val_prob} is bounded above by
+	Putting this all together, we have that there is a constant $c$ such that \eqref{eq:train_val_prob} is bounded above by
 	\begin{equation}
-	c\exp\left(-\frac{n_{V}\delta^{4}}{4 c^{2}\left(16\left\Vert \hat{g}(\tilde{\boldsymbol{\lambda}})-g^{*}\right\Vert _{V}^{2}\right)}\right)
+	c\exp\left(-\frac{n_{V}\delta^{4}}{c^{2} \tilde{R}(X_V|T)}\right)
 	+
 	c\exp\left(-\frac{n_{V} \delta^2}{c^{2}}\right).
 	\end{equation}
@@ -344,7 +357,7 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 	\label{eq:train_val_entropy}
 	\int_{0}^{R}H^{1/2}(u,\mathcal{G}(T),\|\cdot\|_{V})du
 	\le
-	\psi (R) 
+	\mathcal{J}(R) 
 	\coloneqq c R\left ( J \log(\|C_\Lambda(\cdot |T)\|_V \Delta_{\Lambda} n + 1) \right )^{1/2}.
 	\end{equation}
 	Applying Theorem \ref{thrm:train_val_complicated}, we get our desired result.
