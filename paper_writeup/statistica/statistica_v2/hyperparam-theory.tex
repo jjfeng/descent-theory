@@ -990,38 +990,37 @@ Equipped with these conditions, we can characterize the smoothness of the fitted
 	where $$
 	C^*_{D^{(n_T)}} = 
 	\|\epsilon\|_{T}^{2}
-		+2\sum_{j=1}^J
+		+\sum_{j=1}^J
 		\left (
-		\|\boldsymbol{\theta}^{*,(j)}\|_1
-		+ \frac{w}{2}\|\boldsymbol{\theta}^{*,(j)}\|_2^2
+		2 \|\boldsymbol{\theta}^{*,(j)}\|_1
+		+ w\|\boldsymbol{\theta}^{*,(j)}\|_2^2
 		\right )
 	.$$
 	By Theorem~\ref{thrm:train_val}, we have with high probability
 	\begin{align}
 	\begin{split}
 	&\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2\\
-	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
+	&\le \inf_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \Vert^2_{V}\\
 	& + O_p\left (
 	\frac{J \kappa
 	\log \left (
 	C^*_{D^{(n_T)}}
-	\left (
+	w^{-1} n
 	\sum_{j=1}^J
 	\left \| \|x^{(j)}\|_2 \right \|_T^2 \left \| \|x^{(j)}\|_2 \right \|_V^2
-	\right )
-	w^{-1} n + 1
 	\right )}{n_{V}}
 	\right ) \\
 	& + O_p\left(
-	\sqrt{\frac{J \kappa
+	\sqrt{
+		\frac{J \kappa
 		\log \left (
 		C^*_{D^{(n_T)}}
-		\left (
+		w^{-1} n
 		\sum_{j=1}^J
 		\left \| \|x^{(j)}\|_2 \right \|_T^2 \left \| \|x^{(j)}\|_2 \right \|_V^2
-		\right )
-		w^{-1} n + 1
-		\right )}{n_{V}}\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T)\right\Vert_{V}^2}
+		\right )}{n_{V}}
+		\inf_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \Vert^2_{V}
+	}
 	\right ).
 	\end{split}
 	\end{align}
