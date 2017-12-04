@@ -293,17 +293,19 @@ Theorem \ref{thrm:train_val} states that with high probability, the difference b
 	\label{eq:asym_train_val_theorem2}
 	\end{align}
 \end{corollary}
-From Corollary \ref{corr:train_val}, we see that the error of the selected model is bounded by the error of the oracle model, the near-parameteric term \eqref{eq:asym_train_val_theorem1}, and the geometric mean of the two values \eqref{eq:asym_train_val_theorem2}. We refer to \eqref{eq:asym_train_val_theorem1} as near-parametric because the error term in parametric regression models is usually $O_p(J/n)$, where $J$ is the parameter dimension and $n$ is the number of training samples. Analogously, \eqref{eq:asym_train_val_theorem1} is roughly $O_p(J/n_V)$ modulo a $\log n$ term in the numerator.
+From Corollary \ref{corr:train_val}, we see that the risk of the selected model is bounded by the oracle risk, the near-parameteric term \eqref{eq:asym_train_val_theorem1}, and the geometric mean of the two values \eqref{eq:asym_train_val_theorem2}.
+%JF reviewer wants us to clarify lasso is different...
+We refer to \eqref{eq:asym_train_val_theorem1} as near-parametric because the error term in parametric regression models is usually $O_p(J/n)$, where $J$ is the parameter dimension and $n$ is the number of training samples. Analogously, \eqref{eq:asym_train_val_theorem1} is roughly $O_p(J/n_V)$ modulo a $\log n$ term in the numerator.
 
 In the semi- and non-parametric regression settings, the oracle error usually shrinks at a rate of $O_p(n_T^{-\omega})$ where $\omega \in (0, 1)$, which means that for large $n$, the oracle error will tend to dominate both the error terms. Therefore increasing the number of hyper-parameters for such problems only results in a small increase in the model error. In fact, if the oracle error rate is $O_p(n_T^{-\omega})$, the number of hyper-parameters $J$ can grow at the rate
 \begin{equation}
 O_p\left (
-\frac{n_{V} n_T^{-\omega}}{\log (n C_\Lambda\Delta_{\Lambda})}
+\frac{n_{V} n_T^{-\omega}}{\log (n \|C_\Lambda\|_V \Delta_{\Lambda})}
 \right )
-%JF should be \|C_\Lambda\|_V
 \end{equation}
 without affecting the asymptotic convergence rate.
 
+%JF english...
 The appearance of the parametric term \eqref{eq:asym_train_val_theorem1} suggests that we can interpret the problem of tuning hyper-parameters as a parametric regression problem over a $J$-dimensional parameter space where the validation data is the training data. However, this interpretation is an oversimplification. Recall that we perform the training/validation split over the model class
 \begin{equation}
 \mathcal{G}(T) = \left \{ \hat{g}^{(n_T)}( {\boldsymbol{\lambda}}| T) : \boldsymbol{\lambda} \in \Lambda \right \}.
@@ -317,7 +319,7 @@ In this section, we give an oracle inequality for $K$-fold cross-validation.
 Previously, the oracle inequality was with respect to the $L_2$-norm over the validation covariates.
 Now we give our result with respect to the functional $L_2$-norm.
 Let $\mu$ be the probability distribution of $(X,Y)$.
-Then
+The functional $L_2$-norm is defined as
 \begin{equation}
 \left \| g - g^* \right \|^2_{L_2} = \int \left |g(x) - g^*(x) \right |^2 d\mu(x).
 \end{equation}
@@ -335,7 +337,8 @@ In traditional cross-validation, the final model is retrained on all the data wi
 \frac{1}{K} \sum_{k=1}^K 
 \hat{g}^{(n_T)} \left (\hat{\boldsymbol \lambda} \middle | D^{(n_T)}_{-k} \right ).
 \end{equation}
-The following theorem bounds the generalization error of \eqref{thrm:avg_cv}. It is an extends Theorem 3.5 in \citet{lecue2012oracle} and is a special case of our Theorem~\ref{thrm:jean_cv} in the Appendix.
+The following theorem bounds the generalization error of \eqref{thrm:avg_cv}.
+It is an extension of Theorem 3.5 in \citet{lecue2012oracle} and a special case of our Theorem~\ref{thrm:jean_cv} in the Appendix.
 
 Before presenting the theorem, recall the definition of the Orlicz norm:
 \begin{definition}
@@ -344,16 +347,14 @@ Before presenting the theorem, recall the definition of the Orlicz norm:
 	\|f\|_{L_\psi} = \inf \{C > 0: \mathbb{P}\psi(|f|/C) \le 1\}.
 	\end{align}
 \end{definition}
-We will be interested in the particular function $\psi_\alpha = \exp(x^\alpha) - 1 $ for $\alpha = 2$.
-% JF and alpha = 1...? thats also used everywhere
-The $\psi_\alpha$-norm measures the exponential tail behavior of a random variable.
-We will use it to bound the tail behavior of functions in the function class $\mathcal{G}$ and the random variable/noise $\epsilon$.
-In addition, note that the $L_2$-norm is a special case of the Orlicz norm with the function $\psi(x) = x^2$.
+\noindent We will be concerned with the Orlicz norms $\psi_\alpha = \exp(x^\alpha) - 1 $ for $\alpha = 1, 2$.
+The $\psi_\alpha$-norm can be used to bound the tail behavior of a random variable.
 
-First, our assumptions:
+Our oracle inequality depends on two assumptions.
+The first assumption is from \citet{lecue2012oracle}.
 \begin{assump}
 	\label{assump:tail_margin}
-	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$,
+	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda} \in \Lambda$, we have
 	\begin{align}
 	\left \|
 	\left(
@@ -378,35 +379,37 @@ First, our assumptions:
 	\label{eq:cv_assump2}
 	\end{align}
 \end{assump}
-
+\noindent The second assumption is that our fitted functions are Lipschitz.
 \begin{assump}
 	\label{assump:lipschitz}
-	Suppose for any $n_T \in \mathbb{N}$ and any dataset $D^{(n_T)}$, we have
+	Suppose for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
 	\begin{align}
 	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
 	\end{align}
 \end{assump}
 
-\begin{assump}
-	\label{assump:l2_psi2}
-	Suppose there is some $r \ge 0, K_2 \ge 1$ such that for any $n_T \in \mathbb{N}$ and any dataset $D^{(n_T)}$, we have
-	\begin{align}
-	\left \|
-	g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})
-	\right \|_{L_{\psi_{2}}}
-	\le K_2
-	\left( \left \|
-	g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})
-	\right \|_{L_{2}}\right)^{r}.
-	\end{align}
-\end{assump}
+%\begin{assump}
+%	\label{assump:l2_psi2}
+%	Suppose there is some $r \ge 0, K_2 \ge 1$ such that for any $n_T \in \mathbb{N}$ and any dataset $D^{(n_T)}$, we have
+%	\begin{align}
+%	\left \|
+%	g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})
+%	\right \|_{L_{\psi_{2}}}
+%	\le K_2
+%	\left( \left \|
+%	g^{*}-\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})
+%	\right \|_{L_{2}}\right)^{r}.
+%	\end{align}
+%\end{assump}
 
+Under these two assumptions, we have the following oracle inequality.
 \begin{theorem}
 	\label{thrm:kfold}
 	Consider the setting above with $\bar{g}$ defined as in \eqref{thrm:avg_cv}.
 	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = (\lambda_{\max} - \lambda_{\min}) \vee 1$.
-	Suppose random variables $\epsilon_i$ are independent with expectation zero, satisfy $\|\epsilon\|_{L_{\psi_2}} <\infty$, and are independent of $X$.
-	Suppose Assumptions~\ref{assump:tail_margin}, \ref{assump:lipschitz}, \ref{assump:l2_psi2}.
+
+	Suppose random variables $\epsilon_i$ are independent with expectation zero, satisfy $\|\epsilon\|_{L_{\psi_2}}= b <\infty$, and are independent of $X$.
+	Suppose Assumptions~\ref{assump:tail_margin} and \ref{assump:lipschitz} hold.
 	Suppose there exists a function $\tilde{h}$ and some $\sigma_0 > 0$ such that
 	\begin{align}
 	\tilde{h}(n_{T})
@@ -414,9 +417,8 @@ First, our assumptions:
 	1 + \sum_{k=1}^{\infty}
 	k\Pr\left(\|C_\Lambda(\cdot |D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma_{0}\right).
 	\end{align}
-	Then there exists an absolute constant $c_{1}>0$
-	and a constant $\tilde{c}>0$ that depends on $K_0,K_{2},r,\|\epsilon\|_{\psi_{2}}$
-	such that for any $a > 0$,
+
+	Then there exists an absolute constant $c_{1}>0$ and a constant $c_{K_0, b}>0$ such that for any $a > 0$,
 	\begin{align}
 	\begin{split}
 	\mathbb{P}_{D^{(n)}}\left(
@@ -427,22 +429,34 @@ First, our assumptions:
 	& \le	(1+a)
 	\inf_{\lambda\in\Lambda}
 	\left[\mathbb{P}_{D^{(n_{T})}}\left(\|\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})(x)-g^{*}(x)\|_{L_{2}}^{2}\right)\right] \\
-	& + c_{1} \frac{\left(1+a\right)^{2}}{a}
+	& +
+	c_{1}
+	\left (\frac{1+a}{a} \right )^2
 	\frac{J\log n_{V}}{n_{V}}
-	\tilde{c}\log\left(\tilde{c}\frac{\left(1+a\right)}{a}\Delta_{\Lambda}J\sigma_{0}+1\right)
+	K_0
+	\left[\log\left(\Delta_{\Lambda} c_{K_0, b} n \sigma_0 +1\right)+1\right]
 	\tilde{h}(n_{T}).
 	\end{split}
 	\label{eq:cv_lipschitz_oracle_ineq}
 	\end{align}
 \end{theorem}
 
-As we can see, Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are quite similar. The upper bounds in both theorems depend on the oracle error and a near-parametric term. For parametric model-estimation procedures, tuning hyper-parameters incurs a similar cost as the model-estimation procedure itself. In semi- and non-parametric regression settings, tuning hyper-parameters is a relatively ``cheap'' and incurs an error that is negligible asymptotically.
+Theorems \ref{thrm:train_val} and \ref{thrm:kfold} are quite similar. The upper bounds in both theorems depend on the oracle risk and a near-parametric term. For parametric model-estimation procedures, tuning hyper-parameters incurs a similar cost as the model-estimation procedure itself. In semi- and non-parametric regression settings, tuning hyper-parameters is a relatively ``cheap'' and incurs an error that is negligible asymptotically.
 
-There are also some notable differences between Theorems \ref{thrm:train_val} and \ref{thrm:kfold}. The Lipschitz condition in Theorem \ref{thrm:kfold} is required to hold with respect to $\| \cdot \|_\infty$, which is stricter than that in Theorem \ref{thrm:train_val}. Also, we no longer have a sharp oracle inequality since the oracle error is scaled by $1+a$ where $a > 0$. These differences occur because we are interested in characterizing the functional $L_2$-error instead of the $L_2$-error over the observed covariates.
+%JF english...
+There are also some notable differences between Theorems \ref{thrm:train_val} and \ref{thrm:kfold} that highlight the tradeoffs made in the two theorems.
+Theorem~\ref{thrm:kfold} tries to make a statement about the functional $L_2$-error instead of the risk over the validation covariates.
+We pay the price in two ways.
+First, Assumption~\ref{assump:tail_margin} is quite strict and one can try to extend this assumption to be probabilistic.
+Unfortunately the issue is that it is still hard to have a good control of the tail behavior for all $\Lambda$.
+If $\lambda_{\min}$ is not shrinking at an appropriate rate, $K_0$ will grow with $n$ and the remainder term in \eqref{eq:cv_lipschitz_oracle_ineq} will no longer shrink at a parametric rate.
+If we instead require $\lambda_{\min}$ to shrink at an appropriate rate, we then seem to have defeated the purpose of cross-validation in the first place.
+Thus this assumption is crucial though ``tenuous.'' \textred{seems like the wrong word}
+The second price we pay is that we no longer have a sharp oracle inequality since the oracle error is scaled by $1+a$ where $a > 0$.
 
 \section{Penalized regression models}
 \label{sec:examples}
-Now we apply our results to analyze penalized regression procedures of the form \eqref{eq:intro_pen_reg}, where we treat the penalty parameters as hyper-parameters.
+Now we apply our results to analyze penalized regression procedures of the form \eqref{eq:intro_pen_reg}.
 Penalty functions encourage particular characteristics in the fitted models (e.g. smoothness or sparsity) and combining multiple penalty functions results in models that exhibit a combination of the desired characteristics. 
 Thus, naturally, there is a much interest in using multiple penalty functions, such as the elastic net or sparse group lasso.
 However few popular methods incorporate more than two penalties due to a) the concern that models may overfit the data when selection of many penalty parameters is required; and b) computational issues in optimizing multiple penalty parameters. In this section, we evaluate the validity of concern (a) using the results of Section~\ref{sec:main_results}. We see that, contrary to popular wisdom, using split-sample validation to select multiple penalty parameters should not result in drastically increase the generalization error of the selected model. For computational concerns (b), we refer the reader to recent papers on hyper-parameter estimation \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
