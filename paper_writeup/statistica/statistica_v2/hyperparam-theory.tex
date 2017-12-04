@@ -814,7 +814,7 @@ Now we walk through a simple example with ridge penalties.
 	\begin{align}
 	\begin{split}
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2
-	&\le \left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
+	&\le \inf_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \Vert^2_{V}\\
 	& + O_p \left(\frac{J\log \left (n
 		\left \|
 		\|\boldsymbol{x}\|_2
@@ -830,7 +830,8 @@ Now we walk through a simple example with ridge penalties.
 			+ \|\vec{R}(\boldsymbol{x}| D^{(n_T)}) \|_2
 			\right \|_V
 			\right )}{n_{V}}
-		\left\Vert g^* - \hat{g}^{(n_T)}( \tilde{\boldsymbol{\lambda}}| T) \right \Vert^2_{V}
+		\inf_{\lambda \in \Lambda}
+		\left\Vert g^* - \hat{g}^{(n_T)}(\boldsymbol{\lambda}| T) \right \Vert^2_{V}
 	}
 	\right ).
 	\end{split}
