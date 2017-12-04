@@ -351,18 +351,16 @@ Before presenting the theorem, recall the definition of the Orlicz norm:
 The $\psi_\alpha$-norm can be used to bound the tail behavior of a random variable.
 
 Our oracle inequality depends on two assumptions.
-The first assumption is from \citet{lecue2012oracle}.
+The first assumption bounds the tail behavior of the fitted models.
 \begin{assump}
 	\label{assump:tail_margin}
 	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda} \in \Lambda$, we have
 	\begin{align}
 	\left \|
 	\left(
-	y - \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})(x)
+	g^* (x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})(x)
 	\right)^2
-	- \left(
-	y - g^*(x)
-	\right)^2 \right \|_{L_{\psi_1}} & \le K_0
+	\right \|_{L_{\psi_2}} & \le K_0
 	\label{eq:cv_assump1}\\
 	\left \|
 	\left(
@@ -403,7 +401,7 @@ The first assumption is from \citet{lecue2012oracle}.
 %\end{assump}
 
 Under these two assumptions, we have the following oracle inequality.
-If Assumption~\ref{assump:lipschitz} does not hold, then one can apply the more general Theorem~\ref{thrm:jean_cv} in the Appendix.
+We prove Theorem~\ref{thrm:jean_cv} in the Appendix, which is more general than the following theorem.
 \begin{theorem}
 	\label{thrm:kfold}
 	Consider the setting above with $\bar{g}$ defined as in \eqref{thrm:avg_cv}.

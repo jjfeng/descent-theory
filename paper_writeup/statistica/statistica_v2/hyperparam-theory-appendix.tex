@@ -34,6 +34,7 @@
 \newtheorem{example}{Example}
 \newtheorem{remark}{Remark}
 
+\DeclareMathOperator{\Diam}{Diam}
 \newcommand{\textred}[1]{\textcolor{red}{#1}}
 
 
@@ -517,7 +518,7 @@ Then for any $\sigma > 0$, we have
 Obviously the above lemma is only useful if we can show that $h$ is bounded with high probability.
 For instance, in our examples later, $h$ has exponential tails so the upper bound in Lemma~\ref{lemma:chain} is well-controlled.
 
-Let us also restate Assumption~\ref{assump:tail_margin} for the more general case.
+We require the following assumption for the more general case.
 \begin{assump}
 	%JF renumber this to assumption 4?
 	\label{assump:tail_margin_general}
@@ -642,35 +643,25 @@ Q(\cdot , \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x))
 \right)
 \left \|C_\Lambda (x | D^{(n_T)}) \right \|_*
 \|\boldsymbol{\lambda}^{(2)} - \boldsymbol{\lambda}^{(1)} \|_2
+\label{eq:lipschitz_connect}
 \end{align}
 
-For $\|\cdot \| = \|\cdot\|_{L_{2}}$, the upper bound reduces to
+For $\|\cdot \| = \|\cdot\|_{L_{2}}$, the $L_2$ norm is its own dual norm so \eqref{eq:lipschitz_connect} reduces to
 $$
-2\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)
+c_0 \left(b +\sqrt{w}\right)
 \|C_\Lambda (x | D^{(n_T)})\|_{L_{2}}\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}$$
-as the $L_2$ norm is its own dual norm.
+for an absolute constant $c_0 > 0$.
 
-For $\|\cdot \| = \|\cdot\|_{L_{\psi_{1}}}$, the upper bound reduces to 
+For $\|\cdot \| = \|\cdot\|_{L_{\psi_{1}}}$, the dual of the $L_{\psi_1}$ norm is $L_{\psi_2}$.
+Thus applying Assumption~\ref{assump:tail_margin} and the fact that $\|\epsilon\|_{L_{\psi_2}} = b < \infty$, \eqref{eq:lipschitz_connect} reduces to 
 $$
 2\left(
-\|\epsilon\|_{L_{\psi_{2}}}
-+ \sup_{\lambda \in \Lambda} \left \| g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) \right \|_{L_{\psi_2}}
+b
++ K_0
 \right)
 \|C_\Lambda (x | D^{(n_T)})\|_{L_{\psi_{2}}}
-\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}.
 $$
-as the dual of the $L_{\psi_1}$ norm is $L_{\psi_2}$.
-From Assumption~\ref{assump:tail_margin} and the fact that $\|\epsilon\|_{L_{\psi_2}} = b < \infty$, we can show that
-\begin{align}
-\left \| g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) \right \|_{L_{\psi_2}}
-\le 
-\sqrt{
-\frac{1}{2} \left(
-K_0 - 8b^2
-\right)
-}.
-\end{align}
-Plug this in to attain the desired result.
 
 \end{proof}
 
@@ -696,7 +687,8 @@ Then there exist absolute constants $c_0, c_1 >0$ and a constant $c_{K_0, b} > 0
 & \le	c_0 \sqrt{w J}
 \left[\sqrt{
 \log\left(
-\frac{b \Delta_{\Lambda}\|C_\Lambda(x|D^{(n_{T})})\|_{L_{2}}}{\sqrt{w}} + 1
+\left (\frac{b}{\sqrt{w}} + 1 \right )
+\Delta_{\Lambda}\|C_\Lambda(x|D^{(n_{T})})\|_{L_{2}} + 1
 \right)
 }
 +1\right]\\
@@ -707,10 +699,11 @@ Then there exist absolute constants $c_0, c_1 >0$ and a constant $c_{K_0, b} > 0
 \right)
 +1\right].
 \end{align}
+%JF note that c_{K_0, b} is not the same constant as before it
 \end{lemma}
 
 \begin{proof}
-	By definition of $\mathcal{Q}_{w}^{L_{2}}$, we have $\text{Diam}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)	=	2\sqrt{w}.$
+	By definition of $\mathcal{Q}_{w}^{L_{2}}$, we have $\Diam\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)	=	2\sqrt{w}.$
 	Using Lemma~\ref{lemma:covering_lipschitz} and \eqref{eq:bound_gamma}, we have
 	\begin{align}
 	\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)
@@ -722,14 +715,32 @@ Then there exist absolute constants $c_0, c_1 >0$ and a constant $c_{K_0, b} > 0
 %	& \le	2c\sqrt{w J}\int_{0}^{1}\sqrt{\log\left(\frac{8\Delta_{\Lambda}\left(\|\epsilon\|_{L_{2}}+\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}+4\sqrt{w}}{2\sqrt{w}}\right)}+\sqrt{\log\frac{1}{v}}dv\\
 	& \le	2c\sqrt{w J}\left[\sqrt{\log\left(\frac{4 c_0  \Delta_{\Lambda}\left(b +\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}+4\sqrt{w}}{2\sqrt{w}}\right)}+\frac{\sqrt{\pi}}{2}\right]
 	\end{align}
-	Using very similar logic, we have
+	Using very similar logic, we now bound the $\gamma_1$ function.
+	First we bound the diameter of $\mathcal{Q}_w^{L_2}$ with respect to the norm $\|\cdot \|_{L_{\psi_1}}$.
+	\begin{align}
+	\Diam(\mathcal{Q}_w^{L_2}(D^{(n_T)}), \|\cdot \|_{L_{\psi_1}})
+	& \le 2 \sup_{\boldsymbol{\lambda} \in \Lambda}
+	\left \|
+	\left(
+	y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}| D^{(n_T)})
+	\right)^2
+	-
+	\left(
+	y - g^*(x)
+	\right)^2
+	\right \|_{L_{\psi_1}}\\
+	& \le
+	c_1 (b^2 + K_0^2).
+	\label{eq:diam_psi1}
+	\end{align}
+	Thus
 	\begin{align}
 	\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)
-	&\le c\int_{0}^{2K_0}\log N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)du\\
-	& \le 2cJK_0\left[
+	&\le c\int_{0}^{c_1 (b^2 + K_0^2)}\log N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)du\\
+	& \le c_2 J (b^2 + K_0^2)\left[
 	\log\left(
-	\frac{4 \Delta_{\Lambda}c_{K_0, b} \|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_{2}}}+2K_0}
-	{K_0}
+	\frac{4 \Delta_{\Lambda}c_{K_0, b} \|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_{2}}}+ 2 c_1(b^2 + K_0^2)}
+	{c_1(b^2 + K_0^2)}
 	\right)+1\right]
 	\end{align}
 \end{proof}
@@ -753,7 +764,8 @@ JK_0\left[\log\left(\Delta_{\Lambda}\delta c_{K_0, b}+1\right)+1\right]
 
 Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 \begin{proof}[Proof for Theorem~\ref{thrm:kfold}]
-	We will combine our previous results with Theorem~\ref{thrm:jean_cv}.
+	We now apply Theorem~\ref{thrm:jean_cv} to our Lipschitz case.
+	From \eqref{eq:diam_psi1}, we find that Assumption~\ref{assump:tail_margin_general} is satisfied.
 	As defined in \eqref{eq:j_delta}, $J_\delta(w)$ is clearly a valid bound for \eqref{eq:h_to_J} for all $w \ge 1/n$.
 	Moreover, $\mathcal{J}_{\delta}(w)$ is strictly increasing and concave in $w$.
 	This implies that $\mathcal{J}_{\delta}^{-1}$ is strictly convex.
