@@ -66,7 +66,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\cfoot{\thepage}
+%\cfoot{\thepage}
 
 \begin{document}
 
@@ -389,29 +389,28 @@ It is a special case of Theorem~\ref{thrm:jean_cv} in the Appendix, which extend
 	\end{align}
 \end{theorem}
 
-Like in Theorem \ref{thrm:train_val}, Theorem~\ref{thrm:kfold} bounds the generalization error of the fitted model using a near-parametric term $O_p(J/n_V)$.
+As in Theorem \ref{thrm:train_val}, the remainder term in Theorem~\ref{thrm:kfold} includes a near-parametric term $O_p(J/n_V)$.
 So as before, adding hyper-parameters to parametric model estimation incurs a similar cost as adding parameters to the parametric model itself and adding hyper-parameters to semi- and non-parametric regression settings is relatively ``cheap" and negligible asymptotically.
 
 %JF english
-The differences between Theorems \ref{thrm:train_val} and \ref{thrm:kfold} highlight the tradeoffs made in order to establish an oracle inequality involving the functional $L_2$-error.
-First, Theorem~\ref{thrm:kfold} needs to add Assumption~\ref{assump:tail_margin}, which is quite strict since it must hold for all datasets $D$ and hyper-parameters $\Lambda$.
-The former requirement can be relaxed so that Assumption~\ref{assump:tail_margin} holds with high probability.
-However the latter requirement is problematic -- it is hard to control the tail behavior for all $\Lambda$ unless $\lambda_{\min}$ is shrinking at an appropriate rate.
-If $\lambda_{\min}$ shrinks too fast (in the number of samples), $K_0$ may grow with $n$ and the remainder term in \eqref{eq:cv_lipschitz_oracle_ineq} will no longer shrink at a parametric rate.
+The differences between Theorems \ref{thrm:train_val} and \ref{thrm:kfold} highlight the tradeoffs made to establish an oracle inequality involving the functional $L_2$-error.
+The biggest tradeoff is that Theorem~\ref{thrm:kfold} adds Assumption~\ref{assump:tail_margin}.
+Though we can relax Assumption~\ref{assump:tail_margin} to hold over datasets $D$ in some high-probability set, the difficulty lies is controlling the tail behavior of the fitted models over all $\Lambda$.
+For some model estimation procedures, $K_0$ may grow with $n$ if $\lambda_{\min}$ shrinks too quickly with $n$.
+In this case, the remainder term may not longer shrink at a near-parametric rate.
 Unfortunately requiring $\lambda_{\min}$ to shrink at an appropriate rate seems to defeat the purpose of cross-validation.
-Thus this assumption is crucial for the proof, but seems insufficient to fully understand cross-validation.
-In addition, the Lipschitz assumption in Theorem~\ref{thrm:kfold} must hold over all $\mathcal{X}$, which can be harder to show for nonparametric models.
-Finally, the oracle inequality in Theorem~\ref{thrm:kfold} is no longer sharp since the oracle error is scaled by $1+a$ where $a > 0$.
+So even though Theorem~\ref{thrm:kfold} helps us better understand cross-validation, it is limited by this assumption.
+In addition, the Lipschitz assumption must hold over all $\mathcal{X}$ in Theorem~\ref{thrm:kfold}, rather than just the observed covariates.
+Finally, the oracle inequality in Theorem~\ref{thrm:kfold} is no longer sharp since the oracle risk is scaled by $1+a$ for $a > 0$.
 
 \section{Penalized regression models}
 \label{sec:examples}
 Now we apply our results to analyze penalized regression procedures of the form \eqref{eq:intro_pen_reg}.
 Penalty functions encourage particular characteristics in the fitted models (e.g. smoothness or sparsity) and combining multiple penalty functions results in models that exhibit a combination of the desired characteristics. 
 Naturally, there is a much interest in combining multiple penalty functions, such as the elastic net or sparse group lasso.
-However few popular methods incorporate more than two penalties due to (a) the concern that models may overfit the data when selection of many penalty parameters is required; and (b) computational issues in optimizing multiple penalty parameters. In this section, we evaluate the validity of concern (a) using the results of Section~\ref{sec:main_results}. We see that, contrary to popular wisdom, using split-sample validation to select multiple penalty parameters should not result in a drastic increase to the generalization error of the selected model. For computational concerns (b), we refer the reader to recent papers on hyper-parameter estimation \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
+However few popular methods incorporate more than two penalties due to (a) the concern that models may overfit the data when selection of many penalty parameters is required; and (b) computational issues in optimizing multiple penalty parameters. In this section, we evaluate the validity of concern (a) using the results of Section~\ref{sec:main_results}. We see that, contrary to popular wisdom, using split-sample validation to select multiple penalty parameters should not result in a drastic increase to the generalization error of the selected model. For computational concerns (b), we refer the reader to papers on hyper-parameter estimation \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
 
-Recall that in our framework, the model-estimation procedure tunes the penalty parameters over some set $\Lambda$. As long as the fitted models are Lipschitz in the penalty parameters over $\Lambda$, we can apply Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
-We will consider the penalty parameter space
+Throughout this section, we will consider penalty parameter spaces of the form
 $\Lambda = [ n^{-t_{\min}}, n^{t_{\max}}]^J$
 for sufficiently large $t_{\min}, t_{\max} \ge 0$.
 This regime works well for two reasons: one, our rates depend only quite weakly on $t_{\min}$ and $t_{\max}$; and two, generally oracle $\lambda$-values are $\sim n^{-\alpha}$ for some $\alpha \in (0,1)$ \citep{van2000empirical, van2014additive, buhlmann2011statistics}. So long as $t_{\min} > \alpha$, $\Lambda$ will contain the optimal penalty parameter.
@@ -560,6 +559,7 @@ In the next example, we consider generalized additive models (GAMs) \citep{hasti
 Though GAMs are nonparametric models, it is well-known that the procedure is equivalent to solving a finite-dimensional problem that has a closed-form solution \citep{green1993nonparametric, o1986automatic, buja1989linear}.
 In the following example, we start from the closed-form solution to determine the Lipschitz function $C_\Lambda$ and then apply Theorem~\ref{thrm:train_val} to derive an oracle inequality for training-validation split procedures.
 \begin{example}[Multiple sobolev penalties]
+	\label{example:sobolev}
 	To fit a generalized additive model over the domain $[0,1]^J$, a typical setup is to minimize the following objective
 	\begin{align}
 	\argmin_{\alpha_0 \in \mathbb{R}, g_j}
@@ -898,16 +898,18 @@ We now consider an example with the elastic net \citep{zou2003regression}.
 \subsection{Nonparametric additive models}
 \label{sec:nonparam_smooth}
 
-We now generalize the results to nonparametric additive models. We consider estimators of the form
+We now generalize the results to nonparametric additive models.
+We consider estimators of the form
 \begin{align}
 \label{eq:train_crit_nonparam}
-\left\{ \hat{g}_j( \boldsymbol \lambda) \right \}_{j=1}^J &= 
-\argmin_{g_j\in \mathcal{G}_j: j=1,...,J}  L_T\left (\left \{ g_j \right \}_{j=1}^J, \boldsymbol{\lambda} \right ) \\
-\text{where} \quad L_T \left (\left \{ g_j \right \}_{j=1}^J, \boldsymbol{\lambda} \right ) &=
-\frac{1}{2} \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T 
+\left\{ \hat{g}_j( \boldsymbol \lambda) \right \}_{j=1}^J
+=
+\argmin_{g_j\in \mathcal{G}_j: j=1,...,J}  L_T\left (\left \{ g_j \right \}_{j=1}^J, \boldsymbol{\lambda} \right )
+\coloneqq
+\frac{1}{2} \left \| y -  \sum_{j=1}^J g_j(x_j) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j P_j(g_j)
 \end{align}
-where $\{P_j\}$ are now penalty functionals and $\{\mathcal{G}_j\}$ are linear spaces of univariate functions.
+where $\{P_j\}$ are penalty functionals and $\{\mathcal{G}_j\}$ are linear spaces of univariate functions.
 Let $\left\{ g_j^* \right \}_{j=1}^J$ be the minimizer of the generalization error
 \begin{equation}
 \left\{ g_j^* \right \}_{j=1}^J = \argmin_{g_j \in \mathcal{G}_j: j=1,...,J}
@@ -958,86 +960,92 @@ However \eqref{eq:nonparam_lipshitz_thrm} is not a strong enough statement to be
 
 \section{Simulations}\label{sec:simulations}
 
-We now present a simulation study of the generalized additive model example \eqref{eq:smoothing_spline} to understand how the performance changes as the number of penalty parameters increases.
-From Corollary~\ref{corr:train_val}, we know that there are two possibilities.
-On one hand, we know that the parametric term in the upper bound is \eqref{eq:sobolev_param}, so it increases linearly with the number of penalty parameters $J$.
-On the other hand, we know that the oracle risk \eqref{eq:asym_train_val_oracle_risk} in the upper bound may decrease.
-We use two simulations to illustrate that both of these behaviors are possible.
+We now present a simulation study of the generalized additive model in Example \ref{example:sobolev} to understand how the performance changes as the number of penalty parameters $J$ increases.
+Corollary~\ref{corr:train_val} suggests that there are two opposing forces that affect the error of the fitted model.
+On one hand, \eqref{eq:asym_train_val_theorem1} is linear in $J$ so increasing $J$ can increase the error.
+On the other hand, \eqref{eq:asym_train_val_oracle_risk} decreases for larger model spaces, so increasing $J$ may decrease the error.
+We use two simulations to isolate these two behaviors.
 
 The data is generated as the sum of univariate functions
-$Y = \sum_{j=1}^p g_j^*(X_j) + \sigma \epsilon$,
-where $\epsilon$ are iid standard Gaussian random variables and $\sigma > 0$ was chosen such that the signal to noise ratio was two. $X$ was drawn from a uniform distribution over $\mathcal{X} = [-2, 2]^p$.
-We fit nonparametric additive models by minimizing \eqref{eq:smoothing_spline}.
+$Y = \sum_{j=1}^J g_j^*(X_j) + \sigma \epsilon$,
+where $\epsilon$ are iid standard Gaussian random variables and $\sigma > 0$ is chosen such that the signal to noise ratio is two. $X$ is drawn from a uniform distribution over $\mathcal{X} = [-2, 2]^J$.
+We fit models by minimizing \eqref{eq:smoothing_spline}.
 To vary the number of penalty parameters, we constrain certain $\lambda_j$ to be equal while allowing others to be completely free.
-(For instance, if we wanted a single penalty parameter, we would constrain $\lambda_j$ for $j=1,...,p$ to be the same value.) 
+(For instance, if we wanted a single penalty parameter, we would constrain $\lambda_j$ for $j=1,...,J$ to be the same value.) 
 The penalty parameters are tuned using a training/validation split.
 
-\textbf{Simulation 1}: The response is the sum of identical univariate sinusoids where
+\textbf{Simulation 1}: The true function is the sum of identical univariate sinusoids
 \begin{align}
-g_j^*(x_j) &= \sin(x_j) \quad \text{for } j = 1,...,p.
+g_j^*(x_j) &= \sin(x_j) \quad \text{for } j = 1,...,J.
 \label{eq:sim1}
 \end{align} 
-Since the univariate functions are all the same in \eqref{eq:sim1}, the oracle penalty parameters $\tilde \lambda_j$ should be roughly the same for $j = 1,...,p$ and the oracle error should stay relatively constant, even if we increase the number of penalty parameters. So for this first simulation, we should be able to observe that the difference in validation error between the selected model and the oracle model grows linearly in $J$.
-
-\textbf{Simulation 2}: The response is the sum of sinusoid functions with increasing frequency where
+Since the univariate functions are all the same in \eqref{eq:sim1}, the oracle risk should be roughly as we increase the number of free penalty parameters.
+The validation loss difference
 \begin{align}
-g_j^*(x_j) = \sin(x_j * 1.2^{j - 4}) \quad \text{for } j = 1,...,p.
+\left \| \sum_{j=1}^J \hat{g}^{(n_T)}_j(\hat{\boldsymbol{\lambda}}|T) - g^*_j \right \|_V^2 - 
+\min_{\lambda \in \Lambda}
+\left \| \sum_{j=1}^J \hat{g}^{(n_T)}_j(\boldsymbol{\lambda} | T) - g^*_j \right \|_V^2
+\label{eq:excess_risk_sim}
+\end{align}
+should grows linearly in $J$ for this simulation setup.
+
+\textbf{Simulation 2}: The true function is the sum of sinusoid functions with increasing frequency
+\begin{align}
+g_j^*(x_j) = \sin(x_j * 1.2^{j - 4}) \quad \text{for } j = 1,...,J.
 \label{eq:sim2}
 \end{align}
-Since the Sobolev norms of $g_j$ increase with $j$, we expect the oracle penalty parameters to be monotonically decreasing, e.g. $\tilde{\lambda}_1 > ... > \tilde{\lambda}_p$. 
+Since the Sobolev norms of $g_j$ increase with $j$, we expect that the penalty parameters $\tilde{\boldsymbol{\lambda}}$ that attain the oracle risk to be monotonically decreasing, e.g. $\tilde{\lambda}_1 > ... > \tilde{\lambda}_J$. 
 As the number of penalty parameters increases, we expect the oracle error term to shrink. If the oracle error term shrinks fast enough, the validation loss of the selected model should decrease.
 
-For both simulations, we used $p = 8$ features and fit the models using 200 training and 200 validation samples. We considered 1, 2, 4, and 8 free penalty parameters, where the penalty parameter structure was nested. That is, when considering $k$ free penalty parameters, we constrained $\{\lambda_{8\ell/k + j} \}_{j = 1,...,8/k}$ to be equal, for $\ell= 0,...,k - 1$. Each simulation setting was replicated forty times.
+For both simulations, we used $J = 8$ features and fit the models using 200 training and 200 validation samples. We considered 1, 2, 4, and 8 free penalty parameters, where the penalty parameter structure was nested. That is, when considering $k$ free penalty parameters, we constrained $\{\lambda_{8\ell/k + j} \}_{j = 1,...,8/k}$ to be equal, for $\ell= 0,...,k - 1$. Each simulation setting was replicated forty times.
 
 The penalty parameters were tuned using the nonlinear minimization algorithm \texttt{nlm} in \texttt{R} with initializations at $\{\vec{1}, 0.1 \times \vec{1}, 0.01 \times \vec{1}\}$. 
 Multiple initializations were required since minimizing the validation loss with respect to the penalty parameters is a non-convex problem.
 We did not use the usual method of grid-search since it is computationally intractable when there are more than three penalty parameters.
+% I believe tilde lambda was found by giving the algorithm a lot more samples
 
-Figure \ref{fig:simulations}(a) shows the results from Simulation 1, with the number of penalty parameters on the x-axis and the validation loss difference on the y-axis. The validation loss difference is defined as the difference between the validation loss of the selected model and the oracle model
-$$
-\left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\hat{\boldsymbol{\lambda}}|T) - g^*_j \right \|_V^2 - 
-\left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\tilde{\boldsymbol{\lambda}} | T) - g^*_j \right \|_V^2.
-$$
-%JF what is \tilde lambda -- what is it minimized over. how was it found?
-As expected, the validation loss difference increases with the number of penalty parameters.
+As expected, the validation loss difference increases with the number of penalty parameters in Simulation 1 (Figure~\ref{fig:simulations}(a)).
 To see if our oracle inequalities match the simulation results, we performed linear regression with the logarithm of the validation loss difference as the response and the logarithm of the number of penalty parameters as the covariate. 
 We fit the model over the simulation results with at least two penalty parameters since the data is highly skewed for the case of a single penalty parameter. 
-We estimated a slope of 1.00 (standard error 0.15), which suggests that the validation loss difference grows linearly in the number of penalty parameters. 
-The results for a single penalty parameter fall below this estimated line --- including the single parameter case gives a slope of 1.45 with standard error 0.14.
-This suggests that our oracle inequality might not be tight for a single penalty parameter.
+We estimated a slope of 1.00 (standard error 0.15), which suggests that the validation loss difference grows linearly in the number of penalty parameters.
+Interestingly, performing linear regression with the single parameter case gives a slope of 1.45 with standard error 0.14.
+This suggests that our oracle inequality might not be tight for the case where there is only a single penalty parameter.
 
-The results from Simulation 2 are shown in Figure \ref{fig:simulations}(b). As the number of penalty parameters increases, the validation loss of the oracle model decreases. In addition, due to the error incurred from tuning multiple hyper-parameters, the gap between the validation loss of the oracle and selected model increases with the number of penalty parameters. Nonetheless, since the validation loss of the oracle model is decreasing at a fast enough rate, the validation loss of the selected model decreases with the number of penalty parameters.
+For Simulation 2, we get the opposite behavior -- the validation loss of the selected model decreases as the number of penalty parameters increases (Figure~\ref{fig:simulations}(b)).
+By plotting the error of the oracle model, we can see that the validation loss of the selected model decreases because the error of the oracle model is decreasing at a faster rate than the rate at which the additional error term \eqref{eq:asym_train_val_theorem1} grows.
 
-These simulation results suggest that adding more hyper-parameters can improve model-estimation procedures. For nonparametric additive models, having an individual penalty parameter for each additive component allows the model to learn about the differing smoothness of each component. On the other hand, if we know a priori that the additive components have the same smoothness, then it is beneficial to use a single penalty parameter.
+These simulation results suggest that adding more hyper-parameters can improve model-estimation procedures.
+Having a separate penalty parameter for each additive component allows GAMs to fit components with differing smoothness.
+However if we know a priori that the additive components have the same smoothness, then it is best to use a single penalty parameter.
 
 \begin{figure}
 	\centering
 	\begin{subfigure}{0.48\textwidth}
 		\includegraphics[width=\textwidth]{../../../R/figures/validation_size_loss_diff_homogeneous.pdf}
-		\caption{Simulation 1: sum of identical sinusoids}
+		\caption{Simulation 1}
 	\end{subfigure}
 	\begin{subfigure}{0.48\textwidth}
 		\includegraphics[width=\textwidth]{../../../R/figures/validation_size_loss_heterogeneous.pdf}
-		\caption{Simulation 2: sum of sinusoids with increasing frequency}
+		\caption{Simulation 2}
 	\end{subfigure}
 	\caption{
-		Simulation results for nonparametric additive models as the number of penalty parameters grows.
+		Performance of generalized additive models as the number of penalty parameters grows.
 	}
 	\label{fig:simulations}
 \end{figure}
 
 \section{Discussion}\label{sec:discussion}
 
-The goal of this paper is to characterize the generalization error of model-estimation procedures that tune multiple hyper-parameters via single training/validation split or $K$-fold cross-validation. 
-If the estimated models are Lipschitz with respect to the hyper-parameters, the generalization error of the selected model is upper bounded by a combination of the oracle error, a near-parametric term in the number of hyper-parameters, and a geometric mean of the two.
-These results show that if additional hyper-parameters shrink the oracle error term by a sufficient amount, they can improve the performance of the selected model.
-In the semi- or non-parametric setting, the error incurred from tuning hyper-parameters is dominated by the oracle error asymptotically; so having many hyper-parameters is unlikely to drastically increase the generalization error of the selected model.
-In the parametric setting, the error incurred from tuning hyper-parameters is roughly on the same order as the oracle error; so one should be careful about adding more hyper-parameters, though hyper-parameters are not more ``costly'' than model parameters.
+In this manuscript, we have characterized the generalization error of split-sample procedures that tune multiple hyper-parameters. 
+If the estimated models are Lipschitz in the hyper-parameters, the generalization error of the selected model is upper bounded by a combination of the oracle risk, a near-parametric term in the number of hyper-parameters, and the geometric mean of the two.
+The results show that adding hyper-parameters can decrease the generalization error of the selected model if the oracle risk decreases by a sufficient amount.
+In the semi- or non-parametric setting, the error incurred from tuning hyper-parameters is dominated by the oracle risk asymptotically; adding hyper-parameters will have a negligible effect on the generalization error of the selected model.
+In the parametric setting, the error incurred from tuning hyper-parameters is on the same order as the oracle error; one should be careful about adding hyper-parameters, though they are not more ``costly'' than model parameters.
 
+In our penalized regression examples, we showed that the estimated models satisfy the Lipschitz condition so our theoretical results apply.
+We have shown that it can be desirable to fit models by with multiple penalties and penalty parameters, rather than the usual case with one or two penalty parameters.
 
-We also considered the special case of penalized regression problems with multiple penalty parameters. In our example of additive univariate models, we show that the estimated models are Lipschitz in the penalty parameters, which means our theoretical results apply. Our results suggest using multiple penalties to induce the desired model characteristics and allowing for many penalty parameters, rather than the usual one or two penalty parameters. Moreover, using recently-developed algorithms for tuning multiple hyper-parameters \citep{bengio2000gradient, foo2008efficient, snoek2012practical}, it is now computationally tractable to test out regularization schemes with many penalty parameters.
-
-One drawback of our theoretical results is that we have assumed it is possible to find the global minimizer of the validation loss. Unfortunately this is computationally intractable since the validation loss is not convex with respect to the hyper-parameters. This problem is exacerbated when there are multiple hyper-parameters since it is computationally infeasible to perform an exhaustive grid-search. We hope to address this question in future research.
+One drawback of our theoretical results is that we have assumed it is possible to find the global minimizer of the validation loss. Unfortunately this is computationally intractable since the validation loss is not convex with respect to the hyper-parameters. This problem is exacerbated when there are many hyper-parameters since it is computationally infeasible to perform an exhaustive grid-search. We hope to address this question in future research.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
