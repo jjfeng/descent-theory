@@ -13,6 +13,7 @@
 \parindent=1.7pc
 \parskip=0pt
 
+\usepackage{multirow}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
@@ -47,6 +48,8 @@
 \newtheorem{assump}{Assumption}
 \setcounter{assump}{2}
 \newtheorem{condition}{Condition}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\spann}{span}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagestyle{fancy}
@@ -1387,6 +1390,239 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\right  \|_{D^{(n)}}
 	$, the result in \eqref{eq:nonparam_lipshitz_thrm} follows.
 \end{proof}
+
+\subsection{Examples: detailed derivations}
+
+\begin{example}[Multiple Sobolev penalties]
+	Since the solution to \eqref{eq:smoothing_spline} must be the sum of natural cubic splines \citep{buja1989linear}, we can parameterize the space using a Reproducing Kernel Hilbert Space with inner product
+	\begin{align}
+	\langle f, g \rangle = \int_{0}^1 f^{''}(x) g^{''}(x) dx
+	\end{align}
+	and the reproducing kernel
+	\begin{align}
+	R(s, t) = st(s \wedge t)
+	+ \frac{s + t}{2} (s \wedge t)^2
+	+ \frac{1}{3}
+	(s \wedge t)^3
+	\end{align}
+	\citep{heckman2012theory}.
+	Then one can instead solve for \eqref{eq:smoothing_spline} over the functions $g$ of the form
+	\begin{align}
+	g(x_1,..., x_J) = \alpha_0 + \sum_{j=1}^J g_j(x_j)
+	\end{align}
+	where the functions $g_j$ are split into a linear component and an orthogonal non-linear component
+	\begin{align}
+	g_j(x_j) = \alpha_{1j} x_j + \sum_{i=1}^n \theta_{ij} R(x_{ij}, x_j).
+	\end{align}
+	For notational simplicity, we will also denote $\vec{R}(x | D)_{ij} = R(x_{ij}, x_j)$.
+	We will also write
+	\begin{align}
+	g_{j, \perp}(x_j) = \sum_{i=1}^n \theta_{ij} R(x_{ij}, x_j).
+	\end{align}
+	
+	Using this finite-dimensional representation, we find that
+	\begin{align}
+	\int_{0}^1 \left(g_j^{''}(x)\right)^{2} dx
+	= \sum_{u = 1}^n \sum_{v=1}^n \theta_{uj} \theta{vj} R(x_{uj}, x_{vj})
+	= \theta_j^\top K_j \theta_j
+	\label{eq:sobolev_finite}
+	\end{align}
+	where the matrix $K_j$ has elements
+	$
+	K_{j, (u, v)} = R(x_{uj}, x_{vj}).
+	$
+	Since any $g_j$ with non-zero $\boldsymbol{\theta}_j$ will have a positive Sobolev penalty, then the matrix $K_j$ must be positive definite.
+	Using the formulation above, we re-express \eqref{eq:smoothing_spline} as the finite-dimensional problem
+	\begin{align}
+	\hat{\alpha_0}(\boldsymbol{\lambda}),
+	\hat{\boldsymbol{\alpha}_1}(\boldsymbol{\lambda}),
+	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	& = \argmin_{\alpha_0, \boldsymbol{\alpha}_1, \boldsymbol{\theta}}
+	\frac{1}{2}
+	\left \|
+	\boldsymbol{y} -
+	\alpha_0 \boldsymbol{1}
+	- X \boldsymbol{\alpha}_1
+	- K \boldsymbol{\theta}
+	\right \|^2
+	+
+	\frac{1}{2}
+	\boldsymbol{\theta}^\top
+	\diag \left (
+	\left \{
+	\lambda_j K_j
+	\right \} \right ) \boldsymbol{\theta}.
+	\label{eq:matrix_sobolev}
+	\end{align}
+	where the matrix $K = (K_1 ... K_J)$.
+	In order to make the fitted functions $\hat{g}_j$ identifiable, we add the usual constraint that $\sum_{i=1}^n g_j(x_{ij}) = 0$ for all $j$.
+	We also assume that $X^\top X$ is nonsingular to ensure that there is a unique $\hat{\alpha}_1$.
+	
+	The KKT conditions then gives us
+	\begin{align}
+	\hat{\alpha}_0 &= \frac{1}{n}\sum_{i=1}^n y_i \\
+	\hat{\boldsymbol{\alpha}}_1(\boldsymbol{\lambda})
+	& = (X^\top X)^{-1} X^\top
+	(
+	\boldsymbol{y} - \hat{\alpha}_0 \boldsymbol{1}
+	- K \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	)
+	\label{eq:kkt_sobolev_linear}
+	\\
+	\begin{split}
+	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	& =
+	\diag(K_j^{-1/2})
+	\left(
+	K^{(1/2)\top}
+	P_X^\top
+	K^{(1/2)} + \diag(\lambda_j I)
+	\right)^{-1}
+	K^{(1/2)\top}
+	P_X^\top
+	(I - \frac{1}{n}\boldsymbol{1} \boldsymbol{1}^\top)
+	\boldsymbol{y}
+	\end{split}
+	\label{eq:kkt_sobolev}
+	\end{align}
+	where $K^{(1/2)} = (K_1^{1/2} ... K_J^{1/2})$, $I$ is the $n\times n$ identity matrix, and $P_X^\top = I - X (X^\top X)^{-1} X^\top$.
+	
+	To apply Theorem~\ref{thrm:train_val}, we need to characterize how $\hat{g}(\boldsymbol{\lambda})(\cdot)$ varies with $\boldsymbol{\lambda}$.
+	Since we have the closed form solution to \eqref{eq:kkt_sobolev}, we will use it directly to come up with bounds for the Lipschitz factor $C_\Lambda(x | D^{(n_T)})$.
+	From \citet{green1993nonparametric}, we know that the value of the cubic $\hat{g}_j$ on the interval $[t_L, t_R]$ can be defined using its values and second derivatives at the ends of the interval.
+	Let $h = t_R - t_L$.
+	Then the value of the cubic
+	\begin{align}
+	\begin{split}
+	\hat{g}_j(x_j)
+	& = \hat{\alpha_{1j}} x_j
+	+ \frac{(x_j - t_L) \hat{g}_{j, \perp} (t_R) + (t_R - t) \hat{g}_{j, \perp}(t_L)}{h}\\
+	& \quad - \frac{1}{6}(x_j - t_L)(t_R - x_j) \left\{
+	\left(
+	1 + \frac{x_j - t_L}{h}
+	\right) \hat{g}''_{j, \perp}(t_R^+)
+	\left(
+	1 + \frac{t_R - x_j}{h}
+	\right) \hat{g}''_{j, \perp}(t_L^+)
+	\right \}.
+	\label{eq:interp}
+	\end{split}
+	\end{align}
+	Let $\hat{\boldsymbol{\gamma}}_j$ be the vector of second derivatives of $\hat{g}''_{j, \perp}$ at the training covariates for the $j$th axis.
+	Since the fitted functions $\hat{g}_{j, \perp}$ must be natural cubic splines, there is a closed form for $\hat{\boldsymbol{\gamma}}_j$:
+	\begin{align}
+	\hat{\boldsymbol{\gamma}}_j & = R^{-1}_j Q^\top_j K_j \hat{\boldsymbol{\theta}}_j
+	\label{eq:second_deriv}
+	\end{align}
+	where the matrix $R$ is a banded diagonally dominant matrix and $Q$ is a banded negative-semi-definite matrix defined in \citet{green1993nonparametric}.
+	Let $h_j(D^{(n_T)})$ be the smallest distance between the $j$th covariates from the training data.
+	Then using the Gershgorin circle theorem, one can show that all the eigenvalues of $R$ are larger than $\frac{1}{3} h_j(D^{(n_T)})$ and all the eigenvalues of $Q$ have magnitudes no greater than $4/h_j(D^{(n_T)})$.
+	Thus using \eqref{eq:interp} and \eqref{eq:second_deriv}, we have that
+	\begin{align}
+	\left \|
+	\nabla_{\lambda} \hat{g}_{j, \perp}(\boldsymbol{\lambda})(x_j)
+	\right \|_2
+	\le
+	\frac{c}{h_j(D^{(n_T)})^2}
+	\left\|
+	\nabla_{\lambda} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})
+	\right \|_2
+	\end{align}
+	for some absolute constant $c > 0$ (again, assuming validation covariates between 0 and 1).
+	
+	From \eqref{eq:kkt_sobolev}, we have that
+	\begin{align}
+	\nabla_{\lambda_\ell} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})
+	& = 
+	\left[
+	\begin{matrix}
+	0 & .. & 0 & K_j^{1/2} & 0 & .. & 0
+	\end{matrix}
+	\right]
+	\left(
+	K^{(1/2), \top} P_X^\top K^{(1/2)} + \diag(\lambda_j I_j)
+	\right)^{-2}
+	K^{(1/2), \top}
+	P_X^\top (I - \frac{1}{n} 1 1^\top) y
+	\end{align}
+	if $\ell = j$.
+	Otherwise $\nabla_{\lambda_\ell} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}) = 0$.
+	Thus
+	\begin{align}
+	\left\|
+	\nabla_{\lambda_\ell} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})
+	\right \|_2
+	\le
+	\lambda_{\min}^{-2} \|y\|_2 \sqrt{\|K_j\|_2 \sum_{{j'}=1}^J \|K_{j'}\|_2^2}
+	\end{align}
+	The eigenvalues of $K_j$ are bounded above by the largest row sum, which is no more than $2 n_T$ (assuming all training covariates are between 0 and 1).
+	Putting the results above together, we have
+	\begin{align}
+	\left \|
+	\nabla_{\lambda} \hat{g}_{j, \perp}(\boldsymbol{\lambda})(x_j)
+	\right \|_2
+	\le
+	\frac{c \sqrt{J} n_T}{h_j(D^{(n_T)})^2 \lambda_{\min}^2}
+	\|y\|_2.
+	\end{align}
+	
+	Also, we have from \eqref{eq:kkt_sobolev_linear} that
+	\begin{align}
+	\left \| \nabla_{\lambda} \hat{\boldsymbol{\alpha}_1}(\boldsymbol{\lambda}) \right \|_2
+	& =
+	\left \|
+	\left(
+	X^\top X
+	\right)^{-1}
+	X^\top
+	\nabla_{\lambda_j} K \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
+	\right \|_2 \\
+	& =
+	\left \|
+	\left(
+	X^\top X
+	\right)^{-1}
+	X^\top
+	\nabla_{\lambda_j} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})
+	\right \|_2 \\
+	& \le
+	\left \|
+	\left(
+	X^\top X
+	\right)^{-1}
+	X^\top
+	\right \|_2
+	\lambda_{\min}^{-2} \|y\|_2 n_T \sqrt{J}
+	\end{align}
+	Finally we can conclude that
+	\begin{align}
+	\begin{split}
+	\left \|
+	\hat{g}_j(\boldsymbol{\lambda}^{(1)})(x_j)
+	- \hat{g}_j(\boldsymbol{\lambda}^{(2)})(x_j)
+	\right \|_2
+	& \le
+	\left(
+	|x_j|
+	\left \|
+	\left(
+	X^\top X
+	\right)^{-1}
+	X^\top
+	\right \|_2
+	+
+	\frac{c }{h_j(D^{(n_T)})^2}
+	\right)\\
+	& \quad \times
+	\sqrt{J}
+	n_T
+	\lambda_{\min}^{-2}
+	\|y\|_2
+	\| \boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2
+	\end{split}
+	\end{align}
+	By triangle inequality, we obtain our desired result in \eqref{eq:sobolev_lipschitz}.
+\end{example}
 
 
 \bibliographystyle{unsrtnat}
