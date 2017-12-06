@@ -598,7 +598,7 @@ To see why this extension of Theorem 3.5 in \citet{lecue2012oracle} was useful, 
 First we need the following lemma that describes the relationship between Lipschitz functions
 \begin{lemma}
 	Suppose the same conditions as Theorem~\ref{thrm:jean_cv}.
-	Suppose Assumptions~\ref{assump:tail_margin} and \ref{assump:lipschitz} hold.
+	Suppose Assumptions~\ref{assump:lipschitz} and \ref{assump:tail_margin} hold.
 	Also suppose that $\|\epsilon\|_{L_{\psi_2}} = b <\infty$.
 	Define 
 	$\mathcal{Q}_{w}^{L_{2}} = \{g^* - \hat{g}(\boldsymbol{\lambda}|D^{(n_{T})}) : P (g^* - \hat{g}(\boldsymbol{\lambda}|D^{(n_{T})}))^2 < w\}$
@@ -975,7 +975,8 @@ We now show that penalized regression problems for additive models satisfies the
 	& \le
 	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
 	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
-	\left |\boldsymbol{\lambda}^{(1)}_j-\boldsymbol{\lambda}^{(2)}_j \right |.
+	\left |{\lambda}^{(1)}_j-{\lambda}^{(2)}_j \right |.
+	\label{eq:lipschitz_params}
 	\end{align}
 	Finally we combine the above results to get
 	\begin{align}
@@ -995,7 +996,7 @@ We now show that penalized regression problems for additive models satisfies the
 	& \le \sum_{j=1}^J \ell_j(x_j)
 	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
 	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
-	\left |\boldsymbol{\lambda}^{(1)}_j-\boldsymbol{\lambda}^{(2)}_j\right |\\
+	\left |{\lambda}^{(1)}_j-{\lambda}^{(2)}_j\right |\\
 	& \le
 	\frac{1}{m(T) \lambda_{min}}
 	\sqrt{
@@ -1022,10 +1023,10 @@ of $z$ (so if $z$ is a continuous line segment, $\mu_{1}(z)=\|z\|_{2}$;
 if $z$ is composed of multiple line segments $z_{i}$, then $\mu(z)=\sum\mu(z_{i})$).
 
 Before proving the Lipschitz property over all of $\Lambda$, we show that the fitted function is Lipschitz over $\Lambda_{smooth}$.
+For convenience, define $\Lambda_{smooth}^{c} \coloneqq \Lambda \setminus \Lambda_{smooth}$.
 
 \begin{lemma}
-	Suppose that $g_j(x|\boldsymbol{\theta})$ satisfies the Lipschitz
-	condition in Lemma~\ref{lemma:param_add}.
+	Suppose that $g_j(\boldsymbol{\theta})(x)$ satisfies the Lipschitz condition in Lemma~\ref{lemma:param_add}.
 	Let $T\equiv D^{(n_{T})}$ be a fixed set of training data. Suppose
 	the penalized loss function $L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}\right)$
 	has a unique minimizer $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$
@@ -1038,14 +1039,17 @@ Before proving the Lipschitz property over all of $\Lambda$, we show that the fi
 	\begin{equation}
 	\left._{U_{\lambda}}\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta},\boldsymbol{\lambda})\right|_{\theta=\hat{\theta}(\boldsymbol{\lambda})}\succeq m(T)\boldsymbol{I}\quad\forall\boldsymbol{\lambda}\in\Lambda
 	\end{equation}
-	where \textup{$\boldsymbol{I}$ is the identity matrix.} Suppose $\Lambda_{smooth}\subseteq\Lambda$
-	satisfies Condition 1. Define
+	where \textup{$\boldsymbol{I}$ is the identity matrix.}
+	Suppose Condition~\ref{condn:nonsmooth1} is satisfied by some $\Lambda_{smooth}\subseteq\Lambda$.
+	Define
 	\begin{align}
-	\Lambda_{ext}=\left\{ (\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}):\mu_{1}\left(\mathcal{L}(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)})\cap\Lambda_{smooth}^{c}\right)>0\right\}.
+	\Lambda_{ext}=\left\{ (\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}):
+	\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)} \in \Lambda,
+	\mu_{1}\left(\mathcal{L}(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)})\cap\Lambda_{smooth}^{c}\right)>0\right\}.
 	\label{eq:lambda_ext}
 	\end{align}
 	Then any $(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)})\in\Lambda_{ext}^{c}$
-	satisfies the same Lipschitz condition as in Lemma~\ref{lemma:param_add}; that is, it satisfies \eqref{eq:param_add_lipschitz}.
+	satisfies \eqref{eq:param_add_lipschitz}.
 	\label{lemma:lipschitz_lambda_ext_c}
 \end{lemma}
 \begin{proof}
@@ -1113,16 +1117,17 @@ Before proving the Lipschitz property over all of $\Lambda$, we show that the fi
 	\boldsymbol{\lambda}
 	\right ).
 	\]
-	Apply the Lemma~\ref{lemma:param_add} with $\Lambda=\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$,
-	and modify the proofs to take directional derivatives along the columns
-	of $U^{(i)} = (U^{(i,1)}, ..., U^{(i,J)})$ instead.
-	Then there is a Lipschitz constant $c_j>0$ independent of $i$ such that for all $i=1,2...$, such that 
+	We can show that the fitted parameters satisfy the Lipschitz condition \eqref{eq:lipschitz_params} over $\Lambda=\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$ by using the same proof in Lemma~\ref{lemma:param_add} but taking directional derivatives along the columns of $U^{(i)} = (U^{(i,1)} ... U^{(i,J)})$ instead.
+	Then for all $j$ and $i$, we have
 	\begin{align}
 	\left\Vert
 	\boldsymbol{\hat{\beta}}^{(j)}(\boldsymbol{p}^{(i)}|T)
 	-\boldsymbol{\hat{\beta}}^{(j)}(\boldsymbol{p}^{(i)}|T)
 	\right\Vert _{2}
-	\le c_j \left |{p}^{(i)}-{p}^{(i+1)}_j\right |.
+	\le
+	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
+	\left |p^{(i)}_j-p^{(i+1)}_j\right |.
 	\end{align}
 	We can sum these inequalities by the triangle inequality:
 	\begin{align*}
@@ -1137,20 +1142,24 @@ Before proving the Lipschitz property over all of $\Lambda$, we show that the fi
 	-\boldsymbol{\hat{\theta}}^{(j)}(\boldsymbol{p}^{(i + 1)}|T)
 	\right \|_{2}\\
 	& \le
-	c_j
+	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
 	\sum_{i=1}^{\infty} 
 	\left |
 	{p}^{(i)}_j-{p}^{(i+1)}_j
 	\right |\\
-	& = c_j \left |{\lambda}^{(1)}_j - {\lambda}^{(2)}_j\right |.
+	& =
+	\frac{1}{m(T)} \frac{\|\ell_j\|_T}{\lambda_{min}}
+	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
+	\left |{\lambda}^{(1)}_j - {\lambda}^{(2)}_j\right |.
 	\end{align*}
-	Finally, following the same logic as in the proof of Lemma~\ref{lemma:param_add}, we have by the Lipschitz assumption that
-	\[
-	\left|g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)}|T)\right)-g\left(x\mid\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)}|T)\right)\right|
-	\le
-	\sqrt{\sum_{j=1}^J c_j^2 \ell_j^2(x_j)}
-	\left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|_{2}.
-	\]
+	Finally, using the fact that $g_j$ is $\ell_j$-Lipschitz, we have
+	\begin{align}
+	C_\Lambda(\boldsymbol{x})
+	= \frac{\sqrt{\| \epsilon \|_T^2 + 2 C^*_{\Lambda}}}{m(T) \lambda_{min}}
+	\sqrt{\sum_{j=1}^J \|\ell_j\|_T^2 \ell_j^2(x_j)}.
+	\label{eq:nonsmooth_lipschitz_func}
+	\end{align}
 \end{proof}
 
 In order to extend the result in Lemma~\ref{lemma:lipschitz_lambda_ext_c} to all of $\Lambda$, we need to show that $\Lambda_{ext}$ is a set with measure zero.
@@ -1246,32 +1255,27 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	$\left(\boldsymbol{\lambda}^{(1,i)},\boldsymbol{\lambda}^{(2,i)}\right)\in\Lambda_{ext}^{c}$
 	such that $\lim_{i\rightarrow\infty}\left(\boldsymbol{\lambda}^{(1,i)},\boldsymbol{\lambda}^{(2,i)}\right)=\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)$.
 	As $L_T$ is continuous and we have assumed that there exists a unique minimizer of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ for all $\boldsymbol{\lambda} \in \Lambda$, then $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is continuous in $\boldsymbol{\lambda}$ over all $\Lambda$.
-	As $g(x | \boldsymbol{\theta})$ is also continuous in $\boldsymbol{\theta}$, then for any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda$,
+	As $g(\boldsymbol{\theta})(x)$ is also continuous in $\boldsymbol{\theta}$, then for any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda$,
 	we have
 	\begin{align}
 		\left |
-		g\left(
-		x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)})
-		\right)
+		g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1)} | T)(\boldsymbol{x})
 		-
-		g\left(
-		x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)})
-		\right)
+		g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2)} | T)(\boldsymbol{x})
 		\right |
 		& = \lim_{i\rightarrow\infty}
 		\left |
-		g\left(
-		x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1,i)})
-		\right)
+		g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(1,i)} |T))(\boldsymbol{x})
 		-
-		g\left(
-		x \middle | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2,i)})
-		\right)
+		g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2,i)} |T))(\boldsymbol{x})
 		\right |\\
-		& \le \lim_{i\rightarrow\infty}c\|\boldsymbol{\lambda}^{(1,i)}-\boldsymbol{\lambda}^{(2,i)}\|_{2}\\
-		& = c\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
+		& \le \lim_{i\rightarrow\infty}
+		C_\Lambda(\boldsymbol{x})
+		\|\boldsymbol{\lambda}^{(1,i)}-\boldsymbol{\lambda}^{(2,i)}\|_{2}\\
+		& = C_\Lambda(\boldsymbol{x})
+		\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
 	\end{align}
-	where $c$ is the Lipschitz constant in Lemma~\ref{lemma:lipschitz_lambda_ext_c}.
+	where $C_\Lambda(\boldsymbol{x})$ is defined in \eqref{eq:nonsmooth_lipschitz_func}.
 \end{proof}
 
 \subsubsection{Proof for Lemma \ref{lemma:nonparam_smooth}}
@@ -1622,6 +1626,35 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\end{split}
 	\end{align}
 	By triangle inequality, we obtain our desired result in \eqref{eq:sobolev_lipschitz}.
+\end{example}
+
+\begin{example}[Multiple elastic nets, training-validation split]
+	Here we check that Condition~\ref{condn:nonsmooth1} is satisfied.
+	Since the absolute value function $|\cdot|$ is twice-continuously differentiable everywhere except at zero, the directional derivatives of $||\boldsymbol \theta^{(j)}||_1$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ only exist along directions spanned by the columns of $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$.
+	Thus the penalized training loss $L_T(\cdot, \boldsymbol{\lambda})$ is twice differentiable with respect to the directions in \eqref{eq:en_diff_space}.
+	Moreover, the elastic net solution paths are piecewise linear \citep{zou2003regression}, which means that the nonzero indices of the elastic net estimates stay locally constant for almost every $\boldsymbol{\lambda}$. Therefore, \eqref{eq:en_diff_space} is also a local optimality space for $L_T(\cdot, \boldsymbol{\lambda})$.
+	
+	We also show that the Hessian of the penalized training loss has a minimum eigenvalue of $\lambda_{\min}$.
+	Consider the following orthogonal basis of \eqref{eq:en_diff_space} at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$: $U(\boldsymbol{\lambda}) = \{U^{(j)}(\boldsymbol{\lambda})\}_{j = 1}^J$ where
+	\begin{align}
+	U^{(j)} =
+	\left(
+	\begin{matrix}
+	\boldsymbol{0} \\
+	I_{I^{(j)}(\boldsymbol \lambda)}\\
+	\boldsymbol{0}
+	\end{matrix}
+	\right)
+	\quad \forall j = 1,...,J.
+	\end{align}
+	The Hessian matrix of $L_T(\cdot, \boldsymbol{\lambda})$ with respect to directions $U(\boldsymbol{\lambda})$ is
+	\begin{align}
+	\boldsymbol U(\boldsymbol{\lambda})^\top \boldsymbol{X}_{T}^\top \boldsymbol{X}_{T} \boldsymbol U(\boldsymbol{\lambda}) + \lambda_1 w \boldsymbol{I}
+	\label{eq:en_hessian}
+	\end{align}
+	where $\boldsymbol{X}_{T} = (\boldsymbol{X}^{(1)} ... \boldsymbol{X}^{(J)})$
+	and $\boldsymbol{I}$ is the identity matrix with length equal to the number of nonzero elements in $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$.
+	Since the first summand is positive semi-definite and $\lambda_1 > \lambda_{\min}$, \eqref{eq:en_hessian} has a minimum eigenvalue of $\lambda_{\min}$.
 \end{example}
 
 

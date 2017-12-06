@@ -228,13 +228,18 @@ where $\| h \|^2_{V}=\frac{1}{n_V}\sum_{(x_i, y_i)\in V} h^2(x_i, y_i)$ for any 
 
 We now present a finite-sample oracle inequality for the single training/validation split assuming the model-estimation procedure is Lipschitz.
 Our oracle inequality is sharp, i.e. $a=0$ in \eqref{thrm:intro_oracle_ineq}, unlike most other work \citep{gyorfi2006distribution, lecue2012oracle, van2003unified}.
-This theorem requires minimal assumptions -- it only requires that $\epsilon$ are sub-gaussian random variables and that the model-estimation procedure is Lipschitz.
-The tradeoff is that our oracle inequality only characterizes the fitted model at the validation covariates.
+This theorem requires minimal assumptions -- it only requires that $\epsilon$ are sub-gaussian random variables and the following Lipschit assumption:
+\begin{assump}
+	\label{assump:lipschitz}
+	Suppose for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
+	\begin{align}
+	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
+	\end{align}
+\end{assump}
 Note that the result below is a special case of Theorem \ref{thrm:train_val_complicated} in Appendix \ref{appendix:train_val}, which applies to general model-estimation procedures.
 \begin{theorem}
 	\label{thrm:train_val}
 	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$.
-	% ONLY necessary for the validation set
 	Suppose independent random variables $\epsilon_i$ associated with the validation data $(x_i, y_i) \in V$ have expectation zero and are uniformly sub-Gaussian with parameters $b$ and $B$:
 	$$
 	\max_{i: (x_i, y_i) \in V} B^2 \left ( \mathbb{E} e^{|\epsilon_i|^2/B^2} - 1 \right ) \le b^2.
@@ -246,7 +251,7 @@ Note that the result below is a special case of Theorem \ref{thrm:train_val_comp
 	\label{eq:tilde_lambda_def}
 	\end{equation}
 	
-	Now suppose there exists a function $C_\Lambda: \mathbb{R}^p \mapsto \mathbb{R}$ such that $\hat g^{(n_T)}(\boldsymbol{\lambda} |D^{(n_T)})$ is $C_\Lambda$-Lipschitz with respect to $\boldsymbol{\lambda}$ over $\Lambda$.
+	Suppose Assumption~\ref{assump:lipschitz} is satisfied.
 	Then there is a constant $c>0$ only depending on $b$ and $B$ such that for all $\delta$ satisfying
 	\begin{equation}
 	\delta^{2}
@@ -279,9 +284,10 @@ Theorem \ref{thrm:train_val} states that with high probability, the difference b
 	\label{corr:train_val}
 	Under the assumptions given in Theorem \ref{thrm:train_val}, we have
 	\begin{align}
-	%JF please update
 	\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2 &
-	\le \min_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( {\boldsymbol{\lambda}} | T) \right \Vert^2_{V}\\
+	\le \min_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( {\boldsymbol{\lambda}} | T) \right \Vert^2_{V}
+	\label{eq:asym_train_val_oracle_risk}
+	\\
 	& + O_p \left(\frac{J\log (n \|C_\Lambda\|_V \Delta_{\Lambda} )}{n_{V}} \right) 
 	\label{eq:asym_train_val_theorem1} \\
 	& + O_p \left(
@@ -350,16 +356,14 @@ Before presenting the theorem, recall the definition of the Orlicz norm:
 \noindent We will be concerned with the Orlicz norms $\psi_\alpha = \exp(x^\alpha) - 1 $ for $\alpha = 1, 2$.
 The $\psi_\alpha$-norm can be used to bound the tail behavior of a random variable.
 
-Our oracle inequality depends on two assumptions.
-The first assumption bounds the tail behavior of the fitted models and is similar to that in \citet{lecue2012oracle}.
+Our oracle inequality depends on an additional assumption that bounds the tail behavior of the fitted models.
+The assumption is based on that in \citet{lecue2012oracle}.
 \begin{assump}
 	\label{assump:tail_margin}
 	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda} \in \Lambda$, we have
 	\begin{align}
 	\left \|
-	\left(
 	g^* (x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})(x)
-	\right)^2
 	\right \|_{L_{\psi_2}} & \le K_0
 	\label{eq:cv_assump1}\\
 	\left \|
@@ -377,16 +381,8 @@ The first assumption bounds the tail behavior of the fitted models and is simila
 	\label{eq:cv_assump2}
 	\end{align}
 \end{assump}
-\noindent The second assumption is that our fitted functions are Lipschitz.
-\begin{assump}
-	\label{assump:lipschitz}
-	Suppose for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
-	\begin{align}
-	\left |\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right | \le C_\Lambda(x|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
-	\end{align}
-\end{assump}
 
-Under these two assumptions, we have the following oracle inequality.
+With these assumptions, we establish an oracle inequality that bounds the risk of the fitted model from cross-validation.
 We prove Theorem~\ref{thrm:jean_cv} in the Appendix, which is more general than the following theorem.
 \begin{theorem}
 	\label{thrm:kfold}
@@ -400,7 +396,7 @@ We prove Theorem~\ref{thrm:jean_cv} in the Appendix, which is more general than 
 	\tilde{h}(n_{T})
 	\ge
 	1 + \sum_{k=1}^{\infty}
-	k\Pr_{D^{(n_T)}}\left(\|C_\Lambda(\cdot |D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma_{0}\right).
+	k\Pr\left(\|C_\Lambda(\cdot |D^{(n_{T})})\|_{L_{\psi_{2}}}\ge2^{k}\sigma_{0}\right).
 	\end{align}
 
 	Then there exists an absolute constant $c_{1}>0$ and a constant $c_{K_0, b}>0$ such that for any $a > 0$,
@@ -457,21 +453,11 @@ However we will not consider split-sample validation over all $\lambda\in\mathbb
 \end{equation}
 for sufficiently large $t_{\min}, t_{\max} \ge 0$. This regime works well for two reasons: one, our rates depend only quite weakly on $t_{\min}$ and $t_{\max}$; and two, generally oracle $\lambda$-values are $\sim n^{-\alpha}$ for some $\alpha \in (0,1)$ \citep{van2000empirical, van2014additive, buhlmann2011statistics}. So long as $t_{\min} > \alpha$, $\Lambda$ will contain the optimal penalty parameter.
 
-If $\Lambda$ is of the form \eqref{thrm:lambda_range}, we find that the Lipschitz function $C_\Lambda(x | T)$ scales with some polynomial of $n$ for many penalized regression examples, such as those in Sections \ref{sec:param_add_models} and \ref{sec:nonparam_smooth}.
-That is, there exist a function $C_\Lambda(x | T)$ and $\kappa \ge 0$ such that
-\begin{equation}
-\label{thrm:lipschitz_pen_reg}
-\left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}|T)(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}'|T)(x) \right \|_{L_{\psi_1}}
-\le C_\Lambda(x| T) n^\kappa \left \| \boldsymbol{\lambda} - \boldsymbol{\lambda}' \right \|_2 \quad \forall \boldsymbol{\lambda}, \boldsymbol{\lambda}' \in \Lambda.
-\end{equation}
-In our examples, $\kappa$ typically grows linearly in $t_{\min}$.
-Plugging \eqref{thrm:lipschitz_pen_reg} into Theorem~\ref{thrm:train_val}, we immediately see that the remainder term depends linearly on $\kappa$ as the the remainder term depends on the logarithm of the Lipschitz function.
-The formulation in Theorem~\ref{thrm:kfold} more abstract.
-In our Lasso example, we find that a similar relationship holds between the remainder term and $\kappa$.
+If $\Lambda$ is of the form \eqref{thrm:lambda_range}, we find that the Lipschitz function $C_\Lambda(x | T)$ scales with some $n^{O_p(t_{\min})}$ for many penalized regression examples, such as those in Sections \ref{sec:param_add_models} and \ref{sec:nonparam_smooth}.
+So for the training-validation split procedure, we find that the remainder term depends linearly on $t_{\min}$.
+For cross-validation, we find a similar relationship between $t_{\min}$ and the remainder term.
 
-%These results are very similar to those in Corollary \ref{corr:train_val} and Theorem \ref{thrm:kfold}. The oracle inequalities have the same near-parametric term and geometric mean for the single training/validation split and a near-parametric term for cross-validation. The near-parametric terms have the familiar $\log n$ in the numerator because the error terms are proportional to the logarithm of the Lipschitz constant and $\lambda_{\max}$. 
-
-Therefore we reach the same conclusion for the relationship between penalty parameters and the generalization error of the selected model. In high-dimensional and non-parametric penalized regression problems satisfying \eqref{thrm:lipschitz_pen_reg}, the error from tuning penalty parameters is negligible compared to the error from solving the penalized regression problem with the oracle penalty parameters.
+Therefore we reach the same conclusion for the relationship between penalty parameters and the generalization error of the selected model. In high-dimensional and non-parametric penalized regression problems that satisfy the Lipschitz assumption, the error from tuning penalty parameters is negligible compared to the error from solving the penalized regression problem with the oracle penalty parameters.
 
 It remains to characterize penalized problems wherein the fitted models are Lipschitz in the penalty parameters. In this manuscript we will do an in-depth study of additive models, which have the form
 \begin{equation}
@@ -501,16 +487,19 @@ Suppose $\boldsymbol{\theta}^*$ is the unique minimizer of the expected generali
 \subsubsection{Parametric regression with smooth penalties}
 \label{sec:param_smooth}
 We begin with the simple case where the penalty functions are smooth. The following lemma states that the fitted models are Lipschitz in the penalty parameter vector.
+Given matrices $A$ and $B$, $A \succeq B$ means that $A - B$ is a positive semi-definite matrix.
 \begin{lemma}
 	\label{lemma:param_add}
+	Let $\Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ where $\lambda_{\max} \ge \lambda_{\min} > 0$.
 	For a fixed training dataset $T \equiv D^{(n_T)}$, suppose $L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)$ has a unique minimizer denoted
 	\begin{equation}
 	\label{eq:param_add_estimator}
 	\left\{
 	\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda} | T \right )
 	\right\}_{j=1}^J =
-	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right).
+	\argmin_{\boldsymbol{\theta} \in \mathbb{R}^p} L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right)
 	\end{equation}
+	for all $\boldsymbol{\lambda} \in \Lambda$.
 	Suppose for all $j = 1,...,J$, the parametric class $g_j$ is $\ell_j$-Lipschitz in its parameters
 	\begin{align}
 	\left|
@@ -518,30 +507,23 @@ We begin with the simple case where the penalty functions are smooth. The follow
 	-g_j (\boldsymbol{\theta}^{(2)} )(\boldsymbol{x})
 	\right|
 	\le
-	\ell_j (x)
+	\ell_j (\boldsymbol{x})
 	\|\boldsymbol{\theta}^{(1)}-\boldsymbol{\theta}^{(2)}\|_{2}.
 	\end{align}
 	Further suppose for all $j=1,..,J$, $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(\boldsymbol{\theta}^{(j)})(\boldsymbol{x})$ are twice-differentiable with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $\boldsymbol{x}$.
 	Suppose there exists an $m(T) > 0$ such that the Hessian of the penalized training criterion at the minimizer satisfies
 	\begin{equation}
-	\left . \nabla_{\theta}^2 L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right) \right |_{\theta = \hat{\theta}(\boldsymbol{\lambda} | T )} \succeq m(T) I \quad \forall \boldsymbol{\lambda} \in \Lambda,
+	\left . \nabla_{\theta}^2 L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right) \right |_{\theta = \hat{\theta}(\boldsymbol{\lambda} | T )} \succeq m(T) \boldsymbol{I}
+	\quad \forall \boldsymbol{\lambda} \in \Lambda,
 	\label{eq:smooth_pos_def}
 	\end{equation}
-	where $I$ is a $p \times p$ identity matrix and $A \succeq B$ means that $A - B$ is a positive semi-definite matrix.
-	
-	\noindent
-	Let $\lambda_{\max} \ge \lambda_{\min} > 0$. Let
-	\begin{equation}
-	C^*_{\Lambda} = \lambda_{max}\sum_{j=1}^{J} P_{j}(\boldsymbol{\theta}^{(j),*}).
-	\end{equation}
-	
-	\noindent
-	Then for any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$,
+	where $I$ is a $p \times p$ identity matrix.
+	Then for any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$,
 	Assumption~\ref{assump:lipschitz} is satisfied with
 	%JF update this to match appendix!
 	\begin{equation}
 	\label{eq:param_add_lipschitz}
-	C_\Lambda(x | T) =
+	C_\Lambda(\boldsymbol{x} | T) =
 	\frac{1}{m(T) \lambda_{min}}
 	\sqrt{
 		\left(
@@ -552,6 +534,7 @@ We begin with the simple case where the penalty functions are smooth. The follow
 		\right)
 	}
 	\end{equation}
+	where $C^*_{\Lambda} = \lambda_{max}\sum_{j=1}^{J} P_{j}(\boldsymbol{\theta}^{(j),*})$.
 \end{lemma}
 
 %JF lol this is so out of place
@@ -620,10 +603,11 @@ In the following example, we start from the closed-form solution to determine th
 	\left(
 	y_i - \alpha_0 - \sum_{j=1}^J g_j(x_{ij})
 	\right)^2
-	+ \sum_{j=1}^{J} \lambda_j \int_0^1 \left(g_j^{''}(x)\right)^{2} dx
+	+ \sum_{j=1}^{J} \lambda_j \int_{\mathcal{X}} \left(g_j^{''}(x)\right)^{2} dx
 	\label{eq:smoothing_spline}
 	\end{align}
 	where the penalty function is the Sobolev norm.
+	For this example, we will suppose $\mathcal{X} = [0,1]^p$.
 	Since the solution to \eqref{eq:smoothing_spline} must be the sum of natural cubic splines \citep{buja1989linear}, we can parameterize the functions $g_j$ by its linear component and an orthogonal component in a Reproducing Kernel Hilbert Space with reproducing kernel $R$:
 	\begin{align}
 	g_j(x_j) = \alpha_{1j} x_j + \sum_{i=1}^n \theta_{ij} R(x_{ij}, x_j).
@@ -689,6 +673,7 @@ In the following example, we start from the closed-form solution to determine th
 	\sum_{j=1}^J h_j^{-2}(T)
 	\right)
 	\right ).
+	\label{eq:sobolev_param}
 	\end{align}
 	For the full derivation, refer to the Appendix.
 \end{example}
@@ -696,9 +681,8 @@ In the following example, we start from the closed-form solution to determine th
 \subsubsection{Parametric regression with non-smooth penalties}
 \label{sec:param_nonsmooth}
 
-If the regression problem contains non-smooth penalty functions, similar results do not necessarily hold. Nonetheless we find that for many popular non-smooth penalty functions, such as the lasso \citep{tibshirani1996regression} and group lasso \citep{yuan2006model}, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere.
-%JF cite ourselves
-To characterize such problems, we begin with the following definitions:
+If the penalty functions are non-smooth, similar results do not necessarily hold. Nonetheless we find that for many popular non-smooth penalty functions, such as the lasso \citep{tibshirani1996regression} and group lasso \citep{yuan2006model}, the fitted functions are still smoothly parameterized by $\boldsymbol \lambda$ almost everywhere.
+To characterize such problems, we begin with the following definitions from \citet{feng2017gradient}:
 
 \begin{definition}
 	The differentiable space of function $f:\mathbb{R}^p \mapsto \mathbb{R}$ at $\boldsymbol{\theta}$ is
@@ -746,39 +730,38 @@ In particular, we need $\Lambda_{smooth}$ to satisfy the following conditions:
 \end{condition}
 \begin{condition}
 	\label{condn:nonsmooth2}
-	Let $\mu$ be the Lebesgue measure in $\mathbb{R}^{J}$.
-	$\Lambda_{smooth}^c \coloneqq \Lambda \setminus \Lambda_{smooth}$ has measure zero: $\mu(\Lambda_{smooth}^c) = 0$.
+	$\Lambda \setminus \Lambda_{smooth}$ has Lebesgue measure zero: $\mu(\Lambda_{smooth}^c) = 0$.
 \end{condition}
 
 Equipped with these conditions, we can characterize the smoothness of the fitted functions when the penalties are non-smooth. In fact the Lipschitz constant is exactly the same as that in Lemma \ref{lemma:param_add}.
 
 \begin{lemma}
 	\label{lemma:nonsmooth}
-	%JF update the whole damn thing
-	Define $\hat{\boldsymbol{\theta}}^{(j)}\left (\boldsymbol{\lambda} | T\right )$ as in \eqref{eq:param_add_estimator}.
-	
-	\noindent
-	Suppose $g_j(\boldsymbol{\theta}^{(j)})$ is $L$-Lipschitz in $\boldsymbol{\theta}^{(j)}$ with respect to $\| \cdot \|_\infty$ for all $j=1,..,J$.
-	
-	\noindent		
-	Further suppose that $P_j(\boldsymbol{\theta}^{(j)})$ and $g_j(x | \boldsymbol{\theta}^{(j)})$ are convex with respect to $\boldsymbol{\theta}^{(j)}$ for any fixed $x$ and all $j=1,..,J$.
-	%JF dont see why should be convex
-	Also suppose that $L_T\left ( \boldsymbol{\theta} , \boldsymbol{\lambda} \right )$ is convex with respect to $\boldsymbol{\theta}$.
-	%JF dont see why should be convex
-	
-	Let $U_\lambda$ be an orthonormal matrix with columns forming a basis for the differentiable space of $L_T(\cdot , \boldsymbol{\lambda})$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$. Suppose there exists $m > 0$ such that the Hessian of the penalized training criterion at the minimizer taken with respect to the directions in $U_\lambda$ satisfies 
+	Let $\Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ where $\lambda_{\max} \ge \lambda_{\min} > 0$.
+	Suppose that $g_j(\boldsymbol{\theta})(x)$ satisfies the Lipschitz condition in Lemma~\ref{lemma:param_add}.
+	Suppose for training data $T\equiv D^{(n_{T})}$, the penalized loss function $L_{T}\left(\boldsymbol{\theta},\boldsymbol{\lambda}\right)$
+	has a unique minimizer $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$
+	for every $\boldsymbol{\lambda}\in\Lambda$.
+	Let $\boldsymbol{U}_{\lambda}$
+	be an orthonormal matrix with columns forming a basis for the differentiable
+	space of $L_{T}(\cdot,\boldsymbol{\lambda})$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}|T)$.
+	Suppose there exists a constant $m(T)>0$ such that the Hessian of
+	the penalized training criterion at the minimizer taken with respect
+	to the directions in $\boldsymbol{U}_{\lambda}$ satisfies 
 	\begin{equation}
-	\left . _{U_\lambda}\nabla_{\theta}^2 L_T(\boldsymbol{\theta}, \boldsymbol{\lambda}) \right |_{\theta = \hat{\theta}(\boldsymbol{\lambda})} \succeq mI.
+	\left._{U_{\lambda}}\nabla_{\theta}^{2}L_{T}(\boldsymbol{\theta},\boldsymbol{\lambda})\right|_{\theta=\hat{\theta}(\boldsymbol{\lambda})}\succeq m(T)\boldsymbol{I}\quad\forall\boldsymbol{\lambda}\in\Lambda
 	\end{equation}
-	%JF for all lambda.
-	
-	Suppose $\Lambda_{smooth} \subseteq \Lambda$ satisfies Conditions \ref{condn:nonsmooth1} and \ref{condn:nonsmooth2}. Then any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda_{smooth}$ satisfies  \eqref{eq:param_add_lipschitz}.
+	where \textup{$\boldsymbol{I}$ is the identity matrix.}
+	Suppose Conditions~\ref{condn:nonsmooth1} and \ref{condn:nonsmooth2} are satisfied by some $\Lambda_{smooth}\subseteq\Lambda$.
+	Then any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$ satisfies Assumption~\ref{assump:lipschitz} with $C_\Lambda$ defined in \eqref{eq:param_add_lipschitz}.
 \end{lemma}
 
-\begin{example}[Multiple elastic nets, training validation split]
+We now consider an example with the elastic net \citep{zou2003regression}.
+
+\begin{example}[Multiple elastic nets, training/validation split]
 	\label{ex:elastic_net_tv}
-	The elastic net penalty is a combination of the lasso and ridge penalty.
-	Let us consider the following example with multiple elastic net penalties
+	As in the ridge penalty example, suppose we are interested in fitting a linear model and would like to use the elastic net.
+	If we have groups of covariates, we can penalize each group differently by employing multiple penalty parameters as follows
 	\begin{align}
 	\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
 	=\argmin_{\theta^{(j)} \in \mathbb{R}^{p_j}, j = 1,...,J}
@@ -786,193 +769,131 @@ Equipped with these conditions, we can characterize the smoothness of the fitted
 	+ \sum_{j=1}^J \lambda_j \left(
 	\| \boldsymbol{\theta}^{(j)}\|_1
 	+ \frac{w}{2} \| \boldsymbol{\theta}^{(j)}\|_2^2
-	\right).
+	\right)
 	\label{eq:elastic_net_ex}
 	\end{align}
-	Here we treat $w$ as some fixed parameter as Lemma~\ref{lemma:nonsmooth} considers additive penalties.
-	For each $j = 1,...,J$, let the nonzero indices of $\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})$ be denoted $I^{(j)}(\boldsymbol\lambda) = \{i | \hat{\theta}_i(\boldsymbol\lambda) \ne 0 \text{ for } i=1,...,p_j \}$ and let $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$ be a submatrix of the identity matrix with columns $I^{(j)}(\boldsymbol\lambda)$.
-	With the above notation, we can now check that Conditions~\ref{condn:nonsmooth1} and \ref{condn:nonsmooth2} are satisfied.
-	\begin{itemize}
-		\item[] \textbf{Condition~\ref{condn:nonsmooth1}}: Since the absolute value function $|\cdot|$ is twice-continuously differentiable everywhere except at zero, the directional derivatives of $||\boldsymbol \theta^{(j)}||_1$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ only exist along directions spanned by the columns of $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$.
-		Thus the penalized training loss $L_T(\cdot, \boldsymbol{\lambda})$ is twice differentiable with respect to the directions in the space
-		\begin{align}
-		\Omega^{L_T(\cdot, \lambda)}(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T))
-		= \spann(I_{I^{(1)}(\boldsymbol \lambda)}) \times ... \times \spann(I_{I^{(J)}(\boldsymbol \lambda)}).
-		\label{eq:en_diff_space}
-		\end{align}
-		%JF this isn't a formal proof as they only has a single elastic net. Maybe we should mention this!
-		Moreover, the elastic net solution paths are piecewise linear \citep{zou2003regression}, which means that the nonzero indices of the elastic net estimates stay locally constant for almost every $\boldsymbol{\lambda}$. Therefore, \eqref{eq:en_diff_space} is also a local optimality space for $L_T(\cdot, \boldsymbol{\lambda})$.
-		\item[] \textbf{Condition~\ref{condn:nonsmooth2}}: The elastic net solution paths are piecewise linear \citep{zou2003regression} therefore $\Lambda_{smooth}^c$ is a set of countable $\lambda$, e.g. $\Lambda_{smooth}^c$ has measure zero.
-	\end{itemize}
-	Before we can apply Lemma~\ref{lemma:nonsmooth}, we must also show that the Hessian of the penalized training loss has a minimum eigenvalue bounded away from zero.
-	Consider the following orthogonal basis of \eqref{eq:en_diff_space} at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$: $U(\boldsymbol{\lambda}) = \{U^{(j)}(\boldsymbol{\lambda})\}_{j = 1}^J$ where
-	\begin{align}
-	U^{(j)} =
-	\left(
-	\begin{matrix}
-	\boldsymbol{0} \\
-	I_{I^{(j)}(\boldsymbol \lambda)}\\
-	\boldsymbol{0}
-	\end{matrix}
-	\right)
-	\quad \forall j = 1,...,J.
-	\end{align}
-	The Hessian matrix of $L_T(\cdot, \boldsymbol{\lambda})$ with respect to directions $U(\boldsymbol{\lambda})$ is
-	$$
-	\boldsymbol U(\boldsymbol{\lambda})^\top \boldsymbol{X}_{T}^\top \boldsymbol{X}_{T} \boldsymbol U(\boldsymbol{\lambda}) + \lambda_1 w \boldsymbol{I}
-	$$
-	where $\boldsymbol{X}_{T} = (\boldsymbol{X}^{(1)} ... \boldsymbol{X}^{(J)})$
-	and $\boldsymbol{I}$ is the identity matrix with length equal to the number of nonzero elements in $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$.
-	The first summand is positive semi-definite.
-	Since $\lambda_1 > \lambda_{\min}$, the Hessian has a minimum eigenvalue of $\lambda_{\min}$.
+	where $w$ as a fixed parameter.
+	Here we establish an oracle inequality when the penalty parameters are tuned over $\Lambda$ via training/validation split.
+	$\Lambda$ is defined the same as that in the ridge example.
 	
-	Suppose the penalty parameters are tuned over $\Lambda = \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$ using a training-validation split with $\lambda_{\min} = n^{-\kappa}$ for some $\kappa \ge 1$ and $\lambda_{\max} = 1$.
-	Similar to the ridge example, every function $g_j(x^{(j)})$ is Lipschitz with $\ell_j(x^{(j)}) = \|x^{(j)}\|_2$.
-	Finally, applying Lemma~\ref{lemma:nonsmooth}, for any training dataset $D^{(n_T)}$, the function $g(x | \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))$ is Lipschitz with function
+	For each $j = 1,...,J$, let the nonzero indices of $\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})$ be denoted $I^{(j)}(\boldsymbol\lambda) = \{i | \hat{\theta}_i(\boldsymbol\lambda) \ne 0 \text{ for } i=1,...,p_j \}$ and let $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$ be a submatrix of the identity matrix with columns $I^{(j)}(\boldsymbol\lambda)$.
+	Condition~\ref{condn:nonsmooth1} is satisfied with differentiable space
 	\begin{align}
-	C_\Lambda \left ( x | D^{(n_T)} \right ) =
-	\frac{n^{2\kappa}}{w}
+	\Omega^{L_T(\cdot, \lambda)}(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T))
+	= \spann(I_{I^{(1)}(\boldsymbol \lambda)}) \times ... \times \spann(I_{I^{(J)}(\boldsymbol \lambda)}).
+	\label{eq:en_diff_space}
+	\end{align}
+	Condition~\ref{condn:nonsmooth2} is also satisfied since elastic net solution paths are piecewise linear \citep{zou2003regression}.
+	In addition, the Hessian of the penalized training loss has a minimum eigenvalue $m(T) \ge \lambda_{\min}$.
+
+	From Lemma~\ref{lemma:nonsmooth}, we have that the function $g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} |T))(\boldsymbol{x})$ is $C_\Lambda$-Lipschitz where
+	\begin{align}
+	C_\Lambda \left ( \boldsymbol{x} | T \right ) =
+	\frac{n^{2t_{\min}}}{w}
 	\sqrt{
-	C^*_{D^{(n_T)}}
+	C^*_T
 	\sum_{j = 1}^J
 	\left \|
-	\|x^{(j)} \|_2
+	\|\boldsymbol{x}^{(j)} \|_2
 	\right \|_T^2
-	\|x^{(j)}\|_2^2
+	\|\boldsymbol{x}^{(j)}\|_2^2
 	}
 	\label{eq:elastic_lipschitz}
 	\end{align}
-	where $$
-	C^*_{D^{(n_T)}} = 
+	where
+	$
+	C^*_T =
 	\|\epsilon\|_{T}^{2}
-		+\sum_{j=1}^J
-		\left (
-		2 \|\boldsymbol{\theta}^{*,(j)}\|_1
-		+ w\|\boldsymbol{\theta}^{*,(j)}\|_2^2
-		\right )
-	.$$
-	By Theorem~\ref{thrm:train_val}, we have with high probability
+	+\sum_{j=1}^J
+	2 \|\boldsymbol{\theta}^{*,(j)}\|_1
+	+ w\|\boldsymbol{\theta}^{*,(j)}\|_2^2
+	$.
+	Then by Theorem~\ref{thrm:train_val}, the parametric term in the remainder has the form
 	\begin{align}
-	\begin{split}
-	&\left\Vert g^* - \hat{g}^{(n_T)}( \hat{\boldsymbol{\lambda}} | T) \right\Vert _{V}^2\\
-	&\le \inf_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \Vert^2_{V}\\
-	& + O_p\left (
-	\frac{J \kappa
+	\frac{J t_{\min}}{n_{V}}
 	\log \left (
-	C^*_{D^{(n_T)}}
+	C^*_T
 	w^{-1} n
 	\sum_{j=1}^J
-	\left \| \|x^{(j)}\|_2 \right \|_T^2 \left \| \|x^{(j)}\|_2 \right \|_V^2
-	\right )}{n_{V}}
-	\right ) \\
-	& + O_p\left(
-	\sqrt{
-		\frac{J \kappa
-		\log \left (
-		C^*_{D^{(n_T)}}
-		w^{-1} n
-		\sum_{j=1}^J
-		\left \| \|x^{(j)}\|_2 \right \|_T^2 \left \| \|x^{(j)}\|_2 \right \|_V^2
-		\right )}{n_{V}}
-		\inf_{\lambda \in \Lambda} \left\Vert g^* - \hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \Vert^2_{V}
-	}
+	\left \| \|\boldsymbol{x}^{(j)}\|_2 \right \|_T^2 \left \| \|\boldsymbol{x}^{(j)}\|_2 \right \|_V^2
 	\right ).
-	\end{split}
 	\end{align}
 \end{example}
 
-We believe other $L_p$-norm penalties, like the group lasso, also satisfy these conditions.
-%JF maybe elaborate more. point to our other paper
-
 \begin{example}[Multiple elastic nets, cross-validation]
-	In the previous example, we only considered a training/validation split.
-	Here we would like to consider applying Theorem~\ref{thrm:kfold} which provides an oracle inequality for average modified cross-validation.
-	%JF check wording of CV method above.
+	%JF check the name of the CV method.
+	Now we would like to establish an oracle inequality for average modified cross-validation.
 	We consider a similar setup as that in \citet{lecue2012oracle}.
-	For simplicity, we suppose that $X$ is drawn uniformly from a sphere of radius $R > 0$ in $\mathbb{R}^p$.
+	For simplicity, suppose $X$ is drawn uniformly from $[-R, R]^p$ for some $R > 0$.
 	Then $X$ is a log-concave vector and
-	$$
-	\sup_{\|a\|_\infty = 1} \left\| \langle X, a \rangle \right \|_{L_{\psi_2}} < c_R
-	$$
+	$
+	\sup_{\|a\|_\infty = 1} \left\| X^\top a \right \|_{L_{\psi_2}} < c_R < \infty
+	$
 	for some constant $c_R > 0$.
-	In addition, the noise $\epsilon$ is $\psi_2$.
+	In addition, suppose the noise $\epsilon$ is also sub-gaussian.
 	As shown in \citet{lecue2012oracle}, \eqref{eq:cv_assump2} is satisfied.
-	To satisfy \eqref{eq:cv_assump1}, our fitting procedure for $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ entails a thresholding operation reminiscent of that in \citet{lecue2012oracle}.
-	In particular, we first solve \eqref{eq:elastic_net_ex} to obtain $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ and then threshold any covariates that are over some constant $K_0'$: for $i = 1,...,p$,
+	To satisfy \eqref{eq:cv_assump1} in Assumption~\ref{assump:tail_margin}, our fitting procedure for $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ entails a thresholding operation reminiscent of that in \citet{lecue2012oracle}.
+	In particular, the fitted parameters are
 	\begin{align}
-	\hat{\boldsymbol{\theta}}_{thres, i}(\boldsymbol{\lambda})
-	= \hat{\boldsymbol{\theta}}_{i}(\boldsymbol{\lambda}) \wedge K_0'.
+	\hat{{\theta}}_{thres, i}(\boldsymbol{\lambda})
+	= \hat{{\theta}}_{i}(\boldsymbol{\lambda}) \wedge K_0'
+	\quad i = 1,...,p
 	\end{align}
-	Now we can show that \eqref{eq:cv_assump1} is also satisfied:
+	where $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is the solution to \eqref{eq:elastic_net_ex}.
+	Since we are thresholding the fitted parameters, Assumption~\ref{assump:tail_margin} is satisfied:
 	\begin{align}
-	\left \|
-	\left(
-	y - X\theta
-	\right)^2
-	- \left(
-	y - X\theta^*
-	\right)^2 \right \|_{L_{\psi_1}}
-	& =
-	\left \|
-	\langle X, \theta - \theta^* \rangle^2
-	+ 2\epsilon \langle X, \theta - \theta^* \rangle
-	\right \|_{L_{\psi_1}}\\
-	&
+	\left\|
+	X^\top (\boldsymbol{\theta} - \boldsymbol{\theta}^*)
+	\right \|_{L_{\psi_2}}
 	\le
-	2 \left\| \langle X, \theta - \theta^* \rangle \right \|_{L_{\psi_2}}^2
-	+ 8 \|\epsilon\|_{L_{\psi_2}}^2\\
-	&
-	\le
-	2 \|\theta - \theta^*\|_\infty^2
-	\sup_{\|a\|_\infty = 1} \left\| \langle X, a \rangle \right \|_{L_{\psi_2}}^2
-	+ 8 \|\epsilon\|_{L_{\psi_2}}^2\\
-	& \le 2
-	(\|\theta^*\|_\infty + K_0')^2 c_R^2
-	+ 8 \|\epsilon\|_{L_{\psi_2}}^2.
+	(\|\boldsymbol{\theta}^*\|_\infty + K_0')
+	c_R.
 	\end{align}
-	So the two results above show that Assumption~\ref{assump:tail_margin} is satisfied.
-	In Example~\ref{ex:elastic_net_tv}, we showed that the Lipschitz assumption is satisfied for the non-thresholded fitted parameters.
-	The Lipschitz relation is preserved under the thresholding operation, so Assumption~\ref{assump:lipschitz} is satisfied with the constant function
+	The fitted models $\hat{\boldsymbol{\theta}}_{thres}(\boldsymbol{\lambda})$ are $C_\Lambda$-Lipschitz with the constant function
 	\begin{align}
-	C_\Lambda(x | D^{(n_T)})
+	C_\Lambda(\boldsymbol{x} | D^{(n_T)})
 	=
-	R^2
-	\sqrt{J}
-	\left (
-	\|\epsilon\|_{T}
-	\vee \sqrt{2\sum_{j=1}^J
-	\|\boldsymbol{\theta}^{*,(j)}\|_1
-	+ \frac{w}{2}\|\boldsymbol{\theta}^{*,(j)}\|_2^2}
-	\right ).
-	\end{align}
-	Finally, since we are thresholding the fitted parameters, Assumption~\ref{assump:l2_psi2} is satisfied with $r = 0$:
-	\begin{align}
-	\left\| \langle X, \theta - \theta^* \rangle \right \|_{L_{\psi_2}}
-	\le
-	(\|\theta^*\|_\infty + K_0')
-	\sup_{\|a\|_\infty = 1} \left\| \langle X, a \rangle \right \|_{L_{\psi_2}}.
+	\frac{n^{2t_{\min}}}{w}
+	R^2 \sqrt{
+		J p
+		\left(
+		\|\epsilon\|_{T}^{2}
+		+\sum_{j=1}^J
+		2 \|\boldsymbol{\theta}^{*,(j)}\|_1
+		+ w\|\boldsymbol{\theta}^{*,(j)}\|_2^2
+		\right)
+	}.
+	\label{eq:elastic_lipschitz_cv}
 	\end{align}
 	
 	Now we are ready to apply Theorem~\ref{thrm:kfold}.
 	Notice that
 	$\left \| C_\Lambda(\cdot | D^{(n_T)}) \right \|_{L_{\psi_2}}^2$
 	is a sub-exponential random variable.
-	Thus
+	Thus we can choose $\sigma_0 = O_p(n^{4t_{\min}}R^4Jp/w^2 )$ so that
 	\begin{align}
 	1 + \sum_{k = 1}^\infty k \Pr \left (
-	\| C_\Lambda(\cdot | D^{(n_T)}) \|_{L_{\psi_2}}^2 \ge 2^k c
+	\| C_\Lambda(\cdot | D^{(n_T)}) \|_{L_{\psi_2}}
+	\ge 2^k \sigma_0
 	\right )
 	& \le
 	1 + \sum_{k = 1}^\infty k \Pr \left (
-	\| \epsilon\|_T^2 \ge 2^k c
+	\| \epsilon\|_T^2 \ge
+	2^{2k}
 	\right )\\
+%	& \le
+%	1 + \sum_{k = 1}^\infty c_0 k
+%	\exp \left (
+%	- c_0 \frac{2^{2k} n_T}{\|\epsilon\|^2_{L_{\psi_{2}}}}
+%	\right ) \\
 	& \le
-	1 + \sum_{k = 1}^\infty k \exp(- c_0 2^k c n_T / \|\epsilon\|^2_{L_{\psi_{2}}} ) \\
-	& < c_{\tilde{h}}
+	1 + c_1
+	\exp \left (
+	- \frac{c_0 n_T}{\|\epsilon\|^2_{L_{\psi_{2}}}}
+	\right )
 	\end{align}
-	for some absolute constant $c_0 > 0$ and constants $c, c_{\tilde{h}}$ that depend on $\|\epsilon\|_{L_{\psi_{2}}}$, $R$, $J$, and $\boldsymbol{\theta}^*$.
-	Now suppose $\lambda_{\max} = 1$ and $\lambda_{\min} = n^{-\kappa}$.
-	Then for any $a > 0$, we have
+	for absolute constants $c_0, c_1 > 0$.
+	Then for any $a > 0$, we have for a constant $\tilde{c} > 0$
 	\begin{align}
 	\begin{split}
 	\mathbb{P}_{D^{(n)}}
@@ -993,18 +914,21 @@ We believe other $L_p$-norm penalties, like the group lasso, also satisfy these 
 	\right)
 	\right \|_{L_{2}}^{2}
 	\right] \\
-	& + \tilde{c} \frac{\left(1+a\right)^{2}}{a}
-	\frac{J\log n_{V}}{n_{V}}
-	\log\left(\frac{\left(1+a\right)}{a} J +1\right)
-	c_{\tilde{h}}
+	& \quad +
+	\tilde{c}
+	\left (\frac{1+a}{a} \right )^2
+	\frac{J \log n_{V}}{n_{V}}
+	R t_{\min}
+	\log\left(
+	\frac{1+a}{aw} RJpn
+	\right).
 	\end{split}
 	\end{align}
-	for some constant $\tilde{c} > 0$.
 	
-	From this example, we see that the extended version of Theorem~\ref{thrm:kfold} allows us to characterize the performance of tuning penalty parameters over a continuous range, rather than the finite set considered in \citet{lecue2012oracle}.
-	This is valuable in the case where there are many penalty parameters and instead of searching over a finite grid, it is more typical to search via a continuous optimization procedure like some hill-climbing procedure or Bayesian optimization.
 	
-	Unfortunately, we were unable to remove the thresholding step from the example, as Assumption~\ref{assump:tail_margin} requires the estimators to have a bounded $\psi_1$ norm. We hope to address this in future research.
+	In contrast to the lasso example in \citet{lecue2012oracle}, we establish oracle inequalities when the hyper-parameters are tuned over a continuous range.
+	This is particularly valuable when $J$ is large and $\boldsymbol{\lambda}$ must be tuned via a continuous optimization procedure like some hill-climbing procedure or Bayesian optimization.
+	Unfortunately we were only able to consider thresholded fitted parameters as Assumption~\ref{assump:tail_margin} requires estimators to have a bounded $\psi_2$ norm. We hope to address this in future research.
 \end{example}
 
 \subsection{Nonparametric additive models}
@@ -1068,14 +992,13 @@ Note that this is allowed -- we don't actually give the $y$ values for the valid
 Note that \eqref{eq:nonparam_lipshitz_thrm} is over $D^{(n)}$, even though we just need it to be $V$.
 To transform, we can easily relate to two quantities.
 
-An example for this problem is an L2 trend-filtering problem.
-(So a ridge penalty over first-order discrete differences)
-Clearly \eqref{eq:gateuax} is satisfied if $\lambda_j$ are all positive.
-
 \section{Simulations}\label{sec:simulations}
 
-We now present a simulation study of nonparametric additive models to understand how the performance changes as the number of penalty parameters increases. 
-Corollary~\ref{corr:penalized_reg} states that increasing the number of penalty parameters $J$ affects the oracle inequalities in two ways: the oracle error may decrease while the remaining terms on the right hand side increase linearly in $J$. We use two simulations to illustrate these two behaviors.
+We now present a simulation study of the generalized additive model example \eqref{eq:smoothing_spline} to understand how the performance changes as the number of penalty parameters increases.
+From Corollary~\ref{corr:train_val}, we know that there are two possibilities.
+On one hand, we know that the parametric term in the upper bound is \eqref{eq:sobolev_param}, so it increases linearly with the number of penalty parameters $J$.
+On the other hand, we know that the oracle risk \eqref{eq:asym_train_val_oracle_risk} in the upper bound may decrease.
+We use two simulations to illustrate that both of these behaviors are possible.
 
 The data is generated as the sum of univariate functions
 \begin{align}
@@ -1083,15 +1006,10 @@ Y &= \sum_{j=1}^p g_j^*(X_j) + \sigma \epsilon,
 \label{eq:sim_general}
 \end{align}
 where $\epsilon$ are iid standard Gaussian random variables and $\sigma > 0$ was chosen such that the signal to noise ratio was two. $X$ was drawn from a uniform distribution over $\mathcal{X} = [-2, 2]^p$.
-We fit nonparametric additive models by minimizing the training loss penalized with the Sobolev norm
-\begin{align}
-\min_{g_1, ..., g_p} \left \| y - \sum_{j=1}^p g_j(x_j) \right \|_T^2 + \sum_{j=1}^p \lambda_j \int_{\mathcal{X}} \left (g_j^{''}(x) \right )^2 dx
-\label{eq:penal_simulation}
-\end{align}
-where $\lambda_j$ are the penalty parameters.
+We fit nonparametric additive models by minimizing \eqref{eq:smoothing_spline}.
 To vary the number of penalty parameters, we constrain certain $\lambda_j$ to be equal while allowing others to be completely free.
 (For instance, if we wanted a single penalty parameter, we would constrain $\lambda_j$ for $j=1,...,p$ to be the same value.) 
-The penalty parameters are tuned using a training/validation split and we select the one with the minimum error on the validation set.
+The penalty parameters are tuned using a training/validation split.
 
 \textbf{Simulation 1}: The response is the sum of identical univariate sinusoids where
 \begin{align}
@@ -1119,6 +1037,7 @@ $$
 \left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\hat{\boldsymbol{\lambda}}|T) - g^*_j \right \|_V^2 - 
 \left \| \sum_{j=1}^p \hat{g}^{(n_T)}_j(\tilde{\boldsymbol{\lambda}} | T) - g^*_j \right \|_V^2.
 $$
+%JF what is \tilde lambda -- what is it minimized over. how was it found?
 As expected, the validation loss difference increases with the number of penalty parameters.
 To see if our oracle inequalities match the simulation results, we performed linear regression with the logarithm of the validation loss difference as the response and the logarithm of the number of penalty parameters as the covariate. 
 We fit the model over the simulation results with at least two penalty parameters since the data is highly skewed for the case of a single penalty parameter. 
