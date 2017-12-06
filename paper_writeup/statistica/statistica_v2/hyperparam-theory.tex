@@ -189,7 +189,7 @@ Let $D^{(n)}$ denote a dataset with $n$ samples. The model-estimation procedure 
 We focus on model-estimation procedures that satisfy the following Lipschitz assumption:
 \begin{assump}
 	\label{assump:lipschitz}
-	There is a function $C_\Lambda$ such that for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
+	Suppose there is a set $\mathcal{X}^{(L)} \subseteq \mathcal{X}$ such that for any $n_T \in \mathbb{N}$ and dataset $D^{(n_T)}$, there is a function $C_\Lambda(\boldsymbol{x} | D^{(n_T)}) : \mathcal{X}^{(L)} \mapsto \mathbb{R}^+$ such that for any $\boldsymbol{x} \in \mathcal{X}^{(L)}$, we have for all $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$
 	\begin{align}
 	\left |
 	\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(\boldsymbol{x}) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(\boldsymbol{x}) \right |
@@ -231,7 +231,7 @@ Note that the result below is a special case of Theorem \ref{thrm:train_val_comp
 	\tilde{R}(X_V|T) = \argmin_{\lambda \in \Lambda} \left \| g^*-\hat{g}^{(n_T)}( \boldsymbol{\lambda} | T) \right \|_{V}^{2}.
 	\label{eq:tilde_lambda_def}
 	\end{equation}
-	Suppose Assumption~\ref{assump:lipschitz} is satisfied.
+	Suppose Assumption~\ref{assump:lipschitz} is satisfied over the set $X_V$.
 	Then there is a constant $c>0$ only depending on $b$ and $B$ such that for all $\delta$ satisfying
 	\begin{equation}
 	\delta^{2}
@@ -358,7 +358,7 @@ It is a special case of Theorem~\ref{thrm:jean_cv} in the Appendix, which extend
 	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = (\lambda_{\max} - \lambda_{\min}) \vee 1$.
 	%JF do I really need the \vee above?
 	Suppose random variables $\epsilon_i$ are independent with expectation zero, satisfy $\|\epsilon\|_{L_{\psi_2}}= b <\infty$, and are independent of $X$.
-	Suppose Assumptions~\ref{assump:lipschitz} and \ref{assump:tail_margin} hold.
+	Suppose Assumption~\ref{assump:lipschitz} holds over the set $\mathcal{X}$ and Assumption~\ref{assump:tail_margin} holds.
 	Suppose there exists a function $\tilde{h}$ and some $\sigma_0 > 0$ such that
 	\begin{align}
 	\tilde{h}(n_{T})
@@ -392,17 +392,16 @@ It is a special case of Theorem~\ref{thrm:jean_cv} in the Appendix, which extend
 Like in Theorem \ref{thrm:train_val}, Theorem~\ref{thrm:kfold} bounds the generalization error of the fitted model using a near-parametric term $O_p(J/n_V)$.
 So as before, adding hyper-parameters to parametric model estimation incurs a similar cost as adding parameters to the parametric model itself and adding hyper-parameters to semi- and non-parametric regression settings is relatively ``cheap" and negligible asymptotically.
 
-%JF english...
-There are also some notable differences between Theorems \ref{thrm:train_val} and \ref{thrm:kfold} that highlight the tradeoffs made in the two theorems.
-Theorem~\ref{thrm:kfold} tries to make a statement about the functional $L_2$-error instead of the risk over the validation covariates.
-We pay the price in two ways.
-First, we need to add Assumption~\ref{assump:tail_margin}, which is quite strict since it must hold for all datasets $D$ and hyper-parameters $\Lambda$.
+%JF english
+The differences between Theorems \ref{thrm:train_val} and \ref{thrm:kfold} highlight the tradeoffs made in order to establish an oracle inequality involving the functional $L_2$-error.
+First, Theorem~\ref{thrm:kfold} needs to add Assumption~\ref{assump:tail_margin}, which is quite strict since it must hold for all datasets $D$ and hyper-parameters $\Lambda$.
 The former requirement can be relaxed so that Assumption~\ref{assump:tail_margin} holds with high probability.
 However the latter requirement is problematic -- it is hard to control the tail behavior for all $\Lambda$ unless $\lambda_{\min}$ is shrinking at an appropriate rate.
 If $\lambda_{\min}$ shrinks too fast (in the number of samples), $K_0$ may grow with $n$ and the remainder term in \eqref{eq:cv_lipschitz_oracle_ineq} will no longer shrink at a parametric rate.
 Unfortunately requiring $\lambda_{\min}$ to shrink at an appropriate rate seems to defeat the purpose of cross-validation.
 Thus this assumption is crucial for the proof, but seems insufficient to fully understand cross-validation.
-The second price we pay is that we no longer have a sharp oracle inequality since the oracle error is scaled by $1+a$ where $a > 0$.
+In addition, the Lipschitz assumption in Theorem~\ref{thrm:kfold} must hold over all $\mathcal{X}$, which can be harder to show for nonparametric models.
+Finally, the oracle inequality in Theorem~\ref{thrm:kfold} is no longer sharp since the oracle error is scaled by $1+a$ where $a > 0$.
 
 \section{Penalized regression models}
 \label{sec:examples}
@@ -413,10 +412,7 @@ However few popular methods incorporate more than two penalties due to (a) the c
 
 Recall that in our framework, the model-estimation procedure tunes the penalty parameters over some set $\Lambda$. As long as the fitted models are Lipschitz in the penalty parameters over $\Lambda$, we can apply Theorems \ref{thrm:train_val} and \ref{thrm:kfold}.
 We will consider the penalty parameter space
-\begin{equation}
-\label{thrm:lambda_range}
-\Lambda = [ n^{-t_{\min}}, n^{t_{\max}}]^J
-\end{equation}
+$\Lambda = [ n^{-t_{\min}}, n^{t_{\max}}]^J$
 for sufficiently large $t_{\min}, t_{\max} \ge 0$.
 This regime works well for two reasons: one, our rates depend only quite weakly on $t_{\min}$ and $t_{\max}$; and two, generally oracle $\lambda$-values are $\sim n^{-\alpha}$ for some $\alpha \in (0,1)$ \citep{van2000empirical, van2014additive, buhlmann2011statistics}. So long as $t_{\min} > \alpha$, $\Lambda$ will contain the optimal penalty parameter.
 We require $\lambda_{\min}$ to shrink at a polynomial rate in $n$ as the fitted models can be ill-behaved if $\lambda_{\min}$ approaches 0 too quickly.
@@ -428,16 +424,17 @@ We require $\lambda_{\min}$ to shrink at a polynomial rate in $n$ as the fitted 
 
 In the following sections, we will do an in-depth study of additive models, which have the form
 \begin{equation}
-g(x_1, ..., x_J)= \sum_{j=1}^J g_j(x_j).
+g(\boldsymbol{x}^{(1)}, ..., \boldsymbol{x}^{(J)})= \sum_{j=1}^J g_j(\boldsymbol{x}^{(j)}).
 \end{equation}
 We first consider parametric additive models (with potentially growing numbers of parameters) fitted with smooth and non-smooth penalties and then nonparametric additive models.
-We find that the Lipschitz function $C_\Lambda(x | T)$ scales with $n^{O_p(t_{\min})}$; so applying the above theorems, we find that the remainder term grows only linearly with $t_{\min}$ for both training-validation split and cross-validation.
+We find that the Lipschitz function $C_\Lambda(\boldsymbol{x} | T)$ scales with $n^{O_p(t_{\min})}$; so applying the above theorems, we find that the remainder term grows only linearly with $t_{\min}$ for both training-validation split and cross-validation.
 
 \subsection{Parametric additive models}
 \label{sec:param_add_models}
 Parametric additive models have the form
 \begin{equation}
-g(\boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)})(x) = \sum_{j=1}^J g_j(\boldsymbol{\theta}^{(j)})(x)
+g_j(\boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)})(\boldsymbol{x})
+= \sum_{j=1}^J g_j(\boldsymbol{\theta}^{(j)})(\boldsymbol{x}^{(j)})
 \end{equation}
 where $\boldsymbol{\theta}^{(j)} \in \mathbb{R}^{p_j}$ and $p = \sum_{j=1}^J p_j$. The number of parameters $p$ is allowed to grow with $n$, as commonly done in sieve estimation. For simplicity, let the full parameter vector be denoted $\boldsymbol{\theta} = \left (\boldsymbol{\theta}^{(1)}, ..., \boldsymbol{\theta}^{(J)} \right )^\top$. Then we can write the training criterion for training data $T$ as
 \begin{equation}
@@ -512,11 +509,11 @@ Notice that the result assumes that the training criterion is strongly convex at
 + \sum_{j=1}^J \lambda_j \left ( P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2} \| \boldsymbol{\theta}^{(j)} \|^2_2 \right ).
 \end{equation}
 We now consider a simple example with multiple ridge penalties.
-For all the examples, let the penalty parameter space be $\Lambda = \left [n^{- t_{\min}}, 1 \right ]^J$.
+For all examples in this section, we use the penalty parameter space $\Lambda = \left [n^{- t_{\min}}, 1 \right ]^J$.
 \begin{example}[Multiple ridge penalties]
 	Suppose we would like to fit a linear model and want to use ridge regression to stabilize our estimates.
 	In addition, suppose we have prior information that groups covariates based on the similarity of their effects on the response, e.g. $\boldsymbol{x} = (\boldsymbol{x}^{(1)}, ... , \boldsymbol{x}^{(J)})$ where $\boldsymbol{x}^{(j)}$ is a vector of length $p_j$.
-	For example, each group of covariates could be measurements from a different source or instrument.
+%	For example, each group of covariates could be measurements from a different source or instrument.
 	To incorporate this prior knowledge, we may want to penalize each group of covariates differently using the following objective:
 	\begin{align}
 	L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right) 
@@ -910,54 +907,54 @@ We now generalize the results to nonparametric additive models. We consider esti
 \frac{1}{2} \left \| \boldsymbol y -  \sum_{j=1}^J g_j(\boldsymbol x_j) \right \|^2_T 
 + \sum_{j=1}^J \lambda_j P_j(g_j)
 \end{align}
-where $P_j$ are now penalty functionals. For some problems, e.g. smoothing splines, we can show that the solution to~\eqref{eq:train_crit_nonparam} lies in a parametric family (of growing dimension); and use the results of Sections~\ref{sec:param_smooth}, and \ref{sec:param_nonsmooth} to give our Lipschitz bounds. However, this is not always possible. Nevertheless we can still obtain similar results in the non-parametric problem. The following lemma states that the fitted functions are Lipschitz with respect to $\| \cdot \|_{D^{(n)}}$. Let $\left\{ g_j^* \right \}_{j=1}^J$ be the minimizer of the generalization error
+where $\{P_j\}$ are now penalty functionals and $\{\mathcal{G}_j\}$ are linear spaces of univariate functions.
+Let $\left\{ g_j^* \right \}_{j=1}^J$ be the minimizer of the generalization error
 \begin{equation}
-\left\{ g_j^* \right \}_{j=1}^J = \argmin_{g_j \in \mathcal{G}_j: j=1,...,J} E_T\left[ \left \| y - \sum_{j=1}^J g_j^* \right \|^2 \right].
+\left\{ g_j^* \right \}_{j=1}^J = \argmin_{g_j \in \mathcal{G}_j: j=1,...,J}
+E \left \| y - \sum_{j=1}^J g_j^* \right \|^2_{L_2}.
 \end{equation}
-
+We obtain a similar Lipschitz relation in the nonparametric setting to those before.
 \begin{lemma}
 	\label{lemma:nonparam_smooth}
-	Suppose $\mathcal{G}_1, ..., \mathcal{G}_J$ be linear spaces of univariate functions.
-	
+	Let $\lambda_{\max} > \lambda_{\min} > 0 $ and $\Lambda \coloneqq [\lambda_{\min}, \lambda_{\max}]^J$.
 	Suppose the penalty functions $P_{j}$ are twice Gateaux differentiable and convex over $\mathcal{G}_j$.
 	%JF again, are you sure need be convex?
-	Suppose there is a $m > 0$ such that for all $j=1,...,J$, the second Gateaux derivative of the training criterion at $\hat{g}^{(n_T)}_j( \boldsymbol{\lambda} | T)$ satisfies
-	\begin{equation}
+	Suppose there is a $m(T) > 0$ such that the second Gateaux derivative of the training criterion at $\{\hat{g}^{(n_T)}_j( \boldsymbol{\lambda} | T)\}$ for all $\boldsymbol{\lambda} \in \Lambda$ satisfies
+	\begin{align}
 	\left \langle 
-	\left . D^2_{g_j} L_T \left ( \left \{ g_j \right \}_{j=1}^J, \boldsymbol{\lambda} \right ) \right |_{g_j= \hat{g}_j( \boldsymbol{\lambda} | T) }
+	\left . D^2_{\{g_j\}} L_T \left ( \left \{ g_j \right \}_{j=1}^J, \boldsymbol{\lambda} \right ) \right |_{g_j= \hat{g}_j( \boldsymbol{\lambda} | T) }
 	\circ h_j, h_j
 	\right \rangle 
-	\ge m
+	\ge m(T)
 	\quad \forall h_j \in \mathcal{G}_j,  \|h_j \|_{D^{(n)}} = 1
 	\label{eq:gateuax}
-	\end{equation}
-	%JF for all lambda.
-	%JF this implies that the penalty function must contain the values at the validation point!
-	where $D^2_{g_j}$ is the second Gateaux derivative where both derivatives are taken in the direction of $g_j$.
-	%JF should not be "in the direction". should be "by wrt g_j"
-	
-	Let $\lambda_{\max} > \lambda_{\min} > 0 $. Let
-	\begin{equation}
-	C_{\Lambda}^*=
-	\frac{1}{2}\left\Vert y- \sum_{j=1}^J g^*_j\right\Vert _{T}^{2}
-	+\lambda_{max}\sum_{j=1}^{J} P_{j}(g^*_j).
-	\end{equation}
-	
-	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda \coloneqq \left [ \lambda_{\min}, \lambda_{\max} \right ]^J$, we have
+	\end{align}
+	where $D^2_{\{g_j\}}$ is the second Gateaux derivative taken in directions $\{g_j\}$.
+	Let $
+	C_{\Lambda}^*= \lambda_{max}\sum_{j=1}^{J} P_{j}(g^*_j).
+	$
+	For any $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$, we have
 	\begin{align}
 	\label{eq:nonparam_lipshitz_thrm}
 	\left\Vert 
 	\sum_{j=1}^J \hat{g}_j\left(\boldsymbol{\lambda}^{(1)} |T \right)-\hat{g}_j\left(\boldsymbol{\lambda}^{(2)} |T \right)\right\Vert _{D^{(n)}} & \le
-	\frac{J}{m \lambda_{min}}\sqrt{2 C_{\Lambda}^* \frac{n}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}
-	\left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|.
+	\frac{m(T)}{\lambda_{min}}
+	\sqrt{
+		\left(
+		\|\epsilon\|_T^2 + 2 C^*_\Lambda
+		\right)
+		\frac{n_{D}}{n_{T}}
+	}
+	\left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|_2.
 	\end{align}
 \end{lemma}
-
-The requirement that \eqref{eq:gateuax} holds implies that the values of the nonparametric model must appear in the penalty.
-Note that this is allowed -- we don't actually give the $y$ values for the validation covariates.
-
-Note that \eqref{eq:nonparam_lipshitz_thrm} is over $D^{(n)}$, even though we just need it to be $V$.
-To transform, we can easily relate to two quantities.
+\noindent Note that since Lemma~\ref{lemma:nonparam_smooth} verifies that Assumption~\ref{assump:lipschitz} is satisfied over the observed covariates, it is suitable to be used in Theorem~\ref{thrm:train_val}.
+However \eqref{eq:nonparam_lipshitz_thrm} is not a strong enough statement to be used for Theorem~\ref{thrm:kfold}.
+%The requirement that \eqref{eq:gateuax} holds implies that the values of the nonparametric model must appear in the penalty.
+%Note that this is allowed -- we don't actually give the $y$ values for the validation covariates.
+%
+%Note that \eqref{eq:nonparam_lipshitz_thrm} is over $D^{(n)}$, even though we just need it to be $V$.
+%To transform, we can easily relate to two quantities.
 
 \section{Simulations}\label{sec:simulations}
 
@@ -968,10 +965,7 @@ On the other hand, we know that the oracle risk \eqref{eq:asym_train_val_oracle_
 We use two simulations to illustrate that both of these behaviors are possible.
 
 The data is generated as the sum of univariate functions
-\begin{align}
-Y &= \sum_{j=1}^p g_j^*(X_j) + \sigma \epsilon,
-\label{eq:sim_general}
-\end{align}
+$Y = \sum_{j=1}^p g_j^*(X_j) + \sigma \epsilon$,
 where $\epsilon$ are iid standard Gaussian random variables and $\sigma > 0$ was chosen such that the signal to noise ratio was two. $X$ was drawn from a uniform distribution over $\mathcal{X} = [-2, 2]^p$.
 We fit nonparametric additive models by minimizing \eqref{eq:smoothing_spline}.
 To vary the number of penalty parameters, we constrain certain $\lambda_j$ to be equal while allowing others to be completely free.

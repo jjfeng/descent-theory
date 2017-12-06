@@ -885,8 +885,8 @@ We now show that penalized regression problems for additive models satisfies the
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0.
 	\end{equation}
 	From the product rule and chain rule, we can then write the system of equations in \eqref{eq:implicit_diff} as
-	\begin{equation}
-	\label{eq:param_matrix}
+	\begin{align}
+	\label{eq:param_grad}
 	\left . \nabla_{\lambda}\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
 	= -
@@ -895,31 +895,16 @@ We now show that penalized regression problems for additive models satisfies the
 	L_T(\boldsymbol{\theta}, \boldsymbol{\lambda})
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)} 
 	\right)^{-1}
-	\left \{
+	\diag \left \{
 	\left.
-	\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
+	\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}
 	\right \}_{j=1:J}
 	.
-	\end{equation}
-	Now consider any $j$ in $1,...,J$.
-	Since
-	\begin{align}
-	\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})
-	= \left[
-	\begin{matrix*}
-	\boldsymbol {0} \\
-	\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)}) \\
-	\boldsymbol {0}
-	\end{matrix*}
-	\right],
-	\label{eq:grad_pen}
 	\end{align}
-	we can bound the norm of \eqref{eq:grad_pen} by rearranging \eqref{eq:grad_opt} and using the Cauchy-Schwarz inequality:
+	We can bound the norm of the second term in \eqref{eq:param_grad} by rearranging \eqref{eq:grad_opt} and using the Cauchy-Schwarz inequality:
 	\begin{align*}
-		\left\Vert \left.\nabla_{\theta}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
-		& = \left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
-		\\
+		\left\Vert \left.\nabla_{\theta^{(j)}}P_{j}(\boldsymbol{\theta}^{(j)})\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}\right\Vert_2
 		&
 		\le  \frac{1}{\lambda_{min}}\left\Vert y-g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))\right\Vert _{T}
 		\left \|
@@ -1316,37 +1301,20 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	= 0.
 	\label{eq:nonparam_imp_diff}
 	\end{equation}
-	Define the following matrices
-	\[
-	S:S_{ij}=\langle h_{j},h_{j}\rangle_{T}
-	\]
-	\todo{this doesnt look right. where is i?}
-	
-	\[
-	D_{1}=diag\left(
-	\left \{
-	\left.\lambda_{j}\frac{\partial^{2}}{\partial m_{j}^{2}}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right|_{m=\hat{m}(\lambda)}
-	\right \}_{j=1}^J
-	\right)
-	\]
-	
-	
-	\[
-	D_{2}=diag\left(\left \{ \left.
+	From the product rule and chain rule, we can write the system of equations from \eqref{eq:nonparam_imp_diff} as
+	\begin{align}
+	\nabla_{\lambda} \hat{\boldsymbol{m}}(\boldsymbol{\lambda}) = - \left(
+	\nabla_{m}^2 L_T(\boldsymbol{m}, \boldsymbol{\lambda})
+	\right )^{-1}
+	\diag \left \{ \left.
 	\frac{\partial}{\partial m_{j}}P_{j}(\hat{g}_{1,j}+m_{j}h_{j})\right|_{m=\hat{m}(\lambda)}
 	\right \}_{j=1}^J
-	\right)
-	\]
-	
-	
-	\[
-	M:\mbox{ column }M_{j}=\nabla_{\lambda}\hat{m}_{j}(\lambda) \quad \forall j=1,...,J.
-	\]
-	
-	
-	The system of equations from \eqref{eq:nonparam_imp_diff} can be written as  $M=D_{2}\left(S+D_{1}\right)^{-1}$.
-	
-	Now we bound each element in $D_2$. From \eqref{eq:nonparam_grad_opt} and Cauchy Schwarz, we have for all $k=1,...,J$
+	\label{eq:nonparam_grad}
+	\end{align}
+	where $L_T(\boldsymbol{m}, \boldsymbol{\lambda})$ is the loss in \eqref{eq:nonparam_grad_opt}.
+
+	We now bound the second term in \eqref{eq:nonparam_grad}.
+	From \eqref{eq:nonparam_grad_opt} and Cauchy Schwarz, we have for all $k=1,...,J$
 	\begin{equation}
 	\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)}
 	\le 
@@ -1354,45 +1322,63 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)
 	\right\Vert _{T}\|h_{k}\|_{T}.
 	\end{equation}
-	We note that $\|h_{k}\|_{T} \le \sqrt{\frac{n_{D}}{n_{T}}}$. Also, by definition of $\hat{m}(\boldsymbol{\lambda})$,
+	From the definition of $h_k$, we know that $\|h_{k}\|_{T} \le \sqrt{\frac{n_{D}}{n_{T}}}$.
+	By definition of $\hat{m}(\boldsymbol{\lambda})$ and $\hat{g}_{1}$, we also have
 	\begin{align*}
-	\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})
-	& \le \frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})\\
-	& \le C_{\Lambda}^* + J\lambda_{max}\max_{j=1:J}P_{j}(\hat{g}_{1,j}).
+	\frac{1}{2}\left\Vert y-\sum_{j=1}^{J}\left(\hat{g}_{1,j}+\hat{m}_{j}(\boldsymbol{\lambda})h_{j}\right)\right\Vert _{T}^{2}
+	\le
+	\frac{1}{2}
+	\left\Vert y-\sum_{j=1}^{J}\hat{g}_{1,j}\right\Vert _{T}^{2}
+	+\sum_{j=1}^{J}\lambda_{j}P_{j}(\hat{g}_{1,j})
+	\le \frac{1}{2} \|\epsilon\|_T^2 + C^*_\Lambda.
 	\end{align*}
-	\todo{this step might be hard to follow. add more explanation}
-	Hence every diagonal element in $D_2$ is bounded above by
+	Hence
 	\begin{equation}
+	\left|\frac{\partial}{\partial m_{k}}P_{k}(\hat{g}_{1,k}+m_{k}h_{k})\right|_{m=\hat{m}(\lambda)}
+	\le
 	\frac{1}{\lambda_{min}}
-	\sqrt{2C_{\Lambda}^* \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}.
+	\sqrt{
+		\left(
+		\|\epsilon\|_T^2 + 2 C^*_\Lambda
+		\right)
+		\frac{n_{D}}{n_{T}}
+	}.
 	\end{equation}
-	
-	
-	Now we can bound the norm of the gradient $\boldsymbol{\hat{m}}_k(\boldsymbol{\lambda})$ for $k \in H_0$
-	\begin{eqnarray}
-	\|\nabla_{\lambda}\hat{m}_{k}(\boldsymbol{\lambda})\|
-	& = & \left\Vert D_{2}\left(S+D_{1}\right)^{-1}e_{k}\right\Vert \\
-	& \le & \frac{1}{\lambda_{min}}
-	\sqrt{2C_{\Lambda}^*
-		\frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}\left\Vert \left(S+D_{1}\right)^{-1}e_{k}\right\Vert.
-	\end{eqnarray}
-	By the assumption in \eqref{eq:gateuax}, $e_{k}^\top \left(S+D_{1}\right) e_{k} \ge m$.
-	
-	By the mean value theorem and Cauchy Schwarz, we have
-	\todo{MVT or mean value ineq?}
+	By \eqref{eq:gateuax}, we know $\nabla_{m}^2 L_T(\boldsymbol{m}, \boldsymbol{\lambda}) \succeq m(T)I$.
+	So for all $k$,
+	\begin{align}
+	\|\nabla_{\lambda}\hat{m}_{k}(\boldsymbol{\lambda})\|_2
+	& \le
+	\frac{m(T)}{\lambda_{min}}
+	\sqrt{
+		\left(
+		\|\epsilon\|_T^2 + 2 C^*_\Lambda
+		\right)
+		\frac{n_{D}}{n_{T}}
+	}
+	\end{align}
+	By the mean value inequality and Cauchy Schwarz, we have
 	\begin{equation}
-	\left|\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})\right| 
-	\le \left\Vert \boldsymbol{\lambda}^{(2)}-\boldsymbol{\lambda}^{(1)}\right\Vert \frac{1}{d\lambda_{min}}\sqrt{2C^*_\Lambda \frac{n_{D}}{n_{T}}\left(1+\frac{J\lambda_{max}}{\lambda_{min}}\right)}.
+	\left|\hat{m}_{k}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{k}(\boldsymbol{\lambda}^{(1)})\right| 
+	\le
+	\frac{m(T)}{\lambda_{min}}
+	\sqrt{
+		\left(
+		\|\epsilon\|_T^2 + 2 C^*_\Lambda
+		\right)
+		\frac{n_{D}}{n_{T}}
+	}.
 	\end{equation}
-	\todo{what is d?}
-	Since $
+	By construction,
+	$
 	\left|
-	\hat{m}_{j}(\boldsymbol{\lambda}^{(2)})-\hat{m}_{j}(\boldsymbol{\lambda}^{(1)})
+	\hat{m}_k(\boldsymbol{\lambda}^{(2)})-\hat{m}_k(\boldsymbol{\lambda}^{(1)})
 	\right|  =
 	\left \| 
-	\hat{g}_{j}(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_{j}(\boldsymbol{\lambda}^{(1)}|T)
+	\hat{g}_k(\boldsymbol{\lambda}^{(2)}|T)-\hat{g}_k(\boldsymbol{\lambda}^{(1)}|T)
 	\right  \|_{D^{(n)}}
-	$, the result in \eqref{eq:nonparam_lipshitz_thrm} follows.
+	$.
+	So we obtain our desired result in \eqref{eq:nonparam_lipshitz_thrm}.
 \end{proof}
 
 \subsection{Examples: detailed derivations}
