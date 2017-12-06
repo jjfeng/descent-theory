@@ -166,13 +166,15 @@ Under the assumption that the model -estimation procedure is Lipschitz in the hy
 For parametric model-estimation procedures, the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself.
 For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle risk so we can actually grow the number of hyper-parameters without affecting the asymptotic convergence rate.
 
-In this paper, we also specialize these results to penalized regression models of the form \eqref{eq:intro_pen_reg}.
-We show that the fitted models are indeed Lipschitz in the penalty parameters so our oracle inequalities apply. 
-Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect in semi- and non-parametric settings. This result suggests that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-way combinations. Adding more penalties may lead to better models.
+We specialize our results to penalized regression models of the form \eqref{eq:intro_pen_reg}.
+The models in our examples are Lipschitz so that our oracle inequalities apply.
+%Again, we find that additional penalty parameters only add a near-parametric error term, which has a negligible effect in semi- and non-parametric settings.
+This suggests that multiple penalty parameters may improve the model estimation and that the recent interest in combining penalty functions (e.g. elastic net and sparse group lasso \citep{zou2003regression, simon2013sparse}) may have artificially restricted themselves to two-way combinations.
 
 During our literature search, we found few theoretical results relating the number of hyper-parameters to the generalization error of the selected model. 
 Much of the previous work only considered tuning a one-dimensional hyper-parameter over a finite $\Lambda$, proving asymptotic optimality \citep{van2004asymptotic} and finite-sample oracle inequalities \citep{van2003unified, gyorfi2006distribution}. Others have addressed split-sample validation for specific penalized regression problems with a single penalty parameter, such as linear model selection \citep{li1987asymptotic, shao1997asymptotic, golub1979generalized, chetverikov2016cross, chatterjee2015prediction}.
-Only the results in \citet{lecue2012oracle} are relevant to answering our question of interest. A potential reason for this dearth of literature is that, historically, tuning multiple hyper-parameters has been computationally difficult. However, there have been many proposals recently for overcoming this computational hurdle \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
+Only the results in \citet{lecue2012oracle} are relevant to answering our question of interest. A potential reason for this dearth of literature is that, historically, tuning multiple hyper-parameters was computationally difficult.
+However there have been many recent proposals that address this computational hurdle \citep{bengio2000gradient, foo2008efficient, snoek2012practical}.
 
 Section \ref{sec:main_results} presents oracle inequalities for sample-splitting procedures to understand how the number of hyper-parameters affects the model error.
 Section \ref{sec:examples} applies these results to penalized regression models.
@@ -183,8 +185,7 @@ Oracle inequalities for general model-estimation procedures and proofs are given
 
 \section{Oracle Inequalities} \label{sec:main_results}
 
-In this section, we establish oracle inequalities for models where the hyper-parameters are tuned by a single training/validation split and cross-validation. We first introduce some notation and formalize the model-estimation procedure. 
-
+Here we establish oracle inequalities for models where the hyper-parameters are tuned by a single training/validation split and cross-validation. We first introduce some notation.
 Let $D^{(n)}$ denote a dataset with $n$ samples. The model-estimation procedure $\hat{g}$ is a set of functions $\{\hat{g}^{(n_T)}\}$ where $\hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})$ maps hyper-parameter $\boldsymbol{\lambda} \in \Lambda \subseteq \mathbb{R}^J$ and training data $D^{(n_T)}$ to a function in $\mathcal{G}$.
 We focus on model-estimation procedures that satisfy the following Lipschitz assumption:
 \begin{assump}
