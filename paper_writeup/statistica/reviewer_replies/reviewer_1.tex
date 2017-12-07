@@ -35,7 +35,17 @@
 			Since the authors consider the smooth and non-smooth penalty functions in the paper, it would be good if the can use two specific examples to illustrate the low-level conditions in Lemma 1, Lemma 2 and Lemma 3. For example, they may consider the penalty function using the Sobolev norm for smooth case, and the Lasso penalty for the non-smooth case.
 		}
 		\reply{
-		We have added four examples to Section 4 of the paper to illustrate settings where the low-level conditions in Lemmas 1 and 2 are satisfied.
+		We have added four in-depth examples to Section 4 of the paper to illustrate settings where the low-level conditions in Lemmas 1 and 2 are satisfied.
+		We check that the conditions in Lemmas 1 and 2 are satisfied and then apply the oracle inequalities to provide an end-to-end analysis of these penalized regression examples.
+
+		For Lemma 1 which applies to smooth penalty functions, we analyze a problem with multiple ridge penalties.
+		In addition, we consider a generalized additive model which involves multiple Sobolev penalties.
+		We transform the problem to its finite-dimensional equivalent, show that the Lipschitz condition is satisfied, and establish the oracle inequality for the training/validation split setting.
+
+		For Lemma 2 which applies to nonsmooth penalty functions, we analyze the elastic net in both the training/validation split and cross-validation settings.
+
+		Finally, for Lemma 3 which nonparametric additive models, we briefly mention that a problem with ridge penalties on the observed covariates is sufficient to satisfy the low-level conditions.
+
 		}
 		
 		\point{
@@ -44,19 +54,12 @@
 			Is this subset known or it has to be estimated?
 		}
 		\reply{
-			We updated the proof. Gah, so sorry.
-			Also, in practice, just tune over $\Lambda$.
-		}
-	
-		\reply{
-		
-			Lemma 1: ridge penalty
-		
-			Lemma 2: lasso penalty - we can just copy from our previous paper? or do we reference that paper? maybe appendix.
-			
-			Lemma 3: sobolev norm? honestly, i dont know enough nonparametric penalty functions...
-			
-			also get specific rates for these penalties.
+		As suggested by the reviewer, Lemma 2 in its previous form was difficult to understand since it was restricted to penalty parameters where the fitted functions were smoothly parameterized.
+		In order to make Lemma 2 more applicable, we have updated the proof and lemma.
+		Our result now states that for almost every pair of penalty parameters, the Lipschitz condition is satisfied.
+		Thus we no longer restrict the penalty parameters to the set where the fitted functions were smooth.
+		We believe this new version is applicable to many scenarios.
+		For instance, we use Lemma 2 to establish results about the elastic net.
 		}
 		
 		\point{
@@ -64,14 +67,15 @@
 		}
 	
 		\reply{
-			We apologize that the notation in the paper were messy. We have updated much of the notation to improve the clarity of the equations.
+			We apologize that the notation in the paper is messy.
+			We have made extensive efforts to clean up the notation throughout the entire paper.
 		}
 	
 		\point{
 			In Theorem 2 and Theorem 3, are the expectation operators taken under the empirical measure?
 		}
 		\reply{
-			fixing this! reviewer 2 also had similar comments
+			Theorem 2 and 3, which are now labeled Theore
 		}
 		\point{
 			In displays (4.26) and (4.32), does “I” stand for the identity matrix? What does the inequality symbol in these two displays mean?

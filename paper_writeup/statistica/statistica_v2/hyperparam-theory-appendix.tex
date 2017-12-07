@@ -446,7 +446,7 @@ and $\mathcal{Q}\equiv\cup_{m\in\mathbb{N}}\cup_{D^{(m)}}\mathcal{Q}(D^{(m)})$.
 Suppose there exists $C_{1}>0$ and increasing function $G(\cdot)$
 such that $\forall Q\in\mathcal{Q}$, 
 \[
-\|Q(Z)\|_{L_{2}}\le G\left(\mathbb{P}Q(Z)\right).
+\|Q(Z)\|_{L_{2}}\le G\left(\mathbb{E}Q(Z)\right).
 \]
 Let $n_{T},n_{V}\in\mathbb{N}$.
 Suppose there exists a function $h$ that maps training data $D^{(n_T)}$ to $\mathbb{R}^+$,
@@ -462,7 +462,7 @@ $w\ge w_{\min}$ and all $u\ge1$,
 \begin{align}
 \Pr\left(
 \sup_{Q\in\mathcal{Q}(D^{(n_{T})}): PQ \le w}
-\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}
+\left(\left({P}-P_{n_{V}}\right)Q\right)_{+}
 \le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}
 \middle | h\left(D^{(n_{T})}\right)
 \le \delta
@@ -478,7 +478,7 @@ Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the condition
 	be a set of measurable functions.
 	
 	Let random variable $Z$ satisfy for all $m\in\mathbb{N}$, any dataset
-	$D^{(m)}$, for all $Q\in\mathcal{Q}\left(D^{(m)}\right)$, $\mathbb{P}Q(Z)\ge 0 $.
+	$D^{(m)}$, for all $Q\in\mathcal{Q}\left(D^{(m)}\right)$, $\mathbb{E}Q(Z)\ge 0 $.
 	
 	Suppose for any $n_{T},n_{V}\in\mathbb{N}$ and dataset $D^{(n_{T})}$
 	there exists some absolute constant $L,c>0$ such that for all $w\ge w_{\min}$
@@ -486,7 +486,7 @@ Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the condition
 	\[
 	\Pr\left(
 	\sup_{Q\in\mathcal{Q}(D^{(n_{T})}): PQ \le w}
-	\left(\left(\mathbb{P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta\right)
+	\left(\left({P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta\right)
 	\ge 1-L\exp(-cu).
 	\]
 	
@@ -507,7 +507,7 @@ Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the condition
 	\[
 	\Pr\left(
 	\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}
-	\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
+	\left(\left({P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
 	\le \frac{a \tilde{\psi}_{q,\delta}(u/q)}{q}\mid h\left(D^{(n_{T})}\right)\le\delta
 	\right)
 	\ge 1-L_{1}\exp(-cu).
@@ -517,7 +517,7 @@ Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the condition
 	Moreover, assume that $\psi_{\delta}$ increases such that $\psi_{\delta}(\infty)=\infty$.
 	Then there exists a constant $c_{1}$ that depends only on $L$ and $c$ such that
 	\[
-	\mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}
+	\mathbb{E}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}
 	\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
 	\middle |
 	h\left(D^{(n_{T})}\right)\le\delta
@@ -533,15 +533,15 @@ Consider any $a>0$.
 Suppose there exists a constant $c_{1}$ such that for any $n_{T},n_{V} \in \mathbb{N}$, $\delta>0$,
 and $q>1$, we have
 \[
-\mathbb{P}\left[
-\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
+\mathbb{E}\left[
+\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left({P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
 \middle | 
 h\left(D^{(n_{T})}\right)\le\delta\right]
 \le\frac{ac_{1}\epsilon_{q,\delta}(1/q)}{q}.
 \]
 Then for any $\sigma > 0$, we have
 \[
-\mathbb{P}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\right]
+\mathbb{E}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left({P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\right]
 \le
 \frac{ac}{q}
 \left(
@@ -584,14 +584,14 @@ Putting the three lemmas together and using Assumption~\ref{assump:tail_margin_g
 	Consider any $\sigma > 0$. Then there is an absolute constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
 	\begin{align}
 	\begin{split}
-	E_{D^{(n)}} 
+	\mathbb{E}_{D^{(n)}} 
 	\left(
 	R\left(\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) \right )
 	- R (g^*)
 	\right)
 	&\le
 	(1+a) \inf_{\boldsymbol{\lambda} \in \Lambda} 
-	E_{D^{(n_T)}}
+	\mathbb{E}_{D^{(n_T)}}
 	\left(
 	R\left(\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) \right )
 	- R (g^*)

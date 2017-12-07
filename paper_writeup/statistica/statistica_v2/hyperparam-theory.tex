@@ -358,11 +358,12 @@ To bound the generalization error of \eqref{thrm:avg_cv}, we require an assumpti
 	\right \|_{L_{2}}^{1/\kappa}.
 	\label{eq:cv_assump2}
 	\end{align}
-	where $\|f\|_{L_{\psi_2}}= \inf \{C > 0: \mathbb{P}\exp(|f|^2/C^2) - 1 \le 1\}$ is the Orlicz norm.
+	where $\|f\|_{L_{\psi_2}}= \inf \{C > 0: \mathbb{E}\exp(|f|^2/C^2) - 1 \le 1\}$ is the Orlicz norm.
 \end{assump}
 
 With the above assumption, the following oracle inequality bounds the risk of averaged version of $K$-fold cross-validation.
 It is a special case of Theorem~\ref{thrm:jean_cv} in the Supplementary Materials, which extends Theorem 3.5 in \citet{lecue2012oracle}.
+The notation $\mathbb{E}_{D^{(m)}}$ indicates the expectation over random $m$-sample datasets $D^{(m)}$ drawn from the probability distribution $\mu$.
 \begin{theorem}
 	\label{thrm:kfold}
 	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\Lambda} = (\lambda_{\max} - \lambda_{\min}) \vee 1$.
@@ -380,14 +381,14 @@ It is a special case of Theorem~\ref{thrm:jean_cv} in the Supplementary Material
 	Then there exists an absolute constant $c_{1}>0$ and a constant $c_{K_0, b}>0$ such that for any $a > 0$,
 	\begin{align}
 	\begin{split}
-	\mathbb{P}_{D^{(n)}}\left(
+	\mathbb{E}_{D^{(n)}}\left(
 	\|
 	\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})
 	-g^{*}
 	\|_{L_{2}}^{2}\right)
 	& \le	(1+a)
 	\inf_{\lambda\in\Lambda}
-	\left[\mathbb{P}_{D^{(n_{T})}}\left(\|
+	\left[\mathbb{E}_{D^{(n_{T})}}\left(\|
 	\hat{g}(\boldsymbol{\lambda}|D^{(n_{T})})
 	-g^{*}\|_{L_{2}}^{2}\right)\right] \\
 	& +
