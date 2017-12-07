@@ -29,7 +29,21 @@
 	}
 
 	We appreciate the helpful feedback from the associate editor.
-	We have substantially updated the paper and provide a detailed list of replies to the referees' questions and comments.
-	We have paid particular attention to addressing the first referee's doubt that...
+	We have substantially updated the paper per the reviewer comments.
+	In particular, we added four in-depth examples to illustrate that the conditions in our lemmas is satisfied.
+	For Lemma 1 which applies to smooth penalty functions, we analyze a problem with multiple ridge penalties.
+	In addition, we consider a generalized additive model which involves multiple Sobolev penalties.
+	We transform the problem to its finite-dimensional equivalent, show that the Lipschitz condition is satisfied, and establish the oracle inequality for the training/validation split setting.
+	For Lemma 2 which applies to nonsmooth penalty functions, we analyze the elastic net in both the training/validation split and cross-validation settings.
 	
+	During our revisions, we also noticed that Lemma 2 in the paper can be extended such that the result is more widely applicable.
+	Instead of establishing that the fitted models are only Lipschitz over some subset of penalty parameters that are well-behaved, we now establish that the fitted models are Lipschitz over almost every pair of penalty parameters.
+	Thus this lemma can be applied more readily to typical penalized regression problems.
+
+	In addition, upon taking a second pass at this paper, we found that Theorem 2 in the paper can be extended to more general settings.
+	We have loosened the assumptions needed in Theorem 2 so that we can consider problems with unbounded covariates $X$ and unbounded noise $\epsilon$.
+	This required extending the results in Lecue and Mitchell (2012).
+	Thus Theorem 2 in the latest revision is an extension of the results in Lecue and Mitchell (2012), rather than just an application.
+	
+	Finally, we updated the notation in the paper to be more accurate. We thank the reviewers for pointing out the typos.
 \end{document}
