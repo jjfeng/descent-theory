@@ -373,38 +373,73 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 
 \subsection{Cross-validation}
 \label{app:cv}
-As mentioned before, Theorem \ref{thrm:kfold} is an application of Theorem \ref{thrm:jean_cv}, which extends Theorem 3.5 in \citet{lecue2012oracle}.
-\textred{
-\textbf{Is this stuff even true still?}
-Theorem 3.5 in \citet{lecue2012oracle} assumes that there is a single function $\mathcal{J}$ that bounds the complexity of the post-training model class $\mathcal{G}(T)$.
+In order to obtain an oracle inequality for averaged version of cross-validation, we need to extend Theorem 3.5 in \citet{lecue2012oracle}.
+In particular, Theorem 3.5 in \citet{lecue2012oracle} assumes that there is a single function $\mathcal{J}$ that bounds the complexity of the post-training model class $\mathcal{G}(T)$.
 However the complexity of the post-training model class depends on training data -- for instance, if the noise in the training data were particularly large, the complexity of the post-training model class can be very high.
-In our extension, we rely on the fact that the noise in the dataset are sub-gaussian, so that the complexity of the post-training model class can be controlled with high probability.
-}
+In our extension, we allow the function $\mathcal{J}$ to depend on the training data.
 
-For this section, suppose we have a measurable space $(\mathcal{Z}, \mathcal{T})$ and $\mathcal{F}$ is a class of measurable functions from $\mathcal{Z} \mapsto \mathbb{R}$.
-We consider a general, convex loss function $Q: \mathcal{Z} \times \mathcal{F} \mapsto \mathbb{R}$ (rather than the least squares loss considered in the previous section).
+For this section, suppose we have a measurable space $(\mathcal{Z}, \mathcal{T})$ and $\mathcal{G}$ is a class of measurable functions from $\mathcal{Z} \mapsto \mathbb{R}$.
+We consider a general loss function $Q: \mathcal{Z} \times \mathcal{F} \mapsto \mathbb{R}$ (rather than the least squares loss considered in the previous section).
 The model-estimation procedure selects functions from the class $\mathcal{F}$.
-The risk function $R$ is defined as...
+The risk function $R(g)$ is defined as the expected loss $\mathbb{E} Q(Z, g)$.
+We suppose the risk function is convex.
+To match the notation used in \citet{lecue2012oracle}, we use $\hat{g}^{(n)}(D^{(n)})$ denote the averaged version of cross-validation and $f^*$ denote the minimizer of the risk function over $\mathcal{F}$.
+In this more general setting, we can replace Assumption~\ref{assump:tail_margin} with its more general version:
+\begin{assump}
+	%JF renumber this to assumption 4?
+	\label{assump:tail_margin_general}
+	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$,
+	\begin{align}
+	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) \right \|_{L_{\psi_1}} & \le K_0
+	\label{eq:cv_assump1}\\
+	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2}
+	& \le 
+	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
+	\label{eq:cv_assump2}
+	\end{align}
+\end{assump}
 
-Our theorem again begins with a result reminiscent of the basic inequality.
-The following lemma is Lemma 3.1 from \citet{lecue2012oracle}.
 
+
+Our theorem relies on the basic inequality established in Lemma 3.1 in \citet{lecue2012oracle}.
+We reproduce it here for convenience.
 From henceforth, $c_i > 0$ denotes absolute constants, that may not necessarily be the same if they share the same subscript.
 \begin{lemma}
-	lemma 3.1
+For any constant $a >0$, we have the following inequality
+\begin{align}
+\begin{split}
+\mathbb{E}_{D^{(n)}} \left(
+R(\bar g^{(n)}(D^{(n)})) - R(g^*) 
+\right)
+& \le
+(1 + a)
+\inf_{\lambda \in \Lambda}
+\left[
+\mathbb{E}_{D^{(n_V)}}
+R(\hat{g}^{(n_V)}(\boldsymbol{\lambda}| D^{(n_V)})) - R(g^*)
+\right]\\
+& \quad +
+\mathbb{E}_{D^{(n)}}
+\sup_{\lambda\in \Lambda}
+\left[
+(P - (1 + a)P_{n_V})
+\left(
+Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}))
+- Q(\cdot, g^*)
+\right )
+\right]
+\end{split}
+\label{eq:basic_ineq_cv}
+\end{align}
+where $P_{n_V} = 1/n_V \sum_{i=n_T +1}^n \delta_{Z_i}$.
 \end{lemma}
 
 We need to bound the supremum of the shifted empirical process term.
-To do this, we again use techniques from empirical process theory.
-Instead of using metric entropy from the previous section, we use Talagrand's $\gamma$ function, which bounds supremum of stochastic processes using a generic chaining mechanism.
-The $\gamma$ function is defined as follows
-\begin{definition}
-	admissible sequences...
-	talagrand...
-\end{definition}
-
-To prove our result, we first restate Lemma 3.4 in \citet{lecue2012oracle} using notation that clarifies the conditional dependencies.
-This allows us to introduce two new functions $h$ and $J_\delta$.
+To do this, we use Lemma 3.4 in \citet{lecue2012oracle}.
+However we restate it using notation that clarifies the conditional dependencies.
+This allows us to introduce two new functions $h$ and $J_\delta$ that allows us to later extend their oracle inequality.
+The following lemma involves bounding Talagrand's gamma function $\gamma_\alpha$.
+We refer the reader to \citet{talagrand2006generic} for its definition.
 \begin{lemma}
 Let $\mathcal{Q}(D^{(m)})\equiv\left\{ Q(\lambda|D^{(m)}):\lambda\in\Lambda\right\} $
 and $\mathcal{Q}\equiv\cup_{m\in\mathbb{N}}\cup_{D^{(m)}}\mathcal{Q}(D^{(m)})$.
@@ -491,8 +526,7 @@ Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the condition
 	\]
 \end{lemma}
 
-Now we state the following lemma, that will allow us to extend of Theorem 3.5 in \citet{lecue2012oracle}.
-Using a simple chaining argument, we arrive at the following lemma.
+Now we use a simple chaining argument that will allow us to following lemma, that will allow us bound the shifted empirical process term in \eqref{eq:basic_ineq_cv}.
 \begin{lemma}
 	\label{lemma:chain}
 Consider any $a>0$.
@@ -518,34 +552,18 @@ Then for any $\sigma > 0$, we have
 .
 \]
 \end{lemma}
-Obviously the above lemma is only useful if we can show that $h$ is bounded with high probability.
-For instance, in our examples later, $h$ has exponential tails so the upper bound in Lemma~\ref{lemma:chain} is well-controlled.
+Of course, the above lemma is only useful if we can show that $h$ is bounded with high probability.
+For instance, in our examples later, $h$ has sub-exponential tails so the upper bound in Lemma~\ref{lemma:chain} is well-controlled.
 
-We require the following assumption for the more general case.
-\begin{assump}
-	%JF renumber this to assumption 4?
-	\label{assump:tail_margin_general}
-	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$,
-	\begin{align}
-	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) \right \|_{L_{\psi_1}} & \le K_0
-	\label{eq:cv_assump1}\\
-	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2}
-	& \le 
-	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
-	\label{eq:cv_assump2}
-	\end{align}
-\end{assump}
 
-Putting the three lemmas above together, we have the following result.
-
+Putting the three lemmas together and using Assumption~\ref{assump:tail_margin_general}, we have the following result.
 \begin{theorem}
 	\label{thrm:jean_cv}
-	Consider a set of hyper-parameters $\Lambda$. Consider a loss function $Q:(\mathcal{Z}, \mathcal{G}) \mapsto \mathbb{R}$ with convex risk function $R: \mathcal{G} \mapsto \mathbb{R}$. Let
+	Consider a set of hyper-parameters $\Lambda$. Consider a loss function $Q:(\mathcal{Z}, \mathcal{F}) \mapsto \mathbb{R}$ with convex risk function $R: \mathcal{G} \mapsto \mathbb{R}$. Let
 	$$
 	\mathcal{Q} = \{ 
 	Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) : \boldsymbol{\lambda} \in \Lambda \}.
 	$$
-	
 	Suppose Assumption~\ref{assump:tail_margin_general} holds.
 	Suppose there is an $w_{\min} > 0$ and
 	% JF: is this the right notation for a training set?
@@ -668,13 +686,13 @@ $$
 
 \end{proof}
 
-Now we proceed to bound Talagrand's $\gamma$ function. Via simple calculations, one can show that there is an absolute constant $c > 0$ such that
+Talagrand's $\gamma$ function of a class $T$ can be bounded using the entropy of $T$
 \begin{align}
 \gamma_{\alpha}(T,D)\le c\int_{0}^{\text{Diam}(T,d)}\left(\log N(T,\epsilon,d)\right)^{1/\alpha}d\epsilon
 \label{eq:bound_gamma}
 \end{align}
-(cite talgrand).
-Combining the above bound with Lemma~\ref{lemma:covering_lipschitz} gives us the following lemma.
+\citep{talagrand2006generic}.
+Combining the above bound with Lemma~\ref{lemma:covering_lipschitz} gives the following lemma.
 
 \begin{lemma}
 Suppose Assumptions~\ref{assump:tail_margin} and \ref{assump:lipschitz} hold.
