@@ -32,8 +32,12 @@
 		}
 	
 		\reply{
-			yes i assume $x$ is independent of $\epsilon$.
-			yes i assume iid
+			We apologize for failing to specify the distributions of $x$ and $\epsilon$.
+			For Theorem 1 where we consider a training/validation split, we suppose $x$ is given, so it is essentially a fixed design.
+			For Theorem 2 where we consider cross-validation, the dataset is composed of iid observations from the some probability distribution over $(X,y)$ where $X$ is independent of $\epsilon$.
+			We have clarified this in the paper.
+			Theorem 4 in the Supplementary Materials is a more general result and does not require $X$ and $\epsilon$ to be independent.
+			We have updated the Supplementary Materials to highlight this difference.
 		}
 		
 		\point {
@@ -50,17 +54,13 @@
 		}
 	
 		\reply{
-			@noah - what should we do? our proof is for $\|\cdot\|_V$
-			
-			ryan tibshirani's paper on another paper, "additive model for trend filtering", and move from the empirical norm to the 2-norm
-			
-			really explain why we use the empirical norm instead of the 2 norm
-			
-			will mess up the coefficients. but we want to keep the sharp upper bounds
-			
-			of course interesting, but that's beyond the scope of the current paper.
-			
-			check thru the CV paper and explain why that works whereas we don't use it for training validation split.
+			We agree with the reviewer that it would be ideal to establish results on the L2-norm rather than the observed covariates.
+			However, we have decided to leave Theorem 1 about a single training/validation split untouched since we think it is valuable to have an oracle inequality that requires minimal assumptions and is sharp.
+			In this latest revision, we make a small extension to Lecue and Mitchell (2012) and establish an oracle inequality regarding the L2-norm under more general conditions.
+			Unfortunately we were unable to loosen the regularity condition required in their theorem.
+			In order to control the expected risk of the fitted model, our proof techniques and that in Lecue and Mitchell (2012) require that the tail behavior of the estimated functions is totally bounded for all hyper-parameters $\boldsymbol{\lambda}$ in some set $\Lambda$.
+			This is unrealistic, say, in penalized regression problems as $\Lambda$ can include very small penalty parameter values.
+			On the other hand, this assumption is not necessary in Theorem 1 where we only conclude the model's error over the covariates in the validation set.
 		}
 
 		\point{
@@ -68,7 +68,17 @@
 		}
 
 		\reply{
-			i have no idea what you are referring to. where? and what do you mean exactly?
+			The reviewer is correct in nothing that a norm cannot be used here.
+			We have removed that sentence entirely and replaced it with the following:
+			\begin{quote}
+			If there is a set of possible hyper-parameters $\Lambda$, then the goal is to find a penalty parameter $\boldsymbol{\lambda} \in \Lambda$ that minimizes the expected generalization error
+			$
+			E \left [
+			\left ( y - \hat{g}(\boldsymbol{\lambda} | T)(\boldsymbol{x}) \right )^2
+			\right ].
+			$
+		\end{quote}
+		
 		}
 
 		\point{
@@ -76,7 +86,8 @@
 		}
 
 		\reply {
-			yes this is true. we should change the wording here
+			The sentence is indeed inaccurate; we did not take into account the lasso.
+			We have replaced the sentence with the following: ``For parametric model-estimation procedures, the additional error from tuning hyper-parameters is roughly $O_p(J/n)$, which is similar to the typical parametric model-estimation rate $O_p(p/n)$ where the model parameters are not regularized.''
 		}
 
 		\point{
@@ -84,7 +95,8 @@
 		}
 
 		\reply{
-			@noah - what's a better word here
+			We agree that ``hypothesize'' does not seem appropriate here.
+			We have updated that sentence in the paper with the following: ``We believe that many model-estimation procedures are Lipschitz – such procedures are well-behaved in their hyper-parameters so they tend to be easier to use and thereby more popular.''
 		}
 	
 		\point{
@@ -92,7 +104,7 @@
 		}
 	
 		\reply{
-			yes, sorry for the typo
+			We apologize for this typo. It is now corrected.
 		}
 	
 		\end{enumerate} 

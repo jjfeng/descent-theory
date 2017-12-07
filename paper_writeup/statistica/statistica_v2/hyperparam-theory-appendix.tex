@@ -379,6 +379,9 @@ However the complexity of the post-training model class depends on training data
 In our extension, we allow the function $\mathcal{J}$ to depend on the training data.
 
 For this section, suppose we have a measurable space $(\mathcal{Z}, \mathcal{T})$ and $\mathcal{G}$ is a class of measurable functions from $\mathcal{Z} \mapsto \mathbb{R}$.
+Let $Z = (X,y)$ be a random variable with values in $\mathcal{Z}$.
+In contrast to the main manuscript, the random variable $Z$ is more general.
+We do not require that $y - E[y | X=x]$ to be independent of $X$.
 We consider a general loss function $Q: \mathcal{Z} \times \mathcal{F} \mapsto \mathbb{R}$ (rather than the least squares loss considered in the previous section).
 The model-estimation procedure selects functions from the class $\mathcal{F}$.
 The risk function $R(g)$ is defined as the expected loss $\mathbb{E} Q(Z, g)$.

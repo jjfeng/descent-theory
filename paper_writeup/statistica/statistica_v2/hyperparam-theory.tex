@@ -172,7 +172,7 @@ To show these results, we prove that finite-sample oracle inequalities of the fo
 are satisfied with high probability for some constant $a \ge 0$ and remainder $\delta(J,n)$ that depends on the number of tuned hyper-parameters $J$ and the number of samples $n$.
 Under the assumption that the model -estimation procedure is Lipschitz in the hyper-parameters, we find that $\delta$ scales linearly in $J$.
 % be careful here as some reviewer wants to argue log J also happens when you add parameters to the model itself
-For parametric model-estimation procedures, the additional error from adding a hyper-parameter is roughly equivalent to adding a parameter to the model itself.
+For parametric model-estimation procedures, the additional error from tuning hyper-parameters is roughly $O_p(J/n)$, which is similar to the typical parametric model-estimation rate $O_p(p/n)$ where the model parameters are not regularized.
 For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle risk so we can actually grow the number of hyper-parameters without affecting the asymptotic convergence rate.
 
 In addition, we specialize our results to penalized regression models of the form \eqref{eq:intro_pen_reg}.
@@ -231,7 +231,7 @@ Note that the result below is a special case of Theorem \ref{thrm:train_val_comp
 \begin{theorem}
 	\label{thrm:train_val}
 	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$.
-	Suppose independent random variables $\epsilon_i$ associated with the validation data $(x_i, y_i) \in V$ have expectation zero and are uniformly sub-Gaussian with parameters $b$ and $B$:
+	Suppose independent random variables $\epsilon_i$ from the validation set $V$ have expectation zero and are uniformly sub-Gaussian with parameters $b$ and $B$:
 	$$
 	\max_{i: (x_i, y_i) \in V} B^2 \left ( \mathbb{E} e^{|\epsilon_i|^2/B^2} - 1 \right ) \le b^2.
 	$$
@@ -312,10 +312,9 @@ $
 \subsection{Cross-Validation}\label{sec:cv}
 
 Now we give an oracle inequality for $K$-fold cross-validation.
-%JF this needs a rewrite.
 Previously, the oracle inequality was with respect to the $L_2$-norm over the validation covariates.
 Now we give our result with respect to the functional $L_2$-norm.
-Let $\mu$ be the probability distribution of $(X,Y)$.
+We suppose our dataset is composed of independent identically distributed observations $(X,y)$ where $X$ is independent of $\epsilon$.
 The functional $L_2$-norm is defined as
 $
 \left \| h \right \|^2_{L_2} = \int \left |h(x) \right |^2 d\mu(x)
