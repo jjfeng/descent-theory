@@ -1609,27 +1609,7 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\| \boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2
 	\end{split}
 	\end{align}
-	By triangle inequality, we determine that the fitted functions satisfy Assumption~\ref{assump:lipschitz} over $[0,1]^p$ with
-	\begin{align}
-	C_\Lambda(\boldsymbol{x} | T)
-	=
-	\left(
-	p
-	\left \|
-	\left(
-	X^\top X
-	\right)^{-1}
-	X^\top
-	\right \|_2
-	+
-	\sum_{j=1}^J \frac{c }{h_j(T)^2}
-	\right)
-	\sqrt{J}
-	n^{2\kappa + 1}
-	\|\boldsymbol{y}\|_T
-	\label{eq:sobolev_lipschitz}
-	\end{align}
-	where $h_j(T)$ is the minimum distance between the $j$th covariates in the training data.
+	By triangle inequality, we obtain our desired result \eqref{eq:sobolev_lipschitz}.
 \end{example}
 
 \begin{example}[Multiple elastic nets, training-validation split]
