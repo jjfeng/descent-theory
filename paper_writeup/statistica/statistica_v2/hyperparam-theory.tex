@@ -947,7 +947,11 @@ We obtain a similar Lipschitz relation in the nonparametric setting to those bef
 	\left \|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)} \right \|_2.
 	\end{align}
 \end{lemma}
-\noindent Note that since Lemma~\ref{lemma:nonparam_smooth} verifies that Assumption~\ref{assump:lipschitz} is satisfied over the observed covariates, it is suitable to be used in Theorem~\ref{thrm:train_val}.
+\noindent
+A simple example of a problem that satisfies \eqref{eq:gateuax} is one where the penalty function is a ridge penalty on the fitted values at the observed covariates (both training and validation covariates).
+Note that such a penalty is allowed because the response in the validation set is not included in the training data.
+
+Note that since Lemma~\ref{lemma:nonparam_smooth} verifies that Assumption~\ref{assump:lipschitz} is satisfied over the observed covariates, it is suitable to be used in Theorem~\ref{thrm:train_val}.
 However \eqref{eq:nonparam_lipshitz_thrm} is not a strong enough statement to be used for Theorem~\ref{thrm:kfold}.
 %The requirement that \eqref{eq:gateuax} holds implies that the values of the nonparametric model must appear in the penalty.
 %Note that this is allowed -- we don't actually give the $y$ values for the validation covariates.

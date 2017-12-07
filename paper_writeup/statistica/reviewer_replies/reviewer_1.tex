@@ -21,7 +21,9 @@
 	
 	\maketitle
 	
-	We appreciate the helpful feedback from the reviewer. We have addressed your questions and comments. Below we give a point-by-point response to each of the questions:
+	We appreciate the helpful feedback from the reviewer.
+	We have made major modifications to the paper to address your comments and questions.
+	Below we give a point-by-point response:
 	
 	\subsubsection*{Specific Suggestions/comments}
 	
@@ -29,8 +31,12 @@
 		\point{
 			The key assumption is the C-Lipschitz condition of the penalized criterion function on the tuning parameters.  This is a high level condition and the authors try to illustrate it using some low-level sufficient conditions.
 			In the current version, it is not clear whether these low-level conditions can be verified in specific examples, and they are sufficient for the main results of the paper.
+			...
+			Since the authors consider the smooth and non-smooth penalty functions in the paper, it would be good if the can use two specific examples to illustrate the low-level conditions in Lemma 1, Lemma 2 and Lemma 3. For example, they may consider the penalty function using the Sobolev norm for smooth case, and the Lasso penalty for the non-smooth case.
 		}
-		\reply{I don't get what you mean by ``they are sufficient for the main results of the paper.''}
+		\reply{
+		We have added four examples to Section 4 of the paper to illustrate settings where the low-level conditions in Lemmas 1 and 2 are satisfied.
+		}
 		
 		\point{
 			For example, in Lemma 2 of the paper, the authors introduced the subset of the tuning parameters such that the C-Lipschitz condition holds in the case that the penalty function is not smooth.
@@ -40,10 +46,6 @@
 		\reply{
 			We updated the proof. Gah, so sorry.
 			Also, in practice, just tune over $\Lambda$.
-		}
-	
-		\point{
-			Since the authors consider the smooth and non-smooth penalty functions in the paper, it would be good if the can use two specific examples to illustrate the low-level conditions in Lemma 1, Lemma 2 and Lemma 3. For example, they may consider the penalty function using the Sobolev norm for smooth case, and the Lasso penalty for the non-smooth case.
 		}
 	
 		\reply{
