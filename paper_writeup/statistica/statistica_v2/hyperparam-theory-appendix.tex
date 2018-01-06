@@ -375,22 +375,36 @@ We can apply Theorem \ref{thrm:train_val_complicated} to get Theorem \ref{thrm:t
 \subsection{Cross-validation}
 \label{app:cv}
 In order to obtain an oracle inequality for averaged version of cross-validation, we need to extend Theorem 3.5 in \citet{lecue2012oracle}.
-In particular, Theorem 3.5 in \citet{lecue2012oracle} assumes that there is a single function $\mathcal{J}$ that bounds the complexity of the post-training model class $\mathcal{G}(T)$.
-However the complexity of the post-training model class depends on training data -- for instance, if the noise in the training data were particularly large, the complexity of the post-training model class can be very high.
+Let the class of fitted functions for given training data $T$ be denoted
+$$
+\mathcal{G}(T) = \{\hat{g}^{(n_T)}(\boldsymbol{\lambda}| T) : \boldsymbol{\lambda} \in \Lambda\}.
+$$
+In \citet{lecue2012oracle}, they assume that there is a function $\mathcal{J}$ that uniformly bounds the size of the class $\mathcal{G}(T)$ for any training data $T$.
+However the complexity of $\mathcal{G}(T)$ depends on training data -- for instance, if there is a lot of noise in the training data, the size of $\mathcal{G}(T)$ can be very high.
 In our extension, we allow the function $\mathcal{J}$ to depend on the training data.
 
-For this section, suppose we have a measurable space $(\mathcal{Z}, \mathcal{T})$ and $\mathcal{G}$ is a class of measurable functions from $\mathcal{Z} \mapsto \mathbb{R}$.
-Let $Z = (X,y)$ be a random variable with values in $\mathcal{Z}$.
-In contrast to the main manuscript, the random variable $Z$ is more general.
-We do not require that $y - E[y | X=x]$ to be independent of $X$.
-We consider a general loss function $Q: \mathcal{Z} \times \mathcal{F} \mapsto \mathbb{R}$ (rather than the least squares loss considered in the previous section).
-The model-estimation procedure selects functions from the class $\mathcal{F}$.
-The risk function $R(g)$ is defined as the expected loss $\mathbb{E} Q(Z, g)$.
-We suppose the risk function is convex.
-To match the notation used in \citet{lecue2012oracle}, we use $\hat{g}^{(n)}(D^{(n)})$ denote the averaged version of cross-validation and $f^*$ denote the minimizer of the risk function over $\mathcal{F}$.
-In this more general setting, we can replace Assumption~\ref{assump:tail_margin} with its more general version:
+Throughout this section, we use Talagrand's gamma function \citep{talagrand2006generic} to characterize the size of a function class.
+We present it below as it will be used later on.
+\begin{definition}
+	For metric space $(T,d)$ and $\alpha \ge 0$, define
+	$$
+	\gamma_\alpha(T,d) = \inf \sup_{t\in T} \sum_{s = 0}^{\infty} 2^{s/\alpha}d(t, T_s)
+	$$
+	where the infimum is taken over all sequences $\{T_s: s\in \mathbb{N}, T_s \subseteq T, |T_s| \le 2^{2^s} \}$.
+	(Here, $|A|$ denotes the cardinality of the set $A$.)
+\end{definition}
+
+We begin with some notation.
+Suppose we have a measurable space $(\mathcal{Z}, \mathcal{T})$ where we observe $Z = (X,y)$ random variables with values in $\mathcal{Z}$.
+Let $\mathcal{G}$ is a class of measurable functions from $\mathcal{Z} \mapsto \mathbb{R}$; the model-estimation procedure selects functions from the class $\mathcal{G}$.
+In contrast to the main manuscript, we will consider a very general setting.
+In particular, the noise $\epsilon = y - E[y | X=x]$ is not necessarily independent of $X$.
+In addition, we consider a general loss function $Q: \mathcal{Z} \times \mathcal{G} \mapsto \mathbb{R}$ (rather than solely the least squares loss).
+Define the risk function $R(g)$ as the expected loss $\mathbb{E} Q(Z, g)$ and suppose the risk function is convex.
+Let $\bar{g}^{(n)}(D^{(n)})$ denote the averaged version of cross-validation and $g^*$ denote the minimizer of the risk function over $\mathcal{G}$.
+
+In this more general setting, we require a more general version of Assumption~\ref{assump:tail_margin}:
 \begin{assump}
-	%JF renumber this to assumption 4?
 	\label{assump:tail_margin_general}
 	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$,
 	\begin{align}
@@ -398,12 +412,10 @@ In this more general setting, we can replace Assumption~\ref{assump:tail_margin}
 	\label{eq:cv_assump1_app}\\
 	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2}
 	& \le 
-	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
+	K_1 \left ( R(\hat{g}^{(n_T)}(\boldsymbol{\lambda}|D^{(n_T)})) - R(g^*) \right )^{1/2\kappa}.
 	\label{eq:cv_assump2_app}
 	\end{align}
 \end{assump}
-
-
 
 Our theorem relies on the basic inequality established in Lemma 3.1 in \citet{lecue2012oracle}.
 We reproduce it here for convenience.
@@ -435,26 +447,24 @@ Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}))
 \end{split}
 \label{eq:basic_ineq_cv}
 \end{align}
-where $P_{n_V} = 1/n_V \sum_{i=n_T +1}^n \delta_{Z_i}$.
+where $P_{n_V} = 1/n_V \sum_{i=n_T +1}^n \delta_{Z_i}$ is the empirical probability measure on $\{Z_{n_T + 1}, ..., Z_n\}$.
 \end{lemma}
 
-We need to bound the supremum of the shifted empirical process term.
-To do this, we use Lemma 3.4 in \citet{lecue2012oracle}.
-However we restate it using notation that clarifies the conditional dependencies.
-This allows us to introduce two new functions $h$ and $J_\delta$ that allows us to later extend their oracle inequality.
-The following lemma involves bounding Talagrand's gamma function $\gamma_\alpha$.
-We refer the reader to \citet{talagrand2006generic} for its definition.
+We need to bound the supremum of the second term on the right hand side, which is a shifted empirical process term.
+Lemma 3.4 in \citet{lecue2012oracle} already bounds the shifted empirical process term.
+However to extend their result to our purposes, we restate it to clarify the conditional dependencies.
+This allows us to introduce two new functions $h$ and $J_\delta$ that will be used later on.
 \begin{lemma}
 Let $\mathcal{Q}(D^{(m)})\equiv\left\{ Q(\lambda|D^{(m)}):\lambda\in\Lambda\right\} $
 and $\mathcal{Q}\equiv\cup_{m\in\mathbb{N}}\cup_{D^{(m)}}\mathcal{Q}(D^{(m)})$.
-Suppose there exists $C_{1}>0$ and increasing function $G(\cdot)$
+Suppose there exists $C_{1}>0$ and an increasing function $G(\cdot)$
 such that $\forall Q\in\mathcal{Q}$, 
 \[
 \|Q(Z)\|_{L_{2}}\le G\left(\mathbb{E}Q(Z)\right).
 \]
 Let $n_{T},n_{V}\in\mathbb{N}$.
 Suppose there exists a function $h$ that maps training data $D^{(n_T)}$ to $\mathbb{R}^+$,
-functions $J_\delta :\mathbb{R}^+ \mapsto \mathbb{R}^+$ indexed by $\delta > 0$,
+a function $J_\delta :\mathbb{R}^+ \mapsto \mathbb{R}^+$ indexed by $\delta > 0$,
 and a constant $w_{\min}>0$ such that for any dataset $D^{(n_{T})}$ and any $w \ge w_{\min}$,
 \begin{align}
 h(D^{(n_{T})})\le\delta\implies\frac{\log n_{V}}{\sqrt{n_{V}}}\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le J_{\delta}(w)
@@ -476,31 +486,28 @@ $w\ge w_{\min}$ and all $u\ge1$,
 \end{align}
 \end{lemma}
 
-Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the conditional dependencies and using our new functions $h$ and $J_\delta$.
+Similarly, we restate Lemma 3.2 in \citet{lecue2012oracle} using our new functions $h$ and $J_\delta$.
 \begin{lemma}
 	Let $a>0$. Let $\mathcal{Q}(D^{(m)})\equiv\left\{ Q(\lambda|D^{(m)}):\lambda\in\Lambda\right\} $
 	be a set of measurable functions.
-	
-	Let random variable $Z$ satisfy for all $m\in\mathbb{N}$, any dataset
-	$D^{(m)}$, for all $Q\in\mathcal{Q}\left(D^{(m)}\right)$, $\mathbb{E}Q(Z)\ge 0 $.
-	
+	For all $m\in\mathbb{N}$ and any dataset $D^{(m)}$, suppose $\mathbb{E}Q(Z)\ge 0 $ for all $Q\in\mathcal{Q}\left(D^{(m)}\right)$.
+
 	Suppose for any $n_{T},n_{V}\in\mathbb{N}$ and dataset $D^{(n_{T})}$
 	there exists some absolute constant $L,c>0$ such that for all $w\ge w_{\min}$
 	and for all $u\ge1$,
 	\[
 	\Pr\left(
 	\sup_{Q\in\mathcal{Q}(D^{(n_{T})}): PQ \le w}
-	\left(\left({P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}\mid h\left(D^{(n_{T})}\right)\le\delta\right)
+	\left(\left({P}-P_{n_{V}}\right)Q\right)_{+}\le uL\frac{J_{\delta}(w)}{\sqrt{n_{V}}}
+	\middle |
+	h\left(D^{(n_{T})}\right)\le\delta\right)
 	\ge 1-L\exp(-cu).
 	\]
-	
-	
-	Suppose every function in $\left\{ J_{\delta}:\delta>0\right\} $
-	is strictly increasing and its inverse is strictly convex.
+	For any $\delta > 0$, suppose $J_{\delta}$ is strictly increasing and its inverse is strictly convex.
 	Let $\psi_{\delta}$ be the convex conjugate of $J_{\delta}^{-1}$,
 	e.g. $\psi_{\delta}(u)=\sup_{v>0}uv-J_{\delta}^{-1}(v)$ for all $u>0$.
-	Assume there is a $r\ge1$ such that $x>0\mapsto\psi(x)/x^{r}$ decreases
-	and define for $q>1$ and $u\ge1$,
+	Assume there is a $r\ge1$ such that $x>0\mapsto\psi_\delta(x)/x^{r}$ decreases.
+	For all $q>1$ and $u\ge1$, define
 	\[
 	\tilde \psi_{q,\delta}(u)=\psi_{\delta}\left(\frac{2q^{r+1}(1+a)u}{a\sqrt{n_{V}}}\right)\vee w_{\min}.
 	\]
@@ -512,37 +519,33 @@ Next we restate Lemma 3.2 in \citet{lecue2012oracle} by clarifying the condition
 	\Pr\left(
 	\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}
 	\left(\left({P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
-	\le \frac{a \tilde{\psi}_{q,\delta}(u/q)}{q}\mid h\left(D^{(n_{T})}\right)\le\delta
+	\le \frac{a \tilde{\psi}_{q,\delta}(u/q)}{q}
+	\middle | h\left(D^{(n_{T})}\right)\le\delta
 	\right)
 	\ge 1-L_{1}\exp(-cu).
 	\]
 	
 	
-	Moreover, assume that $\psi_{\delta}$ increases such that $\psi_{\delta}(\infty)=\infty$.
+	Moreover, assume that $\psi_{\delta}(x)$ is an increasing function in $x$ such that $\psi_{\delta}(\infty)=\infty$.
 	Then there exists a constant $c_{1}$ that depends only on $L$ and $c$ such that
-	\[
+	\begin{align}
 	\mathbb{E}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}
-	\left(\left(\mathbb{P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
+	\left(\left(P-(1+a)P_{n_{V}}\right)Q\right)_{+}
 	\middle |
 	h\left(D^{(n_{T})}\right)\le\delta
 	\right]
 	\le\frac{ac_{1} \tilde{\psi}_{q,\delta}(1/q)}{q}.
-	\]
+	\label{eq:lecue_exp_cond}
+	\end{align}
 \end{lemma}
 
-Now we use a simple chaining argument that will allow us to following lemma, that will allow us bound the shifted empirical process term in \eqref{eq:basic_ineq_cv}.
+Then by a simple chaining argument, we can bound the shifted empirical process term in \eqref{eq:basic_ineq_cv}.
+We omit its proof since it is a standard application of the chaining argument.
 \begin{lemma}
 	\label{lemma:chain}
 Consider any $a>0$.
 Suppose there exists a constant $c_{1}$ such that for any $n_{T},n_{V} \in \mathbb{N}$, $\delta>0$,
-and $q>1$, we have
-\[
-\mathbb{E}\left[
-\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left({P}-(1+a)P_{n_{V}}\right)Q\right)_{+}
-\middle | 
-h\left(D^{(n_{T})}\right)\le\delta\right]
-\le\frac{ac_{1}\epsilon_{q,\delta}(1/q)}{q}.
-\]
+and $q>1$, \eqref{eq:lecue_exp_cond} holds.
 Then for any $\sigma > 0$, we have
 \[
 \mathbb{E}\left[\sup_{Q\in\mathcal{Q}(D^{(n_{T})})}\left(\left({P}-(1+a)P_{n_{V}}\right)Q\right)_{+}\right]
@@ -556,14 +559,10 @@ Then for any $\sigma > 0$, we have
 .
 \]
 \end{lemma}
-Of course, the above lemma is only useful if we can show that $h$ is bounded with high probability.
-For instance, in our examples later, $h$ has sub-exponential tails so the upper bound in Lemma~\ref{lemma:chain} is well-controlled.
-
-
 Putting the three lemmas together and using Assumption~\ref{assump:tail_margin_general}, we have the following result.
 \begin{theorem}
 	\label{thrm:jean_cv}
-	Consider a set of hyper-parameters $\Lambda$. Consider a loss function $Q:(\mathcal{Z}, \mathcal{F}) \mapsto \mathbb{R}$ with convex risk function $R: \mathcal{G} \mapsto \mathbb{R}$. Let
+	Consider a set of hyper-parameters $\Lambda$. Consider a loss function $Q:(\mathcal{Z}, \mathcal{G}) \mapsto \mathbb{R}$ with convex risk function $R: \mathcal{G} \mapsto \mathbb{R}$. Let
 	$$
 	\mathcal{Q} = \{ 
 	Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) : \boldsymbol{\lambda} \in \Lambda \}.
@@ -582,15 +581,16 @@ Putting the three lemmas together and using Assumption~\ref{assump:tail_margin_g
 	+\gamma_{2}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{2}}\right)\le \mathcal{J}_{\delta}(w)
 	\end{align}
 	where $\mathcal{Q}_w = \{Q \in \mathcal{Q}: \| Q \|_{L_2} \le w^{1/2\kappa} \}$.
-	Moreover, suppose that for all $\delta > 0$, $J_\delta$ is a strictly increasing function, $\mathcal{J}_\delta^{-1}(\epsilon)$ is strictly convex,
-	the convex conjugate $\psi_\delta$ of $\mathcal{J}^{-1}_\delta$ increases, $\psi_\delta(\infty ) = \infty$ and there exists $r \ge 1$ such that $\psi_\delta(x)/x^r$ decreases.
-	
+	Moreover, suppose that for all $\delta > 0$, $J_\delta$ is a strictly increasing function and $\mathcal{J}_\delta^{-1}(\epsilon)$ is strictly convex.
+	Let the convex conjugate of $\mathcal{J}^{-1}_\delta$ be denoted $\psi_\delta$.
+	Suppose $\psi_\delta(x)$ increases in $x$, $\psi_\delta(\infty ) = \infty$, and there exists $r \ge 1$ such that $\psi_\delta(x)/x^r$ decreases.
+
 	Consider any $\sigma > 0$. Then there is a constant $c > 0$ such that for every $a > 0$ and $q > 1$, the following inequality holds
 	\begin{align}
 	\begin{split}
 	\mathbb{E}_{D^{(n)}} 
 	\left(
-	R\left(\bar{g} ( \hat{\boldsymbol \lambda} | {D^{(n)}} ) \right )
+	R\left(\bar{g} ( {D^{(n)}} ) \right )
 	- R (g^*)
 	\right)
 	&\le
@@ -614,9 +614,11 @@ Putting the three lemmas together and using Assumption~\ref{assump:tail_margin_g
 	\end{align}
 	where $\tilde{\psi}_{q, \delta}(u) = \psi_\delta\left(\frac{2q^{r+1}(1 + a)u}{a\sqrt{n_V}}\right) \vee w_{\min}$ for all $u > 0$.
 \end{theorem}
+Of course, this theorem is only useful if we can show that $h(D^{(n_T)})$ is bounded with high probability.
+For instance, in an example in the main manuscript, we show that $h(D^{(n_T)})$ has sub-exponential tails; so the latter term in \eqref{eq:cv_oracle_ineq} is well-controlled.
 
-To see why this extension of Theorem 3.5 in \citet{lecue2012oracle} was useful, we now apply it to prove Theorem~\ref{thrm:kfold} where we consider the squared error loss $Q((x,y), g) = (y - g(x))^2$ and model-estimation methods where the estimated functions are Lipschitz in the hyper-parameters.
-
+We now apply Theorem~\ref{thrm:jean_cv} to prove Theorem~\ref{thrm:kfold}.
+Recall that Theorem~\ref{thrm:kfold} concerns the squared error loss $Q((x,y), g) = (y - g(x))^2$ and only considers model-estimation methods where the estimated functions are Lipschitz in the hyper-parameters.
 First we need the following lemma that describes the relationship between Lipschitz functions
 \begin{lemma}
 	Suppose the same conditions as Theorem~\ref{thrm:jean_cv}.
@@ -635,8 +637,9 @@ First we need the following lemma that describes the relationship between Lipsch
 	N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)
 	\le N\left(
 		\Lambda,
-		\frac{u}{c_{K_0, b}\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right).
+		\frac{u}{c_{K_0, b}\|C_\Lambda(x|D^{(n_{T})})\|_{L_{\psi_{2}}}},\|\cdot\|_{2}\right)
 	\end{align}
+	for a constant $c_{K_0, b} > 0$ that only depends on $K_0$ and $b$.
 	\label{lemma:covering_lipschitz}
 \end{lemma}
 \begin{proof}
@@ -649,8 +652,10 @@ Q(\cdot , \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x))
 - Q(\cdot , \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x))
 \right \|\\
 & = \left \|
-\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
-- \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right) ^2 - \left (y - g^*(x) \right) ^2
+\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right) ^2
+%- \left (y - g^*(x) \right) ^2
+- \left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right) ^2
+%- \left (y - g^*(x) \right) ^2
 \right \|
 \label{eq:loss_diff}
 \\
@@ -658,10 +663,12 @@ Q(\cdot , \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x))
 %\left (y - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) \right)
 %\left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right ) \\ & - \left(\hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x)\right )^2 \|\\
 %%JF falling off page
+\begin{split}
 & \le
 \left \|2\epsilon + g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x)
 + g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(2)} | D^{(n_T)})(x) \right \|_* \\
-& \quad \left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right \|_* \\
+& \quad \times \left \| \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(2)}|D^{(n_T)})(x) - \hat{g}^{(n_T)}(\boldsymbol{\lambda}^{(1)}|D^{(n_T)})(x) \right \|_* \\
+\end{split}\\
 & \le  \left (2 \|\epsilon\|_* +
 2 \sup_{\lambda \in \Lambda: P(g^* - \hat{g}(\boldsymbol{\lambda} | D^{n_T}))^2 \le w} 
 \left \| g^*(x) - \hat{g}(\boldsymbol{\lambda}^{(1)} | D^{(n_T)})(x) \right \|_* 
@@ -690,7 +697,7 @@ $$
 
 \end{proof}
 
-Talagrand's $\gamma$ function of a class $T$ can be bounded using the entropy of $T$
+Talagrand's gamma function of a class $T$ can be bounded by Dudley's integral
 \begin{align}
 \gamma_{\alpha}(T,D)\le c\int_{0}^{\text{Diam}(T,d)}\left(\log N(T,\epsilon,d)\right)^{1/\alpha}d\epsilon
 \label{eq:bound_gamma}
@@ -699,7 +706,7 @@ Talagrand's $\gamma$ function of a class $T$ can be bounded using the entropy of
 Combining the above bound with Lemma~\ref{lemma:covering_lipschitz} gives the following lemma.
 
 \begin{lemma}
-Suppose Assumptions~\ref{assump:tail_margin} and \ref{assump:lipschitz} hold.
+Suppose Assumptions~\ref{assump:lipschitz} and \ref{assump:tail_margin} hold.
 Suppose $\|\epsilon\|_{L_{\psi_2}} = b < \infty$.
 Define $\mathcal{Q}_w^{L_2}$ as before.
 For $\Lambda$, let $\Delta_{\Lambda}=(\lambda_{\max}-\lambda_{\min}) \vee 1$.
@@ -741,7 +748,7 @@ Then there exist absolute constants $c_0, c_1 >0$ and a constant $c_{K_0, b} > 0
 	& \le	2c\sqrt{w J}\left[\sqrt{\log\left(\frac{4 c_0  \Delta_{\Lambda}\left(b +\sqrt{w}\right)\|C_\Lambda(x|D^{(n_T)})\|_{L_{2}}+4\sqrt{w}}{2\sqrt{w}}\right)}+\frac{\sqrt{\pi}}{2}\right]
 	\end{align}
 	Using very similar logic, we now bound the $\gamma_1$ function.
-	First we bound the diameter of $\mathcal{Q}_w^{L_2}$ with respect to the norm $\|\cdot \|_{L_{\psi_1}}$.
+	First we bound the diameter of $\mathcal{Q}_w^{L_2}$ with respect to the norm $\|\cdot \|_{L_{\psi_1}}$:
 	\begin{align}
 	\Diam(\mathcal{Q}_w^{L_2}(D^{(n_T)}), \|\cdot \|_{L_{\psi_1}})
 	& \le 2 \sup_{\boldsymbol{\lambda} \in \Lambda}
@@ -753,27 +760,27 @@ Then there exist absolute constants $c_0, c_1 >0$ and a constant $c_{K_0, b} > 0
 	\left(
 	y - g^*(x)
 	\right)^2
-	\right \|_{L_{\psi_1}}\\
-	& \le
-	c_1 (b^2 + K_0^2).
+	\right \|_{L_{\psi_1}}
+	\le
+	c_1 K_0.
 	\label{eq:diam_psi1}
 	\end{align}
 	Thus
 	\begin{align}
 	\gamma_{1}\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),\|\cdot\|_{L_{\psi_{1}}}\right)
-	&\le c\int_{0}^{c_1 (b^2 + K_0^2)}\log N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)du\\
-	& \le c_2 J (b^2 + K_0^2)\left[
+	&\le c\int_{0}^{c_1 K_0}\log N\left(\mathcal{Q}_{w}^{L_{2}}(D^{(n_{T})}),u,\|\cdot\|_{L_{\psi_{1}}}\right)du\\
+	& \le c_2 J K_0 \left[
 	\log\left(
-	\frac{4 \Delta_{\Lambda}c_{K_0, b} \|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_{2}}}+ 2 c_1(b^2 + K_0^2)}
-	{c_1(b^2 + K_0^2)}
+	\frac{4 \Delta_{\Lambda}c_{K_0, b} \|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_{2}}}+ 2 c_1 K_0}
+	{c_1 K_0}
 	\right)+1\right]
 	\end{align}
 \end{proof}
 
-Using the above lemma, we can now define our functions $h$ and $\mathcal{J}_\delta$.
-Let
+To apply Theorem~\ref{thrm:jean_cv}, we need to define $h$ and $J_\delta$ so that \eqref{eq:h_to_J} is satisfied.
+Based on the lemma above, we see that it suffices to let
 \begin{align}
-h(D^{(n_T)}) = \|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_2}}.
+h(D^{(n_T)}) \coloneqq \|C_\Lambda(x|D^{(n_T)})\|_{L_{\psi_2}}
 \end{align}
 and
 \begin{align}
@@ -786,15 +793,14 @@ JK_0\left[\log\left(\Delta_{\Lambda}\delta c_{K_0, b}+1\right)+1\right]
 \left[\sqrt{\log\left(\Delta_{\Lambda}b \delta n +1\right)}+1\right].
 \end{split}
 \end{align}
-
 Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 \begin{proof}[Proof for Theorem~\ref{thrm:kfold}]
 	We now apply Theorem~\ref{thrm:jean_cv} to our Lipschitz case.
 	From \eqref{eq:diam_psi1}, we find that Assumption~\ref{assump:tail_margin_general} is satisfied.
-	As defined in \eqref{eq:j_delta}, $J_\delta(w)$ is clearly a valid bound for \eqref{eq:h_to_J} for all $w \ge 1/n$.
+	We have defined $h$ and $J_\delta$ so that \eqref{eq:h_to_J} is satisfied for all $w \ge 1/n$.
 	Moreover, $\mathcal{J}_{\delta}(w)$ is strictly increasing and concave in $w$.
 	This implies that $\mathcal{J}_{\delta}^{-1}$ is strictly convex.
-	Also by definition,
+	Via algebra, we find that the convex conjugate of $\mathcal{J}_{\delta}^{-1}$ is
 	\begin{align}
 	\psi_{\delta}(u)
 	= c_{1} u \frac{\log n_{V}}{\sqrt{n_{V}}}
@@ -856,7 +862,7 @@ Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 	c_{5} \left (\frac{1+a}{a} \right )^2 \frac{J\log n_{V}}{n_{V}}
 	K_0\left[\log\left(\Delta_{\Lambda}\delta c_{K_0, b} n +1\right)+1\right].
 	\end{align}
-	Now we are ready to calculate the summation in \eqref{eq:cv_oracle_ineq}.
+	So the summation in \eqref{eq:cv_oracle_ineq} reduces to
 	\begin{align}
 	& \lim_{q \rightarrow 1} \left(
 	\tilde{\psi}_{q,2\sigma_0}(1/q)

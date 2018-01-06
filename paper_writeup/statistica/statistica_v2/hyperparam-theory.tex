@@ -330,7 +330,7 @@ For $K$-fold cross-validation, we randomly partition the dataset $D^{(n)}$ into 
 In traditional cross-validation, the final model is retrained on all the data with $\hat{\boldsymbol{\lambda}}$. However bounding the generalization error of the retrained model requires additional regularity assumptions \citep{lecue2012oracle}. We consider the ``averaged version of $K$-fold cross-validation'' instead
 \begin{equation}
 \label{thrm:avg_cv}
-\bar{g}\left ( \hat{\boldsymbol \lambda} \middle | {D^{(n)}} \right ) = 
+\bar{g}\left ( {D^{(n)}} \right ) = 
 \frac{1}{K} \sum_{k=1}^K 
 \hat{g}^{(n_T)} \left (\hat{\boldsymbol \lambda} \middle | D^{(n_T)}_{-k} \right ).
 \end{equation}
@@ -340,9 +340,13 @@ To bound the generalization error of \eqref{thrm:avg_cv}, we require an assumpti
 	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda} \in \Lambda$, we have
 	\begin{align}
 	\left \|
-	g^*
-	- \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})
-	\right \|_{L_{\psi_2}} & \le K_0
+	\left(
+	y - \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})
+	\right)^2
+	- \left(
+	y - g^*
+	\right)^2
+	\right \|_{L_{\psi_1}} & \le K_0
 	\label{eq:cv_assump1}\\
 	\left \|
 	\left(
@@ -383,7 +387,7 @@ The notation $\mathbb{E}_{D^{(m)}}$ indicates the expectation over random $m$-sa
 	\begin{split}
 	\mathbb{E}_{D^{(n)}}\left(
 	\|
-	\bar{g}(\hat{\boldsymbol{\lambda}}|D^{(n)})
+	\bar{g}(D^{(n)})
 	-g^{*}
 	\|_{L_{2}}^{2}\right)
 	& \le	(1+a)
