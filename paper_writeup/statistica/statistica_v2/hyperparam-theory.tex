@@ -522,46 +522,37 @@ $P_j(\boldsymbol{\theta}^{(j)}) + \frac{w}{2}\| \boldsymbol{\theta}^{(j)} \|_2^2
 	L_T \left (\boldsymbol{\theta}, \boldsymbol{\lambda} \right) 
 	\coloneqq 
 	\frac{1}{2}
-	\sum_{i=1}^n
-	\left(y_i -  \sum_{j=1}^J \boldsymbol{x}_{i}^{(j)} \boldsymbol{\theta}^{(j)} \right )^2
+	\left\|
+	y -  \sum_{j=1}^J \boldsymbol{x}^{(j)} \boldsymbol{\theta}^{(j)}
+	\right \|^2_T
 	+ \sum_{j=1}^J \frac{\lambda_j}{2} \|\boldsymbol{\theta}^{(j)}\|_2^2.
 	\end{align}
-	We can then tune $\boldsymbol{\lambda}$ via a training/validation split with training set $T$ and validation set $V$.
+	We tune the penalty parameters $\boldsymbol{\lambda}$ over the set $\Lambda$ via a training/validation split with training and validation sets $T$ and $V$, respectively.
 	For all the examples in this manuscript, let $\Lambda = \left [n^{- t_{\min}}, 1 \right ]^J$.
 
-	Since we are considering linear functions, the function $g_j(\boldsymbol{\theta}^{(j)})(\boldsymbol{x}^{(j)})$ is $\ell_j$-Lipschitz where $\ell_j(\boldsymbol{x}^{(j)}) = \|\boldsymbol{x}^{(j)}\|_2$.
-	Then by Lemma~\ref{lemma:param_add}, the fitted function $g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))(\boldsymbol{x})$ satisfy Assumption~\ref{assump:lipschitz} over $\mathbb{R}^p$ with
-	\begin{align}
-	C_\Lambda \left ( \boldsymbol{x} | T \right ) =
-	n^{2t_{\min}}
-	\sqrt{
-		C^*_{T}
-		\left(
-		\sum_{j = 1}^J
-		\|\boldsymbol{x}^{(j)}\|_2^2
-		\left \| \|\boldsymbol{x}^{(j)}_i \|_2^2 \right \|_T^2
-		\right)
-	}
-	\label{eq:ex_ridge}
-	\end{align}
-	where $
-	C^*_{T} = 
-	\|\epsilon\|_{T}^{2}
-	+ \sum_{j=1}^J \|\boldsymbol{\theta}^{*,(j)}\|_2^2
-	.$
-	Plugging \eqref{eq:ex_ridge} into Corollary~\ref{corr:train_val} shows that the parametric term \eqref{eq:asym_train_val_theorem1} in the remainder is of the form
+	Via some algebra, we can derive \eqref{eq:param_add_lipschitz} in Lemma~\ref{lemma:param_add}; the details are deferred to the Supplementary Materials.
+	Plugging this result into Corollary~\ref{corr:train_val}, we find that the parametric term \eqref{eq:asym_train_val_theorem1} in the remainder is on the order of
 	\begin{align}
 	\frac{J t_{\min}}{n_{V}}
 	\log \left (
 	C^*_T n
-	\sum_{j = 1}^J \left \|\|\boldsymbol{x}^{(j)} \|_2 \right \|_T^2 \left \|\|\boldsymbol{x}^{(j)}\|_2 \right \|_V^2
-	\right ).
+	\sum_{j = 1}^J
+	\left(\frac{1}{n_T} \sum_{(x_i, y_i) \in T} \|\boldsymbol{x}_i^{(j)}\|^2_2\right)
+	\left(\frac{1}{n_V} \sum_{(x_i, y_i) \in V} \|\boldsymbol{x}_i^{(j)}\|^2_2\right)
+	\right )
 	\end{align}
-	Note that in this example, we indeed find that the near-parametric term in the remainder in the oracle inequality scales linearly with $t_{\min}$.
+	where $
+	C^*_{T} =
+	\|\epsilon\|_{T}^{2}
+	+ \sum_{j=1}^J \|\boldsymbol{\theta}^{*,(j)}\|_2^2
+	.$
+	So we have shown in this example that if the lower bound of $\Lambda$ shrinks at the polynomial rate $n^{-t_{\min}}$, the near-parametric term in the remainder of the oracle inequality grows only linearly in its power $t_{\min}$.
 \end{example}
 
 In the next example, we consider generalized additive models (GAMs) \citep{hastie1990generalized}.
 Though GAMs are nonparametric models, it is well-known that they are equivalent to solving a finite-dimensional problem \citep{green1993nonparametric, o1986automatic, buja1989linear}.
+By reformulating GAMs as parametric models instead, we can establish oracle inequalities for tuning the penalty parameters via training/validation split.
+Here we present an outline of the procedure; the details can be found in the Supplementary Materials.
 \begin{example}[Multiple sobolev penalties]
 	\label{example:sobolev}
 	To fit a generalized additive model over the domain $\mathcal{X}^J$ where $\mathcal{X} \subseteq \mathbb{R}$, a typical setup is to solve
@@ -576,74 +567,46 @@ Though GAMs are nonparametric models, it is well-known that they are equivalent 
 	\end{align}
 	where the penalty function is the Sobolev norm.
 	Let $\mathcal{X} = [0,1]$ for this example.
-	Since the solution to \eqref{eq:smoothing_spline} is the sum of natural cubic splines \citep{buja1989linear}, we can parameterize the each function $g_j$ by its linear component and an orthogonal component from a Reproducing Kernel Hilbert Space with reproducing kernel $R$:
-	\begin{align}
-	g_j(x_j) = \alpha_{1j} x_j + \sum_{i=1}^n \theta_{ij} R(x_{ij}, x_j).
-	\label{eq:rkhs_param}
-	\end{align}
-	For the definition of $R$ and a full derivation of this example, refer to the Supplementary Materials.
-	Here we just provide an outline for checking the Lipschitz relation.
-	Using \eqref{eq:rkhs_param}, we can re-express \eqref{eq:smoothing_spline} as the finite-dimensional problem with matrices $K_j$
+	Using properties of the Sobolev penalty, \eqref{eq:smoothing_spline} can be re-expressed as a finite-dimensional problem with matrices $K_j$
 	\begin{align}
 	\argmin_{\alpha_0, \boldsymbol{\alpha}_1, \boldsymbol{\theta}}
 	\frac{1}{2}
 	\left \|
-	\boldsymbol{y} -
+	y -
 	\alpha_0 \boldsymbol{1}
-	- X \boldsymbol{\alpha}_1
+	- \boldsymbol{x} \boldsymbol{\alpha}_1
 	- \sum_{j=1}^j K_j \boldsymbol{\theta}^{(j)}
 	\right \|^2_T
 	+
 	\frac{1}{2}
 	\sum_{j = 1}^J
-	\boldsymbol{\theta}^\top
 	\lambda_j \boldsymbol{\theta}^{(j)\top} K_j \boldsymbol{\theta}^{(j)}.
 	\label{eq:matrix_sobolev}
 	\end{align}
-	\textcolor{red}{(What is $X$ here?)}
-	If $X^\top X$ is invertible, we can derive a closed-form solution to \eqref{eq:matrix_sobolev}.
-	Instead of applying Lemma~\ref{lemma:param_add}, we can determine the Lipschitz relation directly from the closed-form solution.
-	We find that the fitted model satisfies Assumption~\ref{assump:lipschitz} with function
-	\begin{align}
-	C_\Lambda(\boldsymbol{x} | T)
-	=
-	\left(
-	p
-	\left \|
-	\left(
-	X^\top X
-	\right)^{-1}
-	X^\top
-	\right \|_2
-	+
-	\sum_{j=1}^J \frac{c }{h_j(T)^2}
-	\right)
-	\sqrt{J}
-	n^{2\kappa + 1}
-	\|\boldsymbol{y}\|_T
-	\label{eq:sobolev_lipschitz}
-	\end{align}
-	where $h_j(T)$ is the minimum distance between the $j$th covariates in the training data.
-	We can determine that the parametric term in the remainder of Corollary~\ref{corr:train_val} is
+	Let $X_T \in \mathbb{R}^{n_T\times J}$ be the covariates $\boldsymbol{x}$ in the training data stacked together.
+	If $X_T^\top X_T$ is invertible, we can derive the closed-form solution for \eqref{eq:matrix_sobolev}.
+	From there, we can find \eqref{eq:param_add_lipschitz} in Lemma~\ref{lemma:param_add}.
+	Plugging this result into Corollary~\ref{corr:train_val}, we find that the parametric term in the remainder is on the order of
 	\begin{align}
 	\frac{J t_{\min}}{n_{V}} \log \left (
 	n
 	J
-	\|\boldsymbol{y}\|_T
+	\|y\|_T
 	\left(
 	p
 	\left \|
 	\left(
-	X^\top X
+	X_T^\top X_T
 	\right)^{-1}
-	X^\top
+	X_T^\top
 	\right \|_2
 	+
 	\sum_{j=1}^J h_j^{-2}(T)
 	\right)
-	\right ).
+	\right )
 	\label{eq:sobolev_param}
 	\end{align}
+	where $h_j(T)$ be the minimum distance between the $j$th covariates in the training data.
 \end{example}
 
 \subsubsection{Parametric regression with non-smooth penalties}

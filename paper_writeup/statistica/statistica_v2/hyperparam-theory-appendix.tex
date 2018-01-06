@@ -33,6 +33,7 @@
 \newtheorem{definition}{Definition}
 
 \newtheorem{example}{Example}
+\newtheorem*{example*}{Example}
 \newtheorem{remark}{Remark}
 
 \DeclareMathOperator{\Diam}{Diam}
@@ -1402,7 +1403,27 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 
 \subsection{Examples: detailed derivations}
 
-\begin{example}[Multiple Sobolev penalties]
+\noindent \textbf{Example~\ref{ex:ridge}} (Multiple ridge penalties)
+Here we present the details for deriving \eqref{eq:param_add_lipschitz} for Example \ref{ex:ridge}.
+The additive components $g_j(\boldsymbol{\theta}^{(j)})(\boldsymbol{x}^{(j)})$ are linear functions that are $\ell_j$-Lipschitz where $\ell_j(\boldsymbol{x}^{(j)}) = \|\boldsymbol{x}^{(j)}\|_2$.
+Then by Lemma~\ref{lemma:param_add}, the fitted function $g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}))(\boldsymbol{x})$ satisfy Assumption~\ref{assump:lipschitz} over $\mathbb{R}^p$ with
+\begin{align}
+C_\Lambda \left ( \boldsymbol{x} | T \right ) =
+n^{2t_{\min}}
+\sqrt{
+	C^*_{T}
+	\left(
+	\sum_{j = 1}^J
+	\|\boldsymbol{x}^{(j)}\|_2^2
+	\left(\frac{1}{n_T} \sum_{(x_i, y_i) \in T} \|\boldsymbol{x}_i^{(j)}\|^2_2\right)
+	\right)
+}
+\label{eq:ex_ridge}
+\end{align}
+where $C^*_{T}$ is defined in Example~\ref{ex:ridge} of the main manuscript.
+
+\noindent \textbf{Example~\ref{example:sobolev}}(Multiple sobolev penalties)
+here we present the details for deriving \eqref{eq:param_add_lipschitz} for Example~\ref{example:sobolev}
 	Since the solution to \eqref{eq:smoothing_spline} must be the sum of natural cubic splines \citep{buja1989linear}, we can parameterize the space using a Reproducing Kernel Hilbert Space with inner product
 	\begin{align}
 	\langle f, g \rangle = \int_{0}^1 f^{''}(x) g^{''}(x) dx
@@ -1421,18 +1442,18 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\end{align}
 	where the functions $g_j$ are split into a linear component and an orthogonal non-linear component
 	\begin{align}
-	g_j(x_j) = \alpha_{1j} x_j + \sum_{i=1}^n \theta_{ij} R(x_{ij}, x_j).
+	g_j(x_j) = \alpha_{1j} x_j + \sum_{i=1}^{n_T} \theta_{ij} R(x_{ij}, x_j).
 	\end{align}
 	For notational simplicity, we will also denote $\vec{R}(x | D)_{ij} = R(x_{ij}, x_j)$.
 	We will also write
 	\begin{align}
-	g_{j, \perp}(x_j) = \sum_{i=1}^n \theta_{ij} R(x_{ij}, x_j).
+	g_{j, \perp}(x_j) = \sum_{i=1}^{n_T} \theta_{ij} R(x_{ij}, x_j).
 	\end{align}
 	
 	Using this finite-dimensional representation, we find that
 	\begin{align}
 	\int_{0}^1 \left(g_j^{''}(x)\right)^{2} dx
-	= \sum_{u = 1}^n \sum_{v=1}^n \theta_{uj} \theta{vj} R(x_{uj}, x_{vj})
+	= \sum_{u = 1}^{n_T} \sum_{v=1}^{n_T} \theta_{uj} \theta{vj} R(x_{uj}, x_{vj})
 	= \theta_j^\top K_j \theta_j
 	\label{eq:sobolev_finite}
 	\end{align}
@@ -1449,11 +1470,11 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	& = \argmin_{\alpha_0, \boldsymbol{\alpha}_1, \boldsymbol{\theta}}
 	\frac{1}{2}
 	\left \|
-	\boldsymbol{y} -
+	\boldsymbol{y}_T -
 	\alpha_0 \boldsymbol{1}
-	- X \boldsymbol{\alpha}_1
+	- X_T \boldsymbol{\alpha}_1
 	- K \boldsymbol{\theta}
-	\right \|^2
+	\right \|^2_2
 	+
 	\frac{1}{2}
 	\boldsymbol{\theta}^\top
@@ -1463,17 +1484,17 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\right \} \right ) \boldsymbol{\theta}.
 	\label{eq:matrix_sobolev}
 	\end{align}
-	where the matrix $K = (K_1 ... K_J)$.
-	In order to make the fitted functions $\hat{g}_j$ identifiable, we add the usual constraint that $\sum_{i=1}^n g_j(x_{ij}) = 0$ for all $j$.
-	We also assume that $X^\top X$ is nonsingular to ensure that there is a unique $\hat{\alpha}_1$.
+	where $K = (K_1 ... K_J)$.
+	In order to make the fitted functions $\hat{g}_j$ identifiable, we add the usual constraint that $\sum_{i=1}^{n_T} g_j(x_{ij}) = 0$ for all $j$.
+	We also assume that $X_T^\top X_T$ is nonsingular to ensure that there is a unique $\hat{\alpha}_1$.
 	
 	The KKT conditions then gives us
 	\begin{align}
-	\hat{\alpha}_0 &= \frac{1}{n}\sum_{i=1}^n y_i \\
+	\hat{\alpha}_0 &= \frac{1}{n_T}\sum_{(x_i, y_i)\in T} y_i \\
 	\hat{\boldsymbol{\alpha}}_1(\boldsymbol{\lambda})
-	& = (X^\top X)^{-1} X^\top
+	& = (X_T^\top X_T)^{-1} X_T^\top
 	(
-	\boldsymbol{y} - \hat{\alpha}_0 \boldsymbol{1}
+	\boldsymbol{y}_T - \hat{\alpha}_0 \boldsymbol{1}
 	- K \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
 	)
 	\label{eq:kkt_sobolev_linear}
@@ -1484,26 +1505,26 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\diag(K_j^{-1/2})
 	\left(
 	K^{(1/2)\top}
-	P_X^\top
+	P_{X_T}^\top
 	K^{(1/2)} + \diag(\lambda_j I)
 	\right)^{-1}
 	K^{(1/2)\top}
-	P_X^\top
+	P_{X_T}^\top
 	(I - \frac{1}{n}\boldsymbol{1} \boldsymbol{1}^\top)
-	\boldsymbol{y}
+	\boldsymbol{y}_T
 	\end{split}
 	\label{eq:kkt_sobolev}
 	\end{align}
-	where $K^{(1/2)} = (K_1^{1/2} ... K_J^{1/2})$, $I$ is the $n\times n$ identity matrix, and $P_X^\top = I - X (X^\top X)^{-1} X^\top$.
+	where $K^{(1/2)} = (K_1^{1/2} ... K_J^{1/2})$, $I$ is the $n_T\times n_T$ identity matrix, and $P_{X_T}^\top = I - X_T (X_T^\top X_T)^{-1} X_T^\top$.
 	
 	To apply Theorem~\ref{thrm:train_val}, we need to characterize how $\hat{g}(\boldsymbol{\lambda})(\cdot)$ varies with $\boldsymbol{\lambda}$.
-	Since we have the closed form solution to \eqref{eq:kkt_sobolev}, we will use it directly to come up with bounds for the Lipschitz factor $C_\Lambda(x | D^{(n_T)})$.
+	Since we have the closed form solution to \eqref{eq:kkt_sobolev}, we use it to directly bound the Lipschitz factor $C_\Lambda(\boldsymbol{x} | D^{(n_T)})$.
 	From \citet{green1993nonparametric}, we know that the value of the cubic $\hat{g}_j$ on the interval $[t_L, t_R]$ can be defined using its values and second derivatives at the ends of the interval.
 	Let $h = t_R - t_L$.
 	Then the value of the cubic
 	\begin{align}
 	\begin{split}
-	\hat{g}_j(x_j)
+	\hat{g}_{j,\perp}(x_j)
 	& = \hat{\alpha_{1j}} x_j
 	+ \frac{(x_j - t_L) \hat{g}_{j, \perp} (t_R) + (t_R - t) \hat{g}_{j, \perp}(t_L)}{h}\\
 	& \quad - \frac{1}{6}(x_j - t_L)(t_R - x_j) \left\{
@@ -1523,9 +1544,10 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\hat{\boldsymbol{\gamma}}_j & = R^{-1}_j Q^\top_j K_j \hat{\boldsymbol{\theta}}_j
 	\label{eq:second_deriv}
 	\end{align}
-	where the matrix $R$ is a banded diagonally dominant matrix and $Q$ is a banded negative-semi-definite matrix defined in \citet{green1993nonparametric}.
+	where the matrix $R_j$ is a banded diagonally dominant matrix and $Q_j$ is a banded negative-semi-definite matrix that depend on the covariates $x_j$ in the training data.
+	For the definitions of $R_j$ and $Q_j$, refer to \citet{green1993nonparametric}.
 	Let $h_j(D^{(n_T)})$ be the smallest distance between the $j$th covariates from the training data.
-	Then using the Gershgorin circle theorem, one can show that all the eigenvalues of $R$ are larger than $\frac{1}{3} h_j(D^{(n_T)})$ and all the eigenvalues of $Q$ have magnitudes no greater than $4/h_j(D^{(n_T)})$.
+	Then using the Gershgorin circle theorem, one can show that all the eigenvalues of $R_j$ are larger than $\frac{1}{3} h_j(D^{(n_T)})$ and all the eigenvalues of $Q_j$ have magnitudes no greater than $4/h_j(D^{(n_T)})$.
 	Thus using \eqref{eq:interp} and \eqref{eq:second_deriv}, we have that
 	\begin{align}
 	\left \|
@@ -1537,11 +1559,10 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\nabla_{\lambda} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})
 	\right \|_2
 	\end{align}
-	for some absolute constant $c > 0$ (again, assuming validation covariates between 0 and 1).
-	
-	From \eqref{eq:kkt_sobolev}, we have that
+	for some absolute constant $c > 0$.
+	To bound the second term on the right hand side, we know from \eqref{eq:kkt_sobolev} that
 	\begin{align}
-	\nabla_{\lambda_\ell} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})
+	& \nabla_{\lambda_\ell} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})\\
 	& = 
 	\left[
 	\begin{matrix}
@@ -1549,10 +1570,10 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\end{matrix}
 	\right]
 	\left(
-	K^{(1/2), \top} P_X^\top K^{(1/2)} + \diag(\lambda_j I_j)
+	K^{(1/2), \top} P_{X_T}^\top K^{(1/2)} + \diag\{\lambda_j I\}_{j=1:J}
 	\right)^{-2}
 	K^{(1/2), \top}
-	P_X^\top (I - \frac{1}{n} 1 1^\top) y
+	P_{X_T}^\top (I - \frac{1}{n} \boldsymbol{1} \boldsymbol{1}^\top) \boldsymbol{y}_T
 	\end{align}
 	if $\ell = j$.
 	Otherwise $\nabla_{\lambda_\ell} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda}) = 0$.
@@ -1562,7 +1583,7 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\nabla_{\lambda_\ell} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})
 	\right \|_2
 	\le
-	\lambda_{\min}^{-2} \|y\|_2 \sqrt{\|K_j\|_2 \sum_{{j'}=1}^J \|K_{j'}\|_2^2}
+	\lambda_{\min}^{-2} \|\boldsymbol{y}_T\|_2 \sqrt{\|K_j\|_2 \sum_{{j'}=1}^J \|K_{j'}\|_2^2}
 	\end{align}
 	The eigenvalues of $K_j$ are bounded above by the largest row sum, which is no more than $2 n_T$ (assuming all training covariates are between 0 and 1).
 	Putting the results above together, we have
@@ -1572,36 +1593,35 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\right \|_2
 	\le
 	\frac{c \sqrt{J} n_T}{h_j(D^{(n_T)})^2 \lambda_{\min}^2}
-	\|y\|_2.
+	\|\boldsymbol{y}_T\|_2.
 	\end{align}
-	
 	Also, we have from \eqref{eq:kkt_sobolev_linear} that
 	\begin{align}
 	\left \| \nabla_{\lambda} \hat{\boldsymbol{\alpha}_1}(\boldsymbol{\lambda}) \right \|_2
 	& =
 	\left \|
 	\left(
-	X^\top X
+	X_T^\top X_T
 	\right)^{-1}
-	X^\top
+	X_T^\top
 	\nabla_{\lambda_j} K \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})
 	\right \|_2 \\
 	& =
 	\left \|
 	\left(
-	X^\top X
+	X_T^\top X_T
 	\right)^{-1}
-	X^\top
+	X_T^\top
 	\nabla_{\lambda_j} K_j \hat{\boldsymbol{\theta}}_j(\boldsymbol{\lambda})
 	\right \|_2 \\
 	& \le
 	\left \|
 	\left(
-	X^\top X
+	X_T^\top X_T
 	\right)^{-1}
-	X^\top
+	X_T^\top
 	\right \|_2
-	\lambda_{\min}^{-2} \|y\|_2 n_T \sqrt{J}
+	\lambda_{\min}^{-2} \|\boldsymbol{y}_T\|_2 n_T \sqrt{J}
 	\end{align}
 	Finally we can conclude that
 	\begin{align}
@@ -1615,9 +1635,9 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	|x_j|
 	\left \|
 	\left(
-	X^\top X
+	X_T^\top X_T
 	\right)^{-1}
-	X^\top
+	X_T^\top
 	\right \|_2
 	+
 	\frac{c }{h_j(D^{(n_T)})^2}
@@ -1626,14 +1646,34 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	\sqrt{J}
 	n_T
 	\lambda_{\min}^{-2}
-	\|y\|_2
+	\|\boldsymbol{y}_T\|_2
 	\| \boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2
 	\end{split}
+	\label{eq:sob_add_comp}
 	\end{align}
-	By triangle inequality, we obtain our desired result \eqref{eq:sobolev_lipschitz}.
-\end{example}
+	By triangle inequality, we get the Lipschitz factor for the fitted model $\hat{g}$ by summing up \eqref{eq:sob_add_comp} for $j = 1,..,J$.
+	We find that the Lipschitz factor in \eqref{eq:param_add_lipschitz} is
+	\begin{align}
+	C_\Lambda(\boldsymbol{x} | T)
+	=
+	\left(
+	p
+	\left \|
+	\left(
+	X_T^\top X_T
+	\right)^{-1}
+	X_T^\top
+	\right \|_2
+	+
+	\sum_{j=1}^J \frac{c }{h_j(T)^2}
+	\right)
+	\sqrt{J}
+	n^{2t_{\min} + 1}
+	\|\boldsymbol{y}\|_T.
+	\label{eq:sobolev_lipschitz}
+	\end{align}
 
-\begin{example}[Multiple elastic nets, training-validation split]
+\textbf{Example~\ref{ex:elastic_net_tv}} (Multiple elastic nets, training-validation split)
 	Here we check that Condition~\ref{condn:nonsmooth1} is satisfied.
 	Since the absolute value function $|\cdot|$ is twice-continuously differentiable everywhere except at zero, the directional derivatives of $||\boldsymbol \theta^{(j)}||_1$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ only exist along directions spanned by the columns of $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$.
 	Thus the penalized training loss $L_T(\cdot, \boldsymbol{\lambda})$ is twice differentiable with respect to the directions in \eqref{eq:en_diff_space}.
@@ -1660,7 +1700,6 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 	where $\boldsymbol{X}_{T} = (\boldsymbol{X}^{(1)} ... \boldsymbol{X}^{(J)})$
 	and $\boldsymbol{I}$ is the identity matrix with length equal to the number of nonzero elements in $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$.
 	Since the first summand is positive semi-definite and $\lambda_1 > \lambda_{\min}$, \eqref{eq:en_hessian} has a minimum eigenvalue of $\lambda_{\min}$.
-\end{example}
 
 
 \bibliographystyle{unsrtnat}
