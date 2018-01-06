@@ -744,8 +744,9 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	\label{eq:threshold_elastic_net}
 	\end{align}
 	where $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is the solution to \eqref{eq:elastic_net_ex} and $K_0' > 0$ is some fixed constant.
-	Using Lemma~\ref{lemma:nonparam_smooth}, we can find the Lipschitz factor.
-	We can then apply Theorem~\ref{thrm:kfold}: we bound the Orlicz norm of the Lipschitz factor via concentration inequalities and eventually find that there is some constant $\tilde{c} > 0$, such that for any $a > 0$
+	We then find the Lipschitz factor in Lemma~\ref{lemma:nonparam_smooth} and bound its Orlicz norm via exponential concentration inequalities.
+	Let $\bar{\boldsymbol{\theta}}(\hat{\boldsymbol{\lambda}})$ be the fitted parameters by averaged version of $K$-fold cross-validation.
+	By Theorem~\ref{thrm:kfold}, there is some constant $\tilde{c} > 0$, such that for any $a > 0$
 	\begin{align}
 	\begin{split}
 	\mathbb{P}_{D^{(n)}}
