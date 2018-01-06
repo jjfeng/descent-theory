@@ -585,7 +585,7 @@ Here we present an outline of the procedure; the details can be found in the Sup
 	\end{align}
 	Let $X_T \in \mathbb{R}^{n_T\times J}$ be the covariates $\boldsymbol{x}$ in the training data stacked together.
 	If $X_T^\top X_T$ is invertible, we can derive the closed-form solution for \eqref{eq:matrix_sobolev}.
-	From there, we can find \eqref{eq:param_add_lipschitz} in Lemma~\ref{lemma:param_add}.
+	From there, we can directly calculate \eqref{eq:param_add_lipschitz} in Lemma~\ref{lemma:param_add}.
 	Plugging this result into Corollary~\ref{corr:train_val}, we find that the parametric term in the remainder is on the order of
 	\begin{align}
 	\frac{J t_{\min}}{n_{V}} \log \left (
@@ -705,32 +705,21 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	\label{eq:elastic_net_ex}
 	\end{align}
 	where $w > 0$ is a fixed constant.
-	We establish an oracle inequality when the penalty parameters via training/validation split over $\Lambda$ defined in Example~\ref{ex:ridge}.
+	Here we briefly sketch the process for deriving the oracle inequality when the penalty parameters via training/validation split over $\Lambda = [n^{-t_{\min}}, 1]^J$.
+	Details are given in Supplementary Materials.
 
-	For every $j$, let the nonzero indices of $\hat{\boldsymbol{\theta}}^{(j)}(\boldsymbol{\lambda})$ be denoted $I^{(j)}(\boldsymbol\lambda) = \{i | \hat{\theta}_i(\boldsymbol\lambda) \ne 0 \text{ for } i=1,...,p_j \}$ and let $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$ be a submatrix of the identity matrix with columns $I^{(j)}(\boldsymbol\lambda)$.
-	Condition~\ref{condn:nonsmooth1} is satisfied with differentiable space
+	First we check that all the conditions are satisfied.
+	For this problem, the differentiable space is the subspace spanned by the non-zero elements in $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$.
+	Since the elastic net solution paths are piecewise linear \citep{zou2003regression}, the differentiable space is also a local optimality space.
+	Then using a very similar process as in Example~\ref{ex:ridge}, we find that the parametric term in the remainder of Corollary~\ref{corr:train_val} is
 	\begin{align}
-	\Omega^{L_T(\cdot, \lambda)}(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T))
-	= \spann(I_{I^{(1)}(\boldsymbol \lambda)}) \times ... \times \spann(I_{I^{(J)}(\boldsymbol \lambda)}).
-	\label{eq:en_diff_space}
-	\end{align}
-	Condition~\ref{condn:nonsmooth2} is also satisfied since elastic net solution paths are piecewise linear \citep{zou2003regression}.
-	In addition, the Hessian of the penalized training loss has a minimum eigenvalue $m(T) \ge \lambda_{\min}w$.
-	For more detailed checks that all the conditions are satisfied, refer to the Supplementary Materials.
-
-	From Lemma~\ref{lemma:nonsmooth}, the function $g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} |T))(\boldsymbol{x})$ satisfies Assumption~\ref{assump:lipschitz} over $\mathbb{R}^p$ with
-	\begin{align}
-	C_\Lambda \left ( \boldsymbol{x} | T \right ) =
-	\frac{n^{2t_{\min}}}{w}
-	\sqrt{
-	C^*_T
-	\sum_{j = 1}^J
-	\left \|
-	\|\boldsymbol{x}^{(j)} \|_2
-	\right \|_T^2
-	\|\boldsymbol{x}^{(j)}\|_2^2
-	}
-	\label{eq:elastic_lipschitz}
+	\frac{J t_{\min}}{n_{V}}
+	\log \left (
+	\frac{C^*_T n}{w}
+	\sum_{j=1}^J
+	\left(\frac{1}{n_T} \sum_{(x_i, y_i) \in T} \|\boldsymbol{x}_i^{(j)}\|^2_2\right)
+	\left(\frac{1}{n_V} \sum_{(x_i, y_i) \in V} \|\boldsymbol{x}_i^{(j)}\|^2_2\right)
+	\right )
 	\end{align}
 	where
 	$
@@ -740,88 +729,23 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	2 \|\boldsymbol{\theta}^{*,(j)}\|_1
 	+ w\|\boldsymbol{\theta}^{*,(j)}\|_2^2
 	$.
-	Then the parametric term in the remainder of Corollary~\ref{corr:train_val} is
-	\begin{align}
-	\frac{J t_{\min}}{n_{V}}
-	\log \left (
-	\frac{C^*_T n}{w}
-	\sum_{j=1}^J
-	\left \| \|\boldsymbol{x}^{(j)}\|_2 \right \|_T^2 \left \| \|\boldsymbol{x}^{(j)}\|_2 \right \|_V^2
-	\right ).
-	\end{align}
 \end{example}
 \begin{example}[Multiple elastic nets, cross-validation]
+	\label{eq:elastic_net_cv}
 	Now we establish an oracle inequality for the averaged version of $K$-fold cross-validation using a similar setup as \citet{lecue2012oracle}.
 	Suppose the noise $\epsilon$ is sub-gaussian and for simplicity, suppose $X$ is drawn uniformly from $[-R, R]^p$ for some $R > 0$.
-	Then $X$ is a log-concave vector and
-	$
-	\sup_{\|a\|_\infty = 1} \left\| X^\top a \right \|_{L_{\psi_2}} < c_R < \infty
-	$
-	for some constant $c_R$.
-	Then \eqref{eq:cv_assump2} in Assumption~\ref{assump:tail_margin} is satisfied \citep{lecue2012oracle}.
-	To satisfy \eqref{eq:cv_assump1}, our fitting procedure for $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ entails a thresholding operation similar to that in \citet{lecue2012oracle}.
-	In particular, the fitted parameters are
+	In order to satisfy the assumptions in Theorem~\ref{thrm:kfold}, our fitting procedure for $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ entails a thresholding operation similar to that in \citet{lecue2012oracle}.
+	In particular, we fit parameters $\hat{\boldsymbol{\theta}}_{thres}(\boldsymbol{\lambda})$ where the $i$-th element is
 	\begin{align}
 	\hat{{\theta}}_{thres, i}(\boldsymbol{\lambda})
-	= \hat{{\theta}}_{i}(\boldsymbol{\lambda}) \wedge K_0'
+	= \text{sign}(\hat{{\theta}}_{i}(\boldsymbol{\lambda}))
+	(|\hat{{\theta}}_{i}(\boldsymbol{\lambda})| \wedge K_0')
 	\quad i = 1,...,p
+	\label{eq:threshold_elastic_net}
 	\end{align}
-	where $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is the solution to \eqref{eq:elastic_net_ex}.
-	Thus \eqref{eq:cv_assump1} is satisfied with
-	\begin{align}
-	\left\|
-	X^\top (\boldsymbol{\theta} - \boldsymbol{\theta}^*)
-	\right \|_{L_{\psi_2}}
-	\le
-	K_0 \coloneqq 
-	(\|\boldsymbol{\theta}^*\|_\infty + K_0')
-	c_R.
-	\end{align}
-	This thresholding procedure does not change the Lipschitz relation between the fitted models and the penalty parameters.
-	So Assumption~\ref{assump:lipschitz} is satisfied over $\mathbb{R}^p$ with the function
-	\begin{align}
-	C_\Lambda(\boldsymbol{x} | D^{(n_T)})
-	=
-	\frac{n^{2t_{\min}}}{w}
-	R^2 \sqrt{
-		J p
-		\left(
-		\|\epsilon\|_{D^{(n_T)}}^{2}
-		+\sum_{j=1}^J
-		2 \|\boldsymbol{\theta}^{*,(j)}\|_1
-		+ w\|\boldsymbol{\theta}^{*,(j)}\|_2^2
-		\right)
-	}.
-	\label{eq:elastic_lipschitz_cv}
-	\end{align}
-	\noindent
-	To apply Theorem~\ref{thrm:kfold}, we must find a bound for \eqref{eq:prob_bound_cv}.
-	Let $\sigma_0 = O_p(n^{4t_{\min}}R^4Jp/w^2 )$.
-	Using the fact that
-	$\left \| C_\Lambda(\cdot | D^{(n_T)}) \right \|_{L_{\psi_2}}^2$ is a linear function of $\|\epsilon\|_{D^{(n_T)}}^2$ and $\|\epsilon\|_{D^{(n_T)}}^2$ is a sub-exponential random variable, we have that
-	\begin{align}
-	\sum_{k = 1}^\infty k \Pr \left (
-	\| C_\Lambda(\cdot | D^{(n_T)}) \|_{L_{\psi_2}}
-	\ge 2^k \sigma_0
-	\right )
-	& \le
-	\sum_{k = 1}^\infty k \Pr \left (
-	\|\epsilon\|_{D^{(n_T)}}^2
-	\ge 2^{2k}
-	\right )
-%	& \le
-%	\sum_{k = 1}^\infty c_0 k
-%	\exp \left (
-%	- c_0 \frac{2^{2k} n_T}{\|\epsilon\|^2_{L_{\psi_{2}}}}
-%	\right ) \\
-	\le
-	c_1
-	\exp \left (
-	- \frac{c_0 n_T}{\|\epsilon\|^2_{L_{\psi_{2}}}}
-	\right )
-	\end{align}
-	for absolute constants $c_0, c_1 > 0$.
-	Then there is some constant $\tilde{c} > 0$, such that for any $a > 0$, we have
+	where $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is the solution to \eqref{eq:elastic_net_ex} and $K_0' > 0$ is some fixed constant.
+	Using Lemma~\ref{lemma:nonparam_smooth}, we can find the Lipschitz factor.
+	We can then apply Theorem~\ref{thrm:kfold}: we bound the Orlicz norm of the Lipschitz factor via concentration inequalities and eventually find that there is some constant $\tilde{c} > 0$, such that for any $a > 0$
 	\begin{align}
 	\begin{split}
 	\mathbb{P}_{D^{(n)}}
@@ -846,15 +770,16 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	\tilde{c}
 	\left (\frac{1+a}{a} \right )^2
 	\frac{J \log n_{V}}{n_{V}}
-	K_0 t_{\min}
+	t_{\min}
 	\log\left(
 	\frac{1+a}{aw} RJpn
 	\right).
 	\end{split}
 	\end{align}
 
-\noindent In contrast to the lasso example in \citet{lecue2012oracle}, we have established an oracle inequality when the hyper-parameters are tuned over a continuous range.
-This is particularly valuable when $J$ is large and $\boldsymbol{\lambda}$ must be tuned via a continuous optimization procedure.
+\noindent The above example is similar to the lasso example in \citet{lecue2012oracle}; the major difference is that we consider the case where the penalty parameters are tuned over a continuous range.
+We are able to do this since Lemma~\ref{lemma:nonsmooth} specifies a Lipschitz relation between the fitted functions and the penalty parameters.
+This result is valuable when $J$ is large and $\boldsymbol{\lambda}$ must be tuned via a continuous optimization procedure.
 %Unfortunately we were only able to consider thresholded fitted parameters as Assumption~\ref{assump:tail_margin} requires estimators to have a bounded $\psi_2$ norm. We hope to address this in future research.
 \end{example}
 

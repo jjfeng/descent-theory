@@ -395,11 +395,11 @@ In this more general setting, we can replace Assumption~\ref{assump:tail_margin}
 	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $m \in \mathbb{N}$ and any dataset $D^{(m)}$,
 	\begin{align}
 	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*) \right \|_{L_{\psi_1}} & \le K_0
-	\label{eq:cv_assump1}\\
+	\label{eq:cv_assump1_app}\\
 	\left \| Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}) - Q(\cdot, g^*)  \right \|_{L_2}
 	& \le 
 	K_1 \left ( R(\hat{g}^{(m)}(\boldsymbol{\lambda}|D^{(m)})) - R(g^*) \right )^{1/2\kappa}.
-	\label{eq:cv_assump2}
+	\label{eq:cv_assump2_app}
 	\end{align}
 \end{assump}
 
@@ -1673,13 +1673,23 @@ here we present the details for deriving \eqref{eq:param_add_lipschitz} for Exam
 	\label{eq:sobolev_lipschitz}
 	\end{align}
 
-\textbf{Example~\ref{ex:elastic_net_tv}} (Multiple elastic nets, training-validation split)
-	Here we check that Condition~\ref{condn:nonsmooth1} is satisfied.
+\noindent\textbf{Example~\ref{ex:elastic_net_tv}} (Multiple elastic nets, training-validation split)
+	Here we check that all the conditions for Lemma~\ref{lemma:nonsmooth} are satisfied.
+
+	First we check Condition~\ref{condn:nonsmooth1}.
 	Since the absolute value function $|\cdot|$ is twice-continuously differentiable everywhere except at zero, the directional derivatives of $||\boldsymbol \theta^{(j)}||_1$ at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ only exist along directions spanned by the columns of $\boldsymbol I_{I^{(j)}(\boldsymbol \lambda)}$.
-	Thus the penalized training loss $L_T(\cdot, \boldsymbol{\lambda})$ is twice differentiable with respect to the directions in \eqref{eq:en_diff_space}.
-	Moreover, the elastic net solution paths are piecewise linear \citep{zou2003regression}, which means that the nonzero indices of the elastic net estimates stay locally constant for almost every $\boldsymbol{\lambda}$. Therefore, \eqref{eq:en_diff_space} is also a local optimality space for $L_T(\cdot, \boldsymbol{\lambda})$.
-	
-	We also show that the Hessian of the penalized training loss has a minimum eigenvalue of $\lambda_{\min}$.
+	Thus the penalized training loss $L_T(\cdot, \boldsymbol{\lambda})$ is twice differentiable with respect to the directions in
+	\begin{align}
+	\Omega^{L_T(\cdot, \lambda)}(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T))
+	= \spann(I_{I^{(1)}(\boldsymbol \lambda)}) \times ... \times \spann(I_{I^{(J)}(\boldsymbol \lambda)}).
+	\label{eq:en_diff_space}
+	\end{align}
+
+	Moreover, the elastic net solution paths are piecewise linear \citep{zou2003regression}.
+	This implies that the nonzero indices of the elastic net estimates stay locally constant for almost every $\boldsymbol{\lambda}$; so \eqref{eq:en_diff_space} is also a local optimality space for $L_T(\cdot, \boldsymbol{\lambda})$.
+	In addition, this implies that Condition~\ref{condn:nonsmooth2} is satisfied.
+
+	We also check that the Hessian of the penalized training loss has a minimum eigenvalue bounded away from zero.
 	Consider the following orthogonal basis of \eqref{eq:en_diff_space} at $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$: $U(\boldsymbol{\lambda}) = \{U^{(j)}(\boldsymbol{\lambda})\}_{j = 1}^J$ where
 	\begin{align}
 	U^{(j)} =
@@ -1699,9 +1709,68 @@ here we present the details for deriving \eqref{eq:param_add_lipschitz} for Exam
 	\end{align}
 	where $\boldsymbol{X}_{T} = (\boldsymbol{X}^{(1)} ... \boldsymbol{X}^{(J)})$
 	and $\boldsymbol{I}$ is the identity matrix with length equal to the number of nonzero elements in $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$.
-	Since the first summand is positive semi-definite and $\lambda_1 > \lambda_{\min}$, \eqref{eq:en_hessian} has a minimum eigenvalue of $\lambda_{\min}$.
+	Since the first summand is positive semi-definite and $\lambda_1 > \lambda_{\min}$, \eqref{eq:en_hessian} has a minimum eigenvalue of $\lambda_{\min}w$.
 
+\noindent\textbf{Example~\ref{eq:elastic_net_cv}} (Multiple elastic nets, cross-validation)
+	Here we present details for establishing an oracle inequality when multiple elastic net penalties are tuned via the averaged version of $K$-fold cross-validation.
+	First we check the conditions in Theorem~\ref{thrm:kfold} are satisfied.
+	In the problem setup, $X$ is a log-concave vector and
+	$
+	\sup_{\|a\|_\infty = 1} \left\| X^\top a \right \|_{L_{\psi_2}} < c_R < \infty
+	$
+	for some constant $c_R$.
+	Using a similar procedure as \citet{lecue2012oracle}, we can then show that \eqref{eq:cv_assump1} and \eqref{eq:cv_assump2} in Assumption~\ref{assump:tail_margin} are satisfied with
+	$
+	K_0 \coloneqq 
+	(\|\boldsymbol{\theta}^*\|_\infty + K_0')
+	c_R$.
 
+	Next we find the Lipschitz factor.
+	We can upper bound the Lipschitz factor of the thresholded model with the Lipschitz factor of the un-thresholded model.
+	So Assumption~\ref{assump:lipschitz} is satisfied over $\mathbb{R}^p$ with
+	\begin{align}
+	C_\Lambda(\boldsymbol{x} | D^{(n_T)})
+	=
+	\frac{n^{2t_{\min}}}{w}
+	R^2 \sqrt{
+		J p
+		\left(
+		\|\epsilon\|_{D^{(n_T)}}^{2}
+		+\sum_{j=1}^J
+		2 \|\boldsymbol{\theta}^{*,(j)}\|_1
+		+ w\|\boldsymbol{\theta}^{*,(j)}\|_2^2
+		\right)
+	}.
+	\label{eq:elastic_lipschitz_cv}
+	\end{align}
+
+	Finally, to apply Theorem~\ref{thrm:kfold}, we must find a bound for \eqref{eq:prob_bound_cv}.
+	Let $\sigma_0 = O_p(n^{4t_{\min}}R^4Jp/w^2 )$.
+	Using the fact that
+	$\left \| C_\Lambda(\cdot | D^{(n_T)}) \right \|_{L_{\psi_2}}^2$ is a linear function of $\|\epsilon\|_{D^{(n_T)}}^2$, which is a sub-exponential random variable, we have that
+	\begin{align}
+	\sum_{k = 1}^\infty k \Pr \left (
+	\| C_\Lambda(\cdot | D^{(n_T)}) \|_{L_{\psi_2}}
+	\ge 2^k \sigma_0
+	\right )
+	& \le
+	\sum_{k = 1}^\infty k \Pr \left (
+	\|\epsilon\|_{D^{(n_T)}}^2
+	\ge 2^{2k}
+	\right )
+	%	& \le
+	%	\sum_{k = 1}^\infty c_0 k
+	%	\exp \left (
+	%	- c_0 \frac{2^{2k} n_T}{\|\epsilon\|^2_{L_{\psi_{2}}}}
+	%	\right ) \\
+	\le
+	c_1
+	\exp \left (
+	- \frac{c_0 n_T}{\|\epsilon\|^2_{L_{\psi_{2}}}}
+	\right )
+	\end{align}
+	for constants $c_0, c_1 > 0$.
+	Plugging in this bound to Theorem~\ref{thrm:kfold} gives us our desired result.
 \bibliographystyle{unsrtnat}
 \bibliography{hyperparam-theory-appendix}
 
