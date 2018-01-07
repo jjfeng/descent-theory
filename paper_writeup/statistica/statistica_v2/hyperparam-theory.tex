@@ -194,9 +194,16 @@ Oracle inequalities for general model-estimation procedures and proofs are given
 
 \section{Oracle Inequalities} \label{sec:main_results}
 
-Here we establish oracle inequalities for models where the hyper-parameters are tuned by a single training/validation split and cross-validation. We first introduce some notation.
-Let $D^{(n)}$ denote a dataset with $n$ samples. The model-estimation procedure $\hat{g}$ is a set of functions $\{\hat{g}^{(n_T)}\}$ where $\hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)})$ maps hyper-parameter $\boldsymbol{\lambda} \in \Lambda \subseteq \mathbb{R}^J$ and training data $D^{(n_T)}$ to a function in $\mathcal{G}$. \textcolor{red}{(Too dense too early --- also do these need $n_T$ super scripts? Or can they all just be $n$?)}
-We focus on model-estimation procedures that satisfy the following Lipschitz assumption:
+Here we establish oracle inequalities for models where the hyper-parameters are tuned by a single training/validation split and cross-validation.
+We are interested in studying model-estimation procedures that vary smoothly in their hyper-parameters; such procedures tend to be easier to use and therefore tend to be more popular.
+%\textcolor{red}{(Too dense too early --- also do these need $n_T$ super scripts? Or can they all just be $n$?)}
+%\textcolor{red}{Jean: is this better?}
+
+
+Let $D^{(n)}$ denote a dataset with $n$ samples.
+Given dataset training data $D^{(m)}$, let $\hat{g}^{(m)}(\boldsymbol{\lambda} | D^{(m)})$ be some model-estimation procedure that maps hyper-parameter $\boldsymbol{\lambda}$ to a function in $\mathcal{G}$.
+We assume the following Lipschitz-like assumption on the model-estimation procedure.
+In particular, we suppose that for any $\boldsymbol{x}$, the predicted value $\hat{g}^{(m)}(\boldsymbol{\lambda} | D^{(m)})(\boldsymbol{x})$ is Lipschitz in $\boldsymbol{\lambda}$:
 \begin{assump}
 	\label{assump:lipschitz}
 	Suppose there is a set $\mathcal{X}^{(L)} \subseteq \mathcal{X}$ such that for any $n_T \in \mathbb{N}$ and dataset $D^{(n_T)}$, there is a function $C_\Lambda(\boldsymbol{x} | D^{(n_T)}) : \mathcal{X}^{(L)} \mapsto \mathbb{R}^+$ such that for any $\boldsymbol{x} \in \mathcal{X}^{(L)}$, we have for all $\boldsymbol{\lambda}^{(1)}, \boldsymbol{\lambda}^{(2)} \in \Lambda$
@@ -206,12 +213,8 @@ We focus on model-estimation procedures that satisfy the following Lipschitz ass
 	\le C_\Lambda(\boldsymbol{x}|D^{(n_T)}) \|\boldsymbol{\lambda}^{(1)} - \boldsymbol{\lambda}^{(2)}\|_2.
 	\end{align}
 \end{assump}
-\textcolor{red}{(needs short explanation, as this is not a standard def of lipshchitz)}
-%JF: reviewer said reword - is this better?
-\noindent
-We believe that many model-estimation procedures are Lipschitz -- such procedures are well-behaved in their hyper-parameters so they tend to be easier to use and thereby more popular.
-For instance, Section \ref{sec:examples} shows that penalized regression models satisfy this assumption.
-From this Lipschitz assumption, we find that the error from tuning multiple hyper-parameters shrinks at roughly a parametric rate of $O_p(J/n_V)$.
+\noindent We provide examples of penalized regression models that satisfy this assumption in Section \ref{sec:examples}.
+%From this Lipschitz assumption, we find that the error from tuning multiple hyper-parameters shrinks at roughly a parametric rate of $O_p(J/n_V)$.
 %JF removing sentences cause it seems repetitive
 %Hence for semi- and non-parametric model-estimation procedures, the error from tuning a fixed number of hyper-parameters is negligible.
 %Moreover, we can specify an upper bound on the rate at which the number of hyper-parameters can grow without asymptotically increasing the generalization error of the selected model.
@@ -334,7 +337,9 @@ In traditional cross-validation, the final model is retrained on all the data wi
 \frac{1}{K} \sum_{k=1}^K 
 \hat{g}^{(n_T)} \left (\hat{\boldsymbol \lambda} \middle | D^{(n_T)}_{-k} \right ).
 \end{equation}
-To bound the generalization error of \eqref{thrm:avg_cv}, we require an assumption in \citet{lecue2012oracle} that controls the tail behavior of the fitted models. \textcolor{red}{(Orlicz norm needs citations as to why it's reasonable and/or 1 sentence explanation)}
+To bound the generalization error of \eqref{thrm:avg_cv}, we require an assumption in \citet{lecue2012oracle} that controls the tail behavior of the fitted models.
+A classical approach for bounding the tail behavior of random variable $X$ is to bound its Orlicz norm 
+$\|X\|_{L_{\psi_1}}= \inf \{C > 0: \mathbb{E}\exp(|X|/C) - 1 \le 1\}$ \citep{van1996weak}.
 \begin{assump}
 	\label{assump:tail_margin}
 	There exist constants $K_0, K_1 \ge 0$ and $\kappa \ge 1$ such that for any $n_T \in \mathbb{N}$, dataset $D^{(n_T)}$, and $\boldsymbol{\lambda} \in \Lambda$, we have
@@ -362,7 +367,6 @@ To bound the generalization error of \eqref{thrm:avg_cv}, we require an assumpti
 	\right \|_{L_{2}}^{1/\kappa}.
 	\label{eq:cv_assump2}
 	\end{align}
-	where $\|f\|_{L_{\psi_2}}= \inf \{C > 0: \mathbb{E}\exp(|f|^2/C^2) - 1 \le 1\}$ is the Orlicz norm.
 \end{assump}
 
 With the above assumption, the following oracle inequality bounds the risk of averaged version of $K$-fold cross-validation.
