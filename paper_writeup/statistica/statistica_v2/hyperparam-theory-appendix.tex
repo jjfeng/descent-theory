@@ -891,14 +891,15 @@ Finally using the results above, we can prove Theorem~\ref{thrm:kfold}.
 
 \subsection{Penalized regression for additive models}
 
-We now show that penalized regression problems for additive models satisfies the Lipschitz condition.
+We now show that penalized regression problems for additive models satisfy the Lipschitz condition.
 \subsubsection{Proof for Lemma \ref{lemma:param_add}}
 \begin{proof}
 	We will use the notation $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}) \coloneqq \hat{\boldsymbol{\theta}}(\boldsymbol{\lambda} | T)$. By the gradient optimality conditions, we have
 	\begin{equation}
 	\label{eq:grad_opt}
 	\left.\nabla_{\theta} \left [
-	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
+	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+
+	\sum_{j=1}^J \lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
 	\right ]
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\lambda)}=0.
 	\end{equation}
@@ -908,7 +909,8 @@ We now show that penalized regression problems for additive models satisfies the
 	\label{eq:implicit_diff}
 	\nabla_{\lambda}\left\{ \left.\nabla_{\theta}
 	\left [
-	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}+\lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
+	\frac{1}{2}\left\Vert y-g(\boldsymbol{\theta})\right\Vert _{T}^{2}
+	+ \sum_{j=1}^J \lambda_{j}P_{j}(\boldsymbol{\theta}^{(j)})
 	\right ]
 	\right|_{\boldsymbol{\theta}=\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})}\right\} =0.
 	\end{equation}
@@ -1130,7 +1132,8 @@ For convenience, define $\Lambda_{smooth}^{c} \coloneqq \Lambda \setminus \Lambd
 	\boldsymbol{\lambda}
 	\right ).
 	\]
-	We can show that the fitted parameters satisfy the Lipschitz condition \eqref{eq:lipschitz_params} over $\Lambda=\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$ by using the same proof in Lemma~\ref{lemma:param_add} but taking directional derivatives along the columns of $U^{(i)} = (U^{(i,1)} ... U^{(i,J)})$ instead.
+	We can show that the fitted parameters satisfy the Lipschitz condition \eqref{eq:lipschitz_params} over $\Lambda=\mathcal{L}\left(\boldsymbol{p^{(i)},p^{(i+1)}}\right)$ by using a similar proof as in Lemma~\ref{lemma:param_add}.
+	The only difference is that the proofs starts with taking directional derivatives along the columns of $U^{(i)} = (U^{(i,1)} ... U^{(i,J)})$ to establish the KKT conditions.
 	Then for all $j$ and $i$, we have
 	\begin{align}
 	\left\Vert
@@ -1166,9 +1169,9 @@ For convenience, define $\Lambda_{smooth}^{c} \coloneqq \Lambda \setminus \Lambd
 	\sqrt{\left\Vert \epsilon \right \Vert_T^2 + 2 C^*_{\Lambda}}
 	\left |{\lambda}^{(1)}_j - {\lambda}^{(2)}_j\right |.
 	\end{align*}
-	Finally, using the fact that $g_j$ is $\ell_j$-Lipschitz, we have
+	Finally, using the fact that $g_j$ is $\ell_j$-Lipschitz, we have by the triangle inequality and Cauchy Schwarz that
 	\begin{align}
-	C_\Lambda(\boldsymbol{x})
+	C_\Lambda(\boldsymbol{x}|T)
 	= \frac{\sqrt{\| \epsilon \|_T^2 + 2 C^*_{\Lambda}}}{m(T) \lambda_{min}}
 	\sqrt{\sum_{j=1}^J \|\ell_j\|_T^2 \ell_j^2(x_j)}.
 	\label{eq:nonsmooth_lipschitz_func}
@@ -1265,7 +1268,7 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 \begin{proof}[Proof for Lemma~\ref{lemma:nonsmooth}]
 	Since we already showed Lemma~\ref{lemma:lipschitz_lambda_ext_c}, it suffices to show that the Lipschitz condition is satisfied for any $\boldsymbol{\lambda^{(1)}},\boldsymbol{\lambda^{(2)}}\in\Lambda_{ext}$.
 	Lemma~\ref{lemma:ext_measure_zero} states that $\mu_{2J}(\Lambda_{ext}) = 0$, which means that there exists a sequence
-	$\left(\boldsymbol{\lambda}^{(1,i)},\boldsymbol{\lambda}^{(2,i)}\right)\in\Lambda_{ext}^{c}$
+	$\left \{\left(\boldsymbol{\lambda}^{(1,i)},\boldsymbol{\lambda}^{(2,i)}\right) \right \}_{i=1}^\infty \subseteq \Lambda_{ext}^{c}$
 	such that $\lim_{i\rightarrow\infty}\left(\boldsymbol{\lambda}^{(1,i)},\boldsymbol{\lambda}^{(2,i)}\right)=\left(\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\right)$.
 	As $L_T$ is continuous and we have assumed that there exists a unique minimizer of $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ for all $\boldsymbol{\lambda} \in \Lambda$, then $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is continuous in $\boldsymbol{\lambda}$ over all $\Lambda$.
 	As $g(\boldsymbol{\theta})(x)$ is also continuous in $\boldsymbol{\theta}$, then for any $\boldsymbol{\lambda}^{(1)},\boldsymbol{\lambda}^{(2)}\in\Lambda$,
@@ -1283,12 +1286,12 @@ Finally, combining Lemmas~\ref{lemma:lipschitz_lambda_ext_c} and \ref{lemma:ext_
 		g(\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda}^{(2,i)} |T))(\boldsymbol{x})
 		\right |\\
 		& \le \lim_{i\rightarrow\infty}
-		C_\Lambda(\boldsymbol{x})
+		C_\Lambda(\boldsymbol{x}|T)
 		\|\boldsymbol{\lambda}^{(1,i)}-\boldsymbol{\lambda}^{(2,i)}\|_{2}\\
-		& = C_\Lambda(\boldsymbol{x})
+		& = C_\Lambda(\boldsymbol{x}|T)
 		\|\boldsymbol{\lambda}^{(1)}-\boldsymbol{\lambda}^{(2)}\|_{2}
 	\end{align}
-	where $C_\Lambda(\boldsymbol{x})$ is defined in \eqref{eq:nonsmooth_lipschitz_func}.
+	where $C_\Lambda(\boldsymbol{x}|T)$ is defined in \eqref{eq:nonsmooth_lipschitz_func}.
 \end{proof}
 
 \subsubsection{Proof for Lemma \ref{lemma:nonparam_smooth}}
@@ -1428,7 +1431,7 @@ n^{2t_{\min}}
 \end{align}
 where $C^*_{T}$ is defined in Example~\ref{ex:ridge} of the main manuscript.
 
-\noindent \textbf{Example~\ref{example:sobolev}}(Multiple sobolev penalties)
+\noindent \textbf{Example~\ref{example:sobolev}} (Multiple sobolev penalties)
 here we present the details for deriving \eqref{eq:param_add_lipschitz} for Example~\ref{example:sobolev}
 	Since the solution to \eqref{eq:smoothing_spline} must be the sum of natural cubic splines \citep{buja1989linear}, we can parameterize the space using a Reproducing Kernel Hilbert Space with inner product
 	\begin{align}
@@ -1545,7 +1548,7 @@ here we present the details for deriving \eqref{eq:param_add_lipschitz} for Exam
 	\end{split}
 	\end{align}
 	Let $\hat{\boldsymbol{\gamma}}_j$ be the vector of second derivatives of $\hat{g}''_{j, \perp}$ at the training covariates for the $j$th axis.
-	Since the fitted functions $\hat{g}_{j, \perp}$ must be natural cubic splines, there is a closed form for $\hat{\boldsymbol{\gamma}}_j$:
+	Since the fitted functions $\hat{g}_{j, \perp}$ must be natural cubic splines, $\hat{\boldsymbol{\gamma}}_j$ and $\hat{\boldsymbol{\theta}}_j$ have a linear relationship:
 	\begin{align}
 	\hat{\boldsymbol{\gamma}}_j & = R^{-1}_j Q^\top_j K_j \hat{\boldsymbol{\theta}}_j
 	\label{eq:second_deriv}
