@@ -715,7 +715,7 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	First we check that all the conditions are satisfied.
 	For this problem, the differentiable space is the subspace spanned by the non-zero elements in $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$.
 	Since the elastic net solution paths are piecewise linear \citep{zou2003regression}, the differentiable space is also a local optimality space.
-	Then using a very similar process as in Example~\ref{ex:ridge}, we find that the parametric term in the remainder of Corollary~\ref{corr:train_val} is
+	Then using a similar procedure as in Example~\ref{ex:ridge}, we find that the parametric term in the remainder of Corollary~\ref{corr:train_val} is on the order of
 	\begin{align}
 	\frac{J t_{\min}}{n_{V}}
 	\log \left (
@@ -737,7 +737,7 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 \begin{example}[Multiple elastic nets, cross-validation]
 	\label{eq:elastic_net_cv}
 	Now we establish an oracle inequality for the averaged version of $K$-fold cross-validation using a similar setup as \citet{lecue2012oracle}.
-	Suppose the noise $\epsilon$ is sub-gaussian and for simplicity, suppose $X$ is drawn uniformly from $[-R, R]^p$ for some $R > 0$.
+	Suppose the noise $\epsilon$ is sub-gaussian and for simplicity, suppose $X$ is drawn uniformly from $[-1, 1]^p$.
 	In order to satisfy the assumptions in Theorem~\ref{thrm:kfold}, our fitting procedure for $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ entails a thresholding operation similar to that in \citet{lecue2012oracle}.
 	In particular, we fit parameters $\hat{\boldsymbol{\theta}}_{thres}(\boldsymbol{\lambda})$ where the $i$-th element is
 	\begin{align}
@@ -749,14 +749,14 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	\end{align}
 	where $\hat{\boldsymbol{\theta}}(\boldsymbol{\lambda})$ is the solution to \eqref{eq:elastic_net_ex} and $K_0' > 0$ is some fixed constant.
 	We then find the Lipschitz factor in Lemma~\ref{lemma:nonparam_smooth} and bound its Orlicz norm via exponential concentration inequalities.
-	Let $\bar{\boldsymbol{\theta}}(\hat{\boldsymbol{\lambda}})$ be the fitted parameters by averaged version of $K$-fold cross-validation.
+	Let $\bar{\boldsymbol{\theta}}(D^{(n)})$ be the fitted parameters using the averaged version of $K$-fold cross-validation.
 	By Theorem~\ref{thrm:kfold}, there is some constant $\tilde{c} > 0$, such that for any $a > 0$
 	\begin{align}
 	\begin{split}
 	\mathbb{P}_{D^{(n)}}
 	\left \|
 	X \left(
-	\bar{\boldsymbol{\theta}}(\hat{\boldsymbol{\lambda}}|D^{(n)})
+	\bar{\boldsymbol{\theta}}(D^{(n)})
 	- \boldsymbol{\theta}^*
 	\right)
 	\right \|_{L_{2}}^{2}
@@ -766,7 +766,7 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	\mathbb{P}_{D^{(n_{T})}}
 	\left \|
 	X \left(
-	\bar{\boldsymbol{\theta}}(\hat{\boldsymbol{\lambda}}|D^{(n_T)})
+	\bar{\boldsymbol{\theta}}(D^{(n_T)})
 	- \boldsymbol{\theta}^*
 	\right)
 	\right \|_{L_{2}}^{2}
@@ -777,14 +777,14 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	\frac{J \log n_{V}}{n_{V}}
 	t_{\min}
 	\log\left(
-	\frac{1+a}{aw} RJpn
+	\frac{1+a}{aw} Jpn
 	\right).
 	\end{split}
 	\end{align}
 
 \noindent The above example is similar to the lasso example in \citet{lecue2012oracle}; the major difference is that we consider the case where the penalty parameters are tuned over a continuous range.
 We are able to do this since Lemma~\ref{lemma:nonsmooth} specifies a Lipschitz relation between the fitted functions and the penalty parameters.
-This result is valuable when $J$ is large and $\boldsymbol{\lambda}$ must be tuned via a continuous optimization procedure.
+This result is relevant when $J$ is large and $\boldsymbol{\lambda}$ must be tuned via a continuous optimization procedure.
 %Unfortunately we were only able to consider thresholded fitted parameters as Assumption~\ref{assump:tail_margin} requires estimators to have a bounded $\psi_2$ norm. We hope to address this in future research.
 \end{example}
 
@@ -843,8 +843,8 @@ We obtain a similar Lipschitz relation in the nonparametric setting to those bef
 	\end{align}
 \end{lemma}
 \noindent
-A simple example of a problem that satisfies \eqref{eq:gateuax} is one where the penalty function is a ridge penalty on the fitted values at the observed covariates (both training and validation covariates).
-Note that such a penalty is allowed because the response in the validation set is not included in the training data.
+A simple example that satisfies \eqref{eq:gateuax} is a penalized regression model where we fit values at each of the observed covariates, e.g. $\hat{\boldsymbol{\theta}} \in \mathbb{R}^n$, and penalize this fitted value by a ridge penalty.
+Note that such a penalty is allowed because the response $y$ in the validation set is not used by the training procedure.
 
 Note that since Lemma~\ref{lemma:nonparam_smooth} verifies that Assumption~\ref{assump:lipschitz} is satisfied over the observed covariates, it is suitable to be used in Theorem~\ref{thrm:train_val}.
 However \eqref{eq:nonparam_lipshitz_thrm} is not a strong enough statement to be used for Theorem~\ref{thrm:kfold}.
