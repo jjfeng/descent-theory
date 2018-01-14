@@ -138,7 +138,7 @@ Many model-estimation procedures can be formulated as selecting a model from som
 %JF:  I would like to divide by number of obs in T
 where $P_j$ are penalty functions and $\lambda_j$ are penalty parameters that serve as hyper-parameters of the model-estimation procedure.
 
-If there is a set of possible hyper-parameters $\Lambda$, then the goal is to find a penalty parameter $\boldsymbol{\lambda} \in \Lambda$ that minimizes the expected generalization error
+If $\Lambda$ is a set of possible hyper-parameters, the goal is to find a penalty parameter $\boldsymbol{\lambda} \in \Lambda$ that minimizes the expected generalization error
 $
 \mathbb{E} \left [
 \left ( y - \hat{g}(\boldsymbol{\lambda} | T)(\boldsymbol{x}) \right )^2
@@ -171,7 +171,6 @@ To show these results, we prove that finite-sample oracle inequalities of the fo
 \end{equation}
 are satisfied with high probability for some constant $a \ge 0$ and remainder $\delta(J,n)$ that depends on the number of tuned hyper-parameters $J$ and the number of samples $n$.
 Under the assumption that the model -estimation procedure is Lipschitz in the hyper-parameters, we find that $\delta$ scales linearly in $J$.
-% be careful here as some reviewer wants to argue log J also happens when you add parameters to the model itself
 For parametric model-estimation procedures, the additional error from tuning hyper-parameters is roughly $O_p(J/n)$, which is similar to the typical parametric model-estimation rate $O_p(p/n)$ where the model parameters are not regularized.
 For semi- and non-parametric model-estimation procedures, this error is generally dominated by the oracle risk so we can actually grow the number of hyper-parameters without affecting the asymptotic convergence rate.
 
@@ -235,7 +234,7 @@ Note that the result below is a special case of Theorem \ref{thrm:train_val_comp
 \begin{theorem}
 	\label{thrm:train_val}
 	Let $\Lambda=[\lambda_{\min},\lambda_{\max}]^{J}$ where $\Delta_{\lambda} = \lambda_{\max} - \lambda_{\min} \ge 0$.
-	Suppose independent random variables $\epsilon_i$ from the validation set $V$ have expectation zero and are uniformly sub-Gaussian with parameters $b$ and $B$:
+	Suppose random variables $\epsilon_i$ from the validation set $V$ are independent with expectation zero and are uniformly sub-Gaussian with parameters $b$ and $B$:
 	$$
 	\max_{i: (x_i, y_i) \in V} B^2 \left ( \mathbb{E} e^{|\epsilon_i|^2/B^2} - 1 \right ) \le b^2.
 	$$
@@ -434,11 +433,8 @@ There is much interest in combining multiple penalty functions, but few methods 
 In this section, we consider penalty parameter spaces of the form
 $\Lambda = [ n^{-t_{\min}}, n^{t_{\max}}]^J$
 for $t_{\min}, t_{\max} \ge 0$.
-This regime works well for two reasons: one, our rates depend only quite weakly on $t_{\min}$ and $t_{\max}$; and two, oracle $\lambda$-values are generally $O_p(n^{-\alpha})$ for some $\alpha \in (0,1)$ \citep{van2000empirical, van2014additive, buhlmann2011statistics}. So long as $t_{\min} > \alpha$, $\Lambda$ will contain the optimal penalty parameter.
+This regime works well for two reasons: one, our rates depend only quite weakly on $t_{\min}$ and $t_{\max}$; and two, oracle $\lambda$-values are generally $O_p(n^{-\alpha})$ for some $\alpha \in (0,1)$ \citep{van2000empirical, van2015penalized, buhlmann2011statistics}. So long as $t_{\min} > \alpha$, $\Lambda$ will contain the optimal penalty parameter.
 We do not consider settings where $\lambda_{\min}$ shrinks faster than a polynomial rate since the fitted models can be ill-behaved.
-
-% JF not sure why this paragraph is here. seems to be repeative
-%Therefore we reach the same conclusion for the relationship between penalty parameters and the generalization error of the selected model. In high-dimensional and non-parametric penalized regression problems that satisfy the Lipschitz assumption, the error from tuning penalty parameters is negligible compared to the error from solving the penalized regression problem with the oracle penalty parameters.
 
 In the following sections, we do an in-depth study of additive models of the form
 \begin{equation}
@@ -446,7 +442,9 @@ g(\boldsymbol{x}^{(1)}, ..., \boldsymbol{x}^{(J)})= \sum_{j=1}^J g_j(\boldsymbol
 \end{equation}
 We first consider parametric additive models (with potentially growing numbers of parameters) fitted with smooth and non-smooth penalties and then nonparametric additive models.
 We find that the Lipschitz function $C_\Lambda(\boldsymbol{x} | T)$ scales with $n^{O_p(t_{\min})}$.
-Applying Theorems~\ref{thrm:train_val} and \ref{thrm:kfold}, we find that the near-parametric term in the remainder grows linearly in $t_{\min}$.
+Applying Theorems~\ref{thrm:train_val} and \ref{thrm:kfold}, we find that the near-parametric term in the remainder only grows linearly in $t_{\min}$.
+We apply these results to various additive model estimation methods.
+For instance, in the generalized additive model example, we show that under minimal assumptions, the error from tuning penalty parameters is negligible compared to the error from solving the penalized regression problem with oracle penalty parameters.
 
 \subsection{Parametric additive models}
 \label{sec:param_add_models}
@@ -573,7 +571,7 @@ Here we present an outline of the procedure; the details can be found in the Sup
 	+ \sum_{j=1}^{J} \lambda_j \int_{\mathcal{X}} \left(g_j^{''}(x_j)\right)^{2} dx_j
 	\label{eq:smoothing_spline}
 	\end{align}
-	where the penalty function is the Sobolev norm.
+	where the penalty function is the 2nd-order Sobolev norm.
 	Let $\mathcal{X} = [0,1]$ for this example.
 	Using properties of the Sobolev penalty, \eqref{eq:smoothing_spline} can be re-expressed as a finite-dimensional problem with matrices $K_j$
 	\begin{align}
@@ -601,7 +599,7 @@ Here we present an outline of the procedure; the details can be found in the Sup
 	J
 	\|y\|_T
 	\left(
-	p
+	J
 	\left \|
 	\left(
 	X_T^\top X_T
@@ -614,7 +612,13 @@ Here we present an outline of the procedure; the details can be found in the Sup
 	\right )
 	\label{eq:sobolev_param}
 	\end{align}
-	where $h_j(T)$ be the minimum distance between the $j$th covariates in the training data.
+	where $\|\cdot\|_2$ is the spectral norm and $h_j(T)$ is the smallest distance between observations of the $j$th covariates in the training data $T$.
+%	As the minimax rate for estimating additive models $g^*(x) = \sum_{j=1}^J g_j(x_{ij})$ with finite 2nd-order Sobolev norm is $O_p(n^{-4/5})$ \citep{horowitz2006optimal}, we see that the oracle error \eqref{eq:asym_train_val_oracle_risk} will asymptotically dominate the additional error incurred from tuning over the penalty parameters.
+
+	To put this result into context, consider the case a two-component additive model.
+	\citet{van2015penalized} showed that \eqref{eq:smoothing_spline} attains the minimax rate of $O_p(n^{-4/5})$ \citep{horowitz2006optimal} if the penalty parameters shrink at the rate of $O_p(n^{-4/5})$.
+	From Corollary~\ref{corr:train_val}, we see that the oracle error \eqref{eq:asym_train_val_oracle_risk} asymptotically dominates the remaining error terms incurred from tuning the penalty parameters.
+	Moreover, as long as $\lambda_{\min}$ shrinks at a polynomial rate such that some penalty parameter in $\Lambda$ attains the minimax rate, the model selected via training/validation split will also attain the minimax rate.
 \end{example}
 
 \subsubsection{Parametric regression with non-smooth penalties}
@@ -728,6 +732,7 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	\left(\frac{1}{n_T} \sum_{(x_i, y_i) \in T} \|\boldsymbol{x}_i^{(j)}\|^2_2\right)
 	\left(\frac{1}{n_V} \sum_{(x_i, y_i) \in V} \|\boldsymbol{x}_i^{(j)}\|^2_2\right)
 	\right )
+	\label{eq:elastic_net_tv_param_error}
 	\end{align}
 	where
 	$
@@ -737,6 +742,10 @@ Assuming the above conditions hold, the fitted models for non-smooth penalty fun
 	2 \|\boldsymbol{\theta}^{*,(j)}\|_1
 	+ w\|\boldsymbol{\theta}^{*,(j)}\|_2^2
 	$.
+
+	We can compare this additional error term to the risk of using an oracle penalty parameter.
+	For the case of a single penalty parameter ($J = 1$), the convergence rate of using an oracle penalty parameter for the elastic net is on the order of $O_p(\log(p)/n)$ \citep{bunea2008honest, hebiri2011smooth}.
+	If we split the covariates into groups and tune the penalty parameters via training/validation split, the incurred error \eqref{eq:elastic_net_tv_param_error} is on a similar order.
 \end{example}
 \begin{example}[Multiple elastic nets, cross-validation]
 	\label{eq:elastic_net_cv}

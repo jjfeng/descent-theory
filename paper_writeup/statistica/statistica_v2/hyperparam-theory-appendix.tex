@@ -448,6 +448,7 @@ Q(\cdot, \hat{g}^{(n_T)}(\boldsymbol{\lambda} | D^{(n_T)}))
 \label{eq:basic_ineq_cv}
 \end{align}
 where $P_{n_V} = 1/n_V \sum_{i=n_T +1}^n \delta_{Z_i}$ is the empirical probability measure on $\{Z_{n_T + 1}, ..., Z_n\}$.
+\label{lemma:lecue_basic_ineq}
 \end{lemma}
 
 We need to bound the supremum of the second term on the right hand side, which is a shifted empirical process term.
@@ -484,9 +485,11 @@ $w\ge w_{\min}$ and all $u\ge1$,
 \ge
 1-L\exp(-cu).
 \end{align}
+\label{lemma:lecue_prelim}
 \end{lemma}
 
-Similarly, we restate Lemma 3.2 in \citet{lecue2012oracle} using our new functions $h$ and $J_\delta$.
+Now that we have established a concentration inequality for the function class $\{Q\in\mathcal{Q}(D^{(n_{T})}): PQ \le w\}$, we need to aggregate the results to establish a concentration inequality for the function class $\mathcal{Q}(D^{(n_{T})})$.
+Again, we use Lemma 3.2 in \citet{lecue2012oracle} but restate it using our new functions $h$ and $J_\delta$.
 \begin{lemma}
 	Let $a>0$. Let $\mathcal{Q}(D^{(m)})\equiv\left\{ Q(\lambda|D^{(m)}):\lambda\in\Lambda\right\} $
 	be a set of measurable functions.
@@ -537,10 +540,11 @@ Similarly, we restate Lemma 3.2 in \citet{lecue2012oracle} using our new functio
 	\le\frac{ac_{1} \tilde{\psi}_{q,\delta}(1/q)}{q}.
 	\label{eq:lecue_exp_cond}
 	\end{align}
+	\label{lemma:lecue_prelim2}
 \end{lemma}
 
-Then by a simple chaining argument, we can bound the shifted empirical process term in \eqref{eq:basic_ineq_cv}.
-We omit its proof since it is a standard application of the chaining argument.
+Finally, we are ready to bound the expectation of the shifted empirical process term in \eqref{eq:basic_ineq_cv}.
+We accomplish this via a simple chaining argument; we omit its proof as this is a standard application of the chaining argument.
 \begin{lemma}
 	\label{lemma:chain}
 Consider any $a>0$.
@@ -559,7 +563,7 @@ Then for any $\sigma > 0$, we have
 .
 \]
 \end{lemma}
-Putting the three lemmas together and using Assumption~\ref{assump:tail_margin_general}, we have the following result.
+Putting Lemmas \ref{lemma:lecue_basic_ineq} and \ref{lemma:chain} together, we have the following result.
 \begin{theorem}
 	\label{thrm:jean_cv}
 	Consider a set of hyper-parameters $\Lambda$. Consider a loss function $Q:(\mathcal{Z}, \mathcal{G}) \mapsto \mathbb{R}$ with convex risk function $R: \mathcal{G} \mapsto \mathbb{R}$. Let
@@ -1555,8 +1559,8 @@ here we present the details for deriving \eqref{eq:param_add_lipschitz} for Exam
 	\end{align}
 	where the matrix $R_j$ is a banded diagonally dominant matrix and $Q_j$ is a banded negative-semi-definite matrix that depend on the covariates $x_j$ in the training data.
 	For the definitions of $R_j$ and $Q_j$, refer to \citet{green1993nonparametric}.
-	Let $h_j(D^{(n_T)})$ be the smallest distance between the $j$th covariates from the training data.
-	Then using the Gershgorin circle theorem, one can show that all the eigenvalues of $R_j$ are larger than $\frac{1}{3} h_j(D^{(n_T)})$ and all the eigenvalues of $Q_j$ have magnitudes no greater than $4/h_j(D^{(n_T)})$.
+	Let $h_j(D^{(n_T)})$ be the smallest distance between observations of the $j$th covariates in the training data $T$.
+	Then using the Gershgorin circle theorem \citep{gershgorin1931uber}, one can show that all the eigenvalues of $R_j$ are larger than $\frac{1}{3} h_j(D^{(n_T)})$ and all the eigenvalues of $Q_j$ have magnitudes no greater than $4/h_j(D^{(n_T)})$.
 	Thus using \eqref{eq:interp} and \eqref{eq:second_deriv}, we have that
 	\begin{align}
 	\left \|
@@ -1666,7 +1670,7 @@ here we present the details for deriving \eqref{eq:param_add_lipschitz} for Exam
 	C_\Lambda(\boldsymbol{x} | T)
 	=
 	\left(
-	p
+	J
 	\left \|
 	\left(
 	X_T^\top X_T

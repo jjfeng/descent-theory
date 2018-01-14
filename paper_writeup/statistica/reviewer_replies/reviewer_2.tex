@@ -33,11 +33,13 @@
 	
 		\reply{
 			We apologize for failing to specify the distributions of $x$ and $\epsilon$.
-			For Theorem 1 where we consider a training/validation split, we suppose $x$ is given, so it is essentially a fixed design.
+			For Theorem 1, we establish a concentration inequality where the covariates $X$ are given.
+			The only requirement is that $\epsilon_i$ satisfy the condition that they are uniformly sub-Gaussian.
+
 			For Theorem 2 where we consider cross-validation, the dataset is composed of iid observations from the some probability distribution over $(X,y)$ where $X$ is independent of $\epsilon$.
-			We have clarified this in the paper.
-			Theorem 4 in the Supplementary Materials is a more general result and does not require $X$ and $\epsilon$ to be independent.
-			We have updated the Supplementary Materials to highlight this difference.
+			We have clarified this in Theorem 2.
+			In addition, Theorem 4 in the Supplementary Materials is a more general result and does not require $X$ and $\epsilon$ to be independent.
+			We have updated the beginning of Section S1.2 in the Supplementary Materials to highlight this difference.
 		}
 		
 		\point {
@@ -45,7 +47,8 @@
 		}
 	
 		\reply{
-			Yes, typo. should be $\|g\|^2 = E_X[g^2]$
+			We apologize for poor notation in the paper.
+			We have updated Section 3.2 to clarify that $\|g\|^2 = \int_0^1 g(x)^2 d\mu(x) $ where $\mu$ is the probability measure over $X$.
 		}
 		
 	
@@ -54,13 +57,17 @@
 		}
 	
 		\reply{
-			We agree with the reviewer that it would be ideal to establish results on the L2-norm rather than the observed covariates.
-			However, we have decided to leave Theorem 1 about a single training/validation split untouched since we think it is valuable to have an oracle inequality that requires minimal assumptions and is sharp.
-			In this latest revision, we make a small extension to Lecue and Mitchell (2012) and establish an oracle inequality regarding the L2-norm under more general conditions.
-			Unfortunately we were unable to loosen the regularity condition required in their theorem.
-			In order to control the expected risk of the fitted model, our proof techniques and that in Lecue and Mitchell (2012) require that the tail behavior of the estimated functions is totally bounded for all hyper-parameters $\boldsymbol{\lambda}$ in some set $\Lambda$.
-			This is unrealistic, say, in penalized regression problems as $\Lambda$ can include very small penalty parameter values.
-			On the other hand, this assumption is not necessary in Theorem 1 where we only conclude the model's error over the covariates in the validation set.
+			We agree with the reviewer that it would be useful to establish results on the L2-norm rather than the observed covariates.
+			However, we have decided to leave Theorem 1 untouched since we value its simplicity -- the current result requires minimal assumptions.
+			If we were to modify the result to bound the L2-norm, we would need to add new assumptions regarding the tail behavior of the distributions.
+			In addition, we believe our oracle inequality would no longer be sharp.
+
+			On a somewhat related note, the reviewer's comments inspired us to establish more general results for Theorem 2 and 4.
+			Our original submission assumed the error terms $\epsilon_i$ and the covariates $X_i$ were uniformly bounded.
+			In this new revision, we consider a more general situation with unbounded error and covariates.
+			This required us to extend the results in Lecue and Mitchell (2012) -- their results assumed that the entropy of the set of models obtained after the training step can be bounded independent of the training data.
+			(For instance, consider a penalized estimation method. If the noise of a particular training dataset is large and the set of penalty parameters under consideration includes very small penalty parameter values, the set of penalized estimators can have a large entropy.)
+			To remove this unrealistic assumption, we used a simple chaining argument.
 		}
 
 		\point{
@@ -68,10 +75,10 @@
 		}
 
 		\reply{
-			The reviewer is correct in nothing that a norm cannot be used here.
+			The reviewer is correct in nothing that $\|\cdot\|$ cannot be an arbitrary norm.
 			We have removed that sentence entirely and replaced it with the following:
 			\begin{quote}
-			If there is a set of possible hyper-parameters $\Lambda$, then the goal is to find a penalty parameter $\boldsymbol{\lambda} \in \Lambda$ that minimizes the expected generalization error
+			If $\Lambda$ is a set of possible hyper-parameters, the goal is to find a penalty parameter $\boldsymbol{\lambda} \in \Lambda$ that minimizes the expected generalization error
 			$
 			E \left [
 			\left ( y - \hat{g}(\boldsymbol{\lambda} | T)(\boldsymbol{x}) \right )^2
@@ -96,7 +103,7 @@
 
 		\reply{
 			We agree that ``hypothesize'' does not seem appropriate here.
-			We have updated that sentence in the paper with the following: ``We believe that many model-estimation procedures are Lipschitz – such procedures are well-behaved in their hyper-parameters so they tend to be easier to use and thereby more popular.''
+			We have updated this statement in Section 3 to the following: ``We are interested in studying model-estimation procedures that vary smoothly in their hyper-parameters; such procedures tend to be easier to use and therefore tend to be more popular.''
 		}
 	
 		\point{
@@ -104,7 +111,7 @@
 		}
 	
 		\reply{
-			We apologize for this typo. It is now corrected.
+			Thank you for pointing out this typo. It is now corrected.
 		}
 	
 		\end{enumerate} 

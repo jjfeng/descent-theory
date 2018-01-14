@@ -36,14 +36,15 @@
 	We transform the problem to its finite-dimensional equivalent, show that the Lipschitz condition is satisfied, and establish the oracle inequality for the training/validation split setting.
 	For Lemma 2 which applies to nonsmooth penalty functions, we analyze the elastic net in both the training/validation split and cross-validation settings.
 	
-	During our revisions, we also noticed that Lemma 2 in the paper can be extended such that the result is more widely applicable.
-	Instead of establishing that the fitted models are only Lipschitz over some subset of penalty parameters that are well-behaved, we now establish that the fitted models are Lipschitz over almost every pair of penalty parameters.
-	Thus this lemma can be applied more readily to typical penalized regression problems.
+	Per Reviewer 1's comments, we also updated Section 4.1.2 since Lemma 2 in the original submission was limited in its applicability.
+	We previously established that the fitted models are only Lipschitz over some subset of penalty parameters that are well-behaved.
+	We now establish that the fitted models are Lipschitz over almost every pair of penalty parameters under some new assumptions.
+	We believe these assumptions are still reasonable (we are able to apply Lemma 2 to analyze the elastic net, for example).
 
 	In addition, upon taking a second pass at this paper, we found that Theorem 2 in the paper can be extended to more general settings.
-	We have loosened the assumptions needed in Theorem 2 so that we can consider problems with unbounded covariates $X$ and unbounded noise $\epsilon$.
+	We have loosened the assumptions needed in Theorem 2 so that we can consider problems with unbounded covariates $X$ and noise $\epsilon$.
 	This required extending the results in Lecue and Mitchell (2012).
-	Thus Theorem 2 in the latest revision is an extension of the results in Lecue and Mitchell (2012), rather than just an application.
-	
-	Finally, we updated the notation in the paper to be more accurate. We thank the reviewers for pointing out the typos.
+	Thus Theorem 2 and 4 in the latest revision are an extension of the results in Lecue and Mitchell (2012).
+
+	Finally, we have made a significant effort in updating the notation in the paper. We thank the reviewers for pointing out the typos.
 \end{document}
