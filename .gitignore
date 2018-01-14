@@ -8,4 +8,8 @@
 *.lyx~
 *.synctex.gz
 *.out
+*.pdf
+*.bbl
+*.synctex.gz
+*.blg
 .Rproj.user
