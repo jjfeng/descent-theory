@@ -613,14 +613,10 @@ Here we present an outline of the procedure; the details can be found in the Sup
 	\label{eq:sobolev_param}
 	\end{align}
 	where $\|\cdot\|_2$ is the spectral norm and $h_j(T)$ is the smallest distance between observations of the $j$th covariates in the training data $T$.
-%	As the minimax rate for estimating additive models $g^*(x) = \sum_{j=1}^J g_j(x_{ij})$ with finite 2nd-order Sobolev norm is $O_p(n^{-4/5})$ \citep{horowitz2006optimal}, we see that the oracle error \eqref{eq:asym_train_val_oracle_risk} will asymptotically dominate the additional error incurred from tuning over the penalty parameters.
 
-	In particular, for $p = o(n^{4/5})$, the smoothing spline estimate~\eqref{eq:smoothing_spline} is shown to attain the minimax optimal rate of $O_p(pn^{-4/5})$ \textcolor{red}{(CITE RYAN and HOROWITZ?)} if the penalty parameters shrink at the rate of $\sim n^{-4/5}$ \textcolor{red}{[Should $\lambda$ have a $p$ in it?? esp if we have increasing $p$, which is important here]}. From Corollary~\ref{corr:train_val}, we see that the oracle error \eqref{eq:asym_train_val_oracle_risk} asymptotically dominates the additional error terms incurred from tuning the penalty parameters. Moreover, as long as we choose $\lambda_{\min} \sim n^{-\alpha}$ for any $\alpha > 4/5$, the model selected via training/validation split will also attain the minimax rate.
-
-	%To put this result into context, consider the case a two-component additive model.
-	%\citet{van2015penalized} showed that \eqref{eq:smoothing_spline} attains the minimax rate of $O_p(n^{-4/5})$ \citep{horowitz2006optimal} if the penalty parameters shrink at the rate of $\sim n^{-4/5})$.
-	%From Corollary~\ref{corr:train_val}, we see that the oracle error \eqref{eq:asym_train_val_oracle_risk} asymptotically dominates the remaining error terms incurred from tuning the penalty parameters.
-	%Moreover, as long as we choose $\lambda_{\min} \sim n^{-\alpha}$ for any $\alpha > 4/5$ the model selected via training/validation split will also attain the minimax rate.
+	In particular, for $J = o(n^{1/2})$, the smoothing spline estimate~\eqref{eq:smoothing_spline} is shown to attain the minimax optimal rate of $O_p(Jn^{-4/5})$ if the penalty parameters shrink at the rate of $\sim n^{-4/5}$ \citep{sadhanala2017additive, horowitz2006optimal}.
+	From Corollary~\ref{corr:train_val}, we see that the oracle error \eqref{eq:asym_train_val_oracle_risk} asymptotically dominates the additional error terms incurred from tuning the penalty parameters.
+	Moreover, as long as we choose $\lambda_{\min} \sim n^{-\alpha}$ for any $\alpha > 4/5$, the model selected via training/validation split will also attain the minimax rate.
 \end{example}
 
 \subsubsection{Parametric regression with non-smooth penalties}
